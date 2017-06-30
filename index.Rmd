@@ -3,6 +3,8 @@ title: "Biology 202: Ecological Statistics"
 author: Stanford University
 ---
 
+## Syllabus
+
 **Instructors:** Tadashi Fukami and Jes Coyle
 
 **Students:**
@@ -62,9 +64,14 @@ Each student will complete the results section to include in a paper to submit f
 |      | Fri | Dec. 8   | Final project presentations     |         |            |
 
 
-## Before Class
+## Before Class 
 
-Before the first class please read through the [computer setup instructions](00-computer-setup.html) that walk you throgh how to set up your computer to run R, Rstudio and git. Even if you have these programs already installed, make sure to check that you are running the latest versions of R and RStudio (which the instructions will tell you how to do).
+Before the first class please read through the [computer setup instructions](00-computer-setup.html) that walk you throgh how to set up your computer to run R and Rstudio. Even if you have these programs already installed, make sure to check that you are running the latest versions of R and RStudio (which the instructions will tell you how to do). 
+
+Our course website runs from a repository on GitHub. You can view this repository [here](https://github.com/jescoyle/BIO202). Notice that the repository has 2 files for each lesson webpage (named 00-lesson-topic), one is an html file (.html) that is displayed as a webpage while the other is a R markdown (.Rmd) file that will allow us to write R code and explanatory text in the same file. The html file is created by R Studio from the R markdown file. The repository also as a folder called "data". This is where we will put data files used by our example code. Note that this repository can be downloaded by anyone on the internet. If you have data that you wish to use in class but do not wish to share with the entire WWW, you are welcome to email the data files to the rest of the class prior to your lesson.
+
+During class you will be editing the course webpages to include R code for the lesson discussion that you lead. If you are familiar with git and have a GitHub account, you should fork the repository to your account so that you can make changes there. If that is gibberish to you- don't worry! You can either choose to edit the course webpages by downloading them and emailing any edits to Jes (see [computer setup instructions](00-computer-setup.html)) or you can choose to learn a little git and create you own GitHub account during an optional class session during the first week. 
+
 
 
 ## References & Readings

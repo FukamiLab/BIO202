@@ -540,9 +540,46 @@ div.tocify {
 </ul>
 </div>
 </div>
+<div id="editing-the-course-website" class="section level3">
+<h3>Editing the Course Website</h3>
+<p>The course website can be edited by changing the html files in the course GitHub repository located at <a href="https://github.com/jescoyle/BIO202" class="uri">https://github.com/jescoyle/BIO202</a>.</p>
+<div id="if-you-dont-want-to-work-with-git" class="section level4">
+<h4>If you don’t want to work with git</h4>
+<ol style="list-style-type: decimal">
+<li>Go to the course GitHub repository above.</li>
+<li>Click on the .Rmd file for the lesson you want to edit.</li>
+<li>Click the Raw button in the upper right corner.</li>
+<li>When the page with text opens, download the file and save it as a .Rmd file. Make sure to remove any .txt extensions that may be automatically added.</li>
+<li>Open and edit the .Rmd file in R Studio. Use the ‘Knit’ button to convert the file to an html to check your changes.</li>
+<li>When you as satisfied, email the .Rmd file to Jes no later than 8 am on the day you present.</li>
+</ol>
+</div>
+<div id="if-you-are-new-to-git-but-want-to-learn" class="section level4">
+<h4>If you are new to git, but want to learn</h4>
+<p>See the section below on installing git on your computer.</p>
+<p>Attend the git tutorial provided at the beginning of class.</p>
+<p>Use the ‘If yu are familiar with git’ workflow below to make changes to the course website.</p>
+</div>
+<div id="if-you-are-familiar-with-git" class="section level4">
+<h4>If you are familiar with git</h4>
+<p>The general workflow is:</p>
+<ol style="list-style-type: decimal">
+<li>If you have not aready done so, fork the repository to your account and clone a local copy on your computer. <a href="">Instructions</a>. This only needs to be done once.</li>
+<li>Make sure your copy is up to date.</li>
+<li>Work on the .Rmd file for your lesson in R Studio. Click ‘Knit’ to render your changes as an html file and view them in your browser. Note that any edits you make are only on your computer until you submit a pull request to merge your changes to the repository.</li>
+<li>Use <code>git commit -m &quot;changes you made&quot;</code> to save your changes to your local repository.</li>
+<li>Use <code>git push origin master</code> to push your local changes to your fork on your account.</li>
+<li>Submit a pull request on GitHub to merge your changes with the original BIO202 repository no later than 8 am on the day you present.</li>
+</ol>
+</div>
+</div>
 <div id="git" class="section level3">
 <h3>git</h3>
-<p>[[INCLUDE INSTRUCTIONS FOR DOWNLOADING GIT AND INTEGRATING WITH RSTUDIO]]</p>
+<p>TO DO:</p>
+<ul>
+<li>INCLUDE INSTRUCTIONS FOR DOWNLOADING GIT AND INTEGRATING WITH RSTUDIO</li>
+<li>Link to git lesson content on SWC</li>
+</ul>
 <div id="attribution" class="section level4">
 <h4>Attribution</h4>
 <p>The content of this webpage was derived from <a href="http://datacarpentry.org">Data Carpentry</a> materials (Copyriright (c) Data Carpentry) under CC-3.0 Attribution License (see <a href="http://creativecommons.org/licenses/by/3.0/" class="uri">http://creativecommons.org/licenses/by/3.0/</a>).</p>
