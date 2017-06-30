@@ -16,6 +16,3 @@
 
 # vim backup files
 *.swp
-/data/
-/portalR.db
-data_output/
