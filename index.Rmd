@@ -1,0 +1,74 @@
+---
+title: "Biology 202: Ecological Statistics"
+author: Stanford University
+---
+
+**Instructors:** Tadashi Fukami and Jes Coyle
+
+**Students:**
+
+**Course Goals:**
+
+Students will be able to:
+
+  * Design statistically sound data collection strategies to answer a given research questions.
+  * Choose among modern statistical tools and analyze data using R.
+  * Present results effectively usin R for peer-reviewed papers.
+  * Advise colleagues about statistical analyses.
+  
+**Class Format:**
+
+During the first few weeks, each student will briefly introduce their research question and data and we will go over basics of how to use R and interact with the course content on this website using R markdown files and GitHub. From then on, one selected topic will be covered during each class. First the instructor will briefly summarize the assigned reading (~15 min) and go over key concepts and analyses, R packages and how they should be used, how to differentiate among them, including time for questions and clarification. Then, a student will present an example of the topic (~15 min). This could be (1) going over an example presented in the text by walking through the procedure and details of the code that they think are important; or (2) applying these techniques to the student's own data and walking others through the analysis, and present on their results/challenges faced, etc. Each class concludes with a ~20-min discussion led by the student (who will come prepared with questions to facilitate discussion and will share novel/important/interesting functions and pieces of R code). Each student will lead 1 or 2 topics during the quarter. We will also have a mid-term and final presentation and discussion on student projects. Students will prepare their lesson content ahead of time by modifying the Rmarkdown webpage on this site.
+
+**Final product:**
+
+Each student will complete the results section to include in a paper to submit for publication or data collection plans for a research proposal.
+
+
+## Tentative Schedule
+
+| Week | Day | Date     | Topic & Reading                 | Summary | Discussion |
+|------|-----|----------|---------------------------------|---------|------------|
+| 1    | Mon | Sept. 25 | Intro to R & RStudio            |         |            |
+|      | Wed | Sept. 27 | Topic selection & R markdown    |         |            |
+|      | Fri | Sept. 29 | Intro to ggplot2                |         |            |
+| 2    | Mon | Oct. 2   | Intro to GitHub & git           |         |            |
+|      | Wed | Oct. 4   | R workshop                      |         |            |
+|      | Fri | Oct. 6   | Project introduction            |         |            |
+| 3    | Mon | Oct. 9   |                                 |         |            |
+|      | Wed | Oct. 11  |                                 |         |            |
+|      | Fri | Oct. 13  |                                 |         |            |
+| 4    | Mon | Oct. 16  |                                 |         |            |
+|      | Wed | Oct. 18  |                                 |         |            |
+|      | Fri | Oct. 20  |                                 |         |            |
+| 5    | Mon | Oct. 23  |                                 |         |            |
+|      | Wed | Oct. 25  |                                 |         |            |
+|      | Fri | Oct. 27  |                                 |         |            |
+| 6    | Mon | Oct. 30  |                                 |         |            |
+|      | Wed | Nov. 1   |                                 |         |            |
+|      | Fri | Nov. 3   |                                 |         |            |
+| 7    | Mon | Nov. 6   |                                 |         |            |
+|      | Wed | Nov. 8   |                                 |         |            |
+|      | Fri | Nov. 10  |                                 |         |            |
+| 8    | Mon | Nov. 13  |                                 |         |            |
+|      | Wed | Nov. 15  |                                 |         |            |
+|      | Fri | Nov. 17  |                                 |         |            |
+|RECESS|     |          | Thanksgiving                    |         |            |
+| 9    | Mon | Nov. 27  |                                 |         |            |
+|      | Wed | Nov. 29  |                                 |         |            |
+|      | Fri | Dec. 1   |                                 |         |            |
+| 10   | Mon | Dec. 4   | Final project presentations     |         |            |
+|      | Wed | Dec. 6   | Final project presentations     |         |            |
+|      | Fri | Dec. 8   | Final project presentations     |         |            |
+
+
+## Before Class
+
+Before the first class please read through the [computer setup instructions](00-computer-setup.html) that walk you throgh how to set up your computer to run R, Rstudio and git. Even if you have these programs already installed, make sure to check that you are running the latest versions of R and RStudio (which the instructions will tell you how to do).
+
+
+## References & Readings
+
+
+
+

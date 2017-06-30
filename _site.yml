@@ -1,0 +1,103 @@
+navbar:
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Computer Setup"
+      href: 00-computer-setup.html
+    - text: "W1"
+      menu:
+        - text: "Intro to R"
+          href: 01-A-topic-name.html
+        - text: "R markdown"
+          href: 01-B-topic-name.html
+        - text: "ggplot2"
+          href: 01-C-topic-name.html
+    - text: "W2"
+      menu:
+        - text: "Intro to git"
+          href: 02-A-topic-name.html
+        - text: "More R"
+          href: 02-B-topic-name.html
+    - text: "W3"
+      menu:
+        - text: "Topic 1"
+          href: 02-A-topic-name.html
+        - text: "Topic 2"
+          href: 02-B-topic-name.html
+        - text: "Topic 3"
+          href: 02-C-topic-name.html    
+    - text: "W4"
+      menu:
+        - text: "Topic 4"
+          href: 02-A-topic-name.html
+        - text: "Topic 5"
+          href: 02-B-topic-name.html
+        - text: "Topic 6"
+          href: 02-C-topic-name.html
+    - text: "W5"
+      menu:
+        - text: "Topic 7"
+          href: 02-A-topic-name.html
+        - text: "Topic 8"
+          href: 02-B-topic-name.html
+        - text: "Topic 9"
+          href: 02-C-topic-name.html
+    - text: "W5"
+      menu:
+        - text: "Topic 10"
+          href: 02-A-topic-name.html
+        - text: "Topic 11"
+          href: 02-B-topic-name.html
+        - text: "Topic 12"
+          href: 02-C-topic-name.html
+    - text: "W5"
+      menu:
+        - text: "Topic 13"
+          href: 02-A-topic-name.html
+        - text: "Topic 14"
+          href: 02-B-topic-name.html
+        - text: "Topic 15"
+          href: 02-C-topic-name.html
+    - text: "W6"
+      menu:
+        - text: "Topic 16"
+          href: 02-A-topic-name.html
+        - text: "Topic 17"
+          href: 02-B-topic-name.html
+        - text: "Topic 18"
+          href: 02-C-topic-name.html
+    - text: "W7"
+      menu:
+        - text: "Topic 19"
+          href: 02-A-topic-name.html
+        - text: "Topic 20"
+          href: 02-B-topic-name.html
+        - text: "Topic 21"
+          href: 02-C-topic-name.html
+    - text: "W8"
+      menu:
+        - text: "Topic 22"
+          href: 02-A-topic-name.html
+        - text: "Topic 23"
+          href: 02-B-topic-name.html
+        - text: "Topic 24"
+          href: 02-C-topic-name.html
+    - text: "W9"
+      menu:
+        - text: "Topic 25"
+          href: 02-A-topic-name.html
+        - text: "Topic 26"
+          href: 02-B-topic-name.html
+        - text: "Topic 27"
+          href: 02-C-topic-name.html
+    
+output_dir: "."
+exclude: ["CONTRIBUT*.md","index.md","README.md","*.db"]
+include: ["*.Rmd","LICENSE.md"]
+output:
+  html_document:
+    highlight: pygments
+    toc: true
+    toc_float:
+      collapsed: false
+    css: style.css
