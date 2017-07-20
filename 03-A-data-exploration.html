@@ -9,9 +9,10 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="author" content="Tad" />
 
 
-<title>Setting up your computer</title>
+<title>Data Exploration</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,6 +26,49 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
 
 
 <style type="text/css">
@@ -478,118 +522,47 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Setting up your computer</h1>
+<h1 class="title toc-ignore">Data Exploration</h1>
+<h4 class="author"><em>Tad</em></h4>
 
 </div>
 
 
-<div id="r-and-rstudio" class="section level3">
-<h3>R and RStudio</h3>
-<p><strong>R</strong> and <strong>RStudio</strong> are separate downloads and installations. R is the underlying statistical computing environment, but using R alone is no fun. RStudio is a graphical integrated development environment (IDE) that makes using R much easier and more interactive. You need to install R before you install RStudio. In the sections below are the instructions for installing R and R Studio on your operating system.</p>
-<div id="windows" class="section level4">
-<h4>Windows</h4>
-<div id="if-you-already-have-r-and-rstudio-installed" class="section level5">
-<h5>If you already have R and RStudio installed</h5>
+<p><strong>Assigned Reading:</strong></p>
+<blockquote>
+<p>Zuur, A. F. 2010. <em>A protocol for data exploration to avoid common statistical problems.</em> Methods in Ecology and Evolution <strong>1</strong>: 3-14. DOI: <a href="http://dx.doi.org/10.1111/j.2041-210X.2009.00001.x">10.1111/j.2041-210X.2009.00001.x</a></p>
+</blockquote>
+<div id="key-points" class="section level2">
+<h2>Key Points</h2>
+<p>The instructor will fill in a description of the topic here followed by a bulleted list describing key features of the statistical analysis method. For example:</p>
 <ul>
-<li>Open RStudio, and click on “Help” &gt; “Check for updates”. If a new version is available, quit RStudio, and download the latest version for RStudio.</li>
-<li>To check which version of R you are using, start RStudio and the first thing that appears in the console indicates the version of R you are running. Alternatively, you can type <code>sessionInfo()</code>, which will also display which version of R you are running. Go on the <a href="https://cran.r-project.org/bin/windows/base/">CRAN website</a> and check whether a more recent version is available. If so, please download and install it. You can <a href="https://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-do-I-UNinstall-R_003f">check here</a> for more information on how to remove old versions from your system if you wish to do so.</li>
+<li>When to use this analysis</li>
+<li>When <em>not</em> to use this analysis</li>
 </ul>
 </div>
-<div id="if-you-dont-have-r-and-rstudio-installed" class="section level5">
-<h5>If you don’t have R and RStudio installed</h5>
-<ul>
-<li>Download R from the <a href="http://cran.r-project.org/bin/windows/base/release.htm">CRAN website</a>.</li>
-<li>Run the <code>.exe</code> file that was just downloaded</li>
-<li>Go to the <a href="https://www.rstudio.com/products/rstudio/download/#download">RStudio download page</a></li>
-<li>Under <em>Installers</em> select <strong>RStudio x.yy.zzz - Windows XP/Vista/7/8</strong> (where x, y, and z represent version numbers)</li>
-<li>Double click the file to install it</li>
-<li>Once it’s installed, open RStudio to make sure it works and you don’t get any error messages.</li>
-</ul>
+<div id="analysis-example" class="section level2">
+<h2>Analysis Example</h2>
+<p>The student discussion leader will place their example code in this section, including text that describe the purpose of each code block.</p>
+<p>First you wil probably need to read in data. If you have uploaded the data file on the course GitHub repository in the data folder then you should be able to read in the data as follows by changing the name of the file after <code>data/</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read in a data file from the data folder on the BIO 202 GitHub repository</span>
+dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">file.path</span>(repo_url, <span class="st">&quot;data/macrolichen_traits_Coyle_2016.csv&quot;</span>))
+
+<span class="co"># Or, read in the data file from a folder on your computer</span>
+<span class="co"># Remove # from the following 3 lines and change the file path assigned to my_dir</span>
+<span class="co"># my_dir &lt;- &quot;/Path/to/your/working_directory&quot;</span>
+<span class="co"># setwd(my_dir)</span>
+<span class="co"># dat &lt;- read.csv(&quot;lichen_traits_Coyle_2016.csv&quot;)</span></code></pre></div>
+<p>Next describe how you will manipulate the data in order to perform the anaylsis.</p>
+<p>Include any relevant code below, making sure to include a <code># comment</code> for each line.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Subset the data to foliose lichens</span>
+fol_dat &lt;-<span class="st"> </span><span class="kw">subset</span>(dat, Growth_form ==<span class="st"> &#39;foliose&#39;</span>)</code></pre></div>
+<p>Describe the steps of the example analysis, including code blocks as needed. Describe the functions and packages used.</p>
+<p><img src="images/chl_fig-1.png" width="672" /></p>
+<p><strong>Figure 1. Total chlorophyll versus ratio of chlorophyll A to B.</strong> Looks like we have some data cleaning to do!</p>
 </div>
-</div>
-<div id="macos" class="section level4">
-<h4>macOS</h4>
-<div id="if-you-already-have-r-and-rstudio-installed-1" class="section level5">
-<h5>If you already have R and RStudio installed</h5>
-<ul>
-<li>Open RStudio, and click on “Help” &gt; “Check for updates”. If a new version is available, quit RStudio, and download the latest version for RStudio.</li>
-<li>To check the version of R you are using, start RStudio and the first thing that appears on the terminal indicates the version of R you are running. Alternatively, you can type <code>sessionInfo()</code>, which will also display which version of R you are running. Go on the <a href="https://cran.r-project.org/bin/macosx/">CRAN website</a> and check whether a more recent version is available. If so, please download and install it.</li>
-</ul>
-</div>
-<div id="if-you-dont-have-r-and-rstudio-installed-1" class="section level5">
-<h5>If you don’t have R and RStudio installed</h5>
-<ul>
-<li>Download R from the <a href="http://cran.r-project.org/bin/macosx">CRAN website</a>.</li>
-<li>Select the <code>.pkg</code> file for the latest R version</li>
-<li>Double click on the downloaded file to install R</li>
-<li>It is also a good idea to install <a href="https://www.xquartz.org/">XQuartz</a> (needed by some packages)</li>
-<li>Go to the <a href="https://www.rstudio.com/products/rstudio/download/#download">RStudio download page</a></li>
-<li>Under <em>Installers</em> select <strong>RStudio x.yy.zzz - Mac OS X 10.6+ (64-bit)</strong> (where x, y, and z represent version numbers)</li>
-<li>Double click the file to install RStudio</li>
-<li>Once it’s installed, open RStudio to make sure it works and you don’t get any error messages.</li>
-</ul>
-</div>
-</div>
-<div id="linux" class="section level4">
-<h4>Linux</h4>
-<ul>
-<li>Follow the instructions for your distribution from <a href="https://cloud.r-project.org/bin/linux">CRAN</a>, they provide information to get the most recent version of R for common distributions. For most distributions, you could use your package manager (e.g., for Debian/Ubuntu run <code>sudo apt-get install r-base</code>, and for Fedora <code>sudo yum install R</code>), but we don’t recommend this approach as the versions provided by this are usually out of date. In any case, make sure you have at least R 3.3.1.</li>
-<li>Go to the <a href="https://www.rstudio.com/products/rstudio/download/#download">RStudio download page</a></li>
-<li>Under <em>Installers</em> select the version that matches your distribution, and install it with your preferred method (e.g., with Debian/Ubuntu <code>sudo dpkg -i   rstudio-x.yy.zzz-amd64.deb</code> at the terminal).</li>
-<li>Once it’s installed, open RStudio to make sure it works and you don’t get any error messages.</li>
-</ul>
-</div>
-</div>
-<div id="editing-the-course-website" class="section level3">
-<h3>Editing the Course Website</h3>
-<p>The course website can be edited by changing the html files in the course GitHub repository located at <a href="https://github.com/FukamiLab/BIO202" class="uri">https://github.com/FukamiLab/BIO202</a>.</p>
-<div id="if-you-dont-want-to-work-with-git" class="section level4">
-<h4>If you don’t want to work with git</h4>
-<ol style="list-style-type: decimal">
-<li>Go to the course GitHub repository above.</li>
-<li>Click on the .Rmd file for the lesson you want to edit.</li>
-<li>Click the Raw button in the upper right corner.</li>
-<li>When the page with text opens, download the file and save it as a .Rmd file. Make sure to remove any .txt extensions that may be automatically added.</li>
-<li>Open and edit the .Rmd file in R Studio. Use the ‘Knit’ button to convert the file to an html to check your changes.</li>
-<li>When you as satisfied, email the .Rmd file to Jes no later than 8 am on the day you present.</li>
-</ol>
-</div>
-<div id="if-you-are-new-to-git-but-want-to-learn" class="section level4">
-<h4>If you are new to git, but want to learn</h4>
-<p>See the section below on installing git on your computer.</p>
-<p>Attend the git tutorial provided at the beginning of class.</p>
-<p>Use the ‘If you are familiar with git’ workflow below to make changes to the course website.</p>
-</div>
-<div id="if-you-are-familiar-with-git" class="section level4">
-<h4>If you are familiar with git</h4>
-<p>The general workflow is:</p>
-<ol style="list-style-type: decimal">
-<li>If you have not aready done so, fork the repository from <a href="https://github.com/FukamiLab/BIO202" class="uri">https://github.com/FukamiLab/BIO202</a> to your account on GitHub. Then clone a local copy of this forked repository (from your own GitHub account) to your computer. <a href="">Instructions</a>. This only needs to be done once.</li>
-<li>Before you start working:</li>
-</ol>
-<ul>
-<li>Make sure your copy is up to date with the FukamiLab repository on GitHub. If not, submit a Pull request to update it. <a href="">Instructions</a></li>
-<li>Make sure your local repository on your computer is up to date with your fork of the repository on your GitHub account using <code>git pull</code>.</li>
-</ul>
-<ol start="3" style="list-style-type: decimal">
-<li>Work on the .Rmd file for your lesson in R Studio on your computer. Click ‘Knit’ to render your changes as an html file and view them in your browser. Note that any edits you make are only on your computer until you submit a pull request to merge your changes to the repository. Make sure that when you have made your last edit to the .Rmd file you click ‘Knit’ so that an up-to-date html file is generated. The html file will be the one that appears on the website.</li>
-<li>Commit the changes you make periodically to your local repository using <code>git commit -m &quot;changes you made&quot;</code>.</li>
-<li>When you are finished, push the commits from your local repository to your fork on your GitHub account using <code>git push origin master</code>.</li>
-<li>Submit a pull request on GitHub to merge the changes on your fork with the original BIO202 repository on FukamiLab no later than 8 am on the day you present. Jes or Tad will approve your pull request.</li>
-</ol>
-</div>
-</div>
-<div id="git" class="section level3">
-<h3>git</h3>
-<p>TO DO:</p>
-<ul>
-<li>INCLUDE INSTRUCTIONS FOR DOWNLOADING GIT AND INTEGRATING WITH RSTUDIO</li>
-<li>Link to git lesson content on SWC</li>
-</ul>
-<div id="attribution" class="section level4">
-<h4>Attribution</h4>
-<p>The content of this webpage was derived from <a href="http://datacarpentry.org">Data Carpentry</a> materials (Copyriright (c) Data Carpentry) under CC-3.0 Attribution License (see <a href="http://creativecommons.org/licenses/by/3.0/" class="uri">http://creativecommons.org/licenses/by/3.0/</a>).</p>
-</div>
+<div id="discussion-questions" class="section level2">
+<h2>Discussion Questions</h2>
+<p>Include any questions or issues here that you want to discuss or ask about in class. After the class session, update this section with any important notes discussed.</p>
 </div>
 
 

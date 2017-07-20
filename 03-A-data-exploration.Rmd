@@ -1,16 +1,13 @@
 ---
 layout: topic
-title: "Lesson Title"
-author: [Instructor and Student names]
+title: "Data Exploration"
+author: Tad
 output: html_document
 ---
 
-The instructor will edit the header above to reflect the lesson content and add their and the student's names as authors. The instructor should also update the text below to give a link to the assigned reading:
-
-
 **Assigned Reading:**
 
-> Coyle, JR. 2017. *Intraspecific variation in functional traits reveals limited effects of microclimate on community assemble in temperatedeciduous oak canopies.* Oikos **126**: 111-120. DOI: [10.1111/oik.03239](http://dx.doi.org/10.1111/oik.03239)
+> Zuur, A. F. 2010. *A protocol for data exploration to avoid common statistical problems.* Methods in Ecology and Evolution **1**: 3-14. DOI: [10.1111/j.2041-210X.2009.00001.x](http://dx.doi.org/10.1111/j.2041-210X.2009.00001.x)
 
 
 ```{r include = FALSE}
