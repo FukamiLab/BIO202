@@ -4,8 +4,6 @@ title: "Setting up your computer"
 output: html_document
 ---
 
-
-
 ### R and RStudio
 
 **R** and **RStudio** are separate downloads and installations. R is the underlying statistical computing environment, but using R alone is no fun. RStudio is a graphical integrated development environment (IDE) that makes using R much easier and more interactive. You need to install R before you install RStudio. In the sections below are the instructions for installing R and R Studio on your operating system.

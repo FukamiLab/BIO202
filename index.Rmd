@@ -69,14 +69,23 @@ Each student will complete the results section to include in a paper to submit f
 
 Before the first class please read through the [computer setup instructions](00-computer-setup.html) that walk you through how to set up your computer to run R and Rstudio. Even if you have these programs already installed, make sure to check that you are running the latest versions of R and RStudio (which the instructions will tell you how to do). 
 
-Our course website runs from a repository on GitHub. You can view this repository [here](https://github.com/jescoyle/BIO202). Notice that the repository has 2 files for each lesson webpage (named 00-lesson-topic), one is an html file (.html) that is displayed as a webpage while the other is a R markdown (.Rmd) file that will allow us to write R code and explanatory text in the same file. The html file is created by R Studio from the R markdown file. The repository also has a folder called "data". This is where we will put data files used by our example code. Note that this repository can be downloaded by anyone on the internet. If you have data that you wish to use in class but do not wish to share with the entire WWW, you are welcome to email the data files to the rest of the class prior to your lesson.
+Our course website runs from a repository on GitHub. You can view this repository [here](https://github.com/fukamilab/BIO202). Notice that the repository has 2 files for each lesson webpage (named 00-lesson-topic), one is an html file (.html) that is displayed as a webpage while the other is a R markdown (.Rmd) file that will allow us to write R code and explanatory text in the same file. The html file is created by R Studio from the R markdown file. The repository also has a folder called "data". This is where we will put data files used by our example code. Note that this repository can be downloaded by anyone on the internet. If you have data that you wish to use in class but do not wish to share with the entire WWW, you are welcome to email the data files to the rest of the class prior to your lesson.
 
 During class you will be editing the course webpages to include R code for the lesson discussion that you lead. If you are familiar with git and have a GitHub account, you should fork the repository to your account so that you can make changes there. If that is gibberish to you- don't worry! You can either choose to edit the course webpages by downloading them and emailing any edits to Jes (see [computer setup instructions](00-computer-setup.html)) or you can choose to learn a little git and create you own GitHub account during an optional class session during the first week. 
 
-
-
 ## References & Readings
 
-
++ Beale, C. M., Lennon, J. J., Yearsley, J. M., Brewer, M. J. and Elston, D. A. (2010), *Regression analysis of spatial data*. Ecology Letters, 13: 246–264. DOI:[10.1111/j.1461-0248.2009.01422.x](http://dx.doi.org/10.1111/j.1461-0248.2009.01422.x)
++ Borcard, D., Gillet, F. and Legendre, P. (2011), *Numerical Ecology with R.* Springer. [Stanford Full Text](https://link.springer.com/book/10.1007/978-1-4419-7976-6)
++ Dalgaard, P. (2008), *Introductory Statistics with R*. Springer. [Stanford Full Text](https://link.springer.com/book/10.1007/978-0-387-79054-1)
++ Martin, T. G., Wintle, B. A., Rhodes, J. R., Kuhnert, P. M., Field, S. A., Low-Choy, S. J., Tyre, A. J. and Possingham, H. P. (2005), *Zero tolerance ecology: improving ecological inference by modelling the source of zero observations*. Ecology Letters, 8: 1235–1246. DOI:[10.1111/j.1461-0248.2005.00826.x](http://dx.doi.org/10.1111/j.1461-0248.2005.00826.x)
++ McElreath, R. (2016), *Statistical rethinking: a Bayesian course with examples in R and Stan*. CRC Press. *Available in the Science and Marine libraries* [Author's website](http://xcelab.net/rm/statistical-rethinking/)
++ Ramette, A. (2007), *Multivariate analyses in microbial ecology*. FEMS Microbiology Ecology, 62: 142–160. DOI: [10.1111/j.1574-6941.2007.00375.x](http:dx.doi.org/10.1111/j.1574-6941.2007.00375.x)
++ Stone, J. V. (2016), *Bayes' rule with R: a tutorial introduction to Bayesian analysis*. Sebtel Press.
++ Venables, W. N., Smith, D. M. and the R Core Team. (2012), *An Introduction to R: Notes on R: A Programming Environment for Data Analysis and Graphics*. Version 2.15.1. [full text](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf)
++ Wagner, H. H. and Fortin, M.-J. (2005), *Spatial analysis of landscapes: concepts and statistics*. Ecology, 86: 1975–1987. DOI: [10.1890/04-0914](http://dx.doi.org/10.1890/04-0914)
++ Wickham, H. (2009), *ggplot2: Elegant Graphics for Data Analysis*. Springer. [Stanford Full Text](https://link.springer.com/book/10.1007%2F978-0-387-98141-3)
++ Zuur, A. F., Leno, E. N., Walker, N., Savliev, A. A. and Smith, G. M. (2009), *Mixed Effect Models and Extensions in Ecology with R.* Springer. [Stanford Full Text](https://link.springer.com/book/10.1007%2F978-0-387-87458-6)
++ Zuur, A. F. (2010), *A protocol for data exploration to avoid common statistical problems.* Methods in Ecology and Evolution **1**: 3-14. DOI: [10.1111/j.2041-210X.2009.00001.x](http://dx.doi.org/10.1111/j.2041-210X.2009.00001.x)
 
 
