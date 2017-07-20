@@ -1,6 +1,7 @@
 ---
 title: "Biology 202: Ecological Statistics"
 author: Stanford University
+output: html_document
 ---
 
 ## Syllabus
