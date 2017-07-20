@@ -30,6 +30,8 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ## Key Points
 
+Test editing
+
 The instructor will fill in a description of the topic here followed by a bulleted list describing key features of the statistical analysis method. For example:
 
 * When to use this analysis
