@@ -29,46 +29,46 @@ Each student will complete the results section to include in a paper to submit f
 
 ## Tentative Schedule
 
-| Week | Day | Date     | Topic & Reading                 | Summary | Discussion |
-|------|-----|----------|---------------------------------|---------|------------|
-| 1    | Mon | Sept. 25 | Intro to R & RStudio            |         |            |
-|      | Wed | Sept. 27 | Topic selection & R markdown    |         |            |
-|      | Fri | Sept. 29 | Intro to ggplot2                |         |            |
-| 2    | Mon | Oct. 2   | Intro to GitHub & git           |         |            |
-|      | Wed | Oct. 4   | R workshop                      |         |            |
-|      | Fri | Oct. 6   | Project introduction            |         |            |
-| 3    | Mon | Oct. 9   |                                 |         |            |
-|      | Wed | Oct. 11  |                                 |         |            |
-|      | Fri | Oct. 13  |                                 |         |            |
-| 4    | Mon | Oct. 16  |                                 |         |            |
-|      | Wed | Oct. 18  |                                 |         |            |
-|      | Fri | Oct. 20  |                                 |         |            |
-| 5    | Mon | Oct. 23  |                                 |         |            |
-|      | Wed | Oct. 25  |                                 |         |            |
-|      | Fri | Oct. 27  |                                 |         |            |
-| 6    | Mon | Oct. 30  |                                 |         |            |
-|      | Wed | Nov. 1   |                                 |         |            |
-|      | Fri | Nov. 3   |                                 |         |            |
-| 7    | Mon | Nov. 6   |                                 |         |            |
-|      | Wed | Nov. 8   |                                 |         |            |
-|      | Fri | Nov. 10  |                                 |         |            |
-| 8    | Mon | Nov. 13  |                                 |         |            |
-|      | Wed | Nov. 15  |                                 |         |            |
-|      | Fri | Nov. 17  |                                 |         |            |
-|RECESS|     |          | Thanksgiving                    |         |            |
-| 9    | Mon | Nov. 27  |                                 |         |            |
-|      | Wed | Nov. 29  |                                 |         |            |
-|      | Fri | Dec. 1   |                                 |         |            |
-| 10   | Mon | Dec. 4   | Final project presentations     |         |            |
-|      | Wed | Dec. 6   | Final project presentations     |         |            |
-|      | Fri | Dec. 8   | Final project presentations     |         |            |
+| Week | Day | Date     | Topic & Reading                               | Summary | Discussion |
+|------|-----|----------|-----------------------------------------------|---------|------------|
+| 1    | Mon | Sept. 25 | Intro to R & RStudio                          | Tad     | XXX        |
+|      | Wed | Sept. 27 | Topic selection, Intro to R markdown & class website | Jes     | XXX   |
+|      | Fri | Sept. 29 | Intro to ggplot2                              | Jes     | XXX        |
+| 2    | Mon | Oct. 2   | Intro to GitHub & git (optional)              | Jes     | XXX        |
+|      | Wed | Oct. 4   | R workshop                                    | Jes     | XXX        |
+|      | Fri | Oct. 6   | Each person introduces their questions & data |     | XXX        |
+| 3    | Mon | Oct. 9   | Topic 1. Data exploration                     | Tad     |            |
+|      | Wed | Oct. 11  | Topic 2. Linear models                        | Tad     |            |
+|      | Fri | Oct. 13  | Topic 3. Dealing with heterogeneity           | Tad     |            |
+| 4    | Mon | Oct. 16  | Topic 4. Mixed-effects models with nested data| Tad     |            |
+|      | Wed | Oct. 18  | Topic 5. GLM with binary & proportional data  | Tad     |            |
+|      | Fri | Oct. 20  | Topic 6. GLM with zero-inflated data          | Tad     |            |
+| 5    | Mon | Oct. 23  | Topic 7. Bayesian linear models               | Jes     |            |
+|      | Wed | Oct. 25  | Topic 8. Bayesian hierarchical models         | Jes     |            |
+|      | Fri | Oct. 27  | Topic 9. Bayesian non-linear models           | Jes     |            |
+| 6    | Mon | Oct. 30  | Topic 10. Unconstrained ordination            | Tad     |            |
+|      | Wed | Nov. 1   | Topic 11. Constrained ordination              | Tad     |            |
+|      | Fri | Nov. 3   | Topic 12. Comparing multivariate data         | Jes     |            |
+| 7    | Mon | Nov. 6   | Mid-term project presentation & discussion    |         |            |
+|      | Wed | Nov. 8   | Mid-term project presentation & discussion    |         |            |
+|      | Fri | Nov. 10  | Mid-term project presentation & discussion    |         |            |
+| 8    | Mon | Nov. 13  | Topic 13. Spatial analysis, Zuur et al. approach| Tad     |            |
+|      | Wed | Nov. 15  | Topic 14. Spatial analysis, Borcard et al. approach| Jes    |            |
+|      | Fri | Nov. 17  | Topic 15. Spatial analysis, Bayesian approach | Jes     |            |
+|RECESS|     |          | Thanksgiving                                  |         |            |
+| 9    | Mon | Nov. 27  | Topic 16. To be selected by class             |         |            |
+|      | Wed | Nov. 29  | Topic 16. To be selected by class             |         |            |
+|      | Fri | Dec. 1   | Topic 16. To be selected by class             |         |            |
+| 10   | Mon | Dec. 4   | Final project presentations                   |         |            |
+|      | Wed | Dec. 6   | Final project presentations                   |         |            |
+|      | Fri | Dec. 8   | Final project presentations                   |         |            |
 
 
 ## Before Class 
 
-Before the first class please read through the [computer setup instructions](00-computer-setup.html) that walk you throgh how to set up your computer to run R and Rstudio. Even if you have these programs already installed, make sure to check that you are running the latest versions of R and RStudio (which the instructions will tell you how to do). 
+Before the first class please read through the [computer setup instructions](00-computer-setup.html) that walk you through how to set up your computer to run R and Rstudio. Even if you have these programs already installed, make sure to check that you are running the latest versions of R and RStudio (which the instructions will tell you how to do). 
 
-Our course website runs from a repository on GitHub. You can view this repository [here](https://github.com/jescoyle/BIO202). Notice that the repository has 2 files for each lesson webpage (named 00-lesson-topic), one is an html file (.html) that is displayed as a webpage while the other is a R markdown (.Rmd) file that will allow us to write R code and explanatory text in the same file. The html file is created by R Studio from the R markdown file. The repository also as a folder called "data". This is where we will put data files used by our example code. Note that this repository can be downloaded by anyone on the internet. If you have data that you wish to use in class but do not wish to share with the entire WWW, you are welcome to email the data files to the rest of the class prior to your lesson.
+Our course website runs from a repository on GitHub. You can view this repository [here](https://github.com/jescoyle/BIO202). Notice that the repository has 2 files for each lesson webpage (named 00-lesson-topic), one is an html file (.html) that is displayed as a webpage while the other is a R markdown (.Rmd) file that will allow us to write R code and explanatory text in the same file. The html file is created by R Studio from the R markdown file. The repository also has a folder called "data". This is where we will put data files used by our example code. Note that this repository can be downloaded by anyone on the internet. If you have data that you wish to use in class but do not wish to share with the entire WWW, you are welcome to email the data files to the rest of the class prior to your lesson.
 
 During class you will be editing the course webpages to include R code for the lesson discussion that you lead. If you are familiar with git and have a GitHub account, you should fork the repository to your account so that you can make changes there. If that is gibberish to you- don't worry! You can either choose to edit the course webpages by downloading them and emailing any edits to Jes (see [computer setup instructions](00-computer-setup.html)) or you can choose to learn a little git and create you own GitHub account during an optional class session during the first week. 
 
