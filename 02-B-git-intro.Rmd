@@ -36,16 +36,52 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 Make sure that you have installed git on your computer. You will need both the program git and a command line shell to use the program. See the git installation instructions on the [Computer Setup](00-computer-setup.html) page. We will primarily focus on using git from RStudio.
 
-
 # What is GitHub (and how do I use it)?
+
+GitHub is a website that provides access to files so that people collaborating on a project can work together. GitHub is organized around the idea of projects- a self-contained set of files that "do something". Each project is called a *repository* and is accessed at the web url: https://github.com/name-of-project-owner/project-name. We will be using GitHub to manage changes to our course website which is owned by the FukamiLab organization and is stored in a project named BIO202. Thus, you can find all of the files that make our course website at https://github.com/FukamiLab/BIO202.
+
+Anyone on the internet can see and download files from a GitHub repository (unless you pay to make it private). Keep this in mind when choosing which data to upload. However, you can restrict who is allowed to make changes to the files in your projects. 
 
 ## Creating a GitHub account
 
+In order to use GitHub you will first need to create an account and give yourself a username so that you can create and work on projects. Go to https://github.com/ and on the main screen choose a username and password. You will need to check your email to confirm your regsitration. 
+
+Once you have registered an logged in using your new username and password you can get started. GitHub provides a nice tutorial on creating a new project repository (here)[https://guides.github.com/activities/hello-world/]. Feel free to try out this tutorial on your own.
+
+Let's create a new repository for your class project.
+
+First click the "Start a new project" button. On the following page give the project a repository name and description. Check the box to create a README and then click "Create repository". You will now be on the main page for your project. There is one text file in this project called README.md which contains the project name and description you wrote. We will come back to this project later.
+
+
 ## Forking an existing repository
+
+In order to contribute to the class website you will need to make a copy of the website project on your own account. This is called *forking*. Instead of creating a new project we want to "fork an existing repository". Go to the class webpage GitHub project and click the "Fork" button in the upper right corner. You will want to fork the repository to your account. Notice that you are taken to the webpage `https://github.com/your-username/BIO202`.
+
+Any changes you make to this fork will not show up on the class website because the website looks at the version of the files owned by FukamiLab. You will make changes to your fork and then propose these changes (as a *pull request*) to the FukamiLab fork. The instructors will then accept your changes to make them show up on the class website. We will get to this later in the lesson.
+
 
 ## Editing files online
 
+You can make changes to files in a project directly from your web browser. Let's add your name to the webpage for the lesson that you will be leading.
+
+Click on the Rmarkdown file (.Rmd) corresponding to the lesson that you will be leading. The first number gives the week and the letter refers to the class session (A-Mon, B-Wed, C-Fri). This will show you the partially rendered contents of the file. Because the text file is written in Rmarkdown, GitHub attempts to display the formatting that it understands. To see the underlying text you can click "Raw". 
+
+To edit this file, click the pencil button in the upper right corner. You will be taken to an editor where you can then type your name alongside the instructor name at the top of the document. Save the changes by *commiting* them. In the box at the bottom, type a short description of the changes you made in the fist box. Then, commit the changes to the master branch by clicking the green "Commit" button.
+
+You will not need to create new branches when working on our class website because each person will be making changes to their own fork. Branches are useful when you are working on different aspects of a project or when multiple users are contributing to the same project. However, we won't be using them in our class. Everything you work on will be commited to the "master" branch.
+
+
 ## Merging changes with a pull request
+
+You have added your name to the lesson Rmd file in your fork of the class website. Next we will transfer these changes to the FukamiLab version. We will do this using a "pull request" which is a fancy name for proposing changes. You will propose to change FukamiLab/BIO202 based on the changes you made in your-username/BIO202.
+
+Return to the main page of your fork at `https://github.com/your-username/BIO202` and click the "New pull request" button. The *base* is what you are proposing to change and the *head* is where the changes are coming from. What should the base and head be if you want to propose the changes you just made?
+
+You may nee to click "compare across forks" to make the FukamiLab master branch show up as an option. Once you have selected the base (to) and head (from) branches you can scroll down to see how the files differ. Click the green "Create pull request" button to propose these changes. You will then be prompted to create a description of your changes so that a reviewer (e.g. the instructor) knows what to look for before accepting the changes. Click the green button again to create the request. 
+
+That's it. Now someone will need to review your changes and accept them in order for the FukamiLab project to change.
+
+While it is useful to be able to edit files online. Usually you will want to make changes to files on your computer and then propose changes from these files to a project repository on GitHub. The best way to do this is by using a version control program called git. In the next section you will learn how to use git with RStudio to manages changes to a version of the class website files stored on your computer.
 
 
 # What is git (and how do I use it with RStudio)?
