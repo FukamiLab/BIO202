@@ -53,7 +53,6 @@ dat <- read.csv(file.path(repo_url, "data/macrolichen_traits_Coyle_2016.csv"))
 # dat <- read.csv("lichen_traits_Coyle_2016.csv")
 ```
 
-
 Next describe how you will manipulate the data in order to perform the anaylsis.
 
 Include any relevant code below, making sure to include a `# comment` for each line.
@@ -63,7 +62,6 @@ Include any relevant code below, making sure to include a `# comment` for each l
 fol_dat <- subset(dat, Growth_form == 'foliose')
 
 ```
-
 
 Describe the steps of the example analysis, including code blocks as needed. Describe the functions and packages used.
 
