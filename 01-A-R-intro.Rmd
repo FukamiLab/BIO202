@@ -129,9 +129,9 @@ Note that each line of code has as comment above it describing what the code is 
 
 In this class we will often be working with and modifying existing R code that others have written. Many scientists learn R by borrowing code and modifying it to suit their purposes. Therefore it is useful to start right away learning how to search for answers and troubleshoot.
 
-Download this R script and save it in your code folder in the research project you created today. Then, open it in your current RStudio session.
+Download [this R script](https://github.com/FukamiLab/BIO202/blob/master/code/01-A-r-intro-exercise-code.R) and save it in your code folder in the research project you created today. You will need to click the 'Raw' button and then download the text file that appears. Be sure to remove the .txt extension that may have been added when you saved the file to your computer so that the file ends in .R.  Then, open the downloaded script in your current RStudio session.
 
-This R script makes a new folder called 'data' and downloads a csv file from our course website into this folder. The csv file contains data on trees sampled by students in the BIO46 winter quarter class in 2017. It then reads the data into R and saves it as an object named `raw_data`. The `raw_data` object is a dataframe, which is basically a table where rows are observations and columns are attributes. It is a very useful data structure for performing statistical analyses. The code then goes on to calculate the mean value of Latitude across all obervations in the dataset and count the number of each species of tree sampled.
+This R script makes a new folder called 'data' and downloads a csv file from our course website into this folder. The csv file contains data on trees sampled by students in the BIO46 winter quarter class in 2017. It then reads the data into R and saves it as an object named `raw_data`. The `raw_data` object is a dataframe, which is basically a table where rows are observations and columns are attributes. It is a very useful data structure for performing statistical analyses. The code then goes on to calculate the mean value of latitude across all observations in the dataset and count the number of each species of tree sampled. Run the code so that you can see how it works.
 
 > **Exercise:**
 >
