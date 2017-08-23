@@ -3,8 +3,8 @@
 # Date: Aug. 23, 2017
 # Description: Downloads an example data file from the course website and reads it into R.
 
-##################################
-## Download data and read into R##
+###################################
+## Download data and read into R ##
 
 # Check whether a folder named data exists in the current working directory
 if(dir.exists("data")) {
