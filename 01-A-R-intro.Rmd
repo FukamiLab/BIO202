@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "Introduction to R and RStudio"
-author: Tad
+author: Jes & Tad
 output: html_document
 ---
 
@@ -25,62 +25,120 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ## Key Points
 
-The instructor will fill in a description of the topic here followed by a bulleted list describing key features of the statistical analysis method. For example:
-
-* When to use this analysis
-* When *not* to use this analysis
-
-## Analysis Example
-
-The student discussion leader will place their example code in this section, including text that describe the purpose of each code block.
-
-First you wil probably need to read in data. If you have uploaded the data file on the course GitHub repository in the data folder then you should be able to read in the data as follows by changing the name of the file after `data/`:
+* R is a widely-used program for statistical computing.
+* RStudio is a program  that allows users to easily document and run reproducible analyses with R.
+* Analyses are saved as text files (e.g. "code") that can be re-run and edited as a reproducible record of the research process.
+* Well-organized research projects have clear locations for saving code, data, and analysis output (figures, tables, written documents).
+* Organizing an analysis as an RStudio project makes it easy to collaborate on research because the directory structure is self-contained, facilitating file transfer and version control.
 
 
-```{r results = 'hide'}
-# Read in a data file from the data folder on the BIO 202 GitHub repository
-dat <- read.csv(file.path(repo_url, "data/macrolichen_traits_Coyle_2016.csv"))
+## How we will use R
 
-# Or, read in the data file from a folder on your computer
-# Remove # from the following 3 lines and change the file path assigned to my_dir
-# my_dir <- "/Path/to/your/working_directory"
-# setwd(my_dir)
-# dat <- read.csv("lichen_traits_Coyle_2016.csv")
-```
+R is a popular free and open program for statistical computing (https://www.r-project.org/about.html). R can be run from the command line or from a graphical user interface that is automatically installed when you install R (if you open the R program installed on your computer, this is what will open up). We will be using a program called RStudio (see https://www.rstudio.com/about/) to interface with the R program. RStudio is what is known as an *integrated development environment* that makes it easier for R users to write and execute code and organize research projects. Some of the features that we can take advantage of are:
 
++ Text highlighting that makes it easier to spot typos and see the structure of code. 
++ Easy rendering of Rmarkdown formatting to html documents for our course website.
++ Project management that automatically defines your working directory and makes projects transferable across computers.
++ Integrated version control with Git that make it (mostly) unnecessary to use the command line.
 
-Next describe how you will manipulate the data in order to perform the anaylsis.
+Today we will focus on setting up an RStudio project for the research project you will complete during this class and in the process, introduce you to how RStudio is set up and some basics of using and writing R code.
 
-Include any relevant code below, making sure to include a `# comment` for each line.
+## Setting up your research project
+
+Open RStudio and click File > New Project. Make this project in a new directory and select "Empty Project". You will be prompted to type a name for the project and choose a directory on your computer where you want to save it. The new project can be saved anywhere on your computer that makes sense and you should choose an informative project name **with no spaces**. If you think that you might want to track changes to this project using version control or save the code to GitHub, be sure to check the "Create a git repository" box. We will have a [lesson on Git](02-B-git-intro.html) on Wednesday, October 4th.
+
+You will now have three windows displayed in RStudio:
+
+  + **Console**: This is where the R code that you run will show up and display results.
+  + **Files/Plots/Packages/Help/Viewer**: This should currently show the *working directory* and the files in it. It is also where graphics and help pages will show up. (Try clicking the other tabs!)
+  + **Environment/History**: This will show any *objects* that you define when running R code and (if you click the History tab) a record of previous R code that you have run. It should currently be empty.
+
+Let's make a new *R script*- a text file where you save R code that performs an analysis. Click File > New File > R Script. This will open a new window with a tab for your R script called "Untitled1". The first thing you should do when starting an analysis is to make a new R script and save it with a descriptive name (no spaces!).
+The best practice for project organization is to save all code scripts in a folder named "code". In the Files window, click "New Folder" and make a folder named "code". Then save your new script into this folder.
+Now you are ready to start an analysis!
+
+## How R works
+
+### Code vs. The Console
+
+R is a fancy calculator that can remember previous calculations and store them for future use (see the section Objects and Functions). You can use R by typing commands directing into the console. For example, try doing some simple arithmetic. Place your cursor in the Console window in front of the `>` symbol and type `3 + 5`. Then press Enter. 
+
+> **Exercise:**
+>
+> Convince yourself that R follows the order of operations.
+
+Note: If you see a `+` symbol that means that R is waiting for further input from you before it can finish a calculation. Hit Escape if you aren't sure what it is waiting for and want to try again.
+
+Typing code into the console is inefficient and doesn't allow you to easily save your work or edit previous work. Therefore you should always type R code into an R script and then run the code in the script.  The R script is saved as a text file on your computer that you can open again later or send to colleagues.
+
+Try typing some arithmetic expressions into the blank R script that you just made. Note each line corresponds to a new command to be sent to the R console. What happened in the R console after you typed the lines? Hopefully nothing. 
+
+R code that you type in a script will not be executed unless you tell RStudio to run it. 
+
+  + To run a single line of code in a script place your cursor anywhere on the line and press Ctrl+Enter or Cmd+Enter or click the green "Run" arrow at the upper right of the script window.
+  + To run a portion of a line of code, use your cursor to highlight just the part you want and then press Ctrl+Enter or Cmd+Enter or click the green "Run" arrow at the upper right of the script window. 
+  + To run multiple lines of code use your cursor to highlight all of the lines you want and then press Ctrl+Enter or Cmd+Enter or click the green "Run" arrow at the upper right of the script window.
+  + To run all the code in a script click the "Source" button at the upper right of the script window. Note that the Console displays `source('~/filepath/name-of-script.R')`, but doesn't give any output. The `source()` function allows you to run any code file without opening it in RStudio (which may be useful to you later).
+
+### Documenting your code
+
+The most important part of you code is are the *comments* that document what the code is supposed to do. This is most useful for reminding you of what you are trying to accomplish in an analysis as well as for anyone else who might need to read your code.
+
+Any text in an R script that follows the `#` is interpretted as a *comment*- a piece of descriptive text that doesn't cause R to do any calculations.
+
+The best practice is to begin any R script with comments that give the title, author (with email), date, and short description of what the code does.
+
+> **Exercise**
+>
+> Add a header to your R script describing what will eventually be contained in it.
+
+### Objects and Functions
+
+R can do a lot more than arithmetic and it does so using *objects* and *functions*.
+
+An *object* is piece of information that is saved with a name. A *function* is a set of instructions for how to manipulate objects. 
+
+Here's how to assign (e.g. make) a new object: `name_of_object <- what_goes_in_it`. The only rules are that object names:
+
+  + must have at least one letter 
+  + may contain numbers or the following symbols: - . _
+  + cannot have any spaces
+  + cannot start with a number
+
+Also, don't use any of the following names because they are already used by R: `c`, `t`
+
+For example we can save the results of arithmetic calculations by making new objects:
 
 ```{r}
-# Subset the data to foliose lichens
-fol_dat <- subset(dat, Growth_form == 'foliose')
+# Store the number 7 in an object named my_favorite_prime
+my_favorite_prime <- 7
 
+# Store the sum of the numbers 1 to 10 in an object named sum_to_ten:
+sum_to_ten <- sum(1:10)
 ```
 
+The code above demonstrates two functions:
 
-Describe the steps of the example analysis, including code blocks as needed. Describe the functions and packages used.
-
-```{r chl_fig, echo = FALSE}
-# echo = FALSE means that the results of the code will be shown without the code.
-# chl_fig is a name that knit will use to name the figure generated by this code chunk
-
-# Plot total chlorophyll vs. chlorophyll A:B ratio
-plot(Tot_chl_DW ~ Chla2b, data = fol_dat, 
-     las=1, 
-     ylab = 'Tot. CHL',
-     xlab = 'CHL A:B'
-)
-
-```
-
-**Figure 1. Total chlorophyll versus ratio of chlorophyll A to B.** Looks like we have some data cleaning to do! 
+  + `sum()` adds up everything inside it
+  + `:` is an operator that makes a vector containing all integers between the two numbers on either side of it
+  
+Note that each line of code has as comment above it describing what the code is supposed to do.
 
 
-## Discussion Questions
+### Editing R Code
 
-Include any questions or issues here that you want to discuss or ask about in class. After the class session, update this section with any important notes discussed.
+In this class we will often be working with and modifying existing R code that others have written. Many scientists learn R by borrowing code and modifying it to suit their purposes. Therefore it is useful to start right away learning how to search for answers and troubleshoot.
 
+Download this R script and save it in your code folder in the research project you created today. Then, open it in your current RStudio session.
+
+This R script makes a new folder called 'data' and downloads a csv file from our course website into this folder. The csv file contains data on trees sampled by students in the BIO46 winter quarter class in 2017. It then reads the data into R and saves it as an object named `raw_data`. The `raw_data` object is a dataframe, which is basically a table where rows are observations and columns are attributes. It is a very useful data structure for performing statistical analyses. The code then goes on to calculate the mean value of Latitude across all obervations in the dataset and count the number of each species of tree sampled.
+
+> **Exercise:**
+>
+> 1. Save the R script you downloaded as a new R script named "analysis_2017-09-25.R" into the code folder in this project.
+> 2. Copy a csv file from your computer containing data that you are interested in working with. If you don't have a csv file yet, go to the [Neon Data Portal](http://data.neonscience.org/browse-data) and download precipitation data from the Toolik Lake Core site in Alaska.
+> 3. Modify your R script so that it reads the data file into R and calculates the maximum value in one of the columns.
+
+If you get stuck, use the Help tab in RStudio as well as internet searches to figure out how to accomplish this task. Ask your classmates for help too!
 
 

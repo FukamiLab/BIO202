@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Jes" />
+
+
+<title>Introduction to git and GitHub</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="00-computer-setup.html">Computer Setup</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W1
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01-A-R-intro.html">Intro to R</a>
+    </li>
+    <li>
+      <a href="01-B-Rmarkdown-intro.html">R markdown</a>
+    </li>
+    <li>
+      <a href="01-C-ggplot2-intro.html">ggplot2</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W2
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="02-A-R-workshop.html">R workshop</a>
+    </li>
+    <li>
+      <a href="02-B-git-intro.html">Intro to git</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W3
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="03-A-data-exploration.html">Data exploration</a>
+    </li>
+    <li>
+      <a href="03-B-topic-name.html">Linear models</a>
+    </li>
+    <li>
+      <a href="03-C-topic-name.html">Heterogeneity</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W4
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="04-A-topic-name.html">Mixed effects models</a>
+    </li>
+    <li>
+      <a href="04-B-topic-name.html">Binary &amp; proportional data</a>
+    </li>
+    <li>
+      <a href="04-C-topic-name.html">Zero-inflated data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W5
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="05-A-topic-name.html">Bayesian linear models</a>
+    </li>
+    <li>
+      <a href="05-B-topic-name.html">Bayesian hierarchical models</a>
+    </li>
+    <li>
+      <a href="05-C-topic-name.html">Bayesian non-linear models</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W6
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="06-A-topic-name.html">Unconstrained ordination</a>
+    </li>
+    <li>
+      <a href="06-B-topic-name.html">Constrained ordination</a>
+    </li>
+    <li>
+      <a href="06-C-topic-name.html">Comparing multivariate data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W7
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="07-midquarter-student-name1.html">Student 1</a>
+    </li>
+    <li>
+      <a href="07-midquarter-student-name2.html">Student 2</a>
+    </li>
+    <li>
+      <a href="07-midquarter-student-name3.html">Student 3</a>
+    </li>
+    <li>
+      <a href="07-midquarter-student-name4.html">Student 4</a>
+    </li>
+    <li>
+      <a href="07-midquarter-student-name5.html">Student 5</a>
+    </li>
+    <li>
+      <a href="07-midquarter-student-name6.html">Student 6</a>
+    </li>
+    <li>
+      <a href="07-midquarter-student-name7.html">Student 7</a>
+    </li>
+    <li>
+      <a href="07-midquarter-student-name8.html">Student 8</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W8
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="08-A-topic-name.html">Spatial analysis (Zuur)</a>
+    </li>
+    <li>
+      <a href="08-B-topic-name.html">Spatial analysis (Borcard)</a>
+    </li>
+    <li>
+      <a href="08-C-topic-name.html">Bayesian spatial analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W9
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="09-A-topic-name.html">Topic 19</a>
+    </li>
+    <li>
+      <a href="09-B-topic-name.html">Topic 20</a>
+    </li>
+    <li>
+      <a href="09-C-topic-name.html">Topic 21</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W10
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="07-midquarter-student-name1.html">Student 1</a>
+    </li>
+    <li>
+      <a href="07-midquarter-student-name2.html">Student 2</a>
+    </li>
+    <li>
+      <a href="07-midquarter-student-name3.html">Student 3</a>
+    </li>
+    <li>
+      <a href="07-midquarter-student-name4.html">Student 4</a>
+    </li>
+    <li>
+      <a href="07-midquarter-student-name5.html">Student 5</a>
+    </li>
+    <li>
+      <a href="07-midquarter-student-name6.html">Student 6</a>
+    </li>
+    <li>
+      <a href="07-midquarter-student-name7.html">Student 7</a>
+    </li>
+    <li>
+      <a href="07-midquarter-student-name8.html">Student 8</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Introduction to git and GitHub</h1>
+<h4 class="author"><em>Jes</em></h4>
+
+</div>
+
+
+<p>In this lesson you will learn how to:</p>
+<ul>
+<li>Create and use a GitHub account to collaborate on our course website</li>
+<li>Set up a version-controlled RStudio project on your computer</li>
+<li>Use git to track and manage changes to files on your computer from RStudio</li>
+<li>Send changes to (local) files on your computer to a (remote) GitHub repository</li>
+</ul>
+<div id="before-we-begin" class="section level1">
+<h1>Before we begin</h1>
+<p>Make sure that you have installed git on your computer. You will need both the program git and a command line shell to use the program. See the git installation instructions on the <a href="00-computer-setup.html">Computer Setup</a> page. We will primarily focus on using git from RStudio.</p>
+</div>
+<div id="what-is-github-and-how-do-i-use-it" class="section level1">
+<h1>What is GitHub (and how do I use it)?</h1>
+<p>GitHub is a website that provides access to files so that people collaborating on a project can work together. GitHub is organized around the idea of projects- a self-contained set of files that “do something”. Each project is called a <em>repository</em> and is accessed at the web url: <a href="https://github.com/name-of-project-owner/project-name" class="uri">https://github.com/name-of-project-owner/project-name</a>. We will be using GitHub to manage changes to our course website which is owned by the FukamiLab organization and is stored in a project named BIO202. Thus, you can find all of the files that make our course website at <a href="https://github.com/FukamiLab/BIO202" class="uri">https://github.com/FukamiLab/BIO202</a>.</p>
+<p>Anyone on the internet can see and download files from a GitHub repository (unless you pay to make it private). Keep this in mind when choosing which data to upload. However, you can restrict who is allowed to make changes to the files in your projects.</p>
+<div id="creating-a-github-account" class="section level2">
+<h2>Creating a GitHub account</h2>
+<p>In order to use GitHub you will first need to create an account and give yourself a username so that you can create and work on projects. Go to <a href="https://github.com/" class="uri">https://github.com/</a> and on the main screen choose a username and password. You will need to check your email to confirm your regsitration.</p>
+<p>Once you have registered an logged in using your new username and password you can get started. GitHub provides a nice tutorial on creating a new project repository (here)[<a href="https://guides.github.com/activities/hello-world/" class="uri">https://guides.github.com/activities/hello-world/</a>]. Feel free to try out this tutorial on your own.</p>
+<p>Let’s create a new repository for your class project.</p>
+<p>First click the “Start a new project” button. On the following page give the project a repository name and description. Check the box to create a README and then click “Create repository”. You will now be on the main page for your project. There is one text file in this project called README.md which contains the project name and description you wrote. We will come back to this project later.</p>
+</div>
+<div id="forking-an-existing-repository" class="section level2">
+<h2>Forking an existing repository</h2>
+<p>In order to contribute to the class website you will need to make a copy of the website project on your own account. This is called <em>forking</em>. Instead of creating a new project we want to “fork an existing repository”. Go to the class webpage GitHub project and click the “Fork” button in the upper right corner. You will want to fork the repository to your account. Notice that you are taken to the webpage <code>https://github.com/your-username/BIO202</code>.</p>
+<p>Any changes you make to this fork will not show up on the class website because the website looks at the version of the files owned by FukamiLab. You will make changes to your fork and then propose these changes (as a <em>pull request</em>) to the FukamiLab fork. The instructors will then accept your changes to make them show up on the class website. We will get to this later in the lesson.</p>
+</div>
+<div id="editing-files-online" class="section level2">
+<h2>Editing files online</h2>
+<p>You can make changes to files in a project directly from your web browser. Let’s add your name to the webpage for the lesson that you will be leading.</p>
+<p>Click on the Rmarkdown file (.Rmd) corresponding to the lesson that you will be leading. The first number gives the week and the letter refers to the class session (A-Mon, B-Wed, C-Fri). This will show you the partially rendered contents of the file. Because the text file is written in Rmarkdown, GitHub attempts to display the formatting that it understands. To see the underlying text you can click “Raw”.</p>
+<p>To edit this file, click the pencil button in the upper right corner. You will be taken to an editor where you can then type your name alongside the instructor name at the top of the document. Save the changes by <em>commiting</em> them. In the box at the bottom, type a short description of the changes you made in the fist box. Then, commit the changes to the master branch by clicking the green “Commit” button.</p>
+<p>You will not need to create new branches when working on our class website because each person will be making changes to their own fork. Branches are useful when you are working on different aspects of a project or when multiple users are contributing to the same project. However, we won’t be using them in our class. Everything you work on will be commited to the “master” branch.</p>
+</div>
+<div id="merging-changes-with-a-pull-request" class="section level2">
+<h2>Merging changes with a pull request</h2>
+<p>You have added your name to the lesson Rmd file in your fork of the class website. Next we will transfer these changes to the FukamiLab version. We will do this using a “pull request” which is a fancy name for proposing changes. You will propose to change FukamiLab/BIO202 based on the changes you made in your-username/BIO202.</p>
+<p>Return to the main page of your fork at <code>https://github.com/your-username/BIO202</code> and click the “New pull request” button. The <em>base</em> is what you are proposing to change and the <em>head</em> is where the changes are coming from. What should the base and head be if you want to propose the changes you just made?</p>
+<p>You may nee to click “compare across forks” to make the FukamiLab master branch show up as an option. Once you have selected the base (to) and head (from) branches you can scroll down to see how the files differ. Click the green “Create pull request” button to propose these changes. You will then be prompted to create a description of your changes so that a reviewer (e.g. the instructor) knows what to look for before accepting the changes. Click the green button again to create the request.</p>
+<p>That’s it. Now someone will need to review your changes and accept them in order for the FukamiLab project to change.</p>
+<p>While it is useful to be able to edit files online. Usually you will want to make changes to files on your computer and then propose changes from these files to a project repository on GitHub. The best way to do this is by using a version control program called git. In the next section you will learn how to use git with RStudio to manages changes to a version of the class website files stored on your computer.</p>
+</div>
+</div>
+<div id="what-is-git-and-how-do-i-use-it-with-rstudio" class="section level1">
+<h1>What is git (and how do I use it with RStudio)?</h1>
+<div id="getting-files-from-github-onto-your-computer" class="section level2">
+<h2>Getting files from GitHub onto your computer</h2>
+</div>
+<div id="making-a-version-controlled-project-in-rstudio" class="section level2">
+<h2>Making a version-controlled project in RStudio</h2>
+</div>
+<div id="saving-and-reverting-changes" class="section level2">
+<h2>Saving and reverting changes</h2>
+</div>
+<div id="sending-changes-to-github" class="section level2">
+<h2>Sending changes to GitHub</h2>
+</div>
+</div>
+<div id="using-git-from-the-command-line" class="section level1">
+<h1>Using git from the command line</h1>
+<p><strong>Suggested Additional References:</strong></p>
+<blockquote>
+
+</blockquote>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
