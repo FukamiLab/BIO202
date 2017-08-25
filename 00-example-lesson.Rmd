@@ -42,7 +42,7 @@ The instructor will fill in a description of the topic here followed by a bullet
 
 The student discussion leader will place their example code in this section, including text that describe the purpose of each code block.
 
-First you wil probably need to read in data. If you have uploaded the data file on the course GitHub repository in the data folder then you should be able to read in the data as follows by changing the name of the file after `data/`:
+First you will probably need to read in data. If you have uploaded the data file on the course GitHub repository in the data folder then you should be able to read in the data as follows by changing the name of the file after `data/`:
 
 
 ```{r results = 'hide'}
