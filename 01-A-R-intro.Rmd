@@ -23,7 +23,7 @@ knitr::opts_chunk$set(fig.path = "images/")
 repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 ```
 
-## Key Points
+### Key Points
 
 * R is a widely-used program for statistical computing.
 * RStudio is a program  that allows users to easily document and run reproducible analyses with R.
@@ -32,7 +32,7 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 * Organizing an analysis as an RStudio project makes it easy to collaborate on research because the directory structure is self-contained, facilitating file transfer and version control.
 
 
-## How we will use R
+### How we will use R
 
 R is a popular free and open program for statistical computing (https://www.r-project.org/about.html). R can be run from the command line or from a graphical user interface that is automatically installed when you install R (if you open the R program installed on your computer, this is what will open up). We will be using a program called RStudio (see https://www.rstudio.com/about/) to interface with the R program. RStudio is what is known as an *integrated development environment* that makes it easier for R users to write and execute code and organize research projects. Some of the features that we can take advantage of are:
 
@@ -43,7 +43,7 @@ R is a popular free and open program for statistical computing (https://www.r-pr
 
 Today we will focus on setting up an RStudio project for the research project you will complete during this class and in the process, introduce you to how RStudio is set up and some basics of using and writing R code.
 
-## Setting up your research project
+### Setting up your research project
 
 Open RStudio and click File > New Project. Make this project in a new directory and select "Empty Project". You will be prompted to type a name for the project and choose a directory on your computer where you want to save it. The new project can be saved anywhere on your computer that makes sense and you should choose an informative project name **with no spaces**. If you think that you might want to track changes to this project using version control or save the code to GitHub, be sure to check the "Create a git repository" box. We will have a [lesson on Git](02-B-git-intro.html) on Wednesday, October 4th.
 
@@ -57,9 +57,9 @@ Let's make a new *R script*- a text file where you save R code that performs an 
 The best practice for project organization is to save all code scripts in a folder named "code". In the Files window, click "New Folder" and make a folder named "code". Then save your new script into this folder.
 Now you are ready to start an analysis!
 
-## How R works
+### How R works
 
-### Code vs. The Console
+#### Code vs. The Console
 
 R is a fancy calculator that can remember previous calculations and store them for future use (see the section Objects and Functions). You can use R by typing commands directing into the console. For example, try doing some simple arithmetic. Place your cursor in the Console window in front of the `>` symbol and type `3 + 5`. Then press Enter. 
 
@@ -80,7 +80,7 @@ R code that you type in a script will not be executed unless you tell RStudio to
   + To run multiple lines of code use your cursor to highlight all of the lines you want and then press Ctrl+Enter or Cmd+Enter or click the green "Run" arrow at the upper right of the script window.
   + To run all the code in a script click the "Source" button at the upper right of the script window. Note that the Console displays `source('~/filepath/name-of-script.R')`, but doesn't give any output. The `source()` function allows you to run any code file without opening it in RStudio (which may be useful to you later).
 
-### Documenting your code
+#### Documenting your code
 
 The most important part of you code is are the *comments* that document what the code is supposed to do. This is most useful for reminding you of what you are trying to accomplish in an analysis as well as for anyone else who might need to read your code.
 
@@ -92,7 +92,7 @@ The best practice is to begin any R script with comments that give the title, au
 >
 > Add a header to your R script describing what will eventually be contained in it.
 
-### Objects and Functions
+#### Objects and Functions
 
 R can do a lot more than arithmetic and it does so using *objects* and *functions*.
 
@@ -125,7 +125,7 @@ The code above demonstrates two functions:
 Note that each line of code has as comment above it describing what the code is supposed to do.
 
 
-### Editing R Code
+#### Editing R Code
 
 In this class we will often be working with and modifying existing R code that others have written. Many scientists learn R by borrowing code and modifying it to suit their purposes. Therefore it is useful to start right away learning how to search for answers and troubleshoot.
 
