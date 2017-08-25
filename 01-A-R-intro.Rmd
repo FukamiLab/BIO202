@@ -141,4 +141,6 @@ This R script makes a new folder called 'data' and downloads a csv file from our
 
 If you get stuck, use the Help tab in RStudio as well as internet searches to figure out how to accomplish this task. Ask your classmates for help too!
 
+**Don't forget to press save periodically!** RStudio does not automatically save changes to documents.
+
 
