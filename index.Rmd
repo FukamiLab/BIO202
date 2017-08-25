@@ -30,14 +30,14 @@ Each student will complete the results section to include in a paper to submit f
 
 ## Tentative Schedule
 
-| Week | Day | Date     | Topic & Reading                               | Summary | Discussion |
-|------|-----|----------|-----------------------------------------------|---------|------------|
-| 1    | Mon | Sept. 25 | Intro to R & RStudio                          | Tad     | XXX        |
-|      | Wed | Sept. 27 | Topic selection, Intro to R markdown & class website | Jes     | XXX   |
+| Week | Day | Date     | Topic & Reading                               | Summary   | Discussion |
+|------|-----|----------|-----------------------------------------------|-----------|------------|
+| 1    | Mon | Sept. 25 | [Intro to R & RStudio](01-A-R-intro.html)     | Tad & Jes | XXX        |
+|      | Wed | Sept. 27 | Topic selection, [Intro to R markdown](01-B-Rmarkdown.html) & class website | Jes     | XXX   |
 |      | Fri | Sept. 29 | Intro to ggplot2                              | Jes     | XXX        |
-| 2    | Mon | Oct. 2   | Intro to GitHub & git (optional)              | Jes     | XXX        |
-|      | Wed | Oct. 4   | R workshop                                    | Jes     | XXX        |
-|      | Fri | Oct. 6   | Each person introduces their questions & data |     | XXX        |
+| 2    | Mon | Oct. 2   | R workshop (optional)                         | Jes     | XXX        |
+|      | Wed | Oct. 4   | [Intro to GitHub & git](02-B-git-intro.html) (optional) | Jes     | XXX  |
+|      | Fri | Oct. 6   | Each person introduces their questions & data |         | XXX        |
 | 3    | Mon | Oct. 9   | Topic 1. Data exploration                     | Tad     |            |
 |      | Wed | Oct. 11  | Topic 2. Linear models                        | Tad     |            |
 |      | Fri | Oct. 13  | Topic 3. Dealing with heterogeneity           | Tad     |            |
@@ -53,7 +53,7 @@ Each student will complete the results section to include in a paper to submit f
 | 7    | Mon | Nov. 6   | Mid-term project presentation & discussion    |         |            |
 |      | Wed | Nov. 8   | Mid-term project presentation & discussion    |         |            |
 |      | Fri | Nov. 10  | Mid-term project presentation & discussion    |         |            |
-| 8    | Mon | Nov. 13  | Topic 13. Spatial analysis, Zuur et al. approach| Tad     |            |
+| 8    | Mon | Nov. 13  | Topic 13. Spatial analysis, Zuur et al. approach| Jes     |            |
 |      | Wed | Nov. 15  | Topic 14. Spatial analysis, Borcard et al. approach| Jes    |            |
 |      | Fri | Nov. 17  | Topic 15. Spatial analysis, Bayesian approach | Jes     |            |
 |RECESS|     |          | Thanksgiving                                  |         |            |
