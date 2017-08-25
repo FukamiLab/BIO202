@@ -540,42 +540,130 @@ div.tocify {
 </div>
 
 
-<p>The instructor will edit the header above to reflect the lesson content and add their and the student’s names as authors. The instructor should also update the text below to give a link to the assigned reading:</p>
-<p><strong>Assigned Reading:</strong></p>
-<blockquote>
-<p>Coyle, JR. 2017. <em>Intraspecific variation in functional traits reveals limited effects of microclimate on community assemble in temperatedeciduous oak canopies.</em> Oikos <strong>126</strong>: 111-120. DOI: <a href="http://dx.doi.org/10.1111/oik.03239">10.1111/oik.03239</a></p>
-</blockquote>
-<div id="key-points" class="section level2">
-<h2>Key Points</h2>
-<p>The instructor will fill in a description of the topic here followed by a bulleted list describing key features of the statistical analysis method. For example:</p>
+<div id="key-points" class="section level3">
+<h3>Key Points</h3>
 <ul>
-<li>When to use this analysis</li>
-<li>When <em>not</em> to use this analysis</li>
+<li>R markdown is text-based formatting that allows you to embed code and explanatory text in the same document.</li>
+<li>R markdown documents consist of a header, code chunks and text.</li>
+<li>R markdown files (.Rmd) can be rendered to other document formats (e.g. html, pdf, docx) to generate reports or web applications.</li>
+<li>Formatting analyses in R markdown keeps the entire research process in one document that can easily regenerate reports and output if the data are changed.</li>
 </ul>
+<blockquote>
+<p><strong>Suggested Reading:</strong></p>
+<p>Grolemund, G. 2014. <em>Introduction to R Markdown</em>. RStudio. <a href="http://rmarkdown.rstudio.com/articles_intro.html" class="uri">http://rmarkdown.rstudio.com/articles_intro.html</a></p>
+</blockquote>
 </div>
-<div id="analysis-example" class="section level2">
-<h2>Analysis Example</h2>
-<p>The student discussion leader will place their example code in this section, including text that describe the purpose of each code block.</p>
-<p>First you wil probably need to read in data. If you have uploaded the data file on the course GitHub repository in the data folder then you should be able to read in the data as follows by changing the name of the file after <code>data/</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read in a data file from the data folder on the BIO 202 GitHub repository</span>
-dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">file.path</span>(repo_url, <span class="st">&quot;data/macrolichen_traits_Coyle_2016.csv&quot;</span>))
-
-<span class="co"># Or, read in the data file from a folder on your computer</span>
-<span class="co"># Remove # from the following 3 lines and change the file path assigned to my_dir</span>
-<span class="co"># my_dir &lt;- &quot;/Path/to/your/working_directory&quot;</span>
-<span class="co"># setwd(my_dir)</span>
-<span class="co"># dat &lt;- read.csv(&quot;lichen_traits_Coyle_2016.csv&quot;)</span></code></pre></div>
-<p>Next describe how you will manipulate the data in order to perform the anaylsis.</p>
-<p>Include any relevant code below, making sure to include a <code># comment</code> for each line.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Subset the data to foliose lichens</span>
-fol_dat &lt;-<span class="st"> </span><span class="kw">subset</span>(dat, Growth_form ==<span class="st"> &#39;foliose&#39;</span>)</code></pre></div>
-<p>Describe the steps of the example analysis, including code blocks as needed. Describe the functions and packages used.</p>
-<p><img src="images/chl_fig-1.png" width="672" /></p>
-<p><strong>Figure 1. Total chlorophyll versus ratio of chlorophyll A to B.</strong> Looks like we have some data cleaning to do!</p>
+<div id="how-we-will-use-r-markdown" class="section level3">
+<h3>How we will use R markdown</h3>
+<p>Our course website is a set of R markdown files that have been rendered to html files and are hosted on <a href="https://pages.github.com/">GitHub Pages</a>. You can find all of the pages that comprise our course website in <a href="http://github.com/FukamiLab/BIO202">this GitHub repository</a>. The main landing page is found in the file <code>index.html</code> which has been generated from the file <code>index.Rmd</code>. Each day of the class has a corresponding lesson webpage R markdown file named XX-Y-topic.Rmd, where XX is the week and Y is a letter corresponding to the day (A: Mon, B: Wed, C: Fri). Your job will be to edit the lesson webpage for the day that you sign up to lead class. We have provided an outline, but you will need to supply the example code and text describing what it does.</p>
+<p>We are requiring you to interact with the course website in this way because being able to document reproducible analyses is a valuable skill that is becoming nearly required for today’s ecologists. As analyses become more complex and specialized, code review, in addition to open access to data, is likely to become a regular aspect of formal and informal scientific review. Documenting your analyses in R markdown with RStudio is a (relatively) painless way to ensure that you (and your reviewers) understand how you obtained and analyzed your data even after months of putting a project “on the back burner”. Therefore, we hope that you will find this additional class requirement useful even as it introduces a bit more cognitive burden.</p>
+<p>You have two options for editing the content of the course webpage:</p>
+<ol style="list-style-type: decimal">
+<li>Use git on your computer to interface with the files on GitHub.</li>
+<li>Download the .Rmd files from GitHub, edit them on your computer and email them to Jes.</li>
+</ol>
+<p>Today we will learn option 2 and there will be an optional session on Wednesday of Week 2 for anyone who wishes to learn how to use git for option 1. These two options are summarized on the <a href="file:///C:/Users/jrcoyle/Documents/Stanford/BIO202/GitHub/00-computer-setup.html#editing_the_course_website">Editing the Course Website</a> section of the Computer Setup page on the course website.</p>
+<div id="downloading-files-from-github" class="section level4">
+<h4>Downloading files from GitHub</h4>
+<p>Go to the <a href="https://github.com/FukamiLab/BIO202">course website GitHub repository</a>. Notice that you can choose to download all of the files as a zip file by clicking the green “Clone or download” button in the upper right. You will only need to edit one (or a few) pages, so let’s just download one file rather than the whole website. Click on the R markdown file corresponding to yesterday’s lesson: <code>01-A-R-intro.Rmd</code>, then click the ‘Raw’ button that appears at the top right corner of the document viewer on the page that loads. This will take you to a page that displays the text in the file. Download the page as a .Rmd file (remove the .txt extension that your browser will attempt to append) and save it somewhere useful on your computer (e.g. the folder you have made for this class, not Downloads or Desktop). Find the file on your computer and open it. It should open in RStudio.</p>
+<blockquote>
+<p><strong>Exercise:</strong></p>
+<p>Compare the contents of the .Rmd file to what you see on the course website.</p>
+<ul>
+<li>What is the same?</li>
+<li>What is different?</li>
+</ul>
+</blockquote>
 </div>
-<div id="discussion-questions" class="section level2">
-<h2>Discussion Questions</h2>
-<p>Include any questions or issues here that you want to discuss or ask about in class. After the class session, update this section with any important notes discussed.</p>
+</div>
+<div id="structure-of-a-rmd-document" class="section level3">
+<h3>Structure of a Rmd document</h3>
+<p>R markdown files have three main pieces:</p>
+<ol style="list-style-type: decimal">
+<li>A header that tells the program how to read the document.</li>
+<li>Text with markdown-style formatting.</li>
+<li>Code chunks that conduct the analysis.</li>
+</ol>
+<blockquote>
+<p><strong>Exercise:</strong></p>
+<p>Find each of these three pieces in the Introduction to R lesson document.</p>
+</blockquote>
+<p>You will not need to edit the header for any of the course webpages, other than to add you name to the list of authors. Check out the following resources if you are interested in generating your own markdown documents from scratch and want to learn more about how to change the format of the output document:</p>
+<ul>
+<li><a href="http://rmarkdown.rstudio.com/lesson-1.html">RStudio’s lessons on using R markdown</a></li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">Reference guide</a></li>
+<li>Busy, but printable <a href="https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf">cheatsheet</a></li>
+</ul>
+<div id="markdown-style-text" class="section level4">
+<h4>Markdown-style text</h4>
+<p>Markdown is a basic and readable way to format text that is used by many web platforms because it enables to easily make web-based content without writing html. Most importantly- it is a way to encode formatting directly into the text, which can then be interpretted into multiple different document formats. Markdown keeps documents text-based so that files are readable by both humans and machines.</p>
+<p>Here’s <a href="https://guides.github.com/features/mastering-markdown/">a quick lesson</a> on markdown from GitHub.</p>
+<blockquote>
+<p><strong>Exercise:</strong> Look at the Introduction to R lesson .Rmd file and find examples of the following formatting:</p>
+<ul>
+<li>a header (what controls the size of the header?)</li>
+<li>bold text and italic text</li>
+<li>a list</li>
+<li>a numbered list</li>
+<li>a webpage link</li>
+<li>text that links to a webpage</li>
+<li>text formatted as code that is not evaluated (verbatim code)</li>
+</ul>
+</blockquote>
+<p>R markdown also allows you to type latex-style mathematical formulas using <code>$ $</code> for inline text and <code>$$  $$</code> for for equations centered on their own lines. For example: <code>$$ E(X) = \sum_{i=1}^N x_i*p(x_i)$$</code> would display as: <span class="math display">\[ E(X) = \sum_{i=1}^N x_i*p(x_i)\]</span></p>
+</div>
+<div id="code-chunks" class="section level4">
+<h4>Code chunks</h4>
+<p>Code chunks perform the analysis. Code chunks begin with <code>```{}</code> and end with <code>```</code>. Any text inside the <code>{}</code> at the beginning of the chunk tells R how to evaluate and display the results of the code. Since we will be using R to evaluate our code, all of our code chunks will begin with: <code>```{r}</code>. You can name code chunks (to keep track of parts of an analysis) by typing a word after the <code>r</code>: <code>```{r chunk-name}</code> Any text that you place between the beginning and ending tags of a code chunk will be treated as plain R code. Code chunks are evaluated sequentially, so any objects that you create in a chunk will be available to the chunks that follow it.</p>
+<p>You can also evaluate R code within a paragraph of text (e.g. inline code). For example, suppose you know that you weigh 142 lbs, but want to report it in kg. If you had done the calculation in a code chunk:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_lbs &lt;-<span class="st"> </span><span class="dv">142</span>
+my_kg &lt;-<span class="st"> </span>my_lbs *<span class="st"> </span><span class="fl">0.45359237</span></code></pre></div>
+<p>You could write: I weigh <code>`r my_kg`</code> kg. Which would display: I weigh 64.4101165 kg. Or, for better formatting: I weigh <code>`r round(my_kg, 1)`</code> kg. (Displays: I weigh 64.4 kg.) If you hadn’t done the calculation in a code chunk you can also do calculation in the line: I weigh <code>`r round(142*0.453, 1)`</code> kg.</p>
+</div>
+</div>
+<div id="conducting-analyses-in-rmd" class="section level3">
+<h3>Conducting analyses in Rmd</h3>
+<p>You can treat R markdown files (almost) just like a regular R script. Any text that you highlight or line that you place your cursor on can be run by pressing Ctr+Enter or Cmd+Enter. You can also run an entire code chunk by pressing the green arrow that appears to the right of it.</p>
+<p>If you click the ‘Run’ button at the top of the document you can choose to run all code chunks in the document (or just those above or below your cursor).</p>
+<blockquote>
+<p><strong>Exercise:</strong></p>
+<p>Run a line of code in the Introduction to R Rmd file. What happens in the Console window? What happens in the Environment window?</p>
+<p>Now try running a line of text from this document. What happens?</p>
+<p>What happens when you use the ‘Run’ button to run all code chunks in the document?</p>
+</blockquote>
+</div>
+<div id="rendering-rmd-to-html" class="section level3">
+<h3>Rendering Rmd to html</h3>
+<p>When you are finished with an analysis (or even if you are only part-way through) you can convert your Rmd file to another file format to generate a report. This process is called <em>rendering</em> and we will be rendering all of our Rmd files to html so that they can display as webpages on our course website. For your project, you may want to render your analysis to a slide show (beamer) or pdf or word document.</p>
+<p>Documents written in R markdown are rendered to other document formats by the <code>rmarkdown</code> package that comes automatically installed with RStudio. The rmarkdown package renders documents using two steps: First, it excutes all of the code using functions from the <code>knitr</code> package. Then, it converts the output of the code and any markdown-formatted text to a new document format using functions in the <code>pandoc</code> package. Note that any output that you generate in the code chunks (e.g. plots, exported data) will be saved relative to the working directory, unless you specify otherwise in a code chunk option.</p>
+<p>To render an Rmd document in Rstudio, click the ‘Knit’ button at the top of the window displaying the document. If everything goes right a new window should pop up showing the new file that was generated (or prompt you to open the file in a browwer window). The file will be saved in the directory where the Rmd file is located.</p>
+<blockquote>
+<p><strong>Exercise:</strong></p>
+<ol style="list-style-type: decimal">
+<li>Render the Introduction to R Rmd file to an html file in RStudio by clicking the Knit button.</li>
+<li>Use your file browser to locate the html file that was generated. Open it with your browser- what do you see? How does it differ from what is displayed <a href="https://fukamilab.github.io/BIO202/01-A-R-intro.html">on the course website</a>?</li>
+<li>Now open the html file with a text editor (emacs, notepad). What do you see?</li>
+</ol>
+</blockquote>
+<div id="code-chunk-options" class="section level4">
+<h4>Code chunk options</h4>
+<p>The way that pandoc displays the contents and output of code chunks is determined by the <em>options</em> that you set. These can be set for all code chunks in the document (<em>global</em> options) or for each chunk individually.</p>
+<p>This <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">reference guide</a> has a good overview of what the different options will do.</p>
+<p>Look at the first code chunk in the Introduction to R Rmd document where the global options are set. This code block demonstrates 3 global options that apply to all following code chunks in the document: <code>knitr::opts_chunk$set()</code>. It also shows how you would apply an options to a single code chunk in the brackets at the start of the chunk: <code>{r include = FALSE}</code>, so that this chunk is not shown in the resulting html document, even though it is evaluated.</p>
+</div>
+<div id="figures" class="section level4">
+<h4>Figures</h4>
+<p>Any figure that you make in a code chunk will by default be saved as separate files in your working directory and then imported into the final document created by <code>pandoc</code>. In our class webpages, the first code chunk specifies: <code>knitr::opts_chunk$set(fig.path = &quot;images/&quot;)</code>, which tells <code>knitr</code> that it should save any figures generated with code chunks to a folder named “images” within the working directory. The image files will be named according the the name of the code chunk from which they are generated. Hence, it is a good idea to separate analyses into separate code chunks and give them somewhat descriptive names. R markdown can also automatically number and caption your figures and tables. The <a href="https://cran.r-project.org/web/packages/captioner/vignettes/using_captioner.html"><code>captioner</code></a> package is particularly useful for this.</p>
+<blockquote>
+<p><strong>Exercise:</strong></p>
+<ol style="list-style-type: decimal">
+<li>Download the 00-example-lesson.Rmd file from the course website GitHub repository.</li>
+<li>Try to render the .Rmd file to html. Why didn’t it work? Try to fix the problem.</li>
+<li>Add a new section to the document with markdown-formatted text and a new R code chunk. Render the document again.</li>
+<li>Open the html file with your web browser to see what your changes would look like online. How does what you see differ from what is shown at <a href="https://fukamilab.github.io/BIO202/00-example-lesson.html" class="uri">https://fukamilab.github.io/BIO202/00-example-lesson.html</a></li>
+</ol>
+</blockquote>
+</div>
 </div>
 
 
