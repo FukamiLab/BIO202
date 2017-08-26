@@ -160,6 +160,6 @@ Any figure that you make in a code chunk will by default be saved as separate fi
 > **Exercise:**
 >
 > 1. Download the 00-example-lesson.Rmd file from the course website GitHub repository.
-> 2. Try to render the .Rmd file to html. Why didn't it work? Try to fix the problem.
+> 2. Render the .Rmd file to html. Did it work? Look in the folder where you saved the 00-example.lesson.Rmd file. What has changed?
 > 3. Add a new section to the document with markdown-formatted text and a new R code chunk. Render the document again.
 > 4. Open the html file with your web browser to see what your changes would look like online. How does what you see differ from what is shown at https://fukamilab.github.io/BIO202/00-example-lesson.html
