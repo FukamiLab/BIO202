@@ -497,6 +497,8 @@ div.tocify {
 </div>
 
 
+<div id="key-points" class="section level3">
+<h3>Key Points</h3>
 <p>In this lesson you will learn how to:</p>
 <ul>
 <li>Create and use a GitHub account to collaborate on our course website</li>
@@ -504,35 +506,36 @@ div.tocify {
 <li>Use git to track and manage changes to files on your computer from RStudio</li>
 <li>Send changes to (local) files on your computer to a (remote) GitHub repository</li>
 </ul>
-<div id="before-we-begin" class="section level1">
-<h1>Before we begin</h1>
+</div>
+<div id="before-we-begin" class="section level3">
+<h3>Before we begin</h3>
 <p>Make sure that you have installed git on your computer. You will need both the program git and a command line shell to use the program. See the git installation instructions on the <a href="00-computer-setup.html">Computer Setup</a> page. We will primarily focus on using git from RStudio.</p>
 </div>
-<div id="what-is-github-and-how-do-i-use-it" class="section level1">
-<h1>What is GitHub (and how do I use it)?</h1>
+<div id="what-is-github-and-how-do-i-use-it" class="section level3">
+<h3>What is GitHub (and how do I use it)?</h3>
 <p>GitHub is a website that provides access to files so that people collaborating on a project can work together. GitHub is organized around the idea of projects- a self-contained set of files that “do something”. Each project is called a <em>repository</em> and is accessed at the web url: <a href="https://github.com/name-of-project-owner/project-name" class="uri">https://github.com/name-of-project-owner/project-name</a>. We will be using GitHub to manage changes to our course website which is owned by the FukamiLab organization and is stored in a project named BIO202. Thus, you can find all of the files that make our course website at <a href="https://github.com/FukamiLab/BIO202" class="uri">https://github.com/FukamiLab/BIO202</a>.</p>
 <p>Anyone on the internet can see and download files from a GitHub repository (unless you pay to make it private). Keep this in mind when choosing which data to upload. However, you can restrict who is allowed to make changes to the files in your projects.</p>
-<div id="creating-a-github-account" class="section level2">
-<h2>Creating a GitHub account</h2>
+<div id="creating-a-github-account" class="section level4">
+<h4>Creating a GitHub account</h4>
 <p>In order to use GitHub you will first need to create an account and give yourself a username so that you can create and work on projects. Go to <a href="https://github.com/" class="uri">https://github.com/</a> and on the main screen choose a username and password. You will need to check your email to confirm your regsitration.</p>
 <p>Once you have registered an logged in using your new username and password you can get started. GitHub provides a nice tutorial on creating a new project repository (here)[<a href="https://guides.github.com/activities/hello-world/" class="uri">https://guides.github.com/activities/hello-world/</a>]. Feel free to try out this tutorial on your own.</p>
 <p>Let’s create a new repository for your class project.</p>
 <p>First click the “Start a new project” button. On the following page give the project a repository name and description. Check the box to create a README and then click “Create repository”. You will now be on the main page for your project. There is one text file in this project called README.md which contains the project name and description you wrote. We will come back to this project later.</p>
 </div>
-<div id="forking-an-existing-repository" class="section level2">
-<h2>Forking an existing repository</h2>
+<div id="forking-an-existing-repository" class="section level4">
+<h4>Forking an existing repository</h4>
 <p>In order to contribute to the class website you will need to make a copy of the website project on your own account. This is called <em>forking</em>. Instead of creating a new project we want to “fork an existing repository”. Go to the class webpage GitHub project and click the “Fork” button in the upper right corner. You will want to fork the repository to your account. Notice that you are taken to the webpage <code>https://github.com/your-username/BIO202</code>.</p>
 <p>Any changes you make to this fork will not show up on the class website because the website looks at the version of the files owned by FukamiLab. You will make changes to your fork and then propose these changes (as a <em>pull request</em>) to the FukamiLab fork. The instructors will then accept your changes to make them show up on the class website. We will get to this later in the lesson.</p>
 </div>
-<div id="editing-files-online" class="section level2">
-<h2>Editing files online</h2>
+<div id="editing-files-online" class="section level4">
+<h4>Editing files online</h4>
 <p>You can make changes to files in a project directly from your web browser. Let’s add your name to the webpage for the lesson that you will be leading.</p>
 <p>Click on the Rmarkdown file (.Rmd) corresponding to the lesson that you will be leading. The first number gives the week and the letter refers to the class session (A-Mon, B-Wed, C-Fri). This will show you the partially rendered contents of the file. Because the text file is written in Rmarkdown, GitHub attempts to display the formatting that it understands. To see the underlying text you can click “Raw”.</p>
 <p>To edit this file, click the pencil button in the upper right corner. You will be taken to an editor where you can then type your name alongside the instructor name at the top of the document. Save the changes by <em>commiting</em> them. In the box at the bottom, type a short description of the changes you made in the fist box. Then, commit the changes to the master branch by clicking the green “Commit” button.</p>
 <p>You will not need to create new branches when working on our class website because each person will be making changes to their own fork. Branches are useful when you are working on different aspects of a project or when multiple users are contributing to the same project. However, we won’t be using them in our class. Everything you work on will be commited to the “master” branch.</p>
 </div>
-<div id="merging-changes-with-a-pull-request" class="section level2">
-<h2>Merging changes with a pull request</h2>
+<div id="merging-changes-with-a-pull-request" class="section level4">
+<h4>Merging changes with a pull request</h4>
 <p>You have added your name to the lesson Rmd file in your fork of the class website. Next we will transfer these changes to the FukamiLab version. We will do this using a “pull request” which is a fancy name for proposing changes. You will propose to change FukamiLab/BIO202 based on the changes you made in your-username/BIO202.</p>
 <p>Return to the main page of your fork at <code>https://github.com/your-username/BIO202</code> and click the “New pull request” button. The <em>base</em> is what you are proposing to change and the <em>head</em> is where the changes are coming from. What should the base and head be if you want to propose the changes you just made?</p>
 <p>You may nee to click “compare across forks” to make the FukamiLab master branch show up as an option. Once you have selected the base (to) and head (from) branches you can scroll down to see how the files differ. Click the green “Create pull request” button to propose these changes. You will then be prompted to create a description of your changes so that a reviewer (e.g. the instructor) knows what to look for before accepting the changes. Click the green button again to create the request.</p>
@@ -540,23 +543,23 @@ div.tocify {
 <p>While it is useful to be able to edit files online. Usually you will want to make changes to files on your computer and then propose changes from these files to a project repository on GitHub. The best way to do this is by using a version control program called git. In the next section you will learn how to use git with RStudio to manages changes to a version of the class website files stored on your computer.</p>
 </div>
 </div>
-<div id="what-is-git-and-how-do-i-use-it-with-rstudio" class="section level1">
-<h1>What is git (and how do I use it with RStudio)?</h1>
-<div id="getting-files-from-github-onto-your-computer" class="section level2">
-<h2>Getting files from GitHub onto your computer</h2>
+<div id="what-is-git-and-how-do-i-use-it-with-rstudio" class="section level3">
+<h3>What is git (and how do I use it with RStudio)?</h3>
+<div id="getting-files-from-github-onto-your-computer" class="section level4">
+<h4>Getting files from GitHub onto your computer</h4>
 </div>
-<div id="making-a-version-controlled-project-in-rstudio" class="section level2">
-<h2>Making a version-controlled project in RStudio</h2>
+<div id="making-a-version-controlled-project-in-rstudio" class="section level4">
+<h4>Making a version-controlled project in RStudio</h4>
 </div>
-<div id="saving-and-reverting-changes" class="section level2">
-<h2>Saving and reverting changes</h2>
+<div id="saving-and-reverting-changes" class="section level4">
+<h4>Saving and reverting changes</h4>
 </div>
-<div id="sending-changes-to-github" class="section level2">
-<h2>Sending changes to GitHub</h2>
+<div id="sending-changes-to-github" class="section level4">
+<h4>Sending changes to GitHub</h4>
 </div>
 </div>
-<div id="using-git-from-the-command-line" class="section level1">
-<h1>Using git from the command line</h1>
+<div id="using-git-from-the-command-line" class="section level3">
+<h3>Using git from the command line</h3>
 <p><strong>Suggested Additional References:</strong></p>
 <blockquote>
 
