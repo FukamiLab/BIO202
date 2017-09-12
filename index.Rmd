@@ -33,7 +33,7 @@ Each student will complete the results section to include in a paper to submit f
 | Week | Day | Date     | Topic & Reading                               | Summary   | Discussion |
 |------|-----|----------|-----------------------------------------------|-----------|------------|
 | 1    | Mon | Sept. 25 | [Intro to R & RStudio](01-A-R-intro.html)     | Tad & Jes | XXX        |
-|      | Wed | Sept. 27 | Topic selection, [Intro to R markdown](01-B-Rmarkdown.html) & class website | Jes     | XXX   |
+|      | Wed | Sept. 27 | Topic selection, [Intro to R markdown](01-B-Rmarkdown-intro.html) & class website | Jes     | XXX   |
 |      | Fri | Sept. 29 | Intro to ggplot2                              | Jes     | XXX        |
 | 2    | Mon | Oct. 2   | R workshop (optional)                         | Jes     | XXX        |
 |      | Wed | Oct. 4   | [Intro to GitHub & git](02-B-git-intro.html) (optional) | Jes     | XXX  |

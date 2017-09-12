@@ -1,13 +1,14 @@
 ---
 layout: topic
-title: "Data Exploration"
+title: "Linear Models"
 author: Tad
 output: html_document
 ---
 
 **Assigned Reading:**
 
-> Zuur, A. F. 2010. *A protocol for data exploration to avoid common statistical problems.* Methods in Ecology and Evolution **1**: 3-14. DOI: [10.1111/j.2041-210X.2009.00001.x](http://dx.doi.org/10.1111/j.2041-210X.2009.00001.x)
+> Appendix A from: Zuur, A. F., Ieno, E. N., Walker, N., Saveliev, A. A. and Smith, G. M. 2009. *Mixed Effects Models and Extensions in Ecology with R.* Springer. [link](https://link-springer-com.stanford.idm.oclc.org/book/10.1007%2F978-0-387-87458-6)
+
 
 ```{r include = FALSE}
 # This code block sets up the r session when the page is rendered to html
