@@ -23,7 +23,7 @@ navbar:
         - text: "Data exploration"
           href: 03-A-data-exploration.html
         - text: "Linear models"
-          href: 03-B-topic-name.html
+          href: 03-B-linear-models.html
         - text: "Heterogeneity"
           href: 03-C-topic-name.html    
     - text: "W4"
