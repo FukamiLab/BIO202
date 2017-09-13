@@ -46,3 +46,5 @@ mean(raw_data$Lat)
 # Count the number of times each tree species occurs in the Genus_species column of raw_data
 table(raw_data$Genus_species)
 
+
+

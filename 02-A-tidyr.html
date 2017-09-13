@@ -12,7 +12,7 @@
 <meta name="author" content="Jes" />
 
 
-<title>Introduction to ggplot2</title>
+<title>Introduction to ggplot2 and dplyr</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -286,7 +286,7 @@ div.tocify {
       <a href="01-B-Rmarkdown-intro.html">R markdown</a>
     </li>
     <li>
-      <a href="01-C-ggplot2-intro.html">ggplot2</a>
+      <a href="01-C-R-workshop.html">R workshop</a>
     </li>
   </ul>
 </li>
@@ -298,7 +298,7 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="02-A-R-workshop.html">R workshop</a>
+      <a href="02-A-tidyr.html">ggplot2 and tidyr</a>
     </li>
     <li>
       <a href="02-B-git-intro.html">Intro to git</a>
@@ -319,7 +319,7 @@ div.tocify {
       <a href="03-B-linear-models.html">Linear models</a>
     </li>
     <li>
-      <a href="03-C-topic-name.html">Heterogeneity</a>
+      <a href="03-C-heterogeneity.html">Heterogeneity</a>
     </li>
   </ul>
 </li>
@@ -349,13 +349,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="05-A-topic-name.html">Bayesian linear models</a>
+      <a href="05-A-Bayesian-linear-models.html">Bayesian linear models</a>
     </li>
     <li>
-      <a href="05-B-topic-name.html">Bayesian hierarchical models</a>
+      <a href="05-B-Bayesian-priors.html">Bayesian inference with prior information</a>
     </li>
     <li>
-      <a href="05-C-topic-name.html">Bayesian non-linear models</a>
+      <a href="05-C-Advanced-bayesian-example.html">Advanced Bayesian model example</a>
     </li>
   </ul>
 </li>
@@ -491,20 +491,59 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Introduction to ggplot2</h1>
+<h1 class="title toc-ignore">Introduction to ggplot2 and dplyr</h1>
 <h4 class="author"><em>Jes</em></h4>
 
 </div>
 
 
-<p>The instructor will edit the header above to reflect the lesson content and add their and the student’s names as authors. The instructor should also update the text below to give a link to the assigned reading:</p>
 <p><strong>Assigned Reading:</strong></p>
-<p>Read chapters 1 - 4 in:</p>
 <blockquote>
-<p>Wickham, H. 2009. <em>ggplot2: Elegant Graphics for Data Analysis.</em> Springer. . DOI: <a href="https://link.springer.com/book/10.1007%2F978-0-387-98141-3">Stanford Full Text</a></p>
+<p>Chapters 1.1, 1.2, 2, 3, 9 and 10 in: Wickham, H. 2009. <em>ggplot2: Elegant Graphics for Data Analysis.</em> Springer. DOI: <a href="https://link.springer.com/book/10.1007%2F978-0-387-98141-3">Stanford Full Text</a></p>
 </blockquote>
+<p><strong>Optional Reading:</strong></p>
+<blockquote>
+<p>Chapter 4 in: Wickham, H. 2009. <em>ggplot2: Elegant Graphics for Data Analysis.</em> Springer. DOI: <a href="https://link.springer.com/book/10.1007%2F978-0-387-98141-3">Stanford Full Text</a></p>
+</blockquote>
+<p>RStudio has produced several helpful <a href="https://www.rstudio.com/resources/cheatsheets/">cheatsheets</a> on data management and visualization with ggplot2 and tidyr. You may want to view or print one or several of them.</p>
+<div id="before-class" class="section level3">
+<h3>Before Class</h3>
+<p>Download <a href="https://github.com/FukamiLab/BIO202/blob/master/code/01-A-r-intro-exercise-code.R">this R script</a> and save it in your code folder in the research project you created on the first day of class. You will need to click the ‘Raw’ button and then download the text file that appears. Be sure to remove the .txt extension that may have been added when you saved the file to your computer so that the file ends in .R.</p>
+</div>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<ul>
+<li>Data should be organized so that observations are in rows and attributes (variables) are in columns.</li>
+<li>The <code>dplyr</code> package contains functions for manipulating data:</li>
+<li><code>spread</code> and <code>gather</code> change the format of data tables.</li>
+<li><code>separate</code> and <code>unite</code> change the format of variables.</li>
+<li><code>filter</code> creates a subset of a data table.</li>
+<li><code>mutate</code> creates new variables.</li>
+<li><code>group_by</code> and <code>summarise</code> are used to summarize observations according to the values of their variables.</li>
+<li>The pipe function <code>%&gt;%</code> is used to link several operations together (e.g. function composition).</li>
+<li>The <code>ggplot2</code> package is set of functions for visualizing data.</li>
+<li>A ggplot2 plot contains three components: (1) the data, (2) the aesthetic mappings between variables and visual properties, and (3) layers describing how to display the observations.</li>
+<li>The aesthetic mapping <code>aes</code> must minimally describe which variables define the plot coordinate space.</li>
+<li><code>facet_wrap</code> creates plots for specified data subsets.</li>
+</ul>
+</div>
+<div id="manipulating-data-with-dplyr" class="section level3">
+<h3>Manipulating data with dplyr</h3>
+<p>Open the R project that you created on the first day of class. Then when R Studio opens, open the R script file that you downloaded for today’s class (see above). This script downloads a data set from our course website and then proceeds to manipulate and summarise the data.</p>
+<p>Working in pairs, execute each line of code and then add a comment (using <code>#</code>) above each line of code with a description of what the code does.</p>
+<p>When you have finished commenting the code, try to complete the following challenge:</p>
+<blockquote>
+<p><strong>Exercise:</strong></p>
+</blockquote>
+</div>
+<div id="plotting-data-with-ggplot2" class="section level3">
+<h3>Plotting data with ggplot2</h3>
+<p>Working with your partner, create the following plots using <code>ggplot2</code>:</p>
+<ol style="list-style-type: decimal">
+<li></li>
+<li></li>
+<li></li>
+</ol>
 </div>
 
 
