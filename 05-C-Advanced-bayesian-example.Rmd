@@ -1,13 +1,20 @@
 ---
 layout: topic
-title: "Practice with R"
+title: "Advanced Bayesian model example"
 author: Jes
 output: html_document
 ---
 
 **Assigned Reading:**
 
-> Chapter 2 in Korner-Nievergelt et al. 2015. *Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.* Elsevier. [link](http://www.sciencedirect.com/science/book/9780128013700) 
+> TBD by students: one example from Chapter 14 in Korner-Nievergelt et al. 2015. *Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.* Elsevier. [link](http://www.sciencedirect.com/science/book/9780128013700) 
+
+
+**Optional Reading:**
+
+> Chapters 16 and 17 in Korner-Nievergelt et al. 2015. *Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.* Elsevier. [link](http://www.sciencedirect.com/science/book/9780128013700)
+>
+> \* These chapters contain a data analysis checklist and information on how to report analyses in scientific papers.
 
 ```{r include = FALSE}
 # This code block sets up the r session when the page is rendered to html
@@ -30,10 +37,14 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 ### Key Points
 
 
+
 ### Analysis Example
 
 
+
 ### Discussion Questions
+
+
 
 
 

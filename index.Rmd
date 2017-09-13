@@ -30,39 +30,39 @@ Each student will complete the results section to include in a paper to submit f
 
 ## Tentative Schedule
 
-| Week | Day | Date     | Topic & Reading                               | Summary   | Discussion |
-|------|-----|----------|-----------------------------------------------|-----------|------------|
-| 1    | Mon | Sept. 25 | [Intro to R & RStudio](01-A-R-intro.html)     | Tad & Jes | XXX        |
-|      | Wed | Sept. 27 | Topic selection, [Intro to R markdown](01-B-Rmarkdown-intro.html) & class website | Jes     | XXX   |
-|      | Fri | Sept. 29 | Intro to ggplot2                              | Jes     | XXX        |
-| 2    | Mon | Oct. 2   | R workshop (optional)                         | Jes     | XXX        |
-|      | Wed | Oct. 4   | [Intro to GitHub & git](02-B-git-intro.html) (optional) | Jes     | XXX  |
-|      | Fri | Oct. 6   | Each person introduces their questions & data |         | XXX        |
-| 3    | Mon | Oct. 9   | Topic 1. Data exploration                     | Tad     |            |
-|      | Wed | Oct. 11  | Topic 2. Linear models                        | Tad     |            |
-|      | Fri | Oct. 13  | Topic 3. Dealing with heterogeneity           | Tad     |            |
-| 4    | Mon | Oct. 16  | Topic 4. Mixed-effects models with nested data| Tad     |            |
-|      | Wed | Oct. 18  | Topic 5. GLM with binary & proportional data  | Tad     |            |
-|      | Fri | Oct. 20  | Topic 6. GLM with zero-inflated data          | Tad     |            |
-| 5    | Mon | Oct. 23  | Topic 7. Bayesian linear models               | Jes     |            |
-|      | Wed | Oct. 25  | Topic 8. Bayesian hierarchical models         | Jes     |            |
-|      | Fri | Oct. 27  | Topic 9. Bayesian non-linear models           | Jes     |            |
-| 6    | Mon | Oct. 30  | Topic 10. Unconstrained ordination            | Tad     |            |
-|      | Wed | Nov. 1   | Topic 11. Constrained ordination              | Tad     |            |
-|      | Fri | Nov. 3   | Topic 12. Comparing multivariate data         | Jes     |            |
-| 7    | Mon | Nov. 6   | Mid-term project presentation & discussion    |         |            |
-|      | Wed | Nov. 8   | Mid-term project presentation & discussion    |         |            |
-|      | Fri | Nov. 10  | Mid-term project presentation & discussion    |         |            |
-| 8    | Mon | Nov. 13  | Topic 13. Spatial analysis, Zuur et al. approach| Jes     |            |
-|      | Wed | Nov. 15  | Topic 14. Spatial analysis, Borcard et al. approach| Jes    |            |
-|      | Fri | Nov. 17  | Topic 15. Spatial analysis, Bayesian approach | Jes     |            |
-|RECESS|     |          | Thanksgiving                                  |         |            |
-| 9    | Mon | Nov. 27  | Topic 16. To be selected by class             |         |            |
-|      | Wed | Nov. 29  | Topic 16. To be selected by class             |         |            |
-|      | Fri | Dec. 1   | Topic 16. To be selected by class             |         |            |
-| 10   | Mon | Dec. 4   | Final project presentations                   |         |            |
-|      | Wed | Dec. 6   | Final project presentations                   |         |            |
-|      | Fri | Dec. 8   | Final project presentations                   |         |            |
+| Week | Day | Date     | Topic & Reading                                                                   | Summary   | Discussion |
+|------|-----|----------|-----------------------------------------------------------------------------------|-----------|------------|
+| 1    | Mon | Sept. 25 | [Intro to R & RStudio](01-A-R-intro.html)                                         | Tad & Jes |------------|
+|      | Wed | Sept. 27 | Topic selection, [Intro to R markdown](01-B-Rmarkdown-intro.html) & class website | Tad & Jes |------------|
+|      | Fri | Sept. 29 | [Intro to ggplot2](01-C-ggplot2-into.html)                                        | Jes       |------------|
+| 2    | Mon | Oct. 2   | [R workshop](02-A-R-workshop.html) (optional)                                     | Jes       |------------|
+|      | Wed | Oct. 4   | [Intro to GitHub & git](02-B-git-intro.html) (optional)                           | Jes       |------------|
+|      | Fri | Oct. 6   | Each person introduces their questions & data                                     | Tad & Jes |------------|
+| 3    | Mon | Oct. 9   | Topic 1. [Data exploration](03-A-data-exploration.html)                           | Tad       |            |
+|      | Wed | Oct. 11  | Topic 2. [Linear models](03-B-linear-models.html)                                 | Tad       |            |
+|      | Fri | Oct. 13  | Topic 3. [Dealing with heterogeneity](03-C-heterogeneity.html)                    | Tad       |            |
+| 4    | Mon | Oct. 16  | Topic 4. Mixed-effects models with nested data                                    | Tad       |            |
+|      | Wed | Oct. 18  | Topic 5. GLM with binary & proportional data                                      | Tad       |            |
+|      | Fri | Oct. 20  | Topic 6. GLM with zero-inflated data                                              | Tad       |            |
+| 5    | Mon | Oct. 23  | Topic 7. [Bayesian linear models](05-A-Bayesian-linear-models.html)               | Jes       |            |
+|      | Wed | Oct. 25  | Topic 8. [Bayesian inference with prior information](05-B-Bayesian-priors.html)   | Jes       |            |
+|      | Fri | Oct. 27  | Topic 9. [Advanced Bayesian model example](05-C-Advanced-bayesian-example.html)   | Jes       |            |
+| 6    | Mon | Oct. 30  | Topic 10. Unconstrained ordination                                                | Jes       |            |
+|      | Wed | Nov. 1   | Topic 11. Constrained ordination                                                  | Jes       |            |
+|      | Fri | Nov. 3   | Topic 12. Comparing multivariate data                                             | Jes       |            |
+| 7    | Mon | Nov. 6   | Mid-term project presentation & discussion                                        |           |            |
+|      | Wed | Nov. 8   | Mid-term project presentation & discussion                                        |           |            |
+|      | Fri | Nov. 10  | Mid-term project presentation & discussion                                        |           |            |
+| 8    | Mon | Nov. 13  | Topic 13. Spatial analysis, Zuur et al. approach                                  | Jes       |            |
+|      | Wed | Nov. 15  | Topic 14. Spatial analysis, Borcard et al. approach                               | Jes       |            |
+|      | Fri | Nov. 17  | Topic 15. Spatial analysis, Bayesian approach                                     | Jes       |            |
+|RECESS|     |          | Thanksgiving                                                                      |           |            |
+| 9    | Mon | Nov. 27  | Topic 16. To be selected by class                                                 |           |            |
+|      | Wed | Nov. 29  | Topic 16. To be selected by class                                                 |           |            |
+|      | Fri | Dec. 1   | Topic 16. To be selected by class                                                 |           |            |
+| 10   | Mon | Dec. 4   | Final project presentations                                                       |           |            |
+|      | Wed | Dec. 6   | Final project presentations                                                       |           |            |
+|      | Fri | Dec. 8   | Final project presentations                                                       |           |            |
 
 
 ## Before Class 

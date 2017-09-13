@@ -37,11 +37,11 @@ navbar:
     - text: "W5"
       menu:
         - text: "Bayesian linear models"
-          href: 05-A-topic-name.html
-        - text: "Bayesian hierarchical models"
-          href: 05-B-topic-name.html
-        - text: "Bayesian non-linear models"
-          href: 05-C-topic-name.html
+          href: 05-A-Bayesian-linear-models.html
+        - text: "Bayesian inference with prior information"
+          href: 05-B-Bayesian-priors.html
+        - text: "Advanced Bayesian model example"
+          href: 05-C-Advanced-bayesian-example.html
     - text: "W6"
       menu:
         - text: "Unconstrained ordination"
