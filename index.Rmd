@@ -75,17 +75,23 @@ During class you will be editing the course webpages to include R code for the l
 
 ## References & Readings
 
+### Assigned Readings
+
+All assigned readings can be obtained for free through Stanford library online resources. 
+
 + Beale, C. M., Lennon, J. J., Yearsley, J. M., Brewer, M. J. and Elston, D. A. (2010), *Regression analysis of spatial data*. Ecology Letters, 13: 246–264. DOI:[10.1111/j.1461-0248.2009.01422.x](http://dx.doi.org/10.1111/j.1461-0248.2009.01422.x)
 + Borcard, D., Gillet, F. and Legendre, P. (2011), *Numerical Ecology with R.* Springer. [Stanford Full Text](https://link.springer.com/book/10.1007/978-1-4419-7976-6)
-+ Dalgaard, P. (2008), *Introductory Statistics with R*. Springer. [Stanford Full Text](https://link.springer.com/book/10.1007/978-0-387-79054-1)
++ Korner-Nievergelt et al. (2015), *Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.* Elsevier. [Stanford Full Text](http://www.sciencedirect.com/science/book/9780128013700)
 + Martin, T. G., Wintle, B. A., Rhodes, J. R., Kuhnert, P. M., Field, S. A., Low-Choy, S. J., Tyre, A. J. and Possingham, H. P. (2005), *Zero tolerance ecology: improving ecological inference by modelling the source of zero observations*. Ecology Letters, 8: 1235–1246. DOI:[10.1111/j.1461-0248.2005.00826.x](http://dx.doi.org/10.1111/j.1461-0248.2005.00826.x)
-+ McElreath, R. (2016), *Statistical rethinking: a Bayesian course with examples in R and Stan*. CRC Press. *Available in the Science and Marine libraries* [Author's website](http://xcelab.net/rm/statistical-rethinking/)
 + Ramette, A. (2007), *Multivariate analyses in microbial ecology*. FEMS Microbiology Ecology, 62: 142–160. DOI: [10.1111/j.1574-6941.2007.00375.x](http:dx.doi.org/10.1111/j.1574-6941.2007.00375.x)
-+ Stone, J. V. (2016), *Bayes' rule with R: a tutorial introduction to Bayesian analysis*. Sebtel Press.
-+ Venables, W. N., Smith, D. M. and the R Core Team. (2012), *An Introduction to R: Notes on R: A Programming Environment for Data Analysis and Graphics*. Version 2.15.1. [full text](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf)
 + Wagner, H. H. and Fortin, M.-J. (2005), *Spatial analysis of landscapes: concepts and statistics*. Ecology, 86: 1975–1987. DOI: [10.1890/04-0914](http://dx.doi.org/10.1890/04-0914)
-+ Wickham, H. (2009), *ggplot2: Elegant Graphics for Data Analysis*. Springer. [Stanford Full Text](https://link.springer.com/book/10.1007%2F978-0-387-98141-3)
++ Wickham, H. (2016), *ggplot2: Elegant Graphics for Data Analysis*. Springer. [Stanford Full Text](https://link-springer-com.stanford.idm.oclc.org/book/10.1007%2F978-3-319-24277-4)
 + Zuur, A. F., Leno, E. N., Walker, N., Savliev, A. A. and Smith, G. M. (2009), *Mixed Effect Models and Extensions in Ecology with R.* Springer. [Stanford Full Text](https://link.springer.com/book/10.1007%2F978-0-387-87458-6)
 + Zuur, A. F. (2010), *A protocol for data exploration to avoid common statistical problems.* Methods in Ecology and Evolution **1**: 3-14. DOI: [10.1111/j.2041-210X.2009.00001.x](http://dx.doi.org/10.1111/j.2041-210X.2009.00001.x)
 
+### Addional Suggested References
 
++ Legendre, P. and L. Legendre. (2012), *Numerical Ecology*. Elsevier. [Stanford Full Text](http://www.sciencedirect.com/science/bookseries/01678892/24)
++ McElreath, R. (2016), *Statistical rethinking: a Bayesian course with examples in R and Stan*. CRC Press. *Available in the Science and Marine libraries* [Author's website](http://xcelab.net/rm/statistical-rethinking/)
++ Venables, W. N., Smith, D. M. and the R Core Team. (2012), *An Introduction to R: Notes on R: A Programming Environment for Data Analysis and Graphics*. Version 2.15.1. [full text](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf)
++ Zuur, A. F., J. M. Hilbe and E. N. Ieno. (2013), *A beginner's guide to GLM and GLMM with R: a frequentist and Bayesian perspective for ecologists. Highland Statistics Ltd. [Stanford Library Record](https://searchworks.stanford.edu/view/11749213) 
