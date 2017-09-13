@@ -10,12 +10,12 @@ navbar:
           href: 01-A-R-intro.html
         - text: "R markdown"
           href: 01-B-Rmarkdown-intro.html
-        - text: "ggplot2"
-          href: 01-C-ggplot2-intro.html
+        - text: "R workshop"
+          href: 01-C-R-workshop.html
     - text: "W2"
       menu:
-        - text: "R workshop"
-          href: 02-A-R-workshop.html
+        - text: "ggplot2 and tidyr"
+          href: 02-A-tidyr.html
         - text: "Intro to git"
           href: 02-B-git-intro.html
     - text: "W3"
