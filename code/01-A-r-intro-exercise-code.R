@@ -13,7 +13,7 @@ if(dir.exists("data")) {
 
 } else {
   
-  # If it doesn't exits, make a new folder named code
+  # If it doesn't exits, make a new folder named data
   dir.create("data")
   
 }
