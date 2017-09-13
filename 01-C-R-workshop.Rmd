@@ -1,11 +1,11 @@
 ---
 layout: topic
-title: "Practice with R"
+title: "Introduction to R"
 author: Jes
 output: html_document
 ---
 
-**Assigned Reading:**
+**Suggested Reading:**
 
 > Chapter 2 in Korner-Nievergelt et al. 2015. *Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.* Elsevier. [link](http://www.sciencedirect.com/science/book/9780128013700) 
 
@@ -27,13 +27,12 @@ knitr::opts_chunk$set(fig.path = "images/")
 repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 ```
 
-### Key Points
+Today's class is an optional session for students who are new to R or who want a more formal introduction to R's terminology and data structures.
 
 
-### Analysis Example
+### Lesson Materials
 
-
-### Discussion Questions
+We will be working through the Data Carpentry ecology lessons [Introduction to R](http://www.datacarpentry.org/R-ecology-lesson/01-intro-to-r.html) and [Starting with data](http://www.datacarpentry.org/R-ecology-lesson/02-starting-with-data.html). Rather than reproduce the lesson materials here, you can find them at the links listed above.
 
 
 
