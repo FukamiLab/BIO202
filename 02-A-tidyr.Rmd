@@ -9,6 +9,7 @@ output: html_document
 **Assigned Reading:**
 
 > Chapters 1.1, 1.2, 2, 3, 9 and 10 in: Wickham, H. 2009. *ggplot2: Elegant Graphics for Data Analysis.* Springer. DOI: [Stanford Full Text](https://link.springer.com/book/10.1007%2F978-0-387-98141-3)
+>
 > The sections on mutating and filtering joins in [this vignette](https://cran.r-project.org/web/packages/dplyr/vignettes/two-table.html)
 
 **Optional Reading:**
@@ -38,22 +39,22 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Before Class
 
-Download [this R script](https://github.com/FukamiLab/BIO202/blob/master/code/02-A-r-tidyr-exercise-code.R) and save it in your code folder in the research project you created on the first day of class. You will need to click the 'Raw' button and then download the text file that appears. Be sure to remove the .txt extension that may have been added when you saved the file to your computer so that the file ends in .R. You may want to run the first part of the script that downloads the data to be sure that there will be no issues with data access during class.
+Download [this R script](https://github.com/FukamiLab/BIO202/blob/master/code/02-A-tidyr-exercise-code.R) and save it in your code folder in the research project you created on the first day of class. You will need to click the 'Raw' button and then download the text file that appears. Be sure to remove the .txt extension that may have been added when you saved the file to your computer so that the file ends in .R. You may want to run the first part of the script that downloads the data to be sure that there will be no issues with data access during class.
 
 ### Key Points
 
 + Data should be organized so that observations are in rows and attributes (variables) are in columns.
 + The `dplyr` package contains functions for manipulating data:
-  + `spread` and `gather` change the format of data tables.
-  + `separate` and `unite` change the format of variables.
-  + `filter` creates a subset of a data table.
-  + `mutate` creates new variables.
-  + `group_by` and `summarise` are used to summarize observations according to the values of their variables.
+    + `spread` and `gather` change the format of data tables.
+    + `separate` and `unite` change the format of variables.
+    + `filter` creates a subset of a data table.
+    + `mutate` creates new variables.
+    + `group_by` and `summarise` are used to summarize observations according to the values of their variables.
 + The pipe function `%>%` is used to link several operations together (e.g. function composition).
 + The `ggplot2` package is set of functions for visualizing data.
-  + A ggplot2 plot contains three components: (1) the data, (2) the aesthetic mappings between variables and visual properties, and (3) layers describing how to display the observations.
-  + The aesthetic mapping `aes` must minimally describe which variables define the plot coordinate space.
-  + `facet_wrap` creates plots for specified data subsets.
+    + A ggplot2 plot contains three components: (1) the data, (2) the aesthetic mappings between variables and visual properties, and (3) layers describing how to display the observations.
+    + The aesthetic mapping `aes` must minimally describe which variables define the plot coordinate space.
+    + `facet_wrap` creates plots for specified data subsets.
 
 ### Manipulating data with dplyr
 

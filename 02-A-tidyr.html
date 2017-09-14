@@ -499,7 +499,8 @@ div.tocify {
 
 <p><strong>Assigned Reading:</strong></p>
 <blockquote>
-<p>Chapters 1.1, 1.2, 2, 3, 9 and 10 in: Wickham, H. 2009. <em>ggplot2: Elegant Graphics for Data Analysis.</em> Springer. DOI: <a href="https://link.springer.com/book/10.1007%2F978-0-387-98141-3">Stanford Full Text</a> The sections on mutating and filtering joins in <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/two-table.html">this vignette</a></p>
+<p>Chapters 1.1, 1.2, 2, 3, 9 and 10 in: Wickham, H. 2009. <em>ggplot2: Elegant Graphics for Data Analysis.</em> Springer. DOI: <a href="https://link.springer.com/book/10.1007%2F978-0-387-98141-3">Stanford Full Text</a></p>
+<p>The sections on mutating and filtering joins in <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/two-table.html">this vignette</a></p>
 </blockquote>
 <p><strong>Optional Reading:</strong></p>
 <blockquote>
@@ -508,23 +509,27 @@ div.tocify {
 <p>RStudio has produced several helpful <a href="https://www.rstudio.com/resources/cheatsheets/">cheatsheets</a> on data management and visualization with ggplot2 and tidyr. You may want to view or print one or several of them.</p>
 <div id="before-class" class="section level3">
 <h3>Before Class</h3>
-<p>Download <a href="https://github.com/FukamiLab/BIO202/blob/master/code/02-A-r-tidyr-exercise-code.R">this R script</a> and save it in your code folder in the research project you created on the first day of class. You will need to click the ‘Raw’ button and then download the text file that appears. Be sure to remove the .txt extension that may have been added when you saved the file to your computer so that the file ends in .R. You may want to run the first part of the script that downloads the data to be sure that there will be no issues with data access during class.</p>
+<p>Download <a href="https://github.com/FukamiLab/BIO202/blob/master/code/02-A-tidyr-exercise-code.R">this R script</a> and save it in your code folder in the research project you created on the first day of class. You will need to click the ‘Raw’ button and then download the text file that appears. Be sure to remove the .txt extension that may have been added when you saved the file to your computer so that the file ends in .R. You may want to run the first part of the script that downloads the data to be sure that there will be no issues with data access during class.</p>
 </div>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
 <ul>
 <li>Data should be organized so that observations are in rows and attributes (variables) are in columns.</li>
-<li>The <code>dplyr</code> package contains functions for manipulating data:</li>
+<li>The <code>dplyr</code> package contains functions for manipulating data:
+<ul>
 <li><code>spread</code> and <code>gather</code> change the format of data tables.</li>
 <li><code>separate</code> and <code>unite</code> change the format of variables.</li>
 <li><code>filter</code> creates a subset of a data table.</li>
 <li><code>mutate</code> creates new variables.</li>
 <li><code>group_by</code> and <code>summarise</code> are used to summarize observations according to the values of their variables.</li>
+</ul></li>
 <li>The pipe function <code>%&gt;%</code> is used to link several operations together (e.g. function composition).</li>
-<li>The <code>ggplot2</code> package is set of functions for visualizing data.</li>
+<li>The <code>ggplot2</code> package is set of functions for visualizing data.
+<ul>
 <li>A ggplot2 plot contains three components: (1) the data, (2) the aesthetic mappings between variables and visual properties, and (3) layers describing how to display the observations.</li>
 <li>The aesthetic mapping <code>aes</code> must minimally describe which variables define the plot coordinate space.</li>
 <li><code>facet_wrap</code> creates plots for specified data subsets.</li>
+</ul></li>
 </ul>
 </div>
 <div id="manipulating-data-with-dplyr" class="section level3">
