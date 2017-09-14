@@ -285,7 +285,7 @@ div.tocify {
       <a href="01-B-Rmarkdown-intro.html">R markdown</a>
     </li>
     <li>
-      <a href="01-C-ggplot2-intro.html">ggplot2</a>
+      <a href="01-C-R-workshop.html">R workshop</a>
     </li>
   </ul>
 </li>
@@ -297,7 +297,7 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="02-A-R-workshop.html">R workshop</a>
+      <a href="02-A-tidyr.html">ggplot2 and tidyr</a>
     </li>
     <li>
       <a href="02-B-git-intro.html">Intro to git</a>
@@ -315,10 +315,10 @@ div.tocify {
       <a href="03-A-data-exploration.html">Data exploration</a>
     </li>
     <li>
-      <a href="03-B-topic-name.html">Linear models</a>
+      <a href="03-B-linear-models.html">Linear models</a>
     </li>
     <li>
-      <a href="03-C-topic-name.html">Heterogeneity</a>
+      <a href="03-C-heterogeneity.html">Heterogeneity</a>
     </li>
   </ul>
 </li>
@@ -348,13 +348,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="05-A-topic-name.html">Bayesian linear models</a>
+      <a href="05-A-Bayesian-linear-models.html">Bayesian linear models</a>
     </li>
     <li>
-      <a href="05-B-topic-name.html">Bayesian hierarchical models</a>
+      <a href="05-B-Bayesian-priors.html">Bayesian inference with prior information</a>
     </li>
     <li>
-      <a href="05-C-topic-name.html">Bayesian non-linear models</a>
+      <a href="05-C-Advanced-bayesian-example.html">Advanced Bayesian model example</a>
     </li>
   </ul>
 </li>
@@ -550,6 +550,7 @@ div.tocify {
 <li>Under <em>Installers</em> select the version that matches your distribution, and install it with your preferred method (e.g., with Debian/Ubuntu <code>sudo dpkg -i   rstudio-x.yy.zzz-amd64.deb</code> at the terminal).</li>
 <li>Once it’s installed, open RStudio to make sure it works and you don’t get any error messages.</li>
 </ul>
+<hr />
 </div>
 </div>
 <div id="editing-the-course-website" class="section level3">
@@ -568,39 +569,69 @@ div.tocify {
 </div>
 <div id="if-you-are-new-to-git-but-want-to-learn" class="section level4">
 <h4>If you are new to git, but want to learn</h4>
-<p>See the section below on installing git on your computer.</p>
-<p>Attend the git tutorial provided at the beginning of class.</p>
-<p>Use the ‘If you are familiar with git’ workflow below to make changes to the course website.</p>
+<ol style="list-style-type: decimal">
+<li>Install Git on your computer using the instructions in the section below.</li>
+<li>Attend the Git tutorial during class on Wednesday, October 4th (week 2).</li>
+<li>Use the ‘If you are familiar with git’ workflow below to make changes to the course website.</li>
+</ol>
 </div>
 <div id="if-you-are-familiar-with-git" class="section level4">
 <h4>If you are familiar with git</h4>
 <p>The general workflow is:</p>
 <ol style="list-style-type: decimal">
-<li>If you have not aready done so, fork the repository from <a href="https://github.com/FukamiLab/BIO202" class="uri">https://github.com/FukamiLab/BIO202</a> to your account on GitHub. Then clone a local copy of this forked repository (from your own GitHub account) to your computer. <a href="">Instructions</a>. This only needs to be done once.</li>
-<li>Before you start working:</li>
-</ol>
+<li>If you have not aready done so, fork the repository from <a href="https://github.com/FukamiLab/BIO202" class="uri">https://github.com/FukamiLab/BIO202</a> to your account on GitHub. Then clone a local copy of this forked repository (from your own GitHub account) to your computer. This only needs to be done once.</li>
+<li>Before you start working:
 <ul>
-<li>Make sure your copy is up to date with the FukamiLab repository on GitHub. If not, submit a Pull request to update it. <a href="">Instructions</a></li>
+<li>Make sure your copy is up to date with the FukamiLab repository on GitHub. If not, submit a Pull request to update it.</li>
 <li>Make sure your local repository on your computer is up to date with your fork of the repository on your GitHub account using <code>git pull</code>.</li>
-</ul>
-<ol start="3" style="list-style-type: decimal">
+</ul></li>
 <li>Work on the .Rmd file for your lesson in R Studio on your computer. Click ‘Knit’ to render your changes as an html file and view them in your browser. Note that any edits you make are only on your computer until you submit a pull request to merge your changes to the repository. Make sure that when you have made your last edit to the .Rmd file you click ‘Knit’ so that an up-to-date html file is generated. The html file will be the one that appears on the website.</li>
 <li>Commit the changes you make periodically to your local repository using <code>git commit -m &quot;changes you made&quot;</code>.</li>
 <li>When you are finished, push the commits from your local repository to your fork on your GitHub account using <code>git push origin master</code>.</li>
 <li>Submit a pull request on GitHub to merge the changes on your fork with the original BIO202 repository on FukamiLab no later than 8 am on the day you present. Jes or Tad will approve your pull request.</li>
 </ol>
+<p><em>If you are not sure how to do any of the steps listed above, you can find instructions on the <a href="02-B-git-intro.html">lesson page</a> for Wednesday, October 4th.</em></p>
+<hr />
 </div>
 </div>
 <div id="git" class="section level3">
-<h3>git</h3>
-<p>TO DO:</p>
+<h3>Git</h3>
+<div id="windows-1" class="section level4">
+<h4>Windows</h4>
+<ol style="list-style-type: decimal">
+<li>Download the git installer for Windows <a href="https://git-for-windows.github.io/">here</a>. This will install bash, which is a command-line shell program for interacting with files and programs on your computer.</li>
+<li>Run the installer that you just downloaded. Click “Next” as needed and when you get to the following options make sure that you:
 <ul>
-<li>INCLUDE INSTRUCTIONS FOR DOWNLOADING GIT AND INTEGRATING WITH RSTUDIO</li>
-<li>Link to git lesson content on SWC</li>
-</ul>
-<div id="attribution" class="section level4">
-<h4>Attribution</h4>
-<p>The content of this webpage was derived from <a href="http://datacarpentry.org">Data Carpentry</a> materials (Copyriright (c) Data Carpentry) under CC-3.0 Attribution License (see <a href="http://creativecommons.org/licenses/by/3.0/" class="uri">http://creativecommons.org/licenses/by/3.0/</a>).</p>
+<li>Select “Use Git from the Windows Command Prompt”.</li>
+<li>Keep “Checkout Windows-style, commit Unix-style line endings” selected.</li>
+<li>Select “Use Windows’ default console window”.</li>
+<li>If you forgot to do any of these, rerun the installer and select the appropriate options.</li>
+</ul></li>
+<li>That’s it! You should now have three new programs installed in a folder called Git under your Program Files.</li>
+</ol>
+</div>
+<div id="macos-1" class="section level4">
+<h4>macOS</h4>
+<p>Follow the instructions below or view this <a href="https://www.youtube.com/watch?v=9LQhwETCdwY">video tutorial</a>.</p>
+<ol style="list-style-type: decimal">
+<li>Go to <a href="https://sourceforge.net/projects/git-osx-installer/files/">this list</a> and download an installer for Git.
+<ul>
+<li>If you are using OS X 10.9 and higher, choose the most recent version for “mavericks”.</li>
+<li>If you are using an earlier version of OS X, choose the most recent version for “snow leopard”.</li>
+</ul></li>
+<li>Run the installer you downloaded.</li>
+<li>After installing Git, there will not be anything in your /Applications folder, because Git is a command line program.</li>
+</ol>
+<p>Note: if you have OSX El Capitan you may experience some errors when running Git if you don’t have an updated XCODE. <a href="https://stackoverflow.com/questions/32893412/command-line-tools-not-working-os-x-el-capitan-macos-sierra">Here</a> is a description of the issue on StackOverflow and the solution is to open a Terminal window and type <code>xcode-select --install</code>.</p>
+</div>
+<div id="linux-1" class="section level4">
+<h4>Linux</h4>
+<p>You may already have Git installed. If not, you can try to install it via your distro’s package manager. For Debian/Ubuntu run <code>sudo apt-get install git</code> and for Fedora run <code>sudo yum install git</code>.</p>
+<hr />
+<blockquote>
+<p>Attribution</p>
+<p>The content of this webpage was derived from <a href="http://datacarpentry.org">Data Carpentry</a> and <a href="http://software-carpentry.org">Software Carpentry</a> materials (Copyright (c) Data Carpentry) under CC-3.0 Attribution License (see <a href="http://creativecommons.org/licenses/by/3.0/" class="uri">http://creativecommons.org/licenses/by/3.0/</a>).</p>
+</blockquote>
 </div>
 </div>
 

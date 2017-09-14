@@ -26,49 +26,6 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 
 
-<style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 
 
 <style type="text/css">
@@ -329,7 +286,7 @@ div.tocify {
       <a href="01-B-Rmarkdown-intro.html">R markdown</a>
     </li>
     <li>
-      <a href="01-C-ggplot2-intro.html">ggplot2</a>
+      <a href="01-C-R-workshop.html">R workshop</a>
     </li>
   </ul>
 </li>
@@ -341,7 +298,7 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="02-A-R-workshop.html">R workshop</a>
+      <a href="02-A-tidyr.html">ggplot2 and tidyr</a>
     </li>
     <li>
       <a href="02-B-git-intro.html">Intro to git</a>
@@ -359,10 +316,10 @@ div.tocify {
       <a href="03-A-data-exploration.html">Data exploration</a>
     </li>
     <li>
-      <a href="03-B-topic-name.html">Linear models</a>
+      <a href="03-B-linear-models.html">Linear models</a>
     </li>
     <li>
-      <a href="03-C-topic-name.html">Heterogeneity</a>
+      <a href="03-C-heterogeneity.html">Heterogeneity</a>
     </li>
   </ul>
 </li>
@@ -392,13 +349,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="05-A-topic-name.html">Bayesian linear models</a>
+      <a href="05-A-Bayesian-linear-models.html">Bayesian linear models</a>
     </li>
     <li>
-      <a href="05-B-topic-name.html">Bayesian hierarchical models</a>
+      <a href="05-B-Bayesian-priors.html">Bayesian inference with prior information</a>
     </li>
     <li>
-      <a href="05-C-topic-name.html">Bayesian non-linear models</a>
+      <a href="05-C-Advanced-bayesian-example.html">Advanced Bayesian model example</a>
     </li>
   </ul>
 </li>
@@ -544,38 +501,16 @@ div.tocify {
 <blockquote>
 <p>Zuur, A. F. 2010. <em>A protocol for data exploration to avoid common statistical problems.</em> Methods in Ecology and Evolution <strong>1</strong>: 3-14. DOI: <a href="http://dx.doi.org/10.1111/j.2041-210X.2009.00001.x">10.1111/j.2041-210X.2009.00001.x</a></p>
 </blockquote>
-<div id="key-points" class="section level2">
-<h2>Key Points</h2>
-<p>Test editing</p>
-<p>The instructor will fill in a description of the topic here followed by a bulleted list describing key features of the statistical analysis method. For example:</p>
-<ul>
-<li>When to use this analysis</li>
-<li>When <em>not</em> to use this analysis</li>
-</ul>
-</div>
-<div id="analysis-example" class="section level2">
-<h2>Analysis Example</h2>
-<p>The student discussion leader will place their example code in this section, including text that describe the purpose of each code block.</p>
-<p>First you wil probably need to read in data. If you have uploaded the data file on the course GitHub repository in the data folder then you should be able to read in the data as follows by changing the name of the file after <code>data/</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read in a data file from the data folder on the BIO 202 GitHub repository</span>
-dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">file.path</span>(repo_url, <span class="st">&quot;data/macrolichen_traits_Coyle_2016.csv&quot;</span>))
 
-<span class="co"># Or, read in the data file from a folder on your computer</span>
-<span class="co"># Remove # from the following 3 lines and change the file path assigned to my_dir</span>
-<span class="co"># my_dir &lt;- &quot;/Path/to/your/working_directory&quot;</span>
-<span class="co"># setwd(my_dir)</span>
-<span class="co"># dat &lt;- read.csv(&quot;lichen_traits_Coyle_2016.csv&quot;)</span></code></pre></div>
-<p>Next describe how you will manipulate the data in order to perform the anaylsis.</p>
-<p>Include any relevant code below, making sure to include a <code># comment</code> for each line.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Subset the data to foliose lichens</span>
-fol_dat &lt;-<span class="st"> </span><span class="kw">subset</span>(dat, Growth_form ==<span class="st"> &#39;foliose&#39;</span>)</code></pre></div>
-<p>Describe the steps of the example analysis, including code blocks as needed. Describe the functions and packages used.</p>
-<p><img src="images/chl_fig-1.png" width="672" /></p>
-<p><strong>Figure 1. Total chlorophyll versus ratio of chlorophyll A to B.</strong> Looks like we have some data cleaning to do!</p>
+<div id="key-points" class="section level3">
+<h3>Key Points</h3>
+  
 </div>
-<div id="discussion-questions" class="section level2">
-<h2>Discussion Questions</h2>
-<p>Include any questions or issues here that you want to discuss or ask about in class. After the class session, update this section with any important notes discussed.</p>
+<div id="analysis-example" class="section level3">
+<h3>Analysis Example</h3>
+</div>
+<div id="discussion-questions" class="section level3">
+<h3>Discussion Questions</h3>
 </div>
 
 

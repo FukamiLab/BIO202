@@ -1,13 +1,20 @@
 ---
 layout: topic
-title: "Data Exploration"
-author: Tad
+title: "Advanced Bayesian model example"
+author: Jes
 output: html_document
 ---
 
 **Assigned Reading:**
 
-> Zuur, A. F. 2010. *A protocol for data exploration to avoid common statistical problems.* Methods in Ecology and Evolution **1**: 3-14. DOI: [10.1111/j.2041-210X.2009.00001.x](http://dx.doi.org/10.1111/j.2041-210X.2009.00001.x)
+> TBD by students: one example from Chapter 14 in Korner-Nievergelt et al. 2015. *Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.* Elsevier. [link](http://www.sciencedirect.com/science/book/9780128013700) 
+
+
+**Optional Reading:**
+
+> Chapters 16 and 17 in Korner-Nievergelt et al. 2015. *Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.* Elsevier. [link](http://www.sciencedirect.com/science/book/9780128013700)
+>
+> \* These chapters contain a data analysis checklist and information on how to report analyses in scientific papers.
 
 ```{r include = FALSE}
 # This code block sets up the r session when the page is rendered to html

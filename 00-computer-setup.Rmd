@@ -81,6 +81,7 @@ output: html_document
 * Once it's installed, open RStudio to make sure it works and you don't get any
   error messages.
 
+***
 
 ### Editing the Course Website
 
@@ -98,11 +99,9 @@ The course website can be edited by changing the html files in the course GitHub
 
 #### If you are new to git, but want to learn
 
-See the section below on installing git on your computer.
-
-Attend the git tutorial provided at the beginning of class.
-
-Use the 'If you are familiar with git' workflow below to make changes to the course website.
+1. Install Git on your computer using the instructions in the section below. 
+2. Attend the Git tutorial during class on Wednesday, October 4th (week 2).
+3. Use the 'If you are familiar with git' workflow below to make changes to the course website.
 
 
 #### If you are familiar with git
@@ -110,28 +109,49 @@ Use the 'If you are familiar with git' workflow below to make changes to the cou
 
 The general workflow is:
 
-1. If you have not aready done so, fork the repository from https://github.com/FukamiLab/BIO202 to your account on GitHub. Then clone a local copy of this forked repository (from your own GitHub account) to your computer. [Instructions](). This only needs to be done once.
+1. If you have not aready done so, fork the repository from https://github.com/FukamiLab/BIO202 to your account on GitHub. Then clone a local copy of this forked repository (from your own GitHub account) to your computer. This only needs to be done once.
 2. Before you start working:
-  + Make sure your copy is up to date with the FukamiLab repository on GitHub. If not, submit a Pull request to update it. [Instructions]()
-  + Make sure your local repository on your computer is up to date with your fork of the repository on your GitHub account using `git pull`.
+    + Make sure your copy is up to date with the FukamiLab repository on GitHub. If not, submit a Pull request to update it.
+    + Make sure your local repository on your computer is up to date with your fork of the repository on your GitHub account using `git pull`.
 3. Work on the .Rmd file for your lesson in R Studio on your computer. Click 'Knit' to render your changes as an html file and view them in your browser. Note that any edits you make are only on your computer until you submit a pull request to merge your changes to the repository. Make sure that when you have made your last edit to the .Rmd file you click 'Knit' so that an up-to-date html file is generated. The html file will be the one that appears on the website.
 4. Commit the changes you make periodically to your local repository using `git commit -m "changes you made"`.
 5. When you are finished, push the commits from your local repository to your fork on your GitHub account using `git push origin master`.
 6. Submit a pull request on GitHub to merge the changes on your fork with the original BIO202 repository on FukamiLab no later than 8 am on the day you present. Jes or Tad will approve your pull request.
 
+*If you are not sure how to do any of the steps listed above, you can find instructions on the [lesson page](02-B-git-intro.html) for Wednesday, October 4th.*
 
+***
 
+### Git
 
-### git
+#### Windows
 
+1. Download the git installer for Windows [here](https://git-for-windows.github.io/). This will install bash, which is a command-line shell program for interacting with files and programs on your computer.
+2. Run the installer that you just downloaded. Click "Next" as needed and when you get to the following options make sure that you:
+    + Select "Use Git from the Windows Command Prompt". 
+    + Keep "Checkout Windows-style, commit Unix-style line endings" selected.
+    + Select "Use Windows' default console window".
+    + If you forgot to do any of these, rerun the installer and select the appropriate options.
+3. That's it! You should now have three new programs installed in a folder called Git under your Program Files.
 
-TO DO: 
+#### macOS
 
-* INCLUDE INSTRUCTIONS FOR DOWNLOADING GIT AND INTEGRATING WITH RSTUDIO
-* Link to git lesson content on SWC
+Follow the instructions below or view this [video tutorial](https://www.youtube.com/watch?v=9LQhwETCdwY).
 
+1. Go to [this list](https://sourceforge.net/projects/git-osx-installer/files/) and download an installer for Git.
+    + If you are using OS X 10.9 and higher, choose the most recent version for "mavericks".
+    + If you are using an earlier version of OS X, choose the most recent version for "snow leopard".
+2. Run the installer you downloaded.
+3. After installing Git, there will not be anything in your /Applications folder, because Git is a command line program.
 
+Note: if you have OSX El Capitan you may experience some errors when running Git if you don't have an updated XCODE. [Here](https://stackoverflow.com/questions/32893412/command-line-tools-not-working-os-x-el-capitan-macos-sierra) is a description of the issue on StackOverflow and the solution is to open a Terminal window and type `xcode-select --install`.
 
-#### Attribution
+#### Linux
 
-The content of this webpage was derived from [Data Carpentry](http://datacarpentry.org) materials (Copyriright (c) Data Carpentry) under CC-3.0 Attribution License (see [http://creativecommons.org/licenses/by/3.0/](http://creativecommons.org/licenses/by/3.0/)). 
+You may already have Git installed. If not, you can try to install it via your distro’s package manager. For Debian/Ubuntu run `sudo apt-get install git` and for Fedora run `sudo yum install git`.
+
+***
+
+> Attribution
+>
+> The content of this webpage was derived from [Data Carpentry](http://datacarpentry.org) and [Software Carpentry](http://software-carpentry.org) materials (Copyright (c) Data Carpentry) under CC-3.0 Attribution License (see [http://creativecommons.org/licenses/by/3.0/](http://creativecommons.org/licenses/by/3.0/)). 
