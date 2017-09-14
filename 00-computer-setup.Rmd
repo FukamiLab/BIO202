@@ -132,7 +132,7 @@ The general workflow is:
     + Keep "Checkout Windows-style, commit Unix-style line endings" selected.
     + Select "Use Windows' default console window".
     + If you forgot to do any of these, rerun the installer and select the appropriate options.
-3. That's it! You should now have three new programs installed in a folder called Git under your Progra Files.
+3. That's it! You should now have three new programs installed in a folder called Git under your Program Files.
 
 #### macOS
 

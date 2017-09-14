@@ -511,8 +511,8 @@ div.tocify {
 <h3>Before we begin</h3>
 <p>Make sure that you have installed git on your computer. You will need both the program git and a command line shell to use the program. See the git installation instructions on the <a href="00-computer-setup.html">Computer Setup</a> page. We will primarily focus on using git from RStudio.</p>
 </div>
-<div id="what-is-github-and-how-do-i-use-it" class="section level3">
-<h3>What is GitHub (and how do I use it)?</h3>
+<div id="what-is-github" class="section level3">
+<h3>What is GitHub?</h3>
 <p>GitHub is a website that provides access to files so that people collaborating on a project can work together. GitHub is organized around the idea of projects- a self-contained set of files that “do something”. Each project is called a <em>repository</em> and is accessed at the web url: <a href="https://github.com/name-of-project-owner/project-name" class="uri">https://github.com/name-of-project-owner/project-name</a>. We will be using GitHub to manage changes to our course website which is owned by the FukamiLab organization and is stored in a project named BIO202. Thus, you can find all of the files that make our course website at <a href="https://github.com/FukamiLab/BIO202" class="uri">https://github.com/FukamiLab/BIO202</a>.</p>
 <p>Anyone on the internet can see and download files from a GitHub repository (unless you pay to make it private). Keep this in mind when choosing which data to upload. However, you can restrict who is allowed to make changes to the files in your projects.</p>
 <div id="creating-a-github-account" class="section level4">
@@ -543,23 +543,70 @@ div.tocify {
 <p>While it is useful to be able to edit files online. Usually you will want to make changes to files on your computer and then propose changes from these files to a project repository on GitHub. The best way to do this is by using a version control program called git. In the next section you will learn how to use git with RStudio to manages changes to a version of the class website files stored on your computer.</p>
 </div>
 </div>
-<div id="what-is-git-and-how-do-i-use-it-with-rstudio" class="section level3">
-<h3>What is git (and how do I use it with RStudio)?</h3>
+<div id="what-is-git" class="section level3">
+<h3>What is git?</h3>
+<p>Git is a program that tracks changes to files in a directory and allows you to revert to any previously saved state. Git is often used with a shell program that allows you to directly access the command line. We will be using git exclusively with RStudio. If you want to learn how to use git from the command line, I recommend working through the Software Carpentry git lessons that can be found <a href="http://swcarpentry.github.io/git-novice/">here</a>. We will use git to track the changes to a version of the course website files that will be stored on your computer. Git will also allow us to merge any changes you make on your computer to your fork on your GitHub account, which you can then merge with the official FukamiLab course repository using a pull request.</p>
 <div id="getting-files-from-github-onto-your-computer" class="section level4">
 <h4>Getting files from GitHub onto your computer</h4>
+<p>First we need to clone your version of the course website from your GitHub repository to a folder on your computer. Before doing so, think about where you want to save this project folder. It should be somewhere reasonable on your computer (i.e. <em>not</em> your Desktop or Downloads) and you should not move this folder once it is set up, so choose its location carefully. Next we will clone your fork of the class website repository from GitHub into this folder. You can do this directly from RStudio (the easiest way) or you can do this from the command line.</p>
+<div id="using-rstudio" class="section level5">
+<h5>Using RStudio</h5>
+<ol style="list-style-type: decimal">
+<li>Open RStudio and click File &gt; New Project.</li>
+<li>Click Version Control and then Git.
+<ul>
+<li>If you don’t see this option and have installed git according to the <a href="00-computer-setup.html">instructions</a> you need to tell RStudio where to find the git program on your computer. See the instructions <a href="https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN">here</a>. On Windows the path to the git executable is probably: “C:Files (x86)” or “C:Files”.</li>
+<li>Windows users may need to edit the system path so that Windows can find git. To do this, go to System Properties &gt; Advanced System Settings &gt; Environment Variables &gt; select Path &gt; Edit &gt; add on the path to the git executable and click OK. If those instructions don’t work try Googling “Windows edit PATH”.</li>
+</ul></li>
+<li>Copy the url of your fork of the class website repository into the line marked “Repository URL”. This should look like: <a href="https://github.com/your-username/BIO202" class="uri">https://github.com/your-username/BIO202</a>.</li>
+<li>Name the project directory whatever you like (no spaces!). BIO202_website would be a good name.</li>
+<li>Choose the folder where you want to save the project folder by clicking Browse. Finish by clicking “Create Project”.</li>
+</ol>
 </div>
-<div id="making-a-version-controlled-project-in-rstudio" class="section level4">
-<h4>Making a version-controlled project in RStudio</h4>
+<div id="using-the-command-line" class="section level5">
+<h5>Using the command line</h5>
+<ol style="list-style-type: decimal">
+<li>Navigate to the location on your computer where you want to save the website files and create a new folder to hold them (no spaces in the name!). A good project folder name would be BIO202_website.</li>
+<li>Open a shell program lile GitBash (Windows) or Terminal (Mac). This will open an empty window with a blinking cursor.</li>
+<li>Navigate to the project folder that you just created using the <code>cd</code> command: <code>cd ~/path/to/folder/folder_name</code>. Here’s how you find the path to your project folder:
+<ul>
+<li>On Windows:
+<ol style="list-style-type: decimal">
+<li>Use the file explorer to navigate so that you can see the folder you just created (do not navigate to the inside of the folder).</li>
+<li>Right click on the bar at the top that lists the folders hierarchically and select “copy address”. Or, Ctrl+click to highlight the path and copy what is highlighted.</li>
+<li>Paste this in front of the <code>cd</code> command.</li>
+<li>Change all <code>\</code> to <code>/</code>. Then press ENTER.</li>
+</ol></li>
+<li>On Mac:
+<ol style="list-style-type: decimal">
+<li>Use the Finder to navigate so that you can see the folder you just created.</li>
+<li>Right click (or Ctrl+click or two-finger click) on the folder.</li>
+<li>Hold down the OPTION key and select “Copy (folder name) as Pathname”.</li>
+<li>Paste this in front of the cd command and press ENTER.</li>
+</ol></li>
+</ul></li>
+<li>Use your web browser to go to your fork of the class website repository. It should be at <a href="https://github.com/your-username/BIO202" class="uri">https://github.com/your-username/BIO202</a>.</li>
+<li>Click the green “Clone or download” button in the upper right. This will display a url. Copy this url.</li>
+<li>At the command line (in the shell program) type <code>git clone</code>, then paste the url you copied from GitHub, then type the name of your project folder. If you named the folder “BIO202_website”, it should look like: <code>git clone https://github.com/your-username/BIO202 BIO202_website</code>.</li>
+<li>Press ENTER. Lots of stuff should happen. When you navigate to the project folder you should now see lots of files.</li>
+<li>Open RStudio and create a new Project from an Existing Directory.</li>
+<li>Browse to the project directory you created which now contains the files downloaded from your GitHub repository.</li>
+</ol>
 </div>
-<div id="saving-and-reverting-changes" class="section level4">
-<h4>Saving and reverting changes</h4>
+</div>
+<div id="editing-saving-and-reverting-local-files" class="section level4">
+<h4>Editing, saving and reverting local files</h4>
+<p>Open this new version-controlled RStudio project and open the file 02-C-student-projects.Rmd.Add an entry to this file for your project that you will work on for class. To save your changes and see what the Rmd file will look like as a webpage, click the “Knit” button at the top of the script window.</p>
+<p>You have now made changes to the <em>local</em> files on you computer. Next you need to track these changes with git. To do this, click on the button on the top bar that has a green plus over a red minus over a grey circular arrow. Choose “Commit” from the drop down menu.</p>
+<p>This will open a new window that shows you all of the files that have changed since your last “commit”. First you need to select the files that you want to “stage”. This means that any changes made to these files will be recorded in this “commit”. A “commit” is a record of a set of changes. You can revert files back to the state that they were in at any particular “commit”. So, if you want to be able to revert changes to just one file, you should only stage one file each time you commit. I would suggest stagin both the .Rmd file and its accompanying .html file at the same time, since the changes you made to the Rmd file caused the changes in the html file. Click the checkbox next to the files you want to stage for this commit. Then type a brief and specific message in the Commit message box about the changes you made. Notice that the bottom window shows you the differences between the current version of the file you selected and the most recently commited version. Click the commit version when you are satisfied.</p>
+<p>To see all previous commits, click the “History” tab at the top of the git window. You can select any commit and see which files were changed and the changes within these files.</p>
 </div>
 <div id="sending-changes-to-github" class="section level4">
 <h4>Sending changes to GitHub</h4>
 </div>
 </div>
-<div id="using-git-from-the-command-line" class="section level3">
-<h3>Using git from the command line</h3>
+<div id="workflow-summary" class="section level3">
+<h3>Workflow Summary</h3>
 <p><strong>Suggested Additional References:</strong></p>
 <blockquote>
 
