@@ -1,9 +1,14 @@
 ---
 layout: topic
-title: "Student Projects"
-author: [Instructor and Student names]
+title: "Linear Models"
+author: Tad
 output: html_document
 ---
+
+**Assigned Reading:**
+
+> Appendix A from: Zuur, A. F., Ieno, E. N., Walker, N., Saveliev, A. A. and Smith, G. M. 2009. *Mixed Effects Models and Extensions in Ecology with R.* Springer. [link](https://link-springer-com.stanford.idm.oclc.org/book/10.1007%2F978-0-387-87458-6)
+
 
 ```{r include = FALSE}
 # This code block sets up the r session when the page is rendered to html
@@ -23,16 +28,17 @@ knitr::opts_chunk$set(fig.path = "images/")
 repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 ```
 
-
-#### Student Name
-
-**Project Title**
-
-Brief description of the question you want to ask and the data you have to analyze it.
+### Key Points
 
 
-#### Student Name
 
-**Project Title**
+### Analysis Example
 
-Brief description of the question you want to ask and the data you have to analyze it.
+
+
+### Discussion Questions
+
+
+
+
+

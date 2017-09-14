@@ -9,10 +9,9 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Instructor and Student names" />
 
 
-<title>Lesson Title</title>
+<title></title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -26,49 +25,6 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 
 
-<style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 
 
 <style type="text/css">
@@ -534,48 +490,14 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Lesson Title</h1>
-<h4 class="author"><em>Instructor and Student names</em></h4>
 
 </div>
 
 
-<p>The instructor will edit the header above to reflect the lesson content and add their and the student’s names as authors. The instructor should also update the text below to give a link to the assigned reading:</p>
-<p><strong>Assigned Reading:</strong></p>
-<blockquote>
-<p>Coyle, JR. 2017. <em>Intraspecific variation in functional traits reveals limited effects of microclimate on community assemble in temperatedeciduous oak canopies.</em> Oikos <strong>126</strong>: 111-120. DOI: <a href="http://dx.doi.org/10.1111/oik.03239">10.1111/oik.03239</a></p>
-</blockquote>
-<div id="key-points" class="section level3">
-<h3>Key Points</h3>
-<p>The instructor will fill in a description of the topic here followed by a bulleted list describing key features of the statistical analysis method. For example:</p>
-<ul>
-<li>When to use this analysis</li>
-<li>When <em>not</em> to use this analysis</li>
-</ul>
-</div>
-<div id="analysis-example" class="section level3">
-<h3>Analysis Example</h3>
-<p>The student discussion leader will place their example code in this section, including text that describe the purpose of each code block.</p>
-<p>First you will probably need to read in data. If you have uploaded the data file on the course GitHub repository in the data folder then you should be able to read in the data as follows by changing the name of the file after <code>data/</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read in a data file from the data folder on the BIO 202 GitHub repository</span>
-dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">file.path</span>(repo_url, <span class="st">&quot;data/macrolichen_traits_Coyle_2016.csv&quot;</span>))
-
-<span class="co"># Or, read in the data file from a folder on your computer</span>
-<span class="co"># Remove # from the following 3 lines and change the file path assigned to my_dir</span>
-<span class="co"># my_dir &lt;- &quot;/Path/to/your/working_directory&quot;</span>
-<span class="co"># setwd(my_dir)</span>
-<span class="co"># dat &lt;- read.csv(&quot;lichen_traits_Coyle_2016.csv&quot;)</span></code></pre></div>
-<p>Next describe how you will manipulate the data in order to perform the anaylsis.</p>
-<p>Include any relevant code below, making sure to include a <code># comment</code> for each line.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Subset the data to foliose lichens</span>
-fol_dat &lt;-<span class="st"> </span><span class="kw">subset</span>(dat, Growth_form ==<span class="st"> &#39;foliose&#39;</span>)</code></pre></div>
-<p>Describe the steps of the example analysis, including code blocks as needed. Describe the functions and packages used.</p>
-<p><img src="images/chl_fig-1.png" width="672" /></p>
-<p><strong>Figure 1. Total chlorophyll versus ratio of chlorophyll A to B.</strong> Looks like we have some data cleaning to do!</p>
-</div>
-<div id="discussion-questions" class="section level3">
-<h3>Discussion Questions</h3>
-<p>Include any questions or issues here that you want to discuss or ask about in class. After the class session, update this section with any important notes discussed.</p>
+<div id="biology-202-ecological-statistics" class="section level1">
+<h1>Biology 202: Ecological Statistics</h1>
+<p>This is a repository for materials to be used in Biology 202: Ecological Statistics in Fall 2017 at Stanford University.</p>
+<p>Materials are currently under development and should not be used by outside parties.</p>
 </div>
 
 

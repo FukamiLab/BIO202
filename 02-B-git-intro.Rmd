@@ -5,13 +5,6 @@ author: Jes
 output: html_document
 ---
 
-The instructor will edit the header above to reflect the lesson content and add their and the student's names as authors. The instructor should also update the text below to give a link to the assigned reading:
-
-
-**Assigned Reading:**
-
-> Coyle, JR. 2017. *Intraspecific variation in functional traits reveals limited effects of microclimate on community assemble in temperatedeciduous oak canopies.* Oikos **126**: 111-120. DOI: [10.1111/oik.03239](http://dx.doi.org/10.1111/oik.03239)
-
 
 ```{r include = FALSE}
 # This code block sets up the r session when the page is rendered to html
@@ -31,64 +24,139 @@ knitr::opts_chunk$set(fig.path = "images/")
 repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 ```
 
-## Key Points
+### Key Points
 
-The instructor will fill in a description of the topic here followed by a bulleted list describing key features of the statistical analysis method. For example:
+In this lesson you will learn how to:
 
-* When to use this analysis
-* When *not* to use this analysis
++ Create and use a GitHub account to collaborate on our course website
++ Set up a version-controlled RStudio project on your computer
++ Use git to track and manage changes to files on your computer from RStudio
++ Send changes to (local) files on your computer to a (remote) GitHub repository
 
-## Analysis Example
+### Before we begin
 
-The student discussion leader will place their example code in this section, including text that describe the purpose of each code block.
+Make sure that you have installed git on your computer. You will need both the program git and a command line shell to use the program. See the git installation instructions on the [Computer Setup](00-computer-setup.html) page. We will primarily focus on using git from RStudio.
 
-First you wil probably need to read in data. If you have uploaded the data file on the course GitHub repository in the data folder then you should be able to read in the data as follows by changing the name of the file after `data/`:
+### What is GitHub?
 
+GitHub is a website that provides access to files so that people collaborating on a project can work together. GitHub is organized around the idea of projects- a self-contained set of files that "do something". Each project is called a *repository* and is accessed at the web url: https://github.com/name-of-project-owner/project-name. We will be using GitHub to manage changes to our course website which is owned by the FukamiLab organization and is stored in a project named BIO202. Thus, you can find all of the files that make our course website at https://github.com/FukamiLab/BIO202.
 
-```{r results = 'hide'}
-# Read in a data file from the data folder on the BIO 202 GitHub repository
-dat <- read.csv(file.path(repo_url, "data/macrolichen_traits_Coyle_2016.csv"))
+Anyone on the internet can see and download files from a GitHub repository (unless you pay to make it private). Keep this in mind when choosing which data to upload. However, you can restrict who is allowed to make changes to the files in your projects. 
 
-# Or, read in the data file from a folder on your computer
-# Remove # from the following 3 lines and change the file path assigned to my_dir
-# my_dir <- "/Path/to/your/working_directory"
-# setwd(my_dir)
-# dat <- read.csv("lichen_traits_Coyle_2016.csv")
-```
+#### Creating a GitHub account
 
+In order to use GitHub you will first need to create an account and give yourself a username so that you can create and work on projects. Go to https://github.com/ and on the main screen choose a username and password. You will need to check your email to confirm your regsitration. 
 
-Next describe how you will manipulate the data in order to perform the anaylsis.
+Once you have registered an logged in using your new username and password you can get started. GitHub provides a nice tutorial on creating a new project repository (here)[https://guides.github.com/activities/hello-world/]. Feel free to try out this tutorial on your own.
 
-Include any relevant code below, making sure to include a `# comment` for each line.
+Let's create a new repository for your class project.
 
-```{r}
-# Subset the data to foliose lichens
-fol_dat <- subset(dat, Growth_form == 'foliose')
-
-```
+First click the "Start a new project" button. On the following page give the project a repository name and description. Check the box to create a README and then click "Create repository". You will now be on the main page for your project. There is one text file in this project called README.md which contains the project name and description you wrote. We will come back to this project later.
 
 
-Describe the steps of the example analysis, including code blocks as needed. Describe the functions and packages used.
+#### Forking an existing repository
 
-```{r chl_fig, echo = FALSE}
-# echo = FALSE means that the results of the code will be shown without the code.
-# chl_fig is a name that knit will use to name the figure generated by this code chunk
+In order to contribute to the class website you will need to make a copy of the website project on your own account. This is called *forking*. Instead of creating a new project we want to "fork an existing repository". Go to the class webpage GitHub project and click the "Fork" button in the upper right corner. You will want to fork the repository to your account. Notice that you are taken to the webpage `https://github.com/your-username/BIO202`.
 
-# Plot total chlorophyll vs. chlorophyll A:B ratio
-plot(Tot_chl_DW ~ Chla2b, data = fol_dat, 
-     las=1, 
-     ylab = 'Tot. CHL',
-     xlab = 'CHL A:B'
-)
-
-```
-
-**Figure 1. Total chlorophyll versus ratio of chlorophyll A to B.** Looks like we have some data cleaning to do! 
+Any changes you make to this fork will not show up on the class website because the website looks at the version of the files owned by FukamiLab. You will make changes to your fork and then propose these changes (as a *pull request*) to the FukamiLab fork. The instructors will then accept your changes to make them show up on the class website. We will get to this later in the lesson.
 
 
-## Discussion Questions
+#### Editing files online
 
-Include any questions or issues here that you want to discuss or ask about in class. After the class session, update this section with any important notes discussed.
+You can make changes to files in a project directly from your web browser. Let's add your name to the webpage for the lesson that you will be leading.
+
+Click on the Rmarkdown file (.Rmd) corresponding to the lesson that you will be leading. The first number gives the week and the letter refers to the class session (A-Mon, B-Wed, C-Fri). This will show you the partially rendered contents of the file. Because the text file is written in Rmarkdown, GitHub attempts to display the formatting that it understands. To see the underlying text you can click "Raw". 
+
+To edit this file, click the pencil button in the upper right corner. You will be taken to an editor where you can then type your name alongside the instructor name at the top of the document. Save the changes by *commiting* them. In the box at the bottom, type a short description of the changes you made in the fist box. Then, commit the changes to the master branch by clicking the green "Commit" button.
+
+You will not need to create new branches when working on our class website because each person will be making changes to their own fork. Branches are useful when you are working on different aspects of a project or when multiple users are contributing to the same project. However, we won't be using them in our class. Everything you work on will be commited to the "master" branch.
 
 
+#### Merging changes with a pull request
+
+You have added your name to the lesson Rmd file in your fork of the class website. Next we will transfer these changes to the FukamiLab version. We will do this using a "pull request" which is a fancy name for proposing changes. You will propose to change FukamiLab/BIO202 based on the changes you made in your-username/BIO202.
+
+Return to the main page of your fork at `https://github.com/your-username/BIO202` and click the "New pull request" button. The *base* is what you are proposing to change and the *head* is where the changes are coming from. What should the base and head be if you want to propose the changes you just made?
+
+You may nee to click "compare across forks" to make the FukamiLab master branch show up as an option. Once you have selected the base (to) and head (from) branches you can scroll down to see how the files differ. Click the green "Create pull request" button to propose these changes. You will then be prompted to create a description of your changes so that a reviewer (e.g. the instructor) knows what to look for before accepting the changes. Click the green button again to create the request. 
+
+That's it. Now someone will need to review your changes and accept them in order for the FukamiLab project to change.
+
+While it is useful to be able to edit files online. Usually you will want to make changes to files on your computer and then propose changes from these files to a project repository on GitHub. The best way to do this is by using a version control program called git. In the next section you will learn how to use git with RStudio to manages changes to a version of the class website files stored on your computer.
+
+
+### What is git?
+
+Git is a program that tracks changes to files in a directory and allows you to revert to any previously saved state. Git is often used with a shell program that allows you to directly access the command line. We will be using git exclusively with RStudio. If you want to learn how to use git from the command line, I recommend working through the Software Carpentry git lessons that can be found [here](http://swcarpentry.github.io/git-novice/). We will use git to track the changes to a version of the course website files that will be stored on your computer. Git will also allow us to merge any changes you make on your computer to your fork on your GitHub account, which you can then merge with the official FukamiLab course repository using a pull request.
+
+#### Getting files from GitHub onto your computer
+
+First we need to clone your version of the course website from your GitHub repository to a folder on your computer. Before doing so, think about where you want to save this project folder. It should be somewhere reasonable on your computer (i.e. *not* your Desktop or Downloads) and you should not move this folder once it is set up, so choose its location carefully. Next we will clone your fork of the class website repository from GitHub into this folder. You can do this directly from RStudio (the easiest way) or you can do this from the command line.
+
+##### Using RStudio
+
+1. Open RStudio and click File > New Project.
+2. Click Version Control and then Git.
+    + If you don't see this option and have installed git according to the [instructions](00-computer-setup.html) you need to tell RStudio where to find the git program on your computer. See the instructions [here](https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN). On Windows the path to the git executable is probably: "C:\Program Files (x86)\git\bin" or "C:\Program Files\git\bin".
+    + Windows users may need to edit the system path so that Windows can find git. To do this, go to System Properties > Advanced System Settings > Environment Variables > select Path > Edit > add on the path to the git executable and click OK. If those instructions don't work try Googling "Windows edit PATH".
+3. Copy the url of your fork of the class website repository into the line marked "Repository URL". This should look like: https://github.com/your-username/BIO202.
+4. Name the project directory whatever you like (no spaces!). BIO202_website would be a good name.
+5. Choose the folder where you want to save the project folder by clicking Browse. Finish by clicking "Create Project". 
+
+##### Using the command line
+
+1. Navigate to the location on your computer where you want to save the website files and create a new folder to hold them (no spaces in the name!). A good project folder name would be BIO202_website.
+2. Open a shell program lile GitBash (Windows) or Terminal (Mac). This will open an empty window with a blinking cursor.
+3. Navigate to the project folder that you just created using the `cd` command: `cd ~/path/to/folder/folder_name`. Here's how you find the path to your project folder:
+    + On Windows:
+        1. Use the file explorer to navigate so that you can see the folder you just created (do not navigate to the inside of the folder).
+        2. Right click on the bar at the top that lists the folders hierarchically and select "copy address". Or, Ctrl+click to highlight the path and copy what is highlighted.
+        3. Paste this in front of the `cd` command. 
+        4. Change all `\` to `/`. Then press ENTER.
+    + On Mac: 
+        1. Use the Finder to navigate so that you can see the folder you just created.
+        2. Right click (or Ctrl+click or two-finger click) on the folder.
+        3. Hold down the OPTION key and select "Copy (folder name) as Pathname".
+        4. Paste this in front of the cd command and press ENTER.
+4. Use your web browser to go to your fork of the class website repository. It should be at https://github.com/your-username/BIO202.
+5. Click the green "Clone or download" button in the upper right. This will display a url. Copy this url.
+6. At the command line (in the shell program) type `git clone`, then paste the url you copied from GitHub, then type the name of your project folder. If you named the folder "BIO202_website", it should look like: `git clone https://github.com/your-username/BIO202 BIO202_website`.
+7. Press ENTER. Lots of stuff should happen. When you navigate to the project folder you should now see lots of files.
+8. Open RStudio and create a new Project from an Existing Directory.
+9. Browse to the project directory you created which now contains the files downloaded from your GitHub repository.
+
+#### Editing, saving and reverting local files
+
+Open this new version-controlled RStudio project and open the file 02-C-student-projects.Rmd.Add an entry to this file for your project that you will work on for class. To save your changes and see what the Rmd file will look like as a webpage, click the "Knit" button at the top of the script window.
+
+You have now made changes to the *local* files on you computer. Next you need to track these changes with git. To do this, click on the button on the top bar that has a green plus over a red minus over a grey circular arrow. Choose "Commit" from the drop down menu.
+
+This will open a new window that shows you all of the files that have changed since your last "commit". First you need to select the files that you want to "stage". This means that any changes made to these files will be recorded in this "commit". A "commit" is a record of a set of changes. You can revert files back to the state that they were in at any particular "commit". So, if you want to be able to revert changes to just one file, you should only stage one file each time you commit. I would suggest stagin both the .Rmd file and its accompanying .html file at the same time, since the changes you made to the Rmd file caused the changes in the html file. Click the checkbox next to the files you want to stage for this commit. Then type a brief and specific message in the Commit message box about the changes you made. Notice that the bottom window shows you the differences between the current version of the file you selected and the most recently commited version. Click the commit version when you are satisfied.
+
+To see all previous commits, click the "History" tab at the top of the git window. You can select any commit and see which files were changed and the changes within these files. 
+
+
+
+#### Sending changes to GitHub
+
+
+
+
+### Workflow Summary
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Suggested Additional References:**
+
+> 
 

@@ -10,12 +10,12 @@ navbar:
           href: 01-A-R-intro.html
         - text: "R markdown"
           href: 01-B-Rmarkdown-intro.html
-        - text: "ggplot2"
-          href: 01-C-ggplot2-intro.html
+        - text: "R workshop"
+          href: 01-C-R-workshop.html
     - text: "W2"
       menu:
-        - text: "R workshop"
-          href: 02-A-R-workshop.html
+        - text: "ggplot2 and tidyr"
+          href: 02-A-tidyr.html
         - text: "Intro to git"
           href: 02-B-git-intro.html
     - text: "W3"
@@ -23,9 +23,9 @@ navbar:
         - text: "Data exploration"
           href: 03-A-data-exploration.html
         - text: "Linear models"
-          href: 03-B-topic-name.html
+          href: 03-B-linear-models.html
         - text: "Heterogeneity"
-          href: 03-C-topic-name.html    
+          href: 03-C-heterogeneity.html    
     - text: "W4"
       menu:
         - text: "Mixed effects models"
@@ -37,11 +37,11 @@ navbar:
     - text: "W5"
       menu:
         - text: "Bayesian linear models"
-          href: 05-A-topic-name.html
-        - text: "Bayesian hierarchical models"
-          href: 05-B-topic-name.html
-        - text: "Bayesian non-linear models"
-          href: 05-C-topic-name.html
+          href: 05-A-Bayesian-linear-models.html
+        - text: "Bayesian inference with prior information"
+          href: 05-B-Bayesian-priors.html
+        - text: "Advanced Bayesian model example"
+          href: 05-C-Advanced-bayesian-example.html
     - text: "W6"
       menu:
         - text: "Unconstrained ordination"
