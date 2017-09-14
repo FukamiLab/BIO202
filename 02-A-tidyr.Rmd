@@ -38,7 +38,7 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Before Class
 
-Download [this R script](https://github.com/FukamiLab/BIO202/blob/master/code/01-A-r-intro-exercise-code.R) and save it in your code folder in the research project you created on the first day of class. You will need to click the 'Raw' button and then download the text file that appears. Be sure to remove the .txt extension that may have been added when you saved the file to your computer so that the file ends in .R. You may want to run the first part of the script that downloads the data to be sure that there will be no issues with data access during class.
+Download [this R script](https://github.com/FukamiLab/BIO202/blob/master/code/02-A-r-tidyr-exercise-code.R) and save it in your code folder in the research project you created on the first day of class. You will need to click the 'Raw' button and then download the text file that appears. Be sure to remove the .txt extension that may have been added when you saved the file to your computer so that the file ends in .R. You may want to run the first part of the script that downloads the data to be sure that there will be no issues with data access during class.
 
 ### Key Points
 
@@ -67,16 +67,17 @@ The R script explores algal diversity among lichens and trees. Working in pairs,
 
 When you have finished commenting the code, try to complete the following challenge:
 
-> **Exercise:**
+> **Challenge:**
 >
+> How could you modify the code that creates the `lichenXgeno` table so that it displays the fraction of successful sequences belonging to each GenotypeID for each lichen.
 
 
 ### Plotting data with ggplot2
 
 Working with your partner, create the following plots using `ggplot2`:
 
-1. 
-2. 
-3. 
+1. A plot that maps the locations where each lichen was collected and colors the point by the Chao1 richness estimator.
+2. Modify the above plot so that three plots are shown, one for each tree species.
+
 
 

@@ -49,30 +49,43 @@ algae_raw <- read.csv("data/BIO46_W2017_algae.csv")
 
 
 library(dplyr)
+library(tidyr)
+
 
 
 algae <- lichens_raw %>% 
-         select(LichenID, TreeID) %>%
-         right_join(algae_raw)
+  select(LichenID, TreeID) %>%
+  right_join(algae_raw)
 
 
 
-spread
-
-gather
-
-filter
-
-unite
-
-mutate
-
-group_by
-
-summarise
+algae <- algae %>%
+  mutate(Seq_success = GenotypeID != '',
+         GenotypeID = ifelse(Seq_success, as.character(GenotypeID), NA))
 
 
+lichen <- algae %>%
+  group_by(LichenID) %>%
+  summarise(Num_seqs = sum(Seq_success),
+            Num_genotypes = n_distinct(GenotypeID, na.rm = TRUE),
+            f1 = sum(table(GenotypeID) == 1),
+            f2 = sum(table(GenotypeID) == 2),
+            Chao1 = Num_genotypes + f1*(f1-1)/(2*(f2+1)))
 
+
+lichen <- lichen %>%
+  left_join(lichens_raw) %>%
+  left_join(trees_raw, by = 'TreeID', suffix = c(".lichen", ".tree"))
+
+
+lichenXgeno_long <- algae %>%
+  filter(Seq_success == TRUE) %>%
+  group_by(LichenID) %>%
+  count(GenotypeID) 
+
+
+lichenXgeno <- lichenXgeno_long %>%
+  spread(key = GenotypeID, value = n)
 
 
 

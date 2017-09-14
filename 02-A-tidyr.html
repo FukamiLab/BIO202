@@ -499,7 +499,7 @@ div.tocify {
 
 <p><strong>Assigned Reading:</strong></p>
 <blockquote>
-<p>Chapters 1.1, 1.2, 2, 3, 9 and 10 in: Wickham, H. 2009. <em>ggplot2: Elegant Graphics for Data Analysis.</em> Springer. DOI: <a href="https://link.springer.com/book/10.1007%2F978-0-387-98141-3">Stanford Full Text</a></p>
+<p>Chapters 1.1, 1.2, 2, 3, 9 and 10 in: Wickham, H. 2009. <em>ggplot2: Elegant Graphics for Data Analysis.</em> Springer. DOI: <a href="https://link.springer.com/book/10.1007%2F978-0-387-98141-3">Stanford Full Text</a> The sections on mutating and filtering joins in <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/two-table.html">this vignette</a></p>
 </blockquote>
 <p><strong>Optional Reading:</strong></p>
 <blockquote>
@@ -508,7 +508,7 @@ div.tocify {
 <p>RStudio has produced several helpful <a href="https://www.rstudio.com/resources/cheatsheets/">cheatsheets</a> on data management and visualization with ggplot2 and tidyr. You may want to view or print one or several of them.</p>
 <div id="before-class" class="section level3">
 <h3>Before Class</h3>
-<p>Download <a href="https://github.com/FukamiLab/BIO202/blob/master/code/01-A-r-intro-exercise-code.R">this R script</a> and save it in your code folder in the research project you created on the first day of class. You will need to click the ‘Raw’ button and then download the text file that appears. Be sure to remove the .txt extension that may have been added when you saved the file to your computer so that the file ends in .R.</p>
+<p>Download <a href="https://github.com/FukamiLab/BIO202/blob/master/code/02-A-r-tidyr-exercise-code.R">this R script</a> and save it in your code folder in the research project you created on the first day of class. You will need to click the ‘Raw’ button and then download the text file that appears. Be sure to remove the .txt extension that may have been added when you saved the file to your computer so that the file ends in .R. You may want to run the first part of the script that downloads the data to be sure that there will be no issues with data access during class.</p>
 </div>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
@@ -529,20 +529,25 @@ div.tocify {
 </div>
 <div id="manipulating-data-with-dplyr" class="section level3">
 <h3>Manipulating data with dplyr</h3>
-<p>Open the R project that you created on the first day of class. Then when R Studio opens, open the R script file that you downloaded for today’s class (see above). This script downloads a data set from our course website and then proceeds to manipulate and summarise the data.</p>
-<p>Working in pairs, execute each line of code and then add a comment (using <code>#</code>) above each line of code with a description of what the code does.</p>
+<p>Open the R project that you created on the first day of class. Then when R Studio opens, open the R script file that you downloaded for today’s class (see above). This script downloads a data set from our course website and then proceeds to manipulate and summarise the data. These data contain three tables from the Winter 2016 BIO46 class on lichen microorganisms:</p>
+<ol style="list-style-type: decimal">
+<li><strong>trees</strong> is a table where observations are trees on which lichens were collected. Columns describe each tree’s location, elevation, and species name.</li>
+<li><strong>lichens</strong> is a table where each observation is a lichen that was collected. Columns describe the tree on which the lichen was collected, the team that collected the lichen, the collection date, and the lichen species name.</li>
+<li><strong>algae</strong> is a table where each observation is a fragment of a lichen from which we attempted to amplify and sequence green algal ITS2 rDNA. We attempted to amplify algal DNA from four sections of each lichen in order to quantity algal diversity within a single lichen. If sequencing was successful then the DNA sequence is given along with a code identifying unique haplotype (GenotypeID). The TaxonID column indicates haplotypes that matched those reported in <a href="http://dw.doi.org/10.3732/ajb.0900276">Werth and Sork (2010)</a>.</li>
+</ol>
+<p>The R script explores algal diversity among lichens and trees. Working in pairs, execute each line of code and then add a comment (using <code>#</code>) above each line of code with a description of what the code does.</p>
 <p>When you have finished commenting the code, try to complete the following challenge:</p>
 <blockquote>
-<p><strong>Exercise:</strong></p>
+<p><strong>Challenge:</strong></p>
+<p>How could you modify the code that creates the <code>lichenXgeno</code> table so that it displays the fraction of successful sequences belonging to each GenotypeID for each lichen.</p>
 </blockquote>
 </div>
 <div id="plotting-data-with-ggplot2" class="section level3">
 <h3>Plotting data with ggplot2</h3>
 <p>Working with your partner, create the following plots using <code>ggplot2</code>:</p>
 <ol style="list-style-type: decimal">
-<li></li>
-<li></li>
-<li></li>
+<li>A plot that maps the locations where each lichen was collected and colors the point by the Chao1 richness estimator.</li>
+<li>Modify the above plot so that three plots are shown, one for each tree species.</li>
 </ol>
 </div>
 
