@@ -1,9 +1,16 @@
 ---
 layout: topic
-title: "Practice with R"
+title: "Bayesian Inference with Prior Information"
 author: Jes
 output: html_document
 ---
+
+**Assigned Reading:**
+
+> Chapters 12 and 15 in Korner-Nievergelt et al. 2015. *Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.* Elsevier.[link](http://www.sciencedirect.com/science/book/9780128013700)
+
+
+
 
 ```{r include = FALSE}
 # This code block sets up the r session when the page is rendered to html
@@ -26,10 +33,14 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 ### Key Points
 
 
+
 ### Analysis Example
 
 
+
 ### Discussion Questions
+
+
 
 
 

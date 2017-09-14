@@ -13,7 +13,7 @@ if(dir.exists("data")) {
 
 } else {
   
-  # If it doesn't exits, make a new folder named code
+  # If it doesn't exits, make a new folder named data
   dir.create("data")
   
 }
@@ -45,4 +45,6 @@ mean(raw_data$Lat)
 
 # Count the number of times each tree species occurs in the Genus_species column of raw_data
 table(raw_data$Genus_species)
+
+
 
