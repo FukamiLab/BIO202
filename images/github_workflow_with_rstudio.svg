@@ -102,7 +102,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
-     inkscape:cx="216.50996"
+     inkscape:cx="2.9385314"
      inkscape:cy="408.26751"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -125,7 +125,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -427,7 +427,7 @@
          x="-193.23994"
          y="476.40842"
          id="tspan5950"
-         style="text-align:start;text-anchor:start;fill:#000080">1. Set up a local copy of files on your computer.</tspan><tspan
+         style="text-align:start;text-anchor:start;fill:#000080">1. Set up a local copy of files on your computer. (FIRST TIME ONLY)</tspan><tspan
          sodipodi:role="line"
          x="-193.23994"
          y="501.40842"

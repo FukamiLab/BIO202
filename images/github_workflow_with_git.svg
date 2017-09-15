@@ -15,7 +15,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="github_workflow_with_git.svg">
+   sodipodi:docname="github_workflow_with_git.svg"
+   inkscape:export-filename="C:\Users\jrcoyle\Documents\Stanford\BIO202\GitHub\images\github_workflow_with_git.png"
+   inkscape:export-xdpi="100"
+   inkscape:export-ydpi="100">
   <defs
      id="defs4">
     <marker
@@ -102,7 +105,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
-     inkscape:cx="338.23105"
+     inkscape:cx="124.65962"
      inkscape:cy="443.31157"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -432,7 +435,7 @@
          x="-193.23994"
          y="476.40842"
          id="tspan5950"
-         style="text-align:start;text-anchor:start;fill:#000080">1. Set up a local copy of files on your computer.</tspan><tspan
+         style="text-align:start;text-anchor:start;fill:#000080">1. Set up a local copy of files on your computer. (FIRST TIME ONLY)</tspan><tspan
          sodipodi:role="line"
          x="-193.23994"
          y="501.40842"
