@@ -87,7 +87,9 @@ While it is useful to be able to edit files online. Usually you will want to mak
 
 ### What is git?
 
-Git is a program that tracks changes to files in a directory and allows you to revert to any previously saved state. Git is often used with a shell program that allows you to directly access the command line. We will be using git exclusively with RStudio. If you want to learn how to use git from the command line, I recommend working through the Software Carpentry git lessons that can be found [here](http://swcarpentry.github.io/git-novice/). We will use git to track the changes to a version of the course website files that will be stored on your computer. Git will also allow us to merge any changes you make on your computer to your fork on your GitHub account, which you can then merge with the official FukamiLab course repository using a pull request.
+Git is a program that tracks changes to files in a directory and allows you to revert to any previously saved state. Git is often used with a shell program that allows you to directly access the command line. We will be using git exclusively with RStudio. If you want to learn how to use git from the command line, I recommend working through the Software Carpentry git lessons that can be found [here](http://swcarpentry.github.io/git-novice/). You can also try the quick [interactive tutorial](https://try.github.io/levels/1/challenges/1) from GitHub. We will use git to track the changes to a version of the course website files that will be stored on your computer. Git will also allow us to merge any changes you make on your computer to your fork on your GitHub account, which you can then merge with the official FukamiLab course repository using a pull request.
+
+If you have never set up git on your computer, the first step is to tell git who you are. Open a shell program like GitBash (Windows) or Terminal (Mac). Type: `git config --global user.name "Your Name"` and press enter. Next type: `git config --global user.email "your_email_address"` and press enter. 
 
 #### Getting files from GitHub onto your computer
 
@@ -97,8 +99,14 @@ First we need to clone your version of the course website from your GitHub repos
 
 1. Open RStudio and click File > New Project.
 2. Click Version Control and then Git.
-    + If you don't see this option and have installed git according to the [instructions](00-computer-setup.html) you need to tell RStudio where to find the git program on your computer. See the instructions [here](https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN). On Windows the path to the git executable is probably: "C:\Program Files (x86)\git\bin" or "C:\Program Files\git\bin".
-    + Windows users may need to edit the system path so that Windows can find git. To do this, go to System Properties > Advanced System Settings > Environment Variables > select Path > Edit > add on the path to the git executable and click OK. If those instructions don't work try Googling "Windows edit PATH".
+    + If you don't see this option and have installed git according to the [instructions](00-computer-setup.html) you need to tell RStudio where to find the git program on your computer. Instructions:
+        + Go to Tools > Global Options > Git/SVN
+        + If there is nothing in the line for the Git executable shows (none), click Browse and select the git executable installed on your system. On a Mac, this will likely be one of /usr/bin/git , /usr/local/bin/git , or /usr/local/git/bin/git . On Windows, git.exe will likely be in C:\\Program Files (x86)\\git\\bin or C:\\Program Files\\git\\bin.
+    + Windows users may need to edit the system path so that Windows can find git. Instructions:
+        + Go to System Properties > Advanced System Settings > Environment Variables
+        + Select Path > Edit
+        + In the next window, add a line containing the path to the git executable (see above) and click OK. 
+        + If those instructions don't work try Googling "Windows edit PATH".
 3. Copy the url of your fork of the class website repository into the line marked "Repository URL". This should look like: https://github.com/your-username/BIO202.
 4. Name the project directory whatever you like (no spaces!). BIO202_website would be a good name.
 5. Choose the folder where you want to save the project folder by clicking Browse. Finish by clicking "Create Project". 
@@ -125,28 +133,33 @@ First we need to clone your version of the course website from your GitHub repos
 8. Open RStudio and create a new Project from an Existing Directory.
 9. Browse to the project directory you created which now contains the files downloaded from your GitHub repository.
 
-#### Editing, saving and reverting local files
+#### Editing and saving local files
 
-Open this new version-controlled RStudio project and open the file 02-C-student-projects.Rmd.Add an entry to this file for your project that you will work on for class. To save your changes and see what the Rmd file will look like as a webpage, click the "Knit" button at the top of the script window.
+Open this new version-controlled RStudio project and open the file 02-C-student-projects.Rmd. Add an entry to this file for your project that you will work on for class. To save your changes and see what the Rmd file will look like as a webpage, click the "Knit" button at the top of the script window.
 
 You have now made changes to the *local* files on you computer. Next you need to track these changes with git. To do this, click on the button on the top bar that has a green plus over a red minus over a grey circular arrow. Choose "Commit" from the drop down menu.
 
-This will open a new window that shows you all of the files that have changed since your last "commit". First you need to select the files that you want to "stage". This means that any changes made to these files will be recorded in this "commit". A "commit" is a record of a set of changes. You can revert files back to the state that they were in at any particular "commit". So, if you want to be able to revert changes to just one file, you should only stage one file each time you commit. I would suggest stagin both the .Rmd file and its accompanying .html file at the same time, since the changes you made to the Rmd file caused the changes in the html file. Click the checkbox next to the files you want to stage for this commit. Then type a brief and specific message in the Commit message box about the changes you made. Notice that the bottom window shows you the differences between the current version of the file you selected and the most recently commited version. Click the commit version when you are satisfied.
+This will open a new window that shows you all of the files that have changed since your last "commit". First you need to select the files that you want to "stage". This means that any changes made to these files will be recorded in this "commit". A "commit" is a record of a set of changes. You can revert files back to the state that they were in at any particular "commit". So, if you want to be able to revert changes to just one file, you should only stage one file each time you commit. I would suggest stagin both the .Rmd file and its accompanying .html file at the same time, since the changes you made to the Rmd file caused the changes in the html file. Click the checkbox next to the files you want to stage for this commit. Then type a brief and specific message in the Commit message box about the changes you made. Notice that the bottom window shows you the differences between the current version of the file you selected and the most recently commited version. Click the commit button when you are satisfied.
 
 To see all previous commits, click the "History" tab at the top of the git window. You can select any commit and see which files were changed and the changes within these files. 
 
+##### Reverting changes
 
+If you have made changes to files and saved them, but have not yet committed these changes, you can revert back to the last commit by selecting "Revert" from the git menu in RStudio. However, if you want to change the files back to the state they were in at a previous commit you will need to use the command line.
+
+If you want to learn more about using git from the command line, try this [quick tutorial](https://try.github.io/levels/1/challenges/1).
 
 #### Sending changes to GitHub
 
+To send the committed changes you have made to the files on your computer to your GitHub repository, select "Push branch" from the git menu in RStudio. Then go online to http://github.com/your-username/BIO202 to see that the files have been updated.
+
+Finally, submit a pull request on GitHub to send these changes to the FukamiLab repository. We will see what happens when multiple people try to merge changes to the same file.
 
 
 
 ### Workflow Summary
 
-
-
-
+![Workflow for editing the course website with git in RStudio](images/github_workflow_with_rstudio.png)
 
 
 
