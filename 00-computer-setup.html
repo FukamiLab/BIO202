@@ -558,6 +558,10 @@ div.tocify {
 <p>The course website can be edited by changing the html files in the course GitHub repository located at <a href="https://github.com/FukamiLab/BIO202" class="uri">https://github.com/FukamiLab/BIO202</a>.</p>
 <div id="if-you-dont-want-to-work-with-git" class="section level4">
 <h4>If you don’t want to work with git</h4>
+<div class="figure">
+<img src="images/github_workflow_with_email.png" alt="Workflow for editing the course website without git" style="width:50.0%" />
+<p class="caption">Workflow for editing the course website without git</p>
+</div>
 <ol style="list-style-type: decimal">
 <li>Go to the course GitHub repository above.</li>
 <li>Click on the .Rmd file for the lesson you want to edit.</li>
@@ -571,18 +575,25 @@ div.tocify {
 <h4>If you are new to git, but want to learn</h4>
 <ol style="list-style-type: decimal">
 <li>Install Git on your computer using the instructions in the section below.</li>
-<li>Attend the Git tutorial during class on Wednesday, October 4th (week 2).</li>
-<li>Use the ‘If you are familiar with git’ workflow below to make changes to the course website.</li>
+<li>Attend the Git tutorial during class on Wednesday, October 4th (week 2). We will go over how to use git from RStudio.</li>
+<li>Use the following diagram to remember the workflow:</li>
 </ol>
+<div class="figure">
+<img src="images/github_workflow_with_rstudio.png" alt="Workflow for editing the course website with git in RStudio" style="width:50.0%" />
+<p class="caption">Workflow for editing the course website with git in RStudio</p>
+</div>
 </div>
 <div id="if-you-are-familiar-with-git" class="section level4">
 <h4>If you are familiar with git</h4>
-<p>The general workflow is:</p>
+<div class="figure">
+<img src="images/github_workflow_with_git.png" alt="Workflow for editing the course website with git" style="width:50.0%" />
+<p class="caption">Workflow for editing the course website with git</p>
+</div>
 <ol style="list-style-type: decimal">
 <li>If you have not aready done so, fork the repository from <a href="https://github.com/FukamiLab/BIO202" class="uri">https://github.com/FukamiLab/BIO202</a> to your account on GitHub. Then clone a local copy of this forked repository (from your own GitHub account) to your computer. This only needs to be done once.</li>
 <li>Before you start working:
 <ul>
-<li>Make sure your copy is up to date with the FukamiLab repository on GitHub. If not, submit a Pull request to update it.</li>
+<li>Make sure your copy is up to date with the FukamiLab repository on GitHub by submitting a pull request.</li>
 <li>Make sure your local repository on your computer is up to date with your fork of the repository on your GitHub account using <code>git pull</code>.</li>
 </ul></li>
 <li>Work on the .Rmd file for your lesson in R Studio on your computer. Click ‘Knit’ to render your changes as an html file and view them in your browser. Note that any edits you make are only on your computer until you submit a pull request to merge your changes to the repository. Make sure that when you have made your last edit to the .Rmd file you click ‘Knit’ so that an up-to-date html file is generated. The html file will be the one that appears on the website.</li>
