@@ -26,49 +26,6 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 
 
-<style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 
 
 <style type="text/css">
@@ -601,31 +558,6 @@ div.tocify {
 <p><strong>Exercise</strong></p>
 <p>Add a header to your R script describing what will eventually be contained in it.</p>
 </blockquote>
-</div>
-<div id="objects-and-functions" class="section level4">
-<h4>Objects and Functions</h4>
-<p>R can do a lot more than arithmetic and it does so using <em>objects</em> and <em>functions</em>.</p>
-<p>An <em>object</em> is piece of information that is saved with a name. A <em>function</em> is a set of instructions for how to manipulate objects.</p>
-<p>Here’s how to assign (e.g. make) a new object: <code>name_of_object &lt;- what_goes_in_it</code>. The only rules are that object names:</p>
-<ul>
-<li>must have at least one letter</li>
-<li>may contain numbers or the following symbols: - . _</li>
-<li>cannot have any spaces</li>
-<li>cannot start with a number</li>
-</ul>
-<p>Also, don’t use any of the following names because they are already used by R: <code>c</code>, <code>t</code></p>
-<p>For example we can save the results of arithmetic calculations by making new objects:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Store the number 7 in an object named my_favorite_prime</span>
-my_favorite_prime &lt;-<span class="st"> </span><span class="dv">7</span>
-
-<span class="co"># Store the sum of the numbers 1 to 10 in an object named sum_to_ten:</span>
-sum_to_ten &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="dv">1</span>:<span class="dv">10</span>)</code></pre></div>
-<p>The code above demonstrates two functions:</p>
-<ul>
-<li><code>sum()</code> adds up everything inside it</li>
-<li><code>:</code> is an operator that makes a vector containing all integers between the two numbers on either side of it</li>
-</ul>
-<p>Note that each line of code has as comment above it describing what the code is supposed to do.</p>
 </div>
 <div id="editing-r-code" class="section level4">
 <h4>Editing R Code</h4>
