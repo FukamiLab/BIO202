@@ -30,7 +30,7 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
-
++ Learn linear models
 
 ### Analysis Example
 
