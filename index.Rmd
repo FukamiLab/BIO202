@@ -35,8 +35,8 @@ Each student will complete the results section to include in a paper to submit f
 | 1    | Mon | Sept. 25 | [Intro to R & RStudio](01-A-R-intro.html)                                         | Tad & Jes |------------|
 |      | Wed | Sept. 27 | Topic selection, [Intro to R markdown](01-B-Rmarkdown-intro.html) & class website | Tad & Jes |------------| 
 |      | Fri | Sept. 29 | [R workshop](01-C-R-workshop.html) (optional)                                     | Jes       |------------|
-| 2    | Mon | Oct. 2   | [Intro to ggplot2 and tidyr](02-A-tidyr.html) (optional)                          | Jes       |------------|
-|      | Wed | Oct. 4   | [Intro to GitHub & git](02-B-git-intro.html) (optional)                           | Jes       |------------|
+| 2    | Mon | Oct. 2   | [Intro to ggplot2 and tidyr](02-A-tidyr.html)                                     | Jes       |------------|
+|      | Wed | Oct. 4   | [Intro to GitHub & git](02-B-git-intro.html)                                      | Jes       |------------|
 |      | Fri | Oct. 6   | Each person introduces their questions & data                                     | Tad & Jes |------------|
 | 3    | Mon | Oct. 9   | Topic 1. [Data exploration](03-A-data-exploration.html)                           | Tad       |            |
 |      | Wed | Oct. 11  | Topic 2. [Linear models](03-B-linear-models.html)                                 | Tad       |            |
@@ -58,8 +58,8 @@ Each student will complete the results section to include in a paper to submit f
 |      | Fri | Nov. 17  | Topic 15. Spatial analysis, Bayesian approach                                     | Jes       |            |
 |RECESS|     |          | Thanksgiving                                                                      |           |            |
 | 9    | Mon | Nov. 27  | Topic 16. To be selected by class                                                 |           |            |
-|      | Wed | Nov. 29  | Topic 16. To be selected by class                                                 |           |            |
-|      | Fri | Dec. 1   | Topic 16. To be selected by class                                                 |           |            |
+|      | Wed | Nov. 29  | Topic 17. To be selected by class                                                 |           |            |
+|      | Fri | Dec. 1   | Topic 18. To be selected by class                                                 |           |            |
 | 10   | Mon | Dec. 4   | Final project presentations                                                       |           |            |
 |      | Wed | Dec. 6   | Final project presentations                                                       |           |            |
 |      | Fri | Dec. 8   | Final project presentations                                                       |           |            |
