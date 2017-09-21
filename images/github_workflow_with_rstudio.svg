@@ -15,7 +15,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="github_workflow_with_rstudio.svg">
+   sodipodi:docname="github_workflow_with_rstudio.svg"
+   inkscape:export-filename="C:\Users\jrcoyle\Documents\Stanford\BIO202\GitHub\images\github_workflow_with_rstudio.png"
+   inkscape:export-xdpi="100"
+   inkscape:export-ydpi="100">
   <defs
      id="defs4">
     <marker
@@ -110,9 +113,9 @@
      units="px"
      inkscape:window-width="1536"
      inkscape:window-height="801"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
+     inkscape:window-x="-32000"
+     inkscape:window-y="-32000"
+     inkscape:window-maximized="0"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
