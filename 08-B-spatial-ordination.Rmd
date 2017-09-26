@@ -1,14 +1,13 @@
 ---
 layout: topic
-title: "Bayesian spatial analysis"
+title: "Ordination approach to spatial analysis"
 author: Jes
 output: html_document
 ---
 
 **Assigned Reading:**
 
-> TBD: will use spBayes or R-INLA
-
+> Chapter 7 from: Borcard, D., Gillet, F. and Legendre, P. 2011. *Numerical Ecology with R.* Springer. [link](https://link.springer.com/book/10.1007/978-1-4419-7976-6)
 
 
 ```{r include = FALSE}

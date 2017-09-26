@@ -74,12 +74,12 @@ navbar:
           href: 07-midquarter-tyler.html
     - text: "W8"
       menu:
-        - text: "Spatial autocorrelation"
-          href: 08-A-spatial-autocorrelation.html
-        - text: "Spatial filters"
-          href: 08-B-spatial-filters.html
-        - text: "Bayesian spatial analysis"
-          href: 08-C-bayesian-spatial.html
+        - text: "Spatial regression"
+          href: 08-A-spatial-regression.html
+        - text: "Ordination approach to spatial analysis"
+          href: 08-B-spatial-ordination.html
+        - text: "Visualizing spatial data"
+          href: 08-C-mapping.html
     - text: "W9"
       menu:
         - text: "Topic 19"
