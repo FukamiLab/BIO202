@@ -424,13 +424,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="08-A-spatial-autocorrelation.html">Spatial autocorrelation</a>
+      <a href="08-A-spatial-regression.html">Spatial regression</a>
     </li>
     <li>
-      <a href="08-B-spatial-filters.html">Spatial filters</a>
+      <a href="08-B-spatial-ordination.html">Ordination approach to spatial analysis</a>
     </li>
     <li>
-      <a href="08-C-bayesian-spatial.html">Bayesian spatial analysis</a>
+      <a href="08-C-mapping.html">Visualizing spatial data</a>
     </li>
   </ul>
 </li>
@@ -720,7 +720,7 @@ div.tocify {
 <td>8</td>
 <td>Mon</td>
 <td>Nov. 13</td>
-<td>Topic 13. <a href="08-A-spatial-autocorrelation.html">Spatial autocorrelation</a></td>
+<td>Topic 13. <a href="08-A-spatial-regression.html">Spatial regression</a></td>
 <td>Jes</td>
 <td></td>
 </tr>
@@ -728,7 +728,7 @@ div.tocify {
 <td></td>
 <td>Wed</td>
 <td>Nov. 15</td>
-<td>Topic 14. <a href="08-B-spatial-filters.html">Spatial filters</a></td>
+<td>Topic 14. <a href="08-B-spatial-ordination.html">Ordination approach to spatial analysis</a></td>
 <td>Jes</td>
 <td></td>
 </tr>
@@ -736,7 +736,7 @@ div.tocify {
 <td></td>
 <td>Fri</td>
 <td>Nov. 17</td>
-<td>Topic 15. <a href="08-C-bayesian-spatial.html">Bayesian spatial analysis</a></td>
+<td>Topic 15. <a href="08-C-mapping.html">Visualization of spatial data</a></td>
 <td>Jes</td>
 <td></td>
 </tr>
@@ -812,24 +812,25 @@ div.tocify {
 <h3>Assigned Readings</h3>
 <p>All assigned readings can be obtained for free through Stanford library online resources.</p>
 <ul>
+<li>Bivand, R. S., Pebesma, E., Gomez-Rubio, V. (2013), <em>Applied Spatial Data Analysis with R</em>, 2nd ed. Springer. <a href="https://link-springer-com.stanford.idm.oclc.org/book/10.1007%2F978-1-4614-7618-4">Stanford Full Text</a></li>
 <li>Borcard, D., Gillet, F. and Legendre, P. (2011), <em>Numerical Ecology with R.</em> Springer. <a href="https://link.springer.com/book/10.1007/978-1-4419-7976-6">Stanford Full Text</a></li>
 <li>Korner-Nievergelt et al. (2015), <em>Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.</em> Elsevier. <a href="http://www.sciencedirect.com/science/book/9780128013700">Stanford Full Text</a></li>
-<li>Legendre, P. and L. Legendre. (2012), <em>Numerical Ecology</em>. Elsevier. <a href="http://www.sciencedirect.com/science/bookseries/01678892/24">Stanford Full Text</a></li>
-<li>Martin, T. G., Wintle, B. A., Rhodes, J. R., Kuhnert, P. M., Field, S. A., Low-Choy, S. J., Tyre, A. J. and Possingham, H. P. (2005), <em>Zero tolerance ecology: improving ecological inference by modelling the source of zero observations</em>. Ecology Letters, 8: 1235-1246. <a href="DOI:%5B10.1111/j.1461-0248.2005.00826.x%5D(http://dx.doi.org/10.1111/j.1461-0248.2005.00826.x)" class="uri">DOI:[10.1111/j.1461-0248.2005.00826.x](http://dx.doi.org/10.1111/j.1461-0248.2005.00826.x)</a></li>
-<li>Ramette, A. (2007), <em>Multivariate analyses in microbial ecology</em>. FEMS Microbiology Ecology, 62: 142-160. DOI: <a href="http:dx.doi.org/10.1111/j.1574-6941.2007.00375.x">10.1111/j.1574-6941.2007.00375.x</a></li>
+<li>Legendre, P. and Legendre, L. (2012), <em>Numerical Ecology</em>. Elsevier. <a href="http://www.sciencedirect.com/science/bookseries/01678892/24">Stanford Full Text</a></li>
+<li>Martin, T. G., Wintle, B. A., Rhodes, J. R., Kuhnert, P. M., Field, S. A., Low-Choy, S. J., Tyre, A. J. and Possingham, H. P. (2005), Zero tolerance ecology: improving ecological inference by modelling the source of zero observations. <em>Ecology Letters</em>, 8: 1235-1246. <a href="DOI:%5B10.1111/j.1461-0248.2005.00826.x%5D(http://dx.doi.org/10.1111/j.1461-0248.2005.00826.x)" class="uri">DOI:[10.1111/j.1461-0248.2005.00826.x](http://dx.doi.org/10.1111/j.1461-0248.2005.00826.x)</a></li>
+<li>Ramette, A. (2007), Multivariate analyses in microbial ecology. <em>FEMS Microbiology Ecology</em>, 62: 142-160. DOI: <a href="http:dx.doi.org/10.1111/j.1574-6941.2007.00375.x">10.1111/j.1574-6941.2007.00375.x</a></li>
 <li>Wickham, H. (2016), <em>ggplot2: Elegant Graphics for Data Analysis</em>. Springer. <a href="https://link-springer-com.stanford.idm.oclc.org/book/10.1007%2F978-3-319-24277-4">Stanford Full Text</a></li>
 <li>Zuur, A. F., Leno, E. N., Walker, N., Savliev, A. A. and Smith, G. M. (2009), <em>Mixed Effect Models and Extensions in Ecology with R.</em> Springer. <a href="https://link.springer.com/book/10.1007%2F978-0-387-87458-6">Stanford Full Text</a></li>
-<li>Zuur, A. F. (2010), <em>A protocol for data exploration to avoid common statistical problems.</em> Methods in Ecology and Evolution <strong>1</strong>: 3-14. DOI: <a href="http://dx.doi.org/10.1111/j.2041-210X.2009.00001.x">10.1111/j.2041-210X.2009.00001.x</a></li>
+<li>Zuur, A. F. (2010), A protocol for data exploration to avoid common statistical problems. <em>Methods in Ecology and Evolution</em>, 1: 3-14. DOI: <a href="http://dx.doi.org/10.1111/j.2041-210X.2009.00001.x">10.1111/j.2041-210X.2009.00001.x</a></li>
 </ul>
 </div>
 <div id="additional-suggested-references" class="section level3">
 <h3>Additional Suggested References</h3>
 <ul>
-<li>Beale, C. M., Lennon, J. J., Yearsley, J. M., Brewer, M. J. and Elston, D. A. (2010), <em>Regression analysis of spatial data</em>. Ecology Letters, 13: 246-264. <a href="DOI:%5B10.1111/j.1461-0248.2009.01422.x%5D(http://dx.doi.org/10.1111/j.1461-0248.2009.01422.x)" class="uri">DOI:[10.1111/j.1461-0248.2009.01422.x](http://dx.doi.org/10.1111/j.1461-0248.2009.01422.x)</a></li>
+<li>Beale, C. M., Lennon, J. J., Yearsley, J. M., Brewer, M. J. and Elston, D. A. (2010), Regression analysis of spatial data. <em>Ecology Letters</em>, 13: 246-264. <a href="DOI:%5B10.1111/j.1461-0248.2009.01422.x%5D(http://dx.doi.org/10.1111/j.1461-0248.2009.01422.x)" class="uri">DOI:[10.1111/j.1461-0248.2009.01422.x](http://dx.doi.org/10.1111/j.1461-0248.2009.01422.x)</a> +Hawkins, B. A. (2012), Eight (and a half) deadly sins of spatial analysis. <em>Journal of Biogeography</em>, 39: 1-9. <a href="http://dx.doi.org/10.1111/j.1365-2699.2011.02637.x">DOI: 10.1111/j.1365-2699.2011.02637.x</a></li>
 <li>McElreath, R. (2016), <em>Statistical rethinking: a Bayesian course with examples in R and Stan</em>. CRC Press. <em>Available in the Science and Marine libraries</em> <a href="http://xcelab.net/rm/statistical-rethinking/">Author’s website</a></li>
 <li>Venables, W. N., Smith, D. M. and the R Core Team. (2012), <em>An Introduction to R: Notes on R: A Programming Environment for Data Analysis and Graphics</em>. Version 2.15.1. <a href="https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf">full text</a></li>
-<li>Wagner, H. H. and Fortin, M. J. (2005), <em>Spatial analysis of landscapes: concepts and statistics</em>. Ecology, 86: 1975â€“1987. DOI: <a href="http://dx.doi.org/10.1890/04-0914">10.1890/04-0914</a></li>
-<li>Zuur, A. F., J. M. Hilbe and E. N. Ieno. (2013), <em>A beginner’s guide to GLM and GLMM with R: a frequentist and Bayesian perspective for ecologists.</em> Highland Statistics Ltd. <a href="https://searchworks.stanford.edu/view/11749213">Stanford Library Record</a></li>
+<li>Wagner, H. H. and Fortin, M. J. (2005), Spatial analysis of landscapes: concepts and statistics. <em>Ecology</em>, 86: 1975–1987. DOI: <a href="http://dx.doi.org/10.1890/04-0914">10.1890/04-0914</a></li>
+<li>Zuur, A. F., Hilbe, J. M. and Ieno, E. N. (2013), <em>A beginner’s guide to GLM and GLMM with R: a frequentist and Bayesian perspective for ecologists.</em> Highland Statistics Ltd. <a href="https://searchworks.stanford.edu/view/11749213">Stanford Library Record</a></li>
 </ul>
 </div>
 </div>
