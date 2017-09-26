@@ -54,11 +54,11 @@ Today we will learn option 2 and there will be an optional session on Wednesday 
 
 #### Downloading files from GitHub
 
-Go to the [course website GitHub repository](https://github.com/FukamiLab/BIO202). Notice that you can choose to download all of the files as a zip file by clicking the green "Clone or download" button in the upper right. You will only need to edit one (or a few) pages, so let's just download one file rather than the whole website. Click on the R markdown file corresponding to yesterday's lesson: `01-A-R-intro.Rmd`, then click the 'Raw' button that appears at the top right corner of the document viewer on the page that loads. This will take you to a page that displays the text in the file. Download the page as a .Rmd file (remove the .txt extension that your browser will attempt to append) and save it somewhere useful on your computer (e.g. the folder you have made for this class, not Downloads or Desktop). Find the file on your computer and open it. It should open in RStudio.
+Go to the [course website GitHub repository](https://github.com/FukamiLab/BIO202). Notice that you can choose to download all of the files as a zip file by clicking the green "Clone or download" button in the upper right. You will only need to edit one (or a few) pages, so let's just download one file rather than the whole website. Click on the R markdown file corresponding to yesterday's lesson: `00-example-lesson.Rmd`, then click the 'Raw' button that appears at the top right corner of the document viewer on the page that loads. This will take you to a page that displays the text in the file. Download the page as a .Rmd file (remove the .txt extension that your browser will attempt to append) and save it somewhere useful on your computer (e.g. the folder you have made for this class, not Downloads or Desktop). Find the file on your computer and open it. It should open in RStudio.
 
 > **Exercise:**
 >
-> Compare the contents of the .Rmd file to what you see on the course website.
+> Compare the contents of the .Rmd file to what you see on the course website: http://fukamilab.github.io/BIO202/00-example-lesson.html .
 >
 > + What is the same?
 > + What is different?
@@ -74,7 +74,7 @@ R markdown files have three main pieces:
 
 > **Exercise:**
 > 
-> Find each of these three pieces in the Introduction to R lesson document.
+> Find each of these three pieces in the example lesson document.
 
 You will not need to edit the header for any of the course webpages, other than to add you name to the list of authors. Check out the following resources if you are interested in generating your own markdown documents from scratch and want to learn more about how to change the format of the output document:
 
@@ -95,7 +95,6 @@ Here's [a quick lesson](https://guides.github.com/features/mastering-markdown/) 
 > + bold text and italic text
 > + a list
 > + a numbered list
-> + a webpage link
 > + text that links to a webpage
 > + text formatted as code that is not evaluated (verbatim code)
 
@@ -123,7 +122,7 @@ If you click the 'Run' button at the top of the document you can choose to run a
 
 > **Exercise:**
 >
-> Run a line of code in the Introduction to R Rmd file. What happens in the Console window? What happens in the Environment window?
+> Run a line of code in the example lesson Rmd file. What happens in the Console window? What happens in the Environment window?
 >
 > Now try running a line of text from this document. What happens?
 >
@@ -159,7 +158,5 @@ Any figure that you make in a code chunk will by default be saved as separate fi
 
 > **Exercise:**
 >
-> 1. Download the 00-example-lesson.Rmd file from the course website GitHub repository.
-> 2. Render the .Rmd file to html. Did it work? Look in the folder where you saved the 00-example.lesson.Rmd file. What has changed?
-> 3. Add a new section to the document with markdown-formatted text and a new R code chunk. Render the document again.
-> 4. Open the html file with your web browser to see what your changes would look like online. How does what you see differ from what is shown at https://fukamilab.github.io/BIO202/00-example-lesson.html
+> 1. Add a new section to the example lesson Rmd document with markdown-formatted text and a new R code chunk. Render the document again.
+> 2. Open the html file with your web browser to see what your changes would look like online. How does what you see differ from what is shown at https://fukamilab.github.io/BIO202/00-example-lesson.html ?
