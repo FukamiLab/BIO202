@@ -577,17 +577,31 @@ dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="
 <span class="co"># my_dir &lt;- &quot;/Path/to/your/working_directory&quot;</span>
 <span class="co"># setwd(my_dir)</span>
 <span class="co"># dat &lt;- read.csv(&quot;lichen_traits_Coyle_2016.csv&quot;)</span></code></pre></div>
+<p>Make a code block that loads any packages needed for the analysis. It can be helpful to indicate which functions come from which packages. Note that you may need to install packages using <code>install.packages('package_name')</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load dplyr: filter</span>
+<span class="kw">library</span>(dplyr)
+
+<span class="co"># Load ggplot2: ggplot</span>
+<span class="kw">library</span>(ggplot2)</code></pre></div>
 <p>Next describe how you will manipulate the data in order to perform the anaylsis.</p>
 <p>Include any relevant code below, making sure to include a <code># comment</code> for each line.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Subset the data to foliose lichens</span>
-fol_dat &lt;-<span class="st"> </span><span class="kw">subset</span>(dat, Growth_form ==<span class="st"> &#39;foliose&#39;</span>)</code></pre></div>
+fol_dat &lt;-<span class="st"> </span>dat %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(Growth_form ==<span class="st"> &#39;foliose&#39;</span>)</code></pre></div>
+<pre><code>## Warning: package &#39;bindrcpp&#39; was built under R version 3.3.3</code></pre>
 <p>Describe the steps of the example analysis, including code blocks as needed. Describe the functions and packages used.</p>
+<pre><code>## Warning: Removed 213 rows containing missing values (geom_point).</code></pre>
 <p><img src="images/chl_fig-1.png" width="672" /></p>
 <p><strong>Figure 1. Total chlorophyll versus ratio of chlorophyll A to B.</strong> Looks like we have some data cleaning to do!</p>
 </div>
 <div id="discussion-questions" class="section level3">
 <h3>Discussion Questions</h3>
 <p>Include any questions or issues here that you want to discuss or ask about in class. After the class session, update this section with any important notes discussed.</p>
+<ol style="list-style-type: decimal">
+<li>Question 1:</li>
+<li>Question 2:</li>
+<li>Question 3:</li>
+</ol>
 </div>
 
 
