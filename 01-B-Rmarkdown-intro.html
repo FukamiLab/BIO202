@@ -651,8 +651,8 @@ my_kg &lt;-<span class="st"> </span>my_lbs *<span class="st"> </span><span class
 <blockquote>
 <p><strong>Exercise:</strong></p>
 <ol style="list-style-type: decimal">
-<li>Render the Introduction to R Rmd file to an html file in RStudio by clicking the Knit button.</li>
-<li>Use your file browser to locate the html file that was generated. Open it with your browser- what do you see? How does it differ from what is displayed <a href="https://fukamilab.github.io/BIO202/01-A-R-intro.html">on the course website</a>?</li>
+<li>Render the example lesson Rmd file to an html file in RStudio by clicking the Knit button.</li>
+<li>Use your file browser to locate the html file that was generated. Open it with your browser- what do you see? How does it differ from what is displayed <a href="https://fukamilab.github.io/BIO202/00-example-lesson.html">on the course website</a>?</li>
 <li>Now open the html file with a text editor (emacs, notepad). What do you see?</li>
 </ol>
 </blockquote>
@@ -660,7 +660,11 @@ my_kg &lt;-<span class="st"> </span>my_lbs *<span class="st"> </span><span class
 <h4>Code chunk options</h4>
 <p>The way that pandoc displays the contents and output of code chunks is determined by the <em>options</em> that you set. These can be set for all code chunks in the document (<em>global</em> options) or for each chunk individually.</p>
 <p>This <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">reference guide</a> has a good overview of what the different options will do.</p>
-<p>Look at the first code chunk in the Introduction to R Rmd document where the global options are set. This code block demonstrates 3 global options that apply to all following code chunks in the document: <code>knitr::opts_chunk$set()</code>. It also shows how you would apply an options to a single code chunk in the brackets at the start of the chunk: <code>{r include = FALSE}</code>, so that this chunk is not shown in the resulting html document, even though it is evaluated.</p>
+<p>Look at the first code chunk in the example lesson Rmd document where the global options are set. This code block demonstrates 3 global options that apply to all following code chunks in the document: <code>knitr::opts_chunk$set()</code>. It also shows how you would apply an options to a single code chunk in the brackets at the start of the chunk: <code>{r include = FALSE}</code>, so that this chunk is not shown in the resulting html document, even though it is evaluated.</p>
+<blockquote>
+<p><strong>Exercise:</strong></p>
+<p>What other chunk options do you see in the example lesson Rmd file? What do they do? (Hint: You can figure it out by removing them and rendering the document.)</p>
+</blockquote>
 </div>
 <div id="figures" class="section level4">
 <h4>Figures</h4>
