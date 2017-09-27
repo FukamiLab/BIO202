@@ -92,38 +92,6 @@ The best practice is to begin any R script with comments that give the title, au
 >
 > Add a header to your R script describing what will eventually be contained in it.
 
-#### Objects and Functions
-
-R can do a lot more than arithmetic and it does so using *objects* and *functions*.
-
-An *object* is piece of information that is saved with a name. A *function* is a set of instructions for how to manipulate objects. 
-
-Here's how to assign (e.g. make) a new object: `name_of_object <- what_goes_in_it`. The only rules are that object names:
-
-  + must have at least one letter 
-  + may contain numbers or the following symbols: - . _
-  + cannot have any spaces
-  + cannot start with a number
-
-Also, don't use any of the following names because they are already used by R: `c`, `t`
-
-For example we can save the results of arithmetic calculations by making new objects:
-
-```{r}
-# Store the number 7 in an object named my_favorite_prime
-my_favorite_prime <- 7
-
-# Store the sum of the numbers 1 to 10 in an object named sum_to_ten:
-sum_to_ten <- sum(1:10)
-```
-
-The code above demonstrates two functions:
-
-  + `sum()` adds up everything inside it
-  + `:` is an operator that makes a vector containing all integers between the two numbers on either side of it
-  
-Note that each line of code has as comment above it describing what the code is supposed to do.
-
 
 #### Editing R Code
 

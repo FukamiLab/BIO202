@@ -89,6 +89,8 @@ The course website can be edited by changing the html files in the course GitHub
 
 #### If you don't want to work with git
 
+![Workflow for editing the course website without git](images/github_workflow_with_email.png){width=50%}
+
 1. Go to the course GitHub repository above.
 2. Click on the .Rmd file for the lesson you want to edit.
 3. Click the Raw button in the upper right corner.
@@ -100,18 +102,18 @@ The course website can be edited by changing the html files in the course GitHub
 #### If you are new to git, but want to learn
 
 1. Install Git on your computer using the instructions in the section below. 
-2. Attend the Git tutorial during class on Wednesday, October 4th (week 2).
-3. Use the 'If you are familiar with git' workflow below to make changes to the course website.
+2. Attend the Git tutorial during class on Wednesday, October 4th (week 2). We will go over how to use git from RStudio.
+3. Use the following diagram to remember the workflow:
 
+![Workflow for editing the course website with git in RStudio](images/github_workflow_with_rstudio.png){width=50%}
 
 #### If you are familiar with git
 
-
-The general workflow is:
+![Workflow for editing the course website with git](images/github_workflow_with_git.png){width=50%}
 
 1. If you have not aready done so, fork the repository from https://github.com/FukamiLab/BIO202 to your account on GitHub. Then clone a local copy of this forked repository (from your own GitHub account) to your computer. This only needs to be done once.
 2. Before you start working:
-    + Make sure your copy is up to date with the FukamiLab repository on GitHub. If not, submit a Pull request to update it.
+    + Make sure your copy is up to date with the FukamiLab repository on GitHub by submitting a pull request.
     + Make sure your local repository on your computer is up to date with your fork of the repository on your GitHub account using `git pull`.
 3. Work on the .Rmd file for your lesson in R Studio on your computer. Click 'Knit' to render your changes as an html file and view them in your browser. Note that any edits you make are only on your computer until you submit a pull request to merge your changes to the repository. Make sure that when you have made your last edit to the .Rmd file you click 'Knit' so that an up-to-date html file is generated. The html file will be the one that appears on the website.
 4. Commit the changes you make periodically to your local repository using `git commit -m "changes you made"`.
