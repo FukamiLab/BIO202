@@ -16,7 +16,7 @@ Students will be able to:
 
   * Design statistically sound data collection strategies to answer a given research questions.
   * Choose among modern statistical tools and analyze data using R.
-  * Present results effectively usin R for peer-reviewed papers.
+  * Present results effectively using R for peer-reviewed papers.
   * Advise colleagues about statistical analyses.
   
 **Class Format:**
