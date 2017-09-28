@@ -136,7 +136,7 @@ When you are finished with an analysis (or even if you are only part-way through
 
 Documents written in R markdown are rendered to other document formats by the `rmarkdown` package that comes automatically installed with RStudio. The rmarkdown package renders documents using two steps: First, it excutes all of the code using functions from the `knitr` package. Then, it converts the output of the code and any markdown-formatted text to a new document format using functions in the `pandoc` package. Note that any output that you generate in the code chunks (e.g. plots, exported data) will be saved relative to the working directory, unless you specify otherwise in a code chunk option.
 
-To render an Rmd document in Rstudio, click the 'Knit' button at the top of the window displaying the document. If everything goes right a new window should pop up showing the new file that was generated (or prompt you to open the file in a browwer window). The file will be saved in the directory where the Rmd file is located.
+To render an Rmd document in Rstudio, click the 'Knit' button at the top of the window displaying the document. If everything goes right a new window should pop up showing the new file that was generated (or prompt you to open the file in a browser window). The file will be saved in the directory where the Rmd file is located.
 
 > **Exercise:**
 > 
@@ -150,11 +150,11 @@ The way that pandoc displays the contents and output of code chunks is determine
 
 This [reference guide](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) has a good overview of what the different options will do.
 
-Look at the first code chunk in the Introduction to R Rmd document where the global options are set. This code block demonstrates 3 global options that apply to all following code chunks in the document: `knitr::opts_chunk$set()`. It also shows how you would apply an options to a single code chunk in the brackets at the start of the chunk: `{r include = FALSE}`, so that this chunk is not shown in the resulting html document, even though it is evaluated.
+Look at the first code chunk in the Introduction to R Rmd document where the global options are set. This code block demonstrates 3 global options that apply to all following code chunks in the document: `knitr::opts_chunk$set()`. It also shows how you would apply any options to a single code chunk in the brackets at the start of the chunk: `{r include = FALSE}`, so that this chunk is not shown in the resulting html document, even though it is evaluated.
 
 #### Figures
 
-Any figure that you make in a code chunk will by default be saved as separate files in your working directory and then imported into the final document created by `pandoc`. In our class webpages, the first code chunk specifies: `knitr::opts_chunk$set(fig.path = "images/")`, which tells `knitr` that it should save any figures generated with code chunks to a folder named "images" within the working directory. The image files will be named according the the name of the code chunk from which they are generated. Hence, it is a good idea to separate analyses into separate code chunks and give them somewhat descriptive names. R markdown can also automatically number and caption your figures and tables. The [`captioner`](https://cran.r-project.org/web/packages/captioner/vignettes/using_captioner.html) package is particularly useful for this.
+Any figure that you make in a code chunk will by default be saved as separate files in your working directory and then imported into the final document created by `pandoc`. In our class webpages, the first code chunk specifies: `knitr::opts_chunk$set(fig.path = "images/")`, which tells `knitr` that it should save any figures generated with code chunks to a folder named "images" within the working directory. The image files will be named according to the name of the code chunk from which they are generated. Hence, it is a good idea to separate analyses into separate code chunks and give them somewhat descriptive names. R markdown can also automatically number and caption your figures and tables. The [`captioner`](https://cran.r-project.org/web/packages/captioner/vignettes/using_captioner.html) package is particularly useful for this.
 
 
 > **Exercise:**
