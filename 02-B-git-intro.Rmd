@@ -78,11 +78,11 @@ You have added your name to the lesson Rmd file in your fork of the class websit
 
 Return to the main page of your fork at `https://github.com/your-username/BIO202` and click the "New pull request" button. The *base* is what you are proposing to change and the *head* is where the changes are coming from. What should the base and head be if you want to propose the changes you just made?
 
-You may nee to click "compare across forks" to make the FukamiLab master branch show up as an option. Once you have selected the base (to) and head (from) branches you can scroll down to see how the files differ. Click the green "Create pull request" button to propose these changes. You will then be prompted to create a description of your changes so that a reviewer (e.g. the instructor) knows what to look for before accepting the changes. Click the green button again to create the request. 
+You may need to click "compare across forks" to make the FukamiLab master branch show up as an option. Once you have selected the base (to) and head (from) branches you can scroll down to see how the files differ. Click the green "Create pull request" button to propose these changes. You will then be prompted to create a description of your changes so that a reviewer (e.g. the instructor) knows what to look for before accepting the changes. Click the green button again to create the request. 
 
 That's it. Now someone will need to review your changes and accept them in order for the FukamiLab project to change.
 
-While it is useful to be able to edit files online. Usually you will want to make changes to files on your computer and then propose changes from these files to a project repository on GitHub. The best way to do this is by using a version control program called git. In the next section you will learn how to use git with RStudio to manages changes to a version of the class website files stored on your computer.
+While it is useful to be able to edit files online, usually you will want to make changes to files on your computer and then propose changes from these files to a project repository on GitHub. The best way to do this is by using a version control program called git. In the next section you will learn how to use git with RStudio to manages changes to a version of the class website files stored on your computer.
 
 
 ### What is git?
