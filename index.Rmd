@@ -16,7 +16,7 @@ Students will be able to:
 
   * Design statistically sound data collection strategies to answer a given research questions.
   * Choose among modern statistical tools and analyze data using R.
-  * Present results effectively usin R for peer-reviewed papers.
+  * Present results effectively using R for peer-reviewed papers.
   * Advise colleagues about statistical analyses.
   
 **Class Format:**
@@ -38,28 +38,28 @@ Each student will complete the results section to include in a paper to submit f
 | 2    | Mon | Oct. 2   | [Intro to ggplot2 and tidyr](02-A-tidyr.html)                                     | Jes       |------------|
 |      | Wed | Oct. 4   | [Intro to GitHub & git](02-B-git-intro.html)                                      | Jes       |------------|
 |      | Fri | Oct. 6   | Each person introduces their questions & data                                     | Tad & Jes |------------|
-| 3    | Mon | Oct. 9   | Topic 1. [Data exploration](03-A-data-exploration.html)                           | Tad       |            |
-|      | Wed | Oct. 11  | Topic 2. [Linear models](03-B-linear-models.html)                                 | Tad       |            |
-|      | Fri | Oct. 13  | Topic 3. [Dealing with heterogeneity](03-C-heterogeneity.html)                    | Tad       |            |
-| 4    | Mon | Oct. 16  | Topic 4. [Mixed-effects models with nested data](04-A-mixed-models.html)          | Tad       |            |
-|      | Wed | Oct. 18  | Topic 5. [GLM with binary & proportional data](04-B-binary-data.html)             | Tad       |            |
-|      | Fri | Oct. 20  | Topic 6. [GLM with zero-inflated data](04-C-zero-data.html)                       | Tad       |            |
-| 5    | Mon | Oct. 23  | Topic 7. [Bayesian linear models](05-A-Bayesian-linear-models.html)               | Jes       |            |
-|      | Wed | Oct. 25  | Topic 8. [Bayesian inference with prior information](05-B-Bayesian-priors.html)   | Jes       |            |
-|      | Fri | Oct. 27  | Topic 9. [Advanced Bayesian model example](05-C-Advanced-bayesian-example.html)   | Jes       |            |
-| 6    | Mon | Oct. 30  | Topic 10. [Unconstrained ordination](06-A-unconstrained-ordination.html)          | Tad       |            |
-|      | Wed | Nov. 1   | Topic 11. [Constrained ordination](06-B-constrained-ordination.html)              | Tad       |            |
-|      | Fri | Nov. 3   | Topic 12. [Comparing multivariate data](06-C-matrix-comparison.html)              | Jes       |            |
+| 3    | Mon | Oct. 9   | Topic 1. [Data exploration](03-A-data-exploration.html)                           | Tad       | Priscilla  |
+|      | Wed | Oct. 11  | Topic 2. [Linear models](03-B-linear-models.html)                                 | Tad       | Sandra     |
+|      | Fri | Oct. 13  | Topic 3. [Dealing with heterogeneity](03-C-heterogeneity.html)                    | Tad       | Anna       |
+| 4    | Mon | Oct. 16  | Topic 4. [Mixed-effects models with nested data](04-A-mixed-models.html)          | Tad       | Beth       |
+|      | Wed | Oct. 18  | Topic 5. [GLM with binary & proportional data](04-B-binary-data.html)             | Tad       | Meghan     |
+|      | Fri | Oct. 20  | Topic 6. [GLM with zero-inflated data](04-C-zero-data.html)                       | Tad       | Nick       |
+| 5    | Mon | Oct. 23  | Topic 7. [Bayesian linear models](05-A-Bayesian-linear-models.html)               | Jes       | Jamie      |
+|      | Wed | Oct. 25  | Topic 8. [Bayesian inference with prior information](05-B-Bayesian-priors.html)   | Jes       | Nicole     |
+|      | Fri | Oct. 27  | Topic 9. [Advanced Bayesian model example](05-C-Advanced-bayesian-example.html)   | Jes       | Lizzie     |
+| 6    | Mon | Oct. 30  | Topic 10. [Unconstrained ordination](06-A-unconstrained-ordination.html)          | Tad       | Anna       |
+|      | Wed | Nov. 1   | Topic 11. [Constrained ordination](06-B-constrained-ordination.html)              | Tad       | Meghan     |
+|      | Fri | Nov. 3   | Topic 12. [Comparing multivariate data](06-C-matrix-comparison.html) (symmetric methods)| Jes       | Priscilla  |
 | 7    | Mon | Nov. 6   | Mid-term project presentation & discussion                                        |           |            |
 |      | Wed | Nov. 8   | Mid-term project presentation & discussion                                        |           |            |
 |      | Fri | Nov. 10  | Mid-term project presentation & discussion                                        |           |            |
-| 8    | Mon | Nov. 13  | Topic 13. [Spatial regression](08-A-spatial-regression.html)                      | Jes       |            |
-|      | Wed | Nov. 15  | Topic 14. [Ordination approach to spatial analysis](08-B-spatial-ordination.html) | Jes       |            |
-|      | Fri | Nov. 17  | Topic 15. [Visualization of spatial data](08-C-mapping.html)                      | Jes       |            |
+| 8    | Mon | Nov. 13  | Topic 13. [Spatial regression](08-A-spatial-regression.html)                      | Jes       | Marissa    |
+|      | Wed | Nov. 15  | Topic 14. [Ordination approach to spatial analysis](08-B-spatial-ordination.html) | Jes       | Sandra     |
+|      | Fri | Nov. 17  | Topic 15. [Visualization of spatial data](08-C-mapping.html)                      | Jes       | Tyler      |
 |RECESS|     |          | Thanksgiving                                                                      |           |            |
-| 9    | Mon | Nov. 27  | Topic 16. To be selected by class                                                 |           |            |
-|      | Wed | Nov. 29  | Topic 17. To be selected by class                                                 |           |            |
-|      | Fri | Dec. 1   | Topic 18. To be selected by class                                                 |           |            |
+| 9    | Mon | Nov. 27  | Topic 16. Selected by class: time-series analysis                                 | Lizzie    | Jamie      |
+|      | Wed | Nov. 29  | Topic 17. Selected by class: network analysis                                     | Beth      | Nicole     |
+|      | Fri | Dec. 1   | Topic 18. Selected by class: occupancy models                                     | Nick      |            |
 | 10   | Mon | Dec. 4   | Final project presentations                                                       |           |            |
 |      | Wed | Dec. 6   | Final project presentations                                                       |           |            |
 |      | Fri | Dec. 8   | Final project presentations                                                       |           |            |
