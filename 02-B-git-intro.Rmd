@@ -47,11 +47,7 @@ Anyone on the internet can see and download files from a GitHub repository (unle
 
 In order to use GitHub you will first need to create an account and give yourself a username so that you can create and work on projects. Go to https://github.com/ and on the main screen choose a username and password. You will need to check your email to confirm your regsitration. 
 
-Once you have registered an logged in using your new username and password you can get started. GitHub provides a nice tutorial on creating a new project repository (here)[https://guides.github.com/activities/hello-world/]. Feel free to try out this tutorial on your own.
-
-Let's create a new repository for your class project.
-
-First click the "Start a new project" button. On the following page give the project a repository name and description. Check the box to create a README and then click "Create repository". You will now be on the main page for your project. There is one text file in this project called README.md which contains the project name and description you wrote. We will come back to this project later.
+Once you have registered an logged in using your new username and password you can get started. GitHub provides a nice tutorial on creating a new project repository [here](https://guides.github.com/activities/hello-world/). Feel free to try out this tutorial on your own to learn how to make a repository for your class project.
 
 
 #### Forking an existing repository
@@ -161,15 +157,4 @@ Finally, submit a pull request on GitHub to send these changes to the FukamiLab 
 
 ![Workflow for editing the course website with git in RStudio](images/github_workflow_with_rstudio.png)
 
-
-
-
-
-
-
-
-
-**Suggested Additional References:**
-
-> 
 
