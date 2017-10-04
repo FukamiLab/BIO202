@@ -60,9 +60,9 @@ Brief description of the question you want to ask and the data you have to analy
 
 #### Meghan
 
-**Project Title**
+**Land Use as Driver of Aedes vector mosquito distribution in Costa Rica**
 
-Brief description of the question you want to ask and the data you have to analyze it.
+I will assess how environmental characteristics drive Aedes aegypti and albopictus distribution by comparing field-collected mosquito data from a land use gradient, field-collected temperature and humidity data from those sites, and remote sensing data of environmental characteristics of those sites.
 
 
 #### Nicole
