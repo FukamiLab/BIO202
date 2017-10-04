@@ -16,7 +16,7 @@ Students will be able to:
 
   * Design statistically sound data collection strategies to answer a given research questions.
   * Choose among modern statistical tools and analyze data using R.
-  * Present results effectively usin R for peer-reviewed papers.
+  * Present results effectively using R for peer-reviewed papers.
   * Advise colleagues about statistical analyses.
   
 **Class Format:**
@@ -38,32 +38,33 @@ Each student will complete the results section to include in a paper to submit f
 | 2    | Mon | Oct. 2   | [Intro to ggplot2 and tidyr](02-A-tidyr.html)                                     | Jes       |------------|
 |      | Wed | Oct. 4   | [Intro to GitHub & git](02-B-git-intro.html)                                      | Jes       |------------|
 |      | Fri | Oct. 6   | Each person introduces their questions & data                                     | Tad & Jes |------------|
-| 3    | Mon | Oct. 9   | Topic 1. [Data exploration](03-A-data-exploration.html)                           | Tad       |            |
-|      | Wed | Oct. 11  | Topic 2. [Linear models](03-B-linear-models.html)                                 | Tad       |            |
-|      | Fri | Oct. 13  | Topic 3. [Dealing with heterogeneity](03-C-heterogeneity.html)                    | Tad       |            |
-| 4    | Mon | Oct. 16  | Topic 4. Mixed-effects models with nested data                                    | Tad       |            |
-|      | Wed | Oct. 18  | Topic 5. GLM with binary & proportional data                                      | Tad       |            |
-|      | Fri | Oct. 20  | Topic 6. GLM with zero-inflated data                                              | Tad       |            |
-| 5    | Mon | Oct. 23  | Topic 7. [Bayesian linear models](05-A-Bayesian-linear-models.html)               | Jes       |            |
-|      | Wed | Oct. 25  | Topic 8. [Bayesian inference with prior information](05-B-Bayesian-priors.html)   | Jes       |            |
-|      | Fri | Oct. 27  | Topic 9. [Advanced Bayesian model example](05-C-Advanced-bayesian-example.html)   | Jes       |            |
-| 6    | Mon | Oct. 30  | Topic 10. Unconstrained ordination                                                | Tad       |            |
-|      | Wed | Nov. 1   | Topic 11. Constrained ordination                                                  | Tad       |            |
-|      | Fri | Nov. 3   | Topic 12. Comparing multivariate data                                             | Jes       |            |
+| 3    | Mon | Oct. 9   | Topic 1. [Data exploration](03-A-data-exploration.html)                           | Tad       | Priscilla  |
+|      | Wed | Oct. 11  | Topic 2. [Linear models](03-B-linear-models.html)                                 | Tad       | Sandra     |
+|      | Fri | Oct. 13  | Topic 3. [Dealing with heterogeneity](03-C-heterogeneity.html)                    | Tad       | Anna       |
+| 4    | Mon | Oct. 16  | Topic 4. [Mixed-effects models with nested data](04-A-mixed-models.html)          | Tad       | Beth       |
+|      | Wed | Oct. 18  | Topic 5. [GLM with binary & proportional data](04-B-binary-data.html)             | Tad       | Meghan     |
+|      | Fri | Oct. 20  | Topic 6. [GLM with zero-inflated data](04-C-zero-data.html)                       | Tad       | Nick       |
+| 5    | Mon | Oct. 23  | Topic 7. [Bayesian linear models](05-A-Bayesian-linear-models.html)               | Jes       | Jamie      |
+|      | Wed | Oct. 25  | Topic 8. [Bayesian inference with prior information](05-B-Bayesian-priors.html)   | Jes       | Nicole     |
+|      | Fri | Oct. 27  | Topic 9. [Advanced Bayesian model example](05-C-Advanced-bayesian-example.html)   | Jes       | Lizzie     |
+| 6    | Mon | Oct. 30  | Topic 10. [Unconstrained ordination](06-A-unconstrained-ordination.html)          | Tad       | Anna       |
+|      | Wed | Nov. 1   | Topic 11. [Constrained ordination](06-B-constrained-ordination.html)              | Tad       | Meghan     |
+|      | Fri | Nov. 3   | Topic 12. [Comparing multivariate data](06-C-matrix-comparison.html) (symmetric methods)| Jes       | Priscilla  |
 | 7    | Mon | Nov. 6   | Mid-term project presentation & discussion                                        |           |            |
 |      | Wed | Nov. 8   | Mid-term project presentation & discussion                                        |           |            |
 |      | Fri | Nov. 10  | Mid-term project presentation & discussion                                        |           |            |
-| 8    | Mon | Nov. 13  | Topic 13. Spatial analysis, Zuur et al. approach                                  | Jes       |            |
-|      | Wed | Nov. 15  | Topic 14. Spatial analysis, Borcard et al. approach                               | Jes       |            |
-|      | Fri | Nov. 17  | Topic 15. Spatial analysis, Bayesian approach                                     | Jes       |            |
+| 8    | Mon | Nov. 13  | Topic 13. [Spatial regression](08-A-spatial-regression.html)                      | Jes       | Marissa    |
+|      | Wed | Nov. 15  | Topic 14. [Ordination approach to spatial analysis](08-B-spatial-ordination.html) | Jes       | Sandra     |
+|      | Fri | Nov. 17  | Topic 15. [Visualization of spatial data](08-C-mapping.html)                      | Jes       | Tyler      |
 |RECESS|     |          | Thanksgiving                                                                      |           |            |
-| 9    | Mon | Nov. 27  | Topic 16. To be selected by class                                                 |           |            |
-|      | Wed | Nov. 29  | Topic 17. To be selected by class                                                 |           |            |
-|      | Fri | Dec. 1   | Topic 18. To be selected by class                                                 |           |            |
+| 9    | Mon | Nov. 27  | Topic 16. Selected by class: time-series analysis                                 | Lizzie    | Jamie      |
+|      | Wed | Nov. 29  | Topic 17. Selected by class: network analysis                                     | Beth      | Nicole     |
+|      | Fri | Dec. 1   | Topic 18. Selected by class: occupancy models                                     | Nick      |            |
 | 10   | Mon | Dec. 4   | Final project presentations                                                       |           |            |
 |      | Wed | Dec. 6   | Final project presentations                                                       |           |            |
 |      | Fri | Dec. 8   | Final project presentations                                                       |           |            |
 
+Some possible additional topics: Cluster analysis, Series analysis, structural equation models, occupancy models, phylogenetic contrasts, rarefaction, null models for community analysis, multi-model inference and averaging
 
 ## Before Class 
 
@@ -79,19 +80,21 @@ During class you will be editing the course webpages to include R code for the l
 
 All assigned readings can be obtained for free through Stanford library online resources. 
 
++ Bivand, R. S., Pebesma, E., Gomez-Rubio, V. (2013), *Applied Spatial Data Analysis with R*, 2nd ed. Springer. [Stanford Full Text](https://link-springer-com.stanford.idm.oclc.org/book/10.1007%2F978-1-4614-7618-4)
 + Borcard, D., Gillet, F. and Legendre, P. (2011), *Numerical Ecology with R.* Springer. [Stanford Full Text](https://link.springer.com/book/10.1007/978-1-4419-7976-6)
 + Korner-Nievergelt et al. (2015), *Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.* Elsevier. [Stanford Full Text](http://www.sciencedirect.com/science/book/9780128013700)
-+ Martin, T. G., Wintle, B. A., Rhodes, J. R., Kuhnert, P. M., Field, S. A., Low-Choy, S. J., Tyre, A. J. and Possingham, H. P. (2005), *Zero tolerance ecology: improving ecological inference by modelling the source of zero observations*. Ecology Letters, 8: 1235-1246. DOI:[10.1111/j.1461-0248.2005.00826.x](http://dx.doi.org/10.1111/j.1461-0248.2005.00826.x)
-+ Ramette, A. (2007), *Multivariate analyses in microbial ecology*. FEMS Microbiology Ecology, 62: 142-160. DOI: [10.1111/j.1574-6941.2007.00375.x](http:dx.doi.org/10.1111/j.1574-6941.2007.00375.x)
++ Legendre, P. and Legendre, L. (2012), *Numerical Ecology*. Elsevier. [Stanford Full Text](http://www.sciencedirect.com/science/bookseries/01678892/24)
++ Martin, T. G., Wintle, B. A., Rhodes, J. R., Kuhnert, P. M., Field, S. A., Low-Choy, S. J., Tyre, A. J. and Possingham, H. P. (2005), Zero tolerance ecology: improving ecological inference by modelling the source of zero observations. *Ecology Letters*, 8: 1235-1246. DOI:[10.1111/j.1461-0248.2005.00826.x](http://dx.doi.org/10.1111/j.1461-0248.2005.00826.x)
++ Ramette, A. (2007), Multivariate analyses in microbial ecology. *FEMS Microbiology Ecology*, 62: 142-160. DOI: [10.1111/j.1574-6941.2007.00375.x](http:dx.doi.org/10.1111/j.1574-6941.2007.00375.x)
 + Wickham, H. (2016), *ggplot2: Elegant Graphics for Data Analysis*. Springer. [Stanford Full Text](https://link-springer-com.stanford.idm.oclc.org/book/10.1007%2F978-3-319-24277-4)
 + Zuur, A. F., Leno, E. N., Walker, N., Savliev, A. A. and Smith, G. M. (2009), *Mixed Effect Models and Extensions in Ecology with R.* Springer. [Stanford Full Text](https://link.springer.com/book/10.1007%2F978-0-387-87458-6)
-+ Zuur, A. F. (2010), *A protocol for data exploration to avoid common statistical problems.* Methods in Ecology and Evolution **1**: 3-14. DOI: [10.1111/j.2041-210X.2009.00001.x](http://dx.doi.org/10.1111/j.2041-210X.2009.00001.x)
++ Zuur, A. F. (2010), A protocol for data exploration to avoid common statistical problems. *Methods in Ecology and Evolution*, 1: 3-14. DOI: [10.1111/j.2041-210X.2009.00001.x](http://dx.doi.org/10.1111/j.2041-210X.2009.00001.x)
 
 ### Additional Suggested References
 
-+ Beale, C. M., Lennon, J. J., Yearsley, J. M., Brewer, M. J. and Elston, D. A. (2010), *Regression analysis of spatial data*. Ecology Letters, 13: 246-264. DOI:[10.1111/j.1461-0248.2009.01422.x](http://dx.doi.org/10.1111/j.1461-0248.2009.01422.x)
-+ Legendre, P. and L. Legendre. (2012), *Numerical Ecology*. Elsevier. [Stanford Full Text](http://www.sciencedirect.com/science/bookseries/01678892/24)
++ Beale, C. M., Lennon, J. J., Yearsley, J. M., Brewer, M. J. and Elston, D. A. (2010), Regression analysis of spatial data. *Ecology Letters*, 13: 246-264. DOI:[10.1111/j.1461-0248.2009.01422.x](http://dx.doi.org/10.1111/j.1461-0248.2009.01422.x)
++Hawkins, B. A. (2012), Eight (and a half) deadly sins of spatial analysis. *Journal of Biogeography*, 39: 1-9. [DOI: 10.1111/j.1365-2699.2011.02637.x](http://dx.doi.org/10.1111/j.1365-2699.2011.02637.x)
 + McElreath, R. (2016), *Statistical rethinking: a Bayesian course with examples in R and Stan*. CRC Press. *Available in the Science and Marine libraries* [Author's website](http://xcelab.net/rm/statistical-rethinking/)
 + Venables, W. N., Smith, D. M. and the R Core Team. (2012), *An Introduction to R: Notes on R: A Programming Environment for Data Analysis and Graphics*. Version 2.15.1. [full text](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf)
-+ Wagner, H. H. and Fortin, M.-J. (2005), *Spatial analysis of landscapes: concepts and statistics*. Ecology, 86: 1975–1987. DOI: [10.1890/04-0914](http://dx.doi.org/10.1890/04-0914)
-+ Zuur, A. F., J. M. Hilbe and E. N. Ieno. (2013), *A beginner's guide to GLM and GLMM with R: a frequentist and Bayesian perspective for ecologists.* Highland Statistics Ltd. [Stanford Library Record](https://searchworks.stanford.edu/view/11749213) 
++ Wagner, H. H. and Fortin, M. J. (2005), Spatial analysis of landscapes: concepts and statistics. *Ecology*, 86: 1975–1987. DOI: [10.1890/04-0914](http://dx.doi.org/10.1890/04-0914)
++ Zuur, A. F., Hilbe, J. M. and Ieno, E. N. (2013), *A beginner's guide to GLM and GLMM with R: a frequentist and Bayesian perspective for ecologists.* Highland Statistics Ltd. [Stanford Library Record](https://searchworks.stanford.edu/view/11749213) 

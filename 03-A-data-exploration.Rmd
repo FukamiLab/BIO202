@@ -1,15 +1,13 @@
 ---
 layout: topic
-title: "Linear models"
-author: Tad, SR Schachat
+title: "Data exploration"
+author: Tad
 output: html_document
 ---
 
 **Assigned Reading:**
 
-> Appendix A from: Zuur, A. F., Ieno, E. N., Walker, N., Saveliev, A. A. and Smith, G. M. 2009. *Mixed Effects Models and Extensions in Ecology with R.* Springer. [Here's the whole book](https://link-springer-com.stanford.idm.oclc.org/book/10.1007%2F978-0-387-87458-6) or [you can download just the appendix](https://link.springer.com/content/pdf/bbm%3A978-0-387-87458-6%2F1.pdf).
-
-> "Cleveland Dot Plots" from the UC Business Analytics R Programming Guide, available [here](http://uc-r.github.io/cleveland-dot-plots).
+> Zuur, A. F., E. N. Ieno, and C. S. Elphick. 2010. A protocol for data exploration to avoid common statistical problems. *Methods in Ecology and Evolution* **1**: 3-14.  [DOI: 10.1111/j.2041-210X.2009.00001.x](https://dx.doi.org/10.1111/j.2041-210X.2009.00001.x)
 
 
 ```{r include = FALSE}
@@ -32,14 +30,14 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
-+ Learn the advantages of a Cleveland dot plot
-+ Learn linear models
+
 
 ### Analysis Example
 
 
 
 ### Discussion Questions
+
 
 
 

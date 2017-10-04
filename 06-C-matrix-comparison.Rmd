@@ -1,15 +1,19 @@
 ---
 layout: topic
-title: "Linear models"
-author: Tad, SR Schachat
+title: "Comparing multivariate data"
+subtitle: "symmetric methods for comparing two matrices OR three-table methods"
+author: Jes
 output: html_document
 ---
 
 **Assigned Reading:**
 
-> Appendix A from: Zuur, A. F., Ieno, E. N., Walker, N., Saveliev, A. A. and Smith, G. M. 2009. *Mixed Effects Models and Extensions in Ecology with R.* Springer. [Here's the whole book](https://link-springer-com.stanford.idm.oclc.org/book/10.1007%2F978-0-387-87458-6) or [you can download just the appendix](https://link.springer.com/content/pdf/bbm%3A978-0-387-87458-6%2F1.pdf).
-
-> "Cleveland Dot Plots" from the UC Business Analytics R Programming Guide, available [here](http://uc-r.github.io/cleveland-dot-plots).
+> Sections 10.5 and 11.5 from: Legendre, P. and L. Legendre. 2012. *Numerical Ecology*. Elsevier. [link](http://www.sciencedirect.com/science/bookseries/01678892/24)
+>
+> OR
+>
+> Dray, S. P. et al. 2014. Combining the fourth-corner and RLQ methods for assessing trait responses to environmental variation. *Ecology* **95**: 14-21. [DOI: 10.1890/13-0196.1](http://dx.doi.org/10.1890/13-0196.1). and Supplement 1: A tutorial to perform fourth-corner and RLQ analyses in R. 
+[Ecological Archives E095-002-S1](http://esapubs.org/archive/ecol/E095/002/suppl-1.php)
 
 
 ```{r include = FALSE}
@@ -32,14 +36,14 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
-+ Learn the advantages of a Cleveland dot plot
-+ Learn linear models
+
 
 ### Analysis Example
 
 
 
 ### Discussion Questions
+
 
 
 
