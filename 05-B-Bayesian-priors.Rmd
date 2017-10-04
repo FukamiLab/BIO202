@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "Bayesian Inference with Prior Information"
-author: Jes
+author: Nicole Nova
 output: html_document
 ---
 
