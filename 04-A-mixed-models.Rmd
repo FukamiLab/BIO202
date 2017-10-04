@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "Mixed-effects models with nested data"
-author: Tad
+author: Beth Morrison
 output: html_document
 ---
 
