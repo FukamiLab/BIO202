@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "Visualizing spatial data"
-author: Jes
+author: Jes, Tyler
 output: html_document
 ---
 

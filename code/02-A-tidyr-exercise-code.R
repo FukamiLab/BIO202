@@ -37,6 +37,7 @@ download.file(url = "https://raw.githubusercontent.com/FukamiLab/BIO202/master/d
               method = "auto"
 )
 
+
 # Read downloaded file into dataframes
 trees_raw <- read.csv("data/BIO46_W2017_trees.csv")
 lichens_raw <- read.csv("data/BIO46_W2017_lichens.csv")
@@ -50,7 +51,10 @@ algae_raw <- read.csv("data/BIO46_W2017_algae.csv")
 
 library(dplyr)
 library(tidyr)
+library(ggplot2)
 
+# Open vingnette on join functions that merge two tables
+vignette("two-table", package = "dplyr")
 
 # Add LichenID and TreeID columns to algae data
 
@@ -114,9 +118,6 @@ ggplot(lichen, aes(Lon, Lat, colour = Chao1)) +
 ggplot(lichen, aes(Lon, Lat, colour = Chao1)) +
   geom_point() +
   facet_wrap(~ Genus_species.tree)
-
-
-
 
 
 
