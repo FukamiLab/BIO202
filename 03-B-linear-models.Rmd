@@ -1,7 +1,7 @@
 ---
 layout: topic
-title: "Linear models"
-author: Tad
+title: "Linear Models"
+author: Tad  & Meghan Howard
 output: html_document
 ---
 
