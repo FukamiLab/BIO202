@@ -88,6 +88,6 @@ Brief description of the question you want to ask and the data you have to analy
 
 #### Tyler
 
-**Project Title**
+**Effects of anthropogenic disturbance on the structure of species interaction networks**
 
 Brief description of the question you want to ask and the data you have to analyze it.
