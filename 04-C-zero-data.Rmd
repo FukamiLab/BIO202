@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "GLM with zero-inflated data"
-author: Tad
+author: Tad; Nick Hendershot
 output: html_document
 ---
 
