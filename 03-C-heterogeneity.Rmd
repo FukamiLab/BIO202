@@ -1,6 +1,6 @@
 ---
 layout: topic
-title: "Linear Models"
+title: "Dealing with heterogeneity"
 author: Tad
 output: html_document
 ---

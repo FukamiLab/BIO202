@@ -23,15 +23,70 @@ knitr::opts_chunk$set(fig.path = "images/")
 repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 ```
 
-
-#### Student Name
+#### Anna
 
 **Project Title**
 
 Brief description of the question you want to ask and the data you have to analyze it.
 
 
-#### Student Name
+#### Beth
+
+**Project Title**
+
+Brief description of the question you want to ask and the data you have to analyze it.
+
+
+#### Jamie
+
+**Project Title**
+
+Brief description of the question you want to ask and the data you have to analyze it.
+
+
+#### Lizzie
+
+**Project Title**
+
+Brief description of the question you want to ask and the data you have to analyze it.
+
+
+#### Marissa
+
+**Project Title**
+
+Brief description of the question you want to ask and the data you have to analyze it.
+
+
+#### Meghan
+
+**Project Title**
+
+Brief description of the question you want to ask and the data you have to analyze it.
+
+
+#### Nicole
+
+**Project Title**
+
+Brief description of the question you want to ask and the data you have to analyze it.
+
+
+#### Priscilla
+
+**Project Title**
+
+Brief description of the question you want to ask and the data you have to analyze it.
+
+
+#### Sandra
+
+**Project Title**
+
+Brief description of the question you want to ask and the data you have to analyze it.
+
+
+#### Tyler
 
 **Project Title**
 
