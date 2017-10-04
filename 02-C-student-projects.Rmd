@@ -53,7 +53,7 @@ Brief description of the question you want to ask and the data you have to analy
 
 #### Marissa
 
-**Project Title**
+**Yellow Fever and Dengue interactions in Brazil**
 
 Brief description of the question you want to ask and the data you have to analyze it.
 
