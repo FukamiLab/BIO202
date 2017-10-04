@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "Dealing with heterogeneity"
-author: Tad
+author: Tad & Anna Rasmussen
 output: html_document
 ---
 
