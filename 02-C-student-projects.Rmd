@@ -81,9 +81,9 @@ Brief description of the question you want to ask and the data you have to analy
 
 #### Sandra
 
-**Project Title**
+Spatial autocorrelation in a Pennsylvanian swamp forest
 
-Brief description of the question you want to ask and the data you have to analyze it.
+I want to interrogate patterns of spatial autocorrelation of plants in a Paleozoic forest, at multiple taxonomic levels. I will use semi-quantitative data collected in a transect through a coal mine.
 
 
 #### Tyler
