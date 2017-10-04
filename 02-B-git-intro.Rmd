@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "Introduction to git and GitHub"
-author: Jes
+author: Jes Coyle
 output: html_document
 ---
 
@@ -47,11 +47,7 @@ Anyone on the internet can see and download files from a GitHub repository (unle
 
 In order to use GitHub you will first need to create an account and give yourself a username so that you can create and work on projects. Go to https://github.com/ and on the main screen choose a username and password. You will need to check your email to confirm your regsitration. 
 
-Once you have registered an logged in using your new username and password you can get started. GitHub provides a nice tutorial on creating a new project repository (here)[https://guides.github.com/activities/hello-world/]. Feel free to try out this tutorial on your own.
-
-Let's create a new repository for your class project.
-
-First click the "Start a new project" button. On the following page give the project a repository name and description. Check the box to create a README and then click "Create repository". You will now be on the main page for your project. There is one text file in this project called README.md which contains the project name and description you wrote. We will come back to this project later.
+Once you have registered an logged in using your new username and password you can get started. GitHub provides a nice tutorial on creating a new project repository [here](https://guides.github.com/activities/hello-world/). Feel free to try out this tutorial on your own to learn how to make a repository for your class project.
 
 
 #### Forking an existing repository
@@ -78,11 +74,11 @@ You have added your name to the lesson Rmd file in your fork of the class websit
 
 Return to the main page of your fork at `https://github.com/your-username/BIO202` and click the "New pull request" button. The *base* is what you are proposing to change and the *head* is where the changes are coming from. What should the base and head be if you want to propose the changes you just made?
 
-You may nee to click "compare across forks" to make the FukamiLab master branch show up as an option. Once you have selected the base (to) and head (from) branches you can scroll down to see how the files differ. Click the green "Create pull request" button to propose these changes. You will then be prompted to create a description of your changes so that a reviewer (e.g. the instructor) knows what to look for before accepting the changes. Click the green button again to create the request. 
+You may need to click "compare across forks" to make the FukamiLab master branch show up as an option. Once you have selected the base (to) and head (from) branches you can scroll down to see how the files differ. Click the green "Create pull request" button to propose these changes. You will then be prompted to create a description of your changes so that a reviewer (e.g. the instructor) knows what to look for before accepting the changes. Click the green button again to create the request. 
 
 That's it. Now someone will need to review your changes and accept them in order for the FukamiLab project to change.
 
-While it is useful to be able to edit files online. Usually you will want to make changes to files on your computer and then propose changes from these files to a project repository on GitHub. The best way to do this is by using a version control program called git. In the next section you will learn how to use git with RStudio to manages changes to a version of the class website files stored on your computer.
+While it is useful to be able to edit files online, usually you will want to make changes to files on your computer and then propose changes from these files to a project repository on GitHub. The best way to do this is by using a version control program called git. In the next section you will learn how to use git with RStudio to manages changes to a version of the class website files stored on your computer.
 
 
 ### What is git?
@@ -139,7 +135,7 @@ Open this new version-controlled RStudio project and open the file 02-C-student-
 
 You have now made changes to the *local* files on you computer. Next you need to track these changes with git. To do this, click on the button on the top bar that has a green plus over a red minus over a grey circular arrow. Choose "Commit" from the drop down menu.
 
-This will open a new window that shows you all of the files that have changed since your last "commit". First you need to select the files that you want to "stage". This means that any changes made to these files will be recorded in this "commit". A "commit" is a record of a set of changes. You can revert files back to the state that they were in at any particular "commit". So, if you want to be able to revert changes to just one file, you should only stage one file each time you commit. I would suggest stagin both the .Rmd file and its accompanying .html file at the same time, since the changes you made to the Rmd file caused the changes in the html file. Click the checkbox next to the files you want to stage for this commit. Then type a brief and specific message in the Commit message box about the changes you made. Notice that the bottom window shows you the differences between the current version of the file you selected and the most recently commited version. Click the commit button when you are satisfied.
+This will open a new window that shows you all of the files that have changed since your last "commit". First you need to select the files that you want to "stage". This means that any changes made to these files will be recorded in this "commit". A "commit" is a record of a set of changes. You can revert files back to the state that they were in at any particular "commit". I would suggest staging both the .Rmd file and its accompanying .html file at the same time, since the changes you made to the Rmd file caused the changes in the html file. Click the checkbox next to the files you want to stage for this commit. Then type a brief and specific message in the Commit message box about the changes you made. Notice that the bottom window shows you the differences between the current version of the file you selected and the most recently commited version. Click the commit button when you are satisfied.
 
 To see all previous commits, click the "History" tab at the top of the git window. You can select any commit and see which files were changed and the changes within these files. 
 
@@ -161,15 +157,4 @@ Finally, submit a pull request on GitHub to send these changes to the FukamiLab 
 
 ![Workflow for editing the course website with git in RStudio](images/github_workflow_with_rstudio.png)
 
-
-
-
-
-
-
-
-
-**Suggested Additional References:**
-
-> 
 

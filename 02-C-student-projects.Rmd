@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "Student Projects"
-author: [Instructor and Student names]
+author: Jes & Tad
 output: html_document
 ---
 
@@ -23,15 +23,76 @@ knitr::opts_chunk$set(fig.path = "images/")
 repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 ```
 
+#### Anna
 
-#### Student Name
+**Spatiotemporal Analysis of the San Francisco Estuary Water Column Microbiome**
+
+I will explore environmental drivers on archaeal and bacterial communities in bottom waters of San Francisco Bay using 16S rRNA amplicon libraries and geochemical water column data from USGS water quality cruises.
+
+
+#### Beth
 
 **Project Title**
 
 Brief description of the question you want to ask and the data you have to analyze it.
 
 
-#### Student Name
+#### Jamie
+
+**Drivers of coral reef community structure**
+
+Question:   
+Data: 
+
+#### Lizzie
+
+**Project Title**
+
+Brief description of the question you want to ask and the data you have to analyze it.
+
+
+#### Marissa
+
+**Project Title**
+
+Brief description of the question you want to ask and the data you have to analyze it.
+
+
+#### Meghan
+
+**Land Use as Driver of Aedes vector mosquito distribution in Costa Rica**
+
+I will assess how environmental characteristics drive Aedes aegypti and albopictus distribution by comparing field-collected mosquito data from a land use gradient, field-collected temperature and humidity data from those sites, and remote sensing data of environmental characteristics of those sites.
+
+
+#### Nicole
+
+**Project Title**
+
+Brief description of the question you want to ask and the data you have to analyze it.
+
+
+#### Priscilla
+
+**Project Title**
+
+Brief description of the question you want to ask and the data you have to analyze it.
+
+
+#### Sandra
+
+Spatial autocorrelation in a Pennsylvanian swamp forest
+
+I want to interrogate patterns of spatial autocorrelation of plants in a Paleozoic forest, at multiple taxonomic levels. I will use semi-quantitative data collected in a transect through a coal mine.
+
+
+#### Tyler
+
+**Effects of anthropogenic disturbance on the structure of species interaction networks**
+
+Brief description of the question you want to ask and the data you have to analyze it.
+
+#### Nick
 
 **Project Title**
 
