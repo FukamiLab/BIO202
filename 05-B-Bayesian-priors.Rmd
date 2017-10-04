@@ -1,11 +1,7 @@
 ---
 layout: topic
 title: "Bayesian Inference with Prior Information"
-<<<<<<< HEAD
-author: Nicole Nova (from RStudio - testing)
-=======
-author: Nicole Nova
->>>>>>> c96e1b6f0702a5adc012117ed9279b83ae0a8353
+author: Jes & Nicole
 output: html_document
 ---
 
