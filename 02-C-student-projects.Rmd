@@ -88,7 +88,7 @@ I want to interrogate patterns of spatial autocorrelation of plants in a Paleozo
 
 #### Tyler
 
-**Project Title**
+**Effects of anthropogenic disturbance on the structure of species interaction networks**
 
 Brief description of the question you want to ask and the data you have to analyze it.
 
