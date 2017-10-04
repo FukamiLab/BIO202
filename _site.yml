@@ -18,6 +18,8 @@ navbar:
           href: 02-A-tidyr.html
         - text: "Intro to git"
           href: 02-B-git-intro.html
+        - text: "Project introductions"
+          href: 02-C-student-projects.html
     - text: "W3"
       menu:
         - text: "Data exploration"
@@ -70,6 +72,8 @@ navbar:
           href: 07-midquarter-nicole.html
         - text: "Priscilla"
           href: 07-midquarter-priscilla.html
+        - text: "Sandra"
+          href: 07-midquarter-sandra.html
         - text: "Tyler"
           href: 07-midquarter-tyler.html
     - text: "W8"
@@ -108,6 +112,8 @@ navbar:
           href: 10-final-nicole.html
         - text: "Priscilla"
           href: 10-final-priscilla.html
+        - text: "Sandra"
+          href: 07-midquarter-sandra.html
         - text: "Tyler"
           href: 10-final-tyler.html 
 output_dir: "."
