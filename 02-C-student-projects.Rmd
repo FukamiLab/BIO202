@@ -39,10 +39,10 @@ Brief description of the question you want to ask and the data you have to analy
 
 #### Jamie
 
-**Project Title**
+**Drivers of coral reef community structure**
 
-Brief description of the question you want to ask and the data you have to analyze it.
-
+Question:   
+Data: 
 
 #### Lizzie
 
