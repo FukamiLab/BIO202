@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "Introduction to git and GitHub"
-author: Jes
+author: Jes Coyle
 output: html_document
 ---
 
