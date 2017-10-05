@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "Bayesian Inference with Prior Information"
-author: Jes
+author: Jes & Nicole
 output: html_document
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "Student Projects"
-author: [Instructor and Student names]
+author: Jes & Tad
 output: html_document
 ---
 
@@ -25,9 +25,9 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 #### Anna
 
-**Project Title**
+**Spatiotemporal Analysis of the San Francisco Estuary Water Column Microbiome**
 
-Brief description of the question you want to ask and the data you have to analyze it.
+I will explore environmental drivers on archaeal and bacterial communities in bottom waters of San Francisco Bay using 16S rRNA amplicon libraries and geochemical water column data from USGS water quality cruises.
 
 
 #### Beth
@@ -39,10 +39,9 @@ Brief description of the question you want to ask and the data you have to analy
 
 #### Jamie
 
-**Project Title**
+**Disentangling the importance of drivers that structure benthic communities**  
 
-Brief description of the question you want to ask and the data you have to analyze it.
-
+Determine what environmental and biological factors drive benthic community structure and how their importance varies spatially (i.e. local to regional), using data from 12 habitat types in the Bahamas.  
 
 #### Lizzie
 
@@ -60,9 +59,9 @@ Brief description of the question you want to ask and the data you have to analy
 
 #### Meghan
 
-**Project Title**
+**Land Use as Driver of Aedes vector mosquito distribution in Costa Rica**
 
-Brief description of the question you want to ask and the data you have to analyze it.
+I will assess how environmental characteristics drive Aedes aegypti and albopictus distribution by comparing field-collected mosquito data from a land use gradient, field-collected temperature and humidity data from those sites, and remote sensing data of environmental characteristics of those sites.
 
 
 #### Nicole
@@ -81,19 +80,24 @@ Brief description of the question you want to ask and the data you have to analy
 
 #### Sandra
 
-**Project Title**
+Spatial autocorrelation in a Pennsylvanian swamp forest
 
-Brief description of the question you want to ask and the data you have to analyze it.
+I want to interrogate patterns of spatial autocorrelation of plants in a Paleozoic forest, at multiple taxonomic levels. I will use semi-quantitative data collected in a transect through a coal mine.
 
 
 #### Tyler
 
-**Project Title**
+**Effects of anthropogenic disturbance on the structure of species interaction networks**
 
-Brief description of the question you want to ask and the data you have to analyze it.
+
+How does anthropogenic disturbance affect the structure of species interaction networks? We (Beth and I) have compiled a database of ~30 published datasets which examine changes in network structure across different levels of disturbance. Each dataset consists of two or more species interaction networks measured at study sites exhibiting different levels of anthropogenic disturbance (such as fragmentation, defaunation, invasive species, etc.). We will use network analysis to quantify the structure of each network, and then use meta-analytical techniques to draw conclusions about the general effects of distrubance on network structure across the ~30 datasets.
+
 
 #### Nick
 
 **Response of species traits to deforestation and agricultural intensification in Costa Rica**
 
+
 Which traits make birds most susceptible to deforestation and agricultural intensification? Here I plan to use bird banding data from southern Costa Rica in combination with species and individual-level traits and environmental covariates to address this question.
+
+
