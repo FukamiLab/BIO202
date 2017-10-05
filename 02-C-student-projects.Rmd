@@ -74,9 +74,9 @@ Brief description of the question you want to ask and the data you have to analy
 
 #### Priscilla
 
-**Project Title**
+**Elucidating the influence of land use change on bird gut microbiomes via diet alterations**
 
-Brief description of the question you want to ask and the data you have to analyze it.
+Do changes in diet correspond to the changes in gut microbial composition? I aim to determine the relationship between bird diet of arthopods and their gut microbiomes and how land use change influences this interaction. I will use arthopod and bacteria composition data derived from six species of birds, found in different land use types.
 
 
 #### Sandra
