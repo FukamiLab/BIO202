@@ -95,7 +95,9 @@ How does anthropogenic disturbance affect the structure of species interaction n
 
 #### Nick
 
-**Project Title**
+**Response of species traits to deforestation and agricultural intensification in Costa Rica**
 
-Brief description of the question you want to ask and the data you have to analyze it.
+
+Which traits make birds most susceptible to deforestation and agricultural intensification? Here I plan to use bird banding data from southern Costa Rica in combination with species and individual-level traits and environmental covariates to address this question.
+
 
