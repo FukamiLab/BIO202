@@ -53,9 +53,9 @@ Brief description of the question you want to ask and the data you have to analy
 
 #### Marissa
 
-**Yellow Fever and Dengue interactions in Brazil**
+**Yellow fever and dengue interactions in Brazil**
 
-Brief description of the question you want to ask and the data you have to analyze it.
+Using monthly human case data of yellow fever and dengue in Brazil, I will analyze the spatial trends of the two diseases to identify whether immunity dynamics with dengue contribute to determining the spatial distribution of yellow fever virus. 
 
 
 #### Meghan
