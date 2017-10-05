@@ -39,10 +39,9 @@ Brief description of the question you want to ask and the data you have to analy
 
 #### Jamie
 
-**Drivers of coral reef community structure**
+**Disentangling the importance of drivers that structure benthic communities**  
 
-Question:   
-Data: 
+Determine what environmental and biological factors drive benthic community structure and how their importance varies spatially (i.e. local to regional), using data from 12 habitat types in the Bahamas.  
 
 #### Lizzie
 
