@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "Data exploration"
-author: Tad
+author: Tad, Priscilla San Juan
 output: html_document
 ---
 
