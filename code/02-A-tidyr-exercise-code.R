@@ -27,15 +27,16 @@ download.file(url = "https://raw.githubusercontent.com/FukamiLab/BIO202/master/d
               method = "auto"
 )
 # This file contains data on lichen sampled by the winter 2017 BIO46 class.
-download.file(url = "https://raw.githubusercontent.com/FukamiLab/BIO202/master/data/BIO46_W2017_lichen.csv",
-              destfile = "data/BIO46_W2017_trees.csv",
+download.file(url = "https://raw.githubusercontent.com/FukamiLab/BIO202/master/data/BIO46_W2017_lichens.csv",
+              destfile = "data/BIO46_W2017_lichens.csv",
               method = "auto"
 )
 # This file contains data on algal haplpotypes sampled by the winter 2017 BIO46 class.
 download.file(url = "https://raw.githubusercontent.com/FukamiLab/BIO202/master/data/BIO46_W2017_algae.csv",
-              destfile = "data/BIO46_W2017_trees.csv",
+              destfile = "data/BIO46_W2017_algae.csv",
               method = "auto"
 )
+
 
 # Read downloaded file into dataframes
 trees_raw <- read.csv("data/BIO46_W2017_trees.csv")
@@ -50,7 +51,10 @@ algae_raw <- read.csv("data/BIO46_W2017_algae.csv")
 
 library(dplyr)
 library(tidyr)
+library(ggplot2)
 
+# Open vingnette on join functions that merge two tables
+vignette("two-table", package = "dplyr")
 
 
 algae <- lichens_raw %>% 
@@ -86,9 +90,6 @@ lichenXgeno_long <- algae %>%
 
 lichenXgeno <- lichenXgeno_long %>%
   spread(key = GenotypeID, value = n)
-
-
-
 
 
 

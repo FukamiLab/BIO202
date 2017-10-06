@@ -346,6 +346,9 @@ div.tocify {
     <li>
       <a href="02-B-git-intro.html">Intro to git</a>
     </li>
+    <li>
+      <a href="02-C-student-projects.html">Project introductions</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -455,6 +458,9 @@ div.tocify {
       <a href="07-midquarter-priscilla.html">Priscilla</a>
     </li>
     <li>
+      <a href="07-midquarter-sandra.html">Sandra</a>
+    </li>
+    <li>
       <a href="07-midquarter-tyler.html">Tyler</a>
     </li>
   </ul>
@@ -528,6 +534,9 @@ div.tocify {
     </li>
     <li>
       <a href="10-final-priscilla.html">Priscilla</a>
+    </li>
+    <li>
+      <a href="07-midquarter-sandra.html">Sandra</a>
     </li>
     <li>
       <a href="10-final-tyler.html">Tyler</a>
@@ -647,7 +656,7 @@ my_kg &lt;-<span class="st"> </span>my_lbs *<span class="st"> </span><span class
 <h3>Rendering Rmd to html</h3>
 <p>When you are finished with an analysis (or even if you are only part-way through) you can convert your Rmd file to another file format to generate a report. This process is called <em>rendering</em> and we will be rendering all of our Rmd files to html so that they can display as webpages on our course website. For your project, you may want to render your analysis to a slide show (beamer) or pdf or word document.</p>
 <p>Documents written in R markdown are rendered to other document formats by the <code>rmarkdown</code> package that comes automatically installed with RStudio. The rmarkdown package renders documents using two steps: First, it excutes all of the code using functions from the <code>knitr</code> package. Then, it converts the output of the code and any markdown-formatted text to a new document format using functions in the <code>pandoc</code> package. Note that any output that you generate in the code chunks (e.g. plots, exported data) will be saved relative to the working directory, unless you specify otherwise in a code chunk option.</p>
-<p>To render an Rmd document in Rstudio, click the ‘Knit’ button at the top of the window displaying the document. If everything goes right a new window should pop up showing the new file that was generated (or prompt you to open the file in a browwer window). The file will be saved in the directory where the Rmd file is located.</p>
+<p>To render an Rmd document in Rstudio, click the ‘Knit’ button at the top of the window displaying the document. If everything goes right a new window should pop up showing the new file that was generated (or prompt you to open the file in a browser window). The file will be saved in the directory where the Rmd file is located.</p>
 <blockquote>
 <p><strong>Exercise:</strong></p>
 <ol style="list-style-type: decimal">
@@ -668,7 +677,7 @@ my_kg &lt;-<span class="st"> </span>my_lbs *<span class="st"> </span><span class
 </div>
 <div id="figures" class="section level4">
 <h4>Figures</h4>
-<p>Any figure that you make in a code chunk will by default be saved as separate files in your working directory and then imported into the final document created by <code>pandoc</code>. In our class webpages, the first code chunk specifies: <code>knitr::opts_chunk$set(fig.path = &quot;images/&quot;)</code>, which tells <code>knitr</code> that it should save any figures generated with code chunks to a folder named “images” within the working directory. The image files will be named according the the name of the code chunk from which they are generated. Hence, it is a good idea to separate analyses into separate code chunks and give them somewhat descriptive names. R markdown can also automatically number and caption your figures and tables. The <a href="https://cran.r-project.org/web/packages/captioner/vignettes/using_captioner.html"><code>captioner</code></a> package is particularly useful for this.</p>
+<p>Any figure that you make in a code chunk will by default be saved as separate files in your working directory and then imported into the final document created by <code>pandoc</code>. In our class webpages, the first code chunk specifies: <code>knitr::opts_chunk$set(fig.path = &quot;images/&quot;)</code>, which tells <code>knitr</code> that it should save any figures generated with code chunks to a folder named “images” within the working directory. The image files will be named according to the name of the code chunk from which they are generated. Hence, it is a good idea to separate analyses into separate code chunks and give them somewhat descriptive names. R markdown can also automatically number and caption your figures and tables. The <a href="https://cran.r-project.org/web/packages/captioner/vignettes/using_captioner.html"><code>captioner</code></a> package is particularly useful for this.</p>
 <blockquote>
 <p><strong>Exercise:</strong></p>
 <ol style="list-style-type: decimal">

@@ -82,7 +82,7 @@ R code that you type in a script will not be executed unless you tell RStudio to
 
 #### Documenting your code
 
-The most important part of you code is the *comments* that document what the code is supposed to do. This is most useful for reminding you of what you are trying to accomplish in an analysis as well as for anyone else who might need to read your code.
+The most important part of you code are the *comments* that document what the code is supposed to do. This is most useful for reminding you of what you are trying to accomplish in an analysis as well as for anyone else who might need to read your code.
 
 Any text in an R script that follows the `#` is interpretted as a *comment*- a piece of descriptive text that doesn't cause R to do any calculations.
 
