@@ -31,14 +31,85 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 ### Key Points
 
 
-
 ### Analysis Example
+```{r include = FALSE}
+# 
+library(phyloseq)
+library(readr)
+
+otu <- as.matrix((read_csv("~/Documents/R/Eco_stats_proj/Data/raw/OTU_tab_renamed.csv", col_names = TRUE)[,-1]))
+tax <- as.matrix((read_csv("~/Documents/R/Eco_stats_proj/Data/raw/TAX_reorder_otu_name.csv", col_names = TRUE)[,-1]))
+
+# Add in rownames
+rownames(otu) <- paste0("OTU", 1:nrow(otu))
+rownames(tax) <- paste0("OTU", 1:nrow(tax))
+
+# Read file into phyloseq
+OTU <- otu_table(otu, taxa_are_rows = TRUE)
+TAX <- tax_table(tax)
+
+# Combining OTU and TAX data
+data <- phyloseq(OTU, TAX)
+
+# Reading the sample data file
+sample = sample_data(data.frame(read_csv("~/Documents/R/Eco_stats_proj/Data/raw/samplesinfo.csv")))
+
+# Naming the the first rows using the first column
+row.names(sample) = sample$ID
+
+# Merging OTU/TAX file "Bac.data" with sampledata (includes MM and NEG)
+merged <- merge_phyloseq(data, sample)
+
+# Removing MM and NEG from merged_dataset
+Real <- as.vector(data.frame(sample_data(merged))$Bird_species)
+Real <- (!(Real%in%c("MM", "NEG", "RCRW")))
+Real[is.na(Real)] = FALSE
+merged_data = prune_samples(Real, merged)
+
+# Remove OTUs with bad BLAST matches
+kingdom <- as.vector(data.frame(tax_table(merged_data))$kingdom)
+tax.keep <- kingdom=="Bacteria"
+tax.keep[is.na(tax.keep)] = FALSE
+merged_data <- prune_taxa(tax.keep,merged_data)
+
+# Remove chloroplast (likely plant DNA)
+class <- as.vector(data.frame(tax_table(merged_data))$class)
+class <- (!(class%in%c("Chloroplast")))
+class[is.na(class)] = FALSE
+merged_data = prune_taxa(class, merged_data)
+
+```
+
+#### Checking for outliers
+
+**Boxplot**
+```{r}
+boxplot(sample_sums(merged_data),  ylab = "Sequences per sample")
+```
+
+**Cleveland dotchart**
+```{r}
+dotchart(sample_sums(merged_data), xlab = "Sequences per sample",
+         ylab = "Samples", labels = F)
+```
+
+
+#### Transforming your data
+
+
+
 
 
 
 ### Discussion Questions
 
+**Q1: What are some data exploration techniques you have used?**
 
+**Q2:**
+
+**Q3:** **_To transform or not to transform? That is the question._**
+
+**Q4:**
 
 
 
