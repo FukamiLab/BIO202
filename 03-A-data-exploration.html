@@ -570,6 +570,75 @@ div.tocify {
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(phyloseq)
+<span class="kw">library</span>(readr)
+
+otu &lt;-<span class="st"> </span><span class="kw">as.matrix</span>((<span class="kw">read_csv</span>(<span class="st">&quot;~/Documents/R/Eco_stats_proj/Data/raw/OTU_tab_renamed.csv&quot;</span>, <span class="dt">col_names =</span> <span class="ot">TRUE</span>)[,-<span class="dv">1</span>]))</code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_integer(),
+##   OTUname = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tax &lt;-<span class="st"> </span><span class="kw">as.matrix</span>((<span class="kw">read_csv</span>(<span class="st">&quot;~/Documents/R/Eco_stats_proj/Data/raw/TAX_reorder_otu_name.csv&quot;</span>, <span class="dt">col_names =</span> <span class="ot">TRUE</span>)[,-<span class="dv">1</span>]))</code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   OTUname = col_character(),
+##   kingdom = col_character(),
+##   phylum = col_character(),
+##   class = col_character(),
+##   order = col_character(),
+##   family = col_character(),
+##   genus = col_character(),
+##   species = col_character()
+## )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add in rownames</span>
+<span class="kw">rownames</span>(otu) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;OTU&quot;</span>, <span class="dv">1</span>:<span class="kw">nrow</span>(otu))
+<span class="kw">rownames</span>(tax) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;OTU&quot;</span>, <span class="dv">1</span>:<span class="kw">nrow</span>(tax))
+
+<span class="co"># Read file into phyloseq</span>
+OTU &lt;-<span class="st"> </span><span class="kw">otu_table</span>(otu, <span class="dt">taxa_are_rows =</span> <span class="ot">TRUE</span>)
+TAX &lt;-<span class="st"> </span><span class="kw">tax_table</span>(tax)
+
+<span class="co"># Combining OTU and TAX data</span>
+data &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(OTU, TAX)
+
+<span class="co"># Reading the sample data file</span>
+sample =<span class="st"> </span><span class="kw">sample_data</span>(<span class="kw">data.frame</span>(<span class="kw">read_csv</span>(<span class="st">&quot;~/Documents/R/Eco_stats_proj/Data/raw/samplesinfo.csv&quot;</span>)))</code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   ID = col_character(),
+##   Bird_species = col_character(),
+##   Band_num = col_character(),
+##   julian = col_character(),
+##   Site = col_character(),
+##   Habitat = col_character(),
+##   Site_type = col_character(),
+##   Collection_date = col_character()
+## )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Naming the the first rows using the first column</span>
+<span class="kw">row.names</span>(sample) =<span class="st"> </span>sample$ID
+
+<span class="co"># Merging OTU/TAX file &quot;Bac.data&quot; with sampledata (includes MM and NEG)</span>
+merged &lt;-<span class="st"> </span><span class="kw">merge_phyloseq</span>(data, sample)
+
+<span class="co"># Removing MM and NEG from merged_dataset</span>
+Real &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">data.frame</span>(<span class="kw">sample_data</span>(merged))$Bird_species)
+Real &lt;-<span class="st"> </span>(!(Real%in%<span class="kw">c</span>(<span class="st">&quot;MM&quot;</span>, <span class="st">&quot;NEG&quot;</span>, <span class="st">&quot;RCRW&quot;</span>)))
+Real[<span class="kw">is.na</span>(Real)] =<span class="st"> </span><span class="ot">FALSE</span>
+merged_data =<span class="st"> </span><span class="kw">prune_samples</span>(Real, merged)
+
+<span class="co"># Remove OTUs with bad BLAST matches</span>
+kingdom &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">data.frame</span>(<span class="kw">tax_table</span>(merged_data))$kingdom)
+tax.keep &lt;-<span class="st"> </span>kingdom==<span class="st">&quot;Bacteria&quot;</span>
+tax.keep[<span class="kw">is.na</span>(tax.keep)] =<span class="st"> </span><span class="ot">FALSE</span>
+merged_data &lt;-<span class="st"> </span><span class="kw">prune_taxa</span>(tax.keep,merged_data)
+
+<span class="co"># Remove chloroplast (likely plant DNA)</span>
+class &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">data.frame</span>(<span class="kw">tax_table</span>(merged_data))$class)
+class &lt;-<span class="st"> </span>(!(class%in%<span class="kw">c</span>(<span class="st">&quot;Chloroplast&quot;</span>)))
+class[<span class="kw">is.na</span>(class)] =<span class="st"> </span><span class="ot">FALSE</span>
+merged_data =<span class="st"> </span><span class="kw">prune_taxa</span>(class, merged_data)</code></pre></div>
 <div id="checking-for-outliers" class="section level4">
 <h4>Checking for outliers</h4>
 <p><strong>Boxplot</strong></p>
@@ -582,7 +651,7 @@ div.tocify {
 </div>
 <div id="transforming-your-data" class="section level4">
 <h4>Transforming your data</h4>
-<p>talk about useful interesting new things i learned to do. output if confusing will be a discussion point things you don’t agree with/agree with discuss ambiguity look at OTUs and discuss outliers data transformation (</p>
+<p>talk about useful interesting new things i learned to do. output if confusing will be a discussion point things you don’t agree with/agree with discuss ambiguity look at OTUs and discuss outliers data transformation</p>
 </div>
 </div>
 <div id="discussion-questions" class="section level3">
