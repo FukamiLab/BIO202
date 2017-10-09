@@ -32,17 +32,16 @@ I will explore environmental drivers on archaeal and bacterial communities in bo
 
 #### Beth
 
-**Project Title**
+**The role of evolutionary history in network response to agricultural development**
 
-Brief description of the question you want to ask and the data you have to analyze it.
+Species traits are often influenced by evolutionary history, and in plant-pollinator networks, certain species interaction traits may make species more or less vulnerable to a major disturbance like agricultural development. Thus, I want to know whether there is a phyogenetic signal in species interaction traits, and whether a nonrandom loss of phylogenetic diversity leads to predictable changes in overall plant-pollinator network structure. 
 
 
 #### Jamie
 
-**Drivers of coral reef community structure**
+**Disentangling the importance of drivers that structure benthic communities**  
 
-Question:   
-Data: 
+Determine what environmental and biological factors drive benthic community structure and how their importance varies spatially (i.e. local to regional), using data from 12 habitat types in the Bahamas.  
 
 #### Lizzie
 
@@ -53,9 +52,9 @@ Brief description of the question you want to ask and the data you have to analy
 
 #### Marissa
 
-**Project Title**
+**Yellow fever and dengue interactions in Brazil**
 
-Brief description of the question you want to ask and the data you have to analyze it.
+Using monthly human case data of yellow fever and dengue in Brazil, I will analyze the spatial trends of the two diseases to identify whether immunity dynamics with dengue contribute to determining the spatial distribution of yellow fever virus. 
 
 
 #### Meghan
@@ -67,16 +66,17 @@ I will assess how environmental characteristics drive Aedes aegypti and albopict
 
 #### Nicole
 
-**Project Title**
+**What predicts pathogen sharing among host species across phylogenetic distance?**
 
-Brief description of the question you want to ask and the data you have to analyze it.
+In this study, we are trying to determine which factors predict parasite-sharing (or a potential spillover event) for different host species. What factors matter most? Is it (1) phylogenetic distance between host species and pathogen species (evolutionary factor), or (2) similarity in host or pathogen traits, e.g., host behavior, host body size, range, pathogen type, mode of transmission, etc. (ecological factors)?
+
 
 
 #### Priscilla
 
-**Project Title**
+**Elucidating the influence of land use change on bird gut microbiomes via diet alterations**
 
-Brief description of the question you want to ask and the data you have to analyze it.
+Do changes in diet correspond to the changes in gut microbial composition? I aim to determine the relationship between bird diet of arthopods and their gut microbiomes and how land use change influences this interaction. I will use arthopod and bacteria composition data derived from six species of birds, found in different land use types.
 
 
 #### Sandra
@@ -90,10 +90,15 @@ I want to interrogate patterns of spatial autocorrelation of plants in a Paleozo
 
 **Effects of anthropogenic disturbance on the structure of species interaction networks**
 
-Brief description of the question you want to ask and the data you have to analyze it.
+
+How does anthropogenic disturbance affect the structure of species interaction networks? We (Beth and I) have compiled a database of ~30 published datasets which examine changes in network structure across different levels of disturbance. Each dataset consists of two or more species interaction networks measured at study sites exhibiting different levels of anthropogenic disturbance (such as fragmentation, defaunation, invasive species, etc.). We will use network analysis to quantify the structure of each network, and then use meta-analytical techniques to draw conclusions about the general effects of distrubance on network structure across the ~30 datasets.
+
 
 #### Nick
 
-**Project Title**
+**Response of species traits to deforestation and agricultural intensification in Costa Rica**
 
-Brief description of the question you want to ask and the data you have to analyze it.
+
+Which traits make birds most susceptible to deforestation and agricultural intensification? Here I plan to use bird banding data from southern Costa Rica in combination with species and individual-level traits and environmental covariates to address this question.
+
+
