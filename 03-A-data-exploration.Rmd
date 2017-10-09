@@ -31,6 +31,50 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 ### Key Points
 
 
+#### Data exploration
+
+1. Outliers Y & X
++ Outliers in response variable vs in covariates - to be dealt with differently
++ Transformation less desirable for response variable than in covariates?
+
+2. Homogeneity Y
+
+3. Normality Y
++ Example of importance of biological intuition and graphical investigation
+    + Fig 5b - transformation to get normality not desirable
+
+4. Zero troble Y
++ Zero-inflated GLM
++ Double zeros, or joint absences - what do they mean? e.g., spatial clumping
++ Multivariate analysis that ignores double zeros
+
+5. Collinearity X
++ VIF of 10, 3, or 2 - reason for these values?
++ VIFs, or common sense or biological knowledge
+
+6. Relationships Y & X
++ Multi-panel scatter plots for checking for outliers
+
+7. Interactions
++ Are data balanced? Use coplot (Fig 11).
+
+8. Independence Y
++ Mixed effects, etc. to deal with non-independence
++ ACF or variograms for checking for temporal and spatial non-independence
+
+Not all steps always needed
+
+#### Common themes
+
++ Biological intuition = key to make decisions about stats
++ Hypothesis testing vs hypothesis generation
+    + One solution - two data sets - one to create hypotheses and one to test them
+    + But only practical for large data sets
++ Emphasis on graphical tools
+
+
+***
+
 ### Analysis Example
 ```{r, include=FALSE, eval=TRUE}
 # Load packages
@@ -171,6 +215,10 @@ dotplot(as.matrix(Z), groups = FALSE,
         xlab = "Number of sequences per sample",
         ylab = "Order of the data from text file")
 ```
+
+
+***
+
 
 #### Your data's distribution 
 
