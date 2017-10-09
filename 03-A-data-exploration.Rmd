@@ -172,14 +172,14 @@ Since my data is multivariate, I used sequence count per sample for outlier dete
 
 **Boxplot**
 
-![](/Users/psanjuan/Documents/R/Eco_stats_proj/BIO202_project/images/boxplot.png)
+![](images/boxplot.png)
 ```{r, eval = FALSE}
 boxplot(sample_sums(merged_data),  ylab = "Sequences per sample")
 ```
 
 **Cleveland dotchart**
 
-![](/Users/psanjuan/Documents/R/Eco_stats_proj/BIO202_project/images/dotchart.png)
+![](images/dotchart.png)
 ```{r, eval = FALSE}
 dotchart(sample_sums(merged_data), xlab = "Sequences per sample",
          ylab = "Samples", labels = F)
@@ -187,7 +187,7 @@ dotchart(sample_sums(merged_data), xlab = "Sequences per sample",
 
 **Plotly - great visualization tool**
 
-![](/Users/psanjuan/Documents/R/Eco_stats_proj/BIO202_project/images/ggplot.png)
+![](images/ggplot.png)
 
 ```{r, eval = FALSE}
 seq_num <- data.frame(ID=sample_data(merged_data)$ID, Seq=sample_sums(merged_data))
@@ -205,7 +205,7 @@ ggplotly(dot_gg)
 Since most of the variables in my dataset are categorical, here I used raw data (sequence count) subsetted by bird species.
 
 
-![](/Users/psanjuan/Documents/R/Eco_stats_proj/BIO202_project/images/dot chart_variable.png)
+![](images/dot chart_variable.png)
 
 ```{r, eval = FALSE}
 Z <- qpcR:::cbind.na(sample_sums(data.BTSA), sample_sums(data.CCRO), sample_sums(data.OBNT),
@@ -233,7 +233,7 @@ Some statistical tests assume normal distributions, making it important to check
 
 **Histogram**
 
-![](/Users/psanjuan/Documents/R/Eco_stats_proj/BIO202_project/images/histogram.png)
+![](images/histogram.png)
 
 ```{r, eval = FALSE}
 hist(sample_sums(merged_data), breaks = 100,col = "#a6bddb", xlab="Sequences per sample", main = ' ')
