@@ -72,50 +72,6 @@ Not all steps always needed
 + Emphasis on graphical tools
 
 
-#### Data exploration
-
-1. Outliers Y & X
-+ Outliers in response variable vs in covariates - to be dealt with differently
-+ Transformation less desirable for response variable than in covariates?
-
-2. Homogeneity Y
-
-3. Normality Y
-+ Example of importance of biological intuition and graphical investigation
-    + Fig 5b - transformation to get normality not desirable
-
-4. Zero troble Y
-+ Zero-inflated GLM
-+ Double zeros, or joint absences - what do they mean? e.g., spatial clumping
-+ Multivariate analysis that ignores double zeros
-
-5. Collinearity X
-+ VIF of 10, 3, or 2 - reason for these values?
-+ VIFs, or common sense or biological knowledge
-
-6. Relationships Y & X
-+ Multi-panel scatter plots for checking for outliers
-
-7. Interactions
-+ Are data balanced? Use coplot (Fig 11).
-
-8. Independence Y
-+ Mixed effects, etc. to deal with non-independence
-+ ACF or variograms for checking for temporal and spatial non-independence
-
-Not all steps always needed
-
-#### Common themes
-
-+ Biological intuition = key to make decisions about stats
-+ Hypothesis testing vs hypothesis generation
-    + One solution - two data sets - one to create hypotheses and one to test them
-    + But only practical for large data sets
-+ Emphasis on graphical tools
-
-
-***
-
 ### Analysis Example
 ```{r, include=FALSE, eval=TRUE}
 # Load packages
@@ -215,19 +171,25 @@ Zurr et al. recommends plotting your data using boxplots and dotcharts to detect
 Since my data is multivariate, I used sequence count per sample for outlier detection in the following examples. 
 
 **Boxplot**
-```{r}
+
+![](images/boxplot.png)
+```{r, eval = FALSE}
 boxplot(sample_sums(merged_data),  ylab = "Sequences per sample")
 ```
 
 **Cleveland dotchart**
-```{r}
+
+![](images/dotchart.png)
+```{r, eval = FALSE}
 dotchart(sample_sums(merged_data), xlab = "Sequences per sample",
          ylab = "Samples", labels = F)
 ```
 
 **Plotly - great visualization tool**
 
-```{r}
+![](images/ggplot.png)
+
+```{r, eval = FALSE}
 seq_num <- data.frame(ID=sample_data(merged_data)$ID, Seq=sample_sums(merged_data))
 dot_gg <- ggplot(seq_num, aes(x=Seq,y=ID)) + geom_point(col="coral") + 
   theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
@@ -242,7 +204,11 @@ ggplotly(dot_gg)
 
 Since most of the variables in my dataset are categorical, here I used raw data (sequence count) subsetted by bird species.
 
-```{r}
+
+![](images/dotchart_variable.png)
+
+
+```{r, eval = FALSE}
 Z <- qpcR:::cbind.na(sample_sums(data.BTSA), sample_sums(data.CCRO), sample_sums(data.OBNT),
            sample_sums(data.RCWA), sample_sums(data.SWTH), sample_sums(data.YWAR))
 colnames(Z) <- c("BTSA", "CCRO", "OBNT", "RCWA", "SWTH", "YWAR")
@@ -257,7 +223,6 @@ dotplot(as.matrix(Z), groups = FALSE,
         ylab = "Order of the data from text file")
 ```
 
-
 ***
 
 
@@ -268,7 +233,10 @@ Some statistical tests assume normal distributions, making it important to check
 > "If you want to apply a statistical test to determine whether there is significant group separation in a discriminant analysis, however, normality of observations of a particular variable within each group is important" 
 
 **Histogram**
-```{r}
+
+![](images/histogram.png)
+
+```{r, eval = FALSE}
 hist(sample_sums(merged_data), breaks = 100,col = "#a6bddb", xlab="Sequences per sample", main = ' ')
 ```
 
@@ -293,4 +261,27 @@ hist(sample_sums(merged_data), breaks = 100,col = "#a6bddb", xlab="Sequences per
 **Q4:** What are some data exploration techniques you have used?
 
 
+***
 
+### After-class follow-up
+
++ beeswarm functions recommended by Anna to look at data distribution:
+
+[ggbeeswarm](https://cran.r-project.org/web/packages/ggbeeswarm/index.html)
+
+[ggbeeswarm vignette](https://cran.r-project.org/web/packages/ggbeeswarm/vignettes/usageExamples.pdf)
+
+[beeswarm](http://www.cbs.dtu.dk/~eklund/beeswarm/)
+
++ O'Hara and Kotze 2010 Do not log-transform count data:
+
+[Publication](http://onlinelibrary.wiley.com/doi/10.1111/j.2041-210X.2010.00021.x/abstract)
+
+[Blog post](https://www.r-bloggers.com/do-not-log-transform-count-data-bitches/)
+
+
++ Paper Tad mentioned that uses "principal coordinate analysis of a truncated distance matrix" (PCNM) to incorporate spaptial trends in multivariate data:
+
+[Toju et al. 2017](http://web.stanford.edu/~fukamit/toju-et-al-2017-accepted.pdf)
+
+Also, from Sandra: the PCNM (truncated distance matrix) method is discussed starting on page 244 of this book: https://link.springer.com/content/pdf/10.1007%2F978-1-4419-7976-6.pdf
