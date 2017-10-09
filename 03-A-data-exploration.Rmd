@@ -32,9 +32,11 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 
 ### Analysis Example
-```{r}
+```{r, include=FALSE, eval=TRUE}
 library(phyloseq)
 library(readr)
+library(lattice)
+library(qpcR)
 
 otu <- as.matrix((read_csv("~/Documents/R/Eco_stats_proj/Data/raw/OTU_tab_renamed.csv", col_names = TRUE)[,-1]))
 tax <- as.matrix((read_csv("~/Documents/R/Eco_stats_proj/Data/raw/TAX_reorder_otu_name.csv", col_names = TRUE)[,-1]))
@@ -77,6 +79,42 @@ class <- (!(class%in%c("Chloroplast")))
 class[is.na(class)] = FALSE
 merged_data = prune_taxa(class, merged_data)
 
+# Subset by species - BTSA
+BTSA <- as.vector(data.frame(sample_data(merged_data))$Bird_species)
+BTSA <- BTSA%in%c("BTSA")
+BTSA[is.na(BTSA)] = FALSE
+data.BTSA <- prune_samples(BTSA, merged_data)
+
+# Subset by species - CCRO
+CCRO <- as.vector(data.frame(sample_data(merged_data))$Bird_species)
+CCRO <- CCRO%in%c("CCRO")
+CCRO[is.na(CCRO)] = FALSE
+data.CCRO <- prune_samples(CCRO, merged_data)
+
+# Subset by species - OBNT
+OBNT <- as.vector(data.frame(sample_data(merged_data))$Bird_species)
+OBNT <- OBNT%in%c("OBNT")
+OBNT[is.na(OBNT)] = FALSE
+data.OBNT <- prune_samples(OBNT, merged_data)
+
+# Subset by species - RCWA
+RCWA <- as.vector(data.frame(sample_data(merged_data))$Bird_species)
+RCWA <- RCWA%in%c("RCWA")
+RCWA[is.na(RCWA)] = FALSE
+data.RCWA <- prune_samples(RCWA, merged_data)
+
+# Subset by species - SWTH
+SWTH <- as.vector(data.frame(sample_data(merged_data))$Bird_species)
+SWTH <- SWTH%in%c("SWTH")
+SWTH[is.na(SWTH)] = FALSE
+data.SWTH <- prune_samples(SWTH, merged_data)
+
+# Subset by species - YWAR
+YWAR <- as.vector(data.frame(sample_data(merged_data))$Bird_species)
+YWAR <- YWAR%in%c("YWAR")
+YWAR[is.na(YWAR)] = FALSE
+data.YWAR <- prune_samples(YWAR, merged_data)
+
 ```
 
 #### Checking for outliers
@@ -92,29 +130,46 @@ dotchart(sample_sums(merged_data), xlab = "Sequences per sample",
          ylab = "Samples", labels = F)
 ```
 
+```{r}
+Z <- qpcR:::cbind.na(sample_sums(data.BTSA), sample_sums(data.CCRO), sample_sums(data.OBNT),
+           sample_sums(data.RCWA), sample_sums(data.SWTH), sample_sums(data.YWAR))
+colnames(Z) <- c("BTSA", "CCRO", "OBNT", "RCWA", "SWTH", "YWAR")
+dotplot(as.matrix(Z), groups = FALSE,
+        strip = strip.custom(bg = 'white',
+        par.strip.text = list(cex = 0.8)),
+        scales = list(x = list(relation = "free"),
+                      y = list(relation = "free"),
+                      draw = FALSE),
+        col = 1, cex  = 0.5, pch = 16,
+        xlab = "Number of sequences per sample",
+        ylab = "Order of the data from text file")
+```
 
-#### Transforming your data
+```{r}
+hist(sample_sums(merged_data), breaks = 100,col = "#a6bddb", main = "Histogram of sample sequencing depth")
+```
 
 
 
+```{r}
+plot(table(round(otu_table(merged_data))),
+    type = "h",
+    xlim = c(0, 100),
+    xlab = "Observed values", ylab = "Frequency")
+```
 
-talk about useful interesting new things i learned to do. 
-output if confusing will be a discussion point
-things you don't agree with/agree with
-discuss ambiguity 
-look at OTUs and discuss outliers
-data transformation 
+
 
 
 ### Discussion Questions
 
-**Q1: What are some data exploration techniques you have used?**
+**Q1:** When should you let go of an outlier?
 
-**Q2:**
+**Q2:** 
 
-**Q3:** **_To transform or not to transform? That is the question._**
+**Q3:** _To transform or not to transform? That is the question._
 
-**Q4:**
+**Q4:** What are some data exploration techniques you have used?
 
 
 
