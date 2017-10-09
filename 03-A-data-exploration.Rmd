@@ -179,7 +179,7 @@ boxplot(sample_sums(merged_data),  ylab = "Sequences per sample")
 
 **Cleveland dotchart**
 
-![dotchart](/Users/psanjuan/Documents/R/Eco_stats_proj/BIO202_project/images/dotchart.png)
+![](/Users/psanjuan/Documents/R/Eco_stats_proj/BIO202_project/images/dotchart.png)
 ```{r, eval = FALSE}
 dotchart(sample_sums(merged_data), xlab = "Sequences per sample",
          ylab = "Samples", labels = F)
@@ -187,7 +187,7 @@ dotchart(sample_sums(merged_data), xlab = "Sequences per sample",
 
 **Plotly - great visualization tool**
 
-![ggplot](/Users/psanjuan/Documents/R/Eco_stats_proj/BIO202_project/images/ggplot.png)
+![](/Users/psanjuan/Documents/R/Eco_stats_proj/BIO202_project/images/ggplot.png)
 
 ```{r, eval = FALSE}
 seq_num <- data.frame(ID=sample_data(merged_data)$ID, Seq=sample_sums(merged_data))
@@ -205,7 +205,7 @@ ggplotly(dot_gg)
 Since most of the variables in my dataset are categorical, here I used raw data (sequence count) subsetted by bird species.
 
 
-![dotchart_variable](/Users/psanjuan/Documents/R/Eco_stats_proj/BIO202_project/images/dot chart_variable.png)
+![](/Users/psanjuan/Documents/R/Eco_stats_proj/BIO202_project/images/dot chart_variable.png)
 
 ```{r, eval = FALSE}
 Z <- qpcR:::cbind.na(sample_sums(data.BTSA), sample_sums(data.CCRO), sample_sums(data.OBNT),
@@ -222,6 +222,9 @@ dotplot(as.matrix(Z), groups = FALSE,
         ylab = "Order of the data from text file")
 ```
 
+***
+
+
 #### Your data's distribution 
 
 Some statistical tests assume normal distributions, making it important to check the shape of your data. Plot a histogram with all of your data and then groups of your data.
@@ -230,7 +233,7 @@ Some statistical tests assume normal distributions, making it important to check
 
 **Histogram**
 
-![histogram](/Users/psanjuan/Documents/R/Eco_stats_proj/BIO202_project/images/histogram.png)
+![](/Users/psanjuan/Documents/R/Eco_stats_proj/BIO202_project/images/histogram.png)
 
 ```{r, eval = FALSE}
 hist(sample_sums(merged_data), breaks = 100,col = "#a6bddb", xlab="Sequences per sample", main = ' ')
