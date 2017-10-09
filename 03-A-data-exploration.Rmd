@@ -283,3 +283,5 @@ hist(sample_sums(merged_data), breaks = 100,col = "#a6bddb", xlab="Sequences per
 + Paper Tad mentioned that uses "principal coordinate analysis of a truncated distance matrix" (PCNM) to incorporate spaptial trends in multivariate data:
 
 [Toju et al. 2017](http://web.stanford.edu/~fukamit/toju-et-al-2017-accepted.pdf)
+
+Also, from Sandra: the PCNM (truncated distance matrix) method is discussed starting on page 244 of this book: https://link.springer.com/content/pdf/10.1007%2F978-1-4419-7976-6.pdf
