@@ -38,6 +38,8 @@ library(phyloseq)
 library(readr)
 library(lattice)
 library(qpcR)
+library(ggplot2)
+library(plotly)
 
 
 # Load data
@@ -137,6 +139,20 @@ boxplot(sample_sums(merged_data),  ylab = "Sequences per sample")
 dotchart(sample_sums(merged_data), xlab = "Sequences per sample",
          ylab = "Samples", labels = F)
 ```
+
+**Plotly - great visualization tool**
+
+```{r}
+seq_num <- data.frame(ID=sample_data(merged_data)$ID, Seq=sample_sums(merged_data))
+dot_gg <- ggplot(seq_num, aes(x=Seq,y=ID)) + geom_point(col="coral") + 
+  theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
+ggplotly(dot_gg)
+```
+
+
+
+
+
 **Dotchart for multiple variables**
 
 Since most of the variables in my dataset are categorical, here I used raw data (sequence count) subsetted by bird species.
