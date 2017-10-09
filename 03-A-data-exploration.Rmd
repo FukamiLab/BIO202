@@ -207,6 +207,7 @@ Since most of the variables in my dataset are categorical, here I used raw data 
 
 ![](images/dot chart_variable.png)
 
+
 ```{r, eval = FALSE}
 Z <- qpcR:::cbind.na(sample_sums(data.BTSA), sample_sums(data.CCRO), sample_sums(data.OBNT),
            sample_sums(data.RCWA), sample_sums(data.SWTH), sample_sums(data.YWAR))
