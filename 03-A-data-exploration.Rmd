@@ -205,7 +205,7 @@ ggplotly(dot_gg)
 Since most of the variables in my dataset are categorical, here I used raw data (sequence count) subsetted by bird species.
 
 
-![](images/dot chart_variable.png)
+![](images/dotchart_variable.png)
 
 
 ```{r, eval = FALSE}
