@@ -572,13 +572,16 @@ div.tocify {
 <h3>Analysis Example</h3>
 <div id="checking-for-outliers" class="section level4">
 <h4>Checking for outliers</h4>
+<p>Zurr et al. recommends plotting your data using boxplots and dotcharts to detect outliers. Before removing suspected outliers, make sure they are actually outliers!</p>
+<p>Since my data is multivariate, I used sequence count per sample for outlier detection in the following examples.</p>
 <p><strong>Boxplot</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(<span class="kw">sample_sums</span>(merged_data),  <span class="dt">ylab =</span> <span class="st">&quot;Sequences per sample&quot;</span>)</code></pre></div>
 <p><img src="images/unnamed-chunk-3-1.png" width="672" /></p>
 <p><strong>Cleveland dotchart</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dotchart</span>(<span class="kw">sample_sums</span>(merged_data), <span class="dt">xlab =</span> <span class="st">&quot;Sequences per sample&quot;</span>,
          <span class="dt">ylab =</span> <span class="st">&quot;Samples&quot;</span>, <span class="dt">labels =</span> F)</code></pre></div>
-<p><img src="images/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="images/unnamed-chunk-4-1.png" width="672" /> <strong>Dotchart for multiple variables</strong></p>
+<p>Since most of the variables in my dataset are categorical, here I used raw data (sequence count) subsetted by bird species.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Z &lt;-<span class="st"> </span>qpcR:::<span class="kw">cbind.na</span>(<span class="kw">sample_sums</span>(data.BTSA), <span class="kw">sample_sums</span>(data.CCRO), <span class="kw">sample_sums</span>(data.OBNT),
            <span class="kw">sample_sums</span>(data.RCWA), <span class="kw">sample_sums</span>(data.SWTH), <span class="kw">sample_sums</span>(data.YWAR))
 <span class="kw">colnames</span>(Z) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;BTSA&quot;</span>, <span class="st">&quot;CCRO&quot;</span>, <span class="st">&quot;OBNT&quot;</span>, <span class="st">&quot;RCWA&quot;</span>, <span class="st">&quot;SWTH&quot;</span>, <span class="st">&quot;YWAR&quot;</span>)
@@ -592,20 +595,30 @@ div.tocify {
         <span class="dt">xlab =</span> <span class="st">&quot;Number of sequences per sample&quot;</span>,
         <span class="dt">ylab =</span> <span class="st">&quot;Order of the data from text file&quot;</span>)</code></pre></div>
 <p><img src="images/unnamed-chunk-5-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(<span class="kw">sample_sums</span>(merged_data), <span class="dt">breaks =</span> <span class="dv">100</span>,<span class="dt">col =</span> <span class="st">&quot;#a6bddb&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Histogram of sample sequencing depth&quot;</span>)</code></pre></div>
+</div>
+<div id="your-datas-distribution" class="section level4">
+<h4>Your data’s distribution</h4>
+<p>Some statistical tests assume normal distributions, making it important to check the shape of your data. Plot a histogram with all of your data and then groups of your data.</p>
+<blockquote>
+<p>“If you want to apply a statistical test to determine whether there is significant group separation in a discriminant analysis, however, normality of observations of a particular variable within each group is important”</p>
+</blockquote>
+<p><strong>Histogram</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(<span class="kw">sample_sums</span>(merged_data), <span class="dt">breaks =</span> <span class="dv">100</span>,<span class="dt">col =</span> <span class="st">&quot;#a6bddb&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Sequences per sample&quot;</span>, <span class="dt">main =</span> <span class="st">&#39; &#39;</span>)</code></pre></div>
 <p><img src="images/unnamed-chunk-6-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">table</span>(<span class="kw">round</span>(<span class="kw">otu_table</span>(merged_data))),
-    <span class="dt">type =</span> <span class="st">&quot;h&quot;</span>,
-    <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100</span>),
-    <span class="dt">xlab =</span> <span class="st">&quot;Observed values&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Frequency&quot;</span>)</code></pre></div>
-<p><img src="images/unnamed-chunk-7-1.png" width="672" /></p>
+<hr />
 </div>
 </div>
 <div id="discussion-questions" class="section level3">
 <h3>Discussion Questions</h3>
 <p><strong>Q1:</strong> When should you let go of an outlier?</p>
-<p><strong>Q2:</strong></p>
+<p><strong>Q2:</strong> How can you check for independence using multivariate data?</p>
+<blockquote>
+<p>“Hence, it is important to check whether there is dependence in the raw data before doing the analysis, and also the residuals afterwards. These checks can be made by plotting the response variable vs. time or spatial coordinates.”</p>
+</blockquote>
 <p><strong>Q3:</strong> <em>To transform or not to transform? That is the question.</em></p>
+<blockquote>
+<p>“There are three main reasons for a transformation: <strong>to reduce the effect of outliers</strong> (especially in covariates), <strong>to stabilize the variance</strong> and <strong>to linearize relationships</strong>. However, using more advanced techniques like GLS and GAMs, heterogenity and nonlinearity problems can be solved, making transformation less important.”</p>
+</blockquote>
 <p><strong>Q4:</strong> What are some data exploration techniques you have used?</p>
 </div>
 

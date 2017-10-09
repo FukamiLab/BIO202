@@ -33,11 +33,14 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Analysis Example
 ```{r, include=FALSE, eval=TRUE}
+# Load packages
 library(phyloseq)
 library(readr)
 library(lattice)
 library(qpcR)
 
+
+# Load data
 otu <- as.matrix((read_csv("~/Documents/R/Eco_stats_proj/Data/raw/OTU_tab_renamed.csv", col_names = TRUE)[,-1]))
 tax <- as.matrix((read_csv("~/Documents/R/Eco_stats_proj/Data/raw/TAX_reorder_otu_name.csv", col_names = TRUE)[,-1]))
 
@@ -119,6 +122,11 @@ data.YWAR <- prune_samples(YWAR, merged_data)
 
 #### Checking for outliers
 
+Zurr et al. recommends plotting your data using boxplots and dotcharts to detect outliers. Before removing suspected outliers, make sure they are actually outliers!
+
+
+Since my data is multivariate, I used sequence count per sample for outlier detection in the following examples. 
+
 **Boxplot**
 ```{r}
 boxplot(sample_sums(merged_data),  ylab = "Sequences per sample")
@@ -129,6 +137,9 @@ boxplot(sample_sums(merged_data),  ylab = "Sequences per sample")
 dotchart(sample_sums(merged_data), xlab = "Sequences per sample",
          ylab = "Samples", labels = F)
 ```
+**Dotchart for multiple variables**
+
+Since most of the variables in my dataset are categorical, here I used raw data (sequence count) subsetted by bird species.
 
 ```{r}
 Z <- qpcR:::cbind.na(sample_sums(data.BTSA), sample_sums(data.CCRO), sample_sums(data.OBNT),
@@ -145,29 +156,34 @@ dotplot(as.matrix(Z), groups = FALSE,
         ylab = "Order of the data from text file")
 ```
 
+#### Your data's distribution 
+
+Some statistical tests assume normal distributions, making it important to check the shape of your data. Plot a histogram with all of your data and then groups of your data.
+
+> "If you want to apply a statistical test to determine whether there is significant group separation in a discriminant analysis, however, normality of observations of a particular variable within each group is important" 
+
+**Histogram**
 ```{r}
-hist(sample_sums(merged_data), breaks = 100,col = "#a6bddb", main = "Histogram of sample sequencing depth")
+hist(sample_sums(merged_data), breaks = 100,col = "#a6bddb", xlab="Sequences per sample", main = ' ')
 ```
 
 
-
-```{r}
-plot(table(round(otu_table(merged_data))),
-    type = "h",
-    xlim = c(0, 100),
-    xlab = "Observed values", ylab = "Frequency")
-```
-
-
+***
 
 
 ### Discussion Questions
 
 **Q1:** When should you let go of an outlier?
 
-**Q2:** 
+**Q2:** How can you check for independence using multivariate data? 
+
+> "Hence, it is important to check whether there is dependence in the raw data before doing the analysis, and also the residuals afterwards. These checks can be made by plotting the response variable vs. time or spatial coordinates."
+
 
 **Q3:** _To transform or not to transform? That is the question._
+
+> "There are three main reasons for a transformation: **to reduce the effect of outliers** (especially in covariates), **to stabilize the variance** and **to linearize relationships**. However, using more advanced techniques like GLS and GAMs, heterogenity and nonlinearity problems can be solved, making transformation less important."
+
 
 **Q4:** What are some data exploration techniques you have used?
 
