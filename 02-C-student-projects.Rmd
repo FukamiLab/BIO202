@@ -66,9 +66,10 @@ I will assess how environmental characteristics drive Aedes aegypti and albopict
 
 #### Nicole
 
-**Project Title**
+**What predicts pathogen sharing among host species across phylogenetic distance?**
 
-Brief description of the question you want to ask and the data you have to analyze it.
+In this study, we are trying to determine which factors predict parasite-sharing (or a potential spillover event) for different host species. What factors matter most? Is it (1) phylogenetic distance between host species and pathogen species (evolutionary factor), or (2) similarity in host or pathogen traits, e.g., host behavior, host body size, range, pathogen type, mode of transmission, etc. (ecological factors)? We have data on such host and pathogen traits from about ~400 mammalian hosts and ~2000 pathogens that we have gathered from the literature.
+
 
 
 #### Priscilla

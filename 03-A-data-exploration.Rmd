@@ -30,15 +30,258 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
+#### Data exploration
+
+1. Outliers Y & X
++ Outliers in response variable vs in covariates - to be dealt with differently
++ Transformation less desirable for response variable than in covariates?
+
+2. Homogeneity Y
+
+3. Normality Y
++ Example of importance of biological intuition and graphical investigation
+    + Fig 5b - transformation to get normality not desirable
+
+4. Zero troble Y
++ Zero-inflated GLM
++ Double zeros, or joint absences - what do they mean? e.g., spatial clumping
++ Multivariate analysis that ignores double zeros
+
+5. Collinearity X
++ VIF of 10, 3, or 2 - reason for these values?
++ VIFs, or common sense or biological knowledge
+
+6. Relationships Y & X
++ Multi-panel scatter plots for checking for outliers
+
+7. Interactions
++ Are data balanced? Use coplot (Fig 11).
+
+8. Independence Y
++ Mixed effects, etc. to deal with non-independence
++ ACF or variograms for checking for temporal and spatial non-independence
+
+Not all steps always needed
+
+#### Common themes
+
++ Biological intuition = key to make decisions about stats
++ Hypothesis testing vs hypothesis generation
+    + One solution - two data sets - one to create hypotheses and one to test them
+    + But only practical for large data sets
++ Emphasis on graphical tools
 
 
 ### Analysis Example
+```{r, include=FALSE, eval=TRUE}
+# Load packages
+library(phyloseq)
+library(readr)
+library(lattice)
+library(qpcR)
+library(ggplot2)
+library(plotly)
 
+
+# Load data
+otu <- as.matrix((read_csv("~/Documents/R/Eco_stats_proj/Data/raw/OTU_tab_renamed.csv", col_names = TRUE)[,-1]))
+tax <- as.matrix((read_csv("~/Documents/R/Eco_stats_proj/Data/raw/TAX_reorder_otu_name.csv", col_names = TRUE)[,-1]))
+
+# Add in rownames
+rownames(otu) <- paste0("OTU", 1:nrow(otu))
+rownames(tax) <- paste0("OTU", 1:nrow(tax))
+
+# Read file into phyloseq
+OTU <- otu_table(otu, taxa_are_rows = TRUE)
+TAX <- tax_table(tax)
+
+# Combining OTU and TAX data
+data <- phyloseq(OTU, TAX)
+
+# Reading the sample data file
+sample = sample_data(data.frame(read_csv("~/Documents/R/Eco_stats_proj/Data/raw/samplesinfo.csv")))
+
+# Naming the the first rows using the first column
+row.names(sample) = sample$ID
+
+# Merging OTU/TAX file "Bac.data" with sampledata (includes MM and NEG)
+merged <- merge_phyloseq(data, sample)
+
+# Removing MM and NEG from merged_dataset
+Real <- as.vector(data.frame(sample_data(merged))$Bird_species)
+Real <- (!(Real%in%c("MM", "NEG", "RCRW")))
+Real[is.na(Real)] = FALSE
+merged_data = prune_samples(Real, merged)
+
+# Remove OTUs with bad BLAST matches
+kingdom <- as.vector(data.frame(tax_table(merged_data))$kingdom)
+tax.keep <- kingdom=="Bacteria"
+tax.keep[is.na(tax.keep)] = FALSE
+merged_data <- prune_taxa(tax.keep,merged_data)
+
+# Remove chloroplast (likely plant DNA)
+class <- as.vector(data.frame(tax_table(merged_data))$class)
+class <- (!(class%in%c("Chloroplast")))
+class[is.na(class)] = FALSE
+merged_data = prune_taxa(class, merged_data)
+
+# Subset by species - BTSA
+BTSA <- as.vector(data.frame(sample_data(merged_data))$Bird_species)
+BTSA <- BTSA%in%c("BTSA")
+BTSA[is.na(BTSA)] = FALSE
+data.BTSA <- prune_samples(BTSA, merged_data)
+
+# Subset by species - CCRO
+CCRO <- as.vector(data.frame(sample_data(merged_data))$Bird_species)
+CCRO <- CCRO%in%c("CCRO")
+CCRO[is.na(CCRO)] = FALSE
+data.CCRO <- prune_samples(CCRO, merged_data)
+
+# Subset by species - OBNT
+OBNT <- as.vector(data.frame(sample_data(merged_data))$Bird_species)
+OBNT <- OBNT%in%c("OBNT")
+OBNT[is.na(OBNT)] = FALSE
+data.OBNT <- prune_samples(OBNT, merged_data)
+
+# Subset by species - RCWA
+RCWA <- as.vector(data.frame(sample_data(merged_data))$Bird_species)
+RCWA <- RCWA%in%c("RCWA")
+RCWA[is.na(RCWA)] = FALSE
+data.RCWA <- prune_samples(RCWA, merged_data)
+
+# Subset by species - SWTH
+SWTH <- as.vector(data.frame(sample_data(merged_data))$Bird_species)
+SWTH <- SWTH%in%c("SWTH")
+SWTH[is.na(SWTH)] = FALSE
+data.SWTH <- prune_samples(SWTH, merged_data)
+
+# Subset by species - YWAR
+YWAR <- as.vector(data.frame(sample_data(merged_data))$Bird_species)
+YWAR <- YWAR%in%c("YWAR")
+YWAR[is.na(YWAR)] = FALSE
+data.YWAR <- prune_samples(YWAR, merged_data)
+
+```
+
+#### Checking for outliers
+
+Zurr et al. recommends plotting your data using boxplots and dotcharts to detect outliers. Before removing suspected outliers, make sure they are actually outliers!
+
+
+Since my data is multivariate, I used sequence count per sample for outlier detection in the following examples. 
+
+**Boxplot**
+
+![](images/boxplot.png)
+```{r, eval = FALSE}
+boxplot(sample_sums(merged_data),  ylab = "Sequences per sample")
+```
+
+**Cleveland dotchart**
+
+![](images/dotchart.png)
+```{r, eval = FALSE}
+dotchart(sample_sums(merged_data), xlab = "Sequences per sample",
+         ylab = "Samples", labels = F)
+```
+
+**Plotly - great visualization tool**
+
+![](images/ggplot.png)
+
+```{r, eval = FALSE}
+seq_num <- data.frame(ID=sample_data(merged_data)$ID, Seq=sample_sums(merged_data))
+dot_gg <- ggplot(seq_num, aes(x=Seq,y=ID)) + geom_point(col="coral") + 
+  theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
+ggplotly(dot_gg)
+```
+
+
+
+
+
+**Dotchart for multiple variables**
+
+Since most of the variables in my dataset are categorical, here I used raw data (sequence count) subsetted by bird species.
+
+
+![](images/dotchart_variable.png)
+
+
+```{r, eval = FALSE}
+Z <- qpcR:::cbind.na(sample_sums(data.BTSA), sample_sums(data.CCRO), sample_sums(data.OBNT),
+           sample_sums(data.RCWA), sample_sums(data.SWTH), sample_sums(data.YWAR))
+colnames(Z) <- c("BTSA", "CCRO", "OBNT", "RCWA", "SWTH", "YWAR")
+dotplot(as.matrix(Z), groups = FALSE,
+        strip = strip.custom(bg = 'white',
+        par.strip.text = list(cex = 0.8)),
+        scales = list(x = list(relation = "free"),
+                      y = list(relation = "free"),
+                      draw = FALSE),
+        col = 1, cex  = 0.5, pch = 16,
+        xlab = "Number of sequences per sample",
+        ylab = "Order of the data from text file")
+```
+
+***
+
+
+#### Your data's distribution 
+
+Some statistical tests assume normal distributions, making it important to check the shape of your data. Plot a histogram with all of your data and then groups of your data.
+
+> "If you want to apply a statistical test to determine whether there is significant group separation in a discriminant analysis, however, normality of observations of a particular variable within each group is important" 
+
+**Histogram**
+
+![](images/histogram.png)
+
+```{r, eval = FALSE}
+hist(sample_sums(merged_data), breaks = 100,col = "#a6bddb", xlab="Sequences per sample", main = ' ')
+```
+
+
+***
 
 
 ### Discussion Questions
 
+**Q1:** When should you let go of an outlier?
+
+**Q2:** How can you check for independence using multivariate data? 
+
+> "Hence, it is important to check whether there is dependence in the raw data before doing the analysis, and also the residuals afterwards. These checks can be made by plotting the response variable vs. time or spatial coordinates."
 
 
+**Q3:** _To transform or not to transform? That is the question._
+
+> "There are three main reasons for a transformation: **to reduce the effect of outliers** (especially in covariates), **to stabilize the variance** and **to linearize relationships**. However, using more advanced techniques like GLS and GAMs, heterogenity and nonlinearity problems can be solved, making transformation less important."
 
 
+**Q4:** What are some data exploration techniques you have used?
+
+
+***
+
+### After-class follow-up
+
++ beeswarm functions recommended by Anna to look at data distribution:
+
+[ggbeeswarm](https://cran.r-project.org/web/packages/ggbeeswarm/index.html)
+
+[ggbeeswarm vignette](https://cran.r-project.org/web/packages/ggbeeswarm/vignettes/usageExamples.pdf)
+
+[beeswarm](http://www.cbs.dtu.dk/~eklund/beeswarm/)
+
++ O'Hara and Kotze 2010 Do not log-transform count data:
+
+[Publication](http://onlinelibrary.wiley.com/doi/10.1111/j.2041-210X.2010.00021.x/abstract)
+
+[Blog post](https://www.r-bloggers.com/do-not-log-transform-count-data-bitches/)
+
+
++ Paper Tad mentioned that uses "principal coordinate analysis of a truncated distance matrix" (PCNM) to incorporate spaptial trends in multivariate data:
+
+[Toju et al. 2017](http://web.stanford.edu/~fukamit/toju-et-al-2017-accepted.pdf)
+
+Also, from Sandra: the PCNM (truncated distance matrix) method is discussed starting on page 244 of this book: https://link.springer.com/content/pdf/10.1007%2F978-1-4419-7976-6.pdf
