@@ -9,8 +9,6 @@ output: html_document
 
 > Appendix A from: Zuur, A. F., Ieno, E. N., Walker, N., Saveliev, A. A. and Smith, G. M. 2009. *Mixed Effects Models and Extensions in Ecology with R.* Springer. [Here's the whole book](https://link-springer-com.stanford.idm.oclc.org/book/10.1007%2F978-0-387-87458-6) or [you can download just the appendix](https://link.springer.com/content/pdf/bbm%3A978-0-387-87458-6%2F1.pdf).
 
-> "Cleveland Dot Plots" from the UC Business Analytics R Programming Guide, available [here](http://uc-r.github.io/cleveland-dot-plots).
-
 
 ```{r include = FALSE}
 # This code block sets up the r session when the page is rendered to html
@@ -32,15 +30,147 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
-+ Learn the advantages of a Cleveland dot plot
-+ Learn linear models
+#### Data exploration: outliers and collinearity
++ Normality not needed for explanatory variables
++ Correlation - "value of 0.6 (and -0.6) is not large enough to worry us"?
+
+#### Linear regression: model selection
++ Which interactions to include - opinions vary (p. 537)
++ `summary(M1)`, `drop1(M1, test="F")`, `anova(M1)` - Is `drop1()` the best method?
++ Which explanatory variables to drop - opinions vary (p. 541)
++ `step(M1)` - easy one-line command; AIC-based backwards selection
+
+#### Linear regression: model validation
++ Mostly done graphically
++ But not very powerful when n is small (as common in ecological data?)
++ Model selection, then model validation - Is this always ok?
+
+#### Linear regression: model interpretation
++ Graphical presentation - Data should be plotted.
+
+#### Additive modeling
++ Zuur et al.'s favorite tool? (more in Ch 3)
++ Try model with all explanatory variables, to look at potential non-linear effect
++ Difficulties: overfitting and need for large data?
+
+***
 
 ### Analysis Example
 
+In this example, we'll use linear regression to examine whether there is any sort of relationship beween Damage Type (DT) diversity and herbivorized leaf area on fossil leaves.
 
+First, let's read in the data:
+
+```{r results = 'hide'}
+# Read in a data file from the data folder on the BIO 202 GitHub repository
+data <- read.csv("https://raw.githubusercontent.com/FukamiLab/BIO202/master/data/03-B-permian.csv")
+data <- data[order(data$dts),]
+```
+
+Now, we can simply plot DT diversity against herbivorized leaf area:
+
+```{r}
+plot(data$dts~data$rem)
+```
+
+Not a particularly clear relationship there! We can try running a simple linear regression:
+
+```{r}
+fit <- lm(dts~0+rem, data=data)
+summary(fit)
+```
+
+Very low p-value (< 2.2e-16), very unconvincing R-squared (0.10).
+
+We can try plotting a different line for each site (as in Fig. A.3 from the reading, on page 544).
+
+```{r}
+fit <- lm(dts~0+rem+site, data=data)
+summary(fit)
+
+D1 <- data[data$site=="CCP",]
+D2 <- data[data$site=="MCF",]
+
+P1 <- predict(fit, newdata = D1)
+P2 <- predict(fit, newdata = D2)
+
+plot(data$dts~data$rem)
+lines(D1$rem, P1, col="blue")
+lines(D2$rem, P2, col="red")
+```
+
+We can try plotting a different line for each species instead of each site.
+
+```{r}
+fit <- lm(dts~0+rem+sp, data=data)
+
+D1 <- data[data$sp=="cau",]
+D2 <- data[data$sp=="cev",]
+D3 <- data[data$sp=="cta",]
+D4 <- data[data$sp=="mgi",]
+D5 <- data[data$sp=="mta",]
+
+P1 <- predict(fit, newdata = D1)
+P2 <- predict(fit, newdata = D2)
+P3 <- predict(fit, newdata = D3)
+P4 <- predict(fit, newdata = D4)
+P5 <- predict(fit, newdata = D5)
+
+plot(data$dts~data$rem)
+lines(D1$rem, P1, co="red")
+lines(D2$rem, P2, col="blue")
+lines(D3$rem, P3, col="green")
+lines(D4$rem, P4, col="purple")
+lines(D5$rem, P5, col="yellow")
+```
+
+To be thorough, we can try adding all possible predictor variables, dropping them, and seeing what happens.
+
+```{r}
+fit.full <- lm(dts~0+rem+sp+site+area, data=data)
+drop1(fit.full, test="F")
+```
+
+Now a run-of-the-mill GAM:
+
+```{r}
+library(mgcv)
+AM1 <- gam(dts ~ s(rem) + sp + site + s(area), data = data)
+anova(AM1)
+```
+
+All predictors except "site" are significant.
+
+Now a fancy GAM with cubic regression spline with shrinkage.
+
+```{r}
+AM2 <- gam(dts ~ s(rem, bs = "cs") + sp + site + s(area, bs = "cs"), data = data)
+anova(AM2)
+```
+
+Values change but no difference in significance at p = 0.05. So let's get rid of "site."
+
+```{r}
+AM3 <- gam(dts ~ s(rem, bs = "cs") + sp + s(area, bs = "cs"), data = data)
+anova(AM3)
+```
+
+We can plot the smoothing function.
+
+```{r}
+plot(AM3)
+```
 
 ### Discussion Questions
 
-
-
-
+1. Page 537: Of the 7 possible ways to treat interaction terms, which do you prefer and why?
+2. Page 537: What are "main terms" and why do they matter?
+3. Page 537: Why are 4-way interactions a bad thing? What are "Cook distance values" and "non-convergence"?
+4. Page 539: Review: What is RSS (residual sum of squares) and what does it tell us?
+5. Page 540: What are "nested models" in this context?
+6. Page 541: Of the 3 possible ways to treat non-significant explanatory variables, which do you prefer and why?
+7. Page 542: How does AIC "judge" model fit?
+8. Page 546: What is it about the fit of the lines in figure A.3 (pg. 544) that suggests that a linear model may not be the best fit?
+9. Page 546: What is a Generalized Additive Model and how does it work?
+10. Page 546: What is a thin plate spline and how is it relevant here?
+11. Page 551: When might the Aikake weight be useful?
