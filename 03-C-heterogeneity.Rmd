@@ -40,9 +40,11 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
     + $\epsilon_i \sim N(0, \sigma^2)$
 
 + How to check for homogeneity
+    
     Residuals vs. fitted values (Fig 4.2a)
 
 + How to identify source of variation in residuals
+    
     Residuals vs. explanatory variables (Fig. 4.2b, c)
 
 #### Many variance structures (Table 4.1)
@@ -60,6 +62,7 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
      + $\epsilon_{ij} \sim N(0, \sigma^2 \times (\delta_1 + |\mathrm{DML}_{ij}|^{\delta_2})^2)$
   + `V1<-varComb(varIdent(form =∼ 1 | fMONTH), varExp(form =∼ DML))`
      + $\epsilon_{ij} \sim N(0, \sigma^2_j \times e^{2 \delta \times \mathrm{DML}_{ij}})$
+     
 
 How to choose variance structure? - AIC, e.g., `AIC(M.lm, M.gls1, M.gls2)`
 
