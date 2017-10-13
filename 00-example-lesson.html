@@ -597,7 +597,6 @@ dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Subset the data to foliose lichens</span>
 fol_dat &lt;-<span class="st"> </span>dat %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(Growth_form ==<span class="st"> &#39;foliose&#39;</span>)</code></pre></div>
-<pre><code>## Warning: package &#39;bindrcpp&#39; was built under R version 3.3.3</code></pre>
 <p>Describe the steps of the example analysis, including code blocks as needed. Describe the functions and packages used.</p>
 <pre><code>## Warning: Removed 213 rows containing missing values (geom_point).</code></pre>
 <p><img src="images/chl_fig-1.png" width="672" /></p>
@@ -638,7 +637,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
