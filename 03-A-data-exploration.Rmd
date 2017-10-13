@@ -245,4 +245,20 @@ hist(sample_sums(merged_data), breaks = 100,col = "#a6bddb", xlab="Sequences per
 **Q4:** What are some data exploration techniques you have used?
 
 
+***
 
+### After-class follow-up
+
++ beeswarm functions recommended by Anna to look at data distribution:
+
+https://cran.r-project.org/web/packages/ggbeeswarm/index.html
+https://cran.r-project.org/web/packages/ggbeeswarm/vignettes/usageExamples.pdf
+http://www.cbs.dtu.dk/~eklund/beeswarm/
+
++ O'Hara and Kotze 2010 Do not log-transform count data:
+
+http://onlinelibrary.wiley.com/doi/10.1111/j.2041-210X.2010.00021.x/abstract
+
++ Paper Tad mentioned that uses "principal coordinate analysis of a truncated distance matrix" (PCNM) to incorporate spaptial trends in multivariate data:
+
+http://web.stanford.edu/~fukamit/toju-et-al-2017-accepted.pdf
