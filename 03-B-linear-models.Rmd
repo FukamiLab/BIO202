@@ -174,3 +174,10 @@ plot(AM3)
 9. Page 546: What is a Generalized Additive Model and how does it work?
 10. Page 546: What is a thin plate spline and how is it relevant here?
 11. Page 551: When might the Aikake weight be useful?
+
+
+***
+
+### After-class follow-up
+
++ df = 0 for site in the `drop1()` analysis above because some species were observed only in one of the two sites.
