@@ -589,7 +589,7 @@ div.tocify {
 ##  $ Testisweight: num  0.006 0.008 0.008 0.011 0.012 0.012 0.013 0.015 0.017 0.017 ...
 ##  $ fMONTH      : num  2 9 12 11 8 10 5 7 7 7 ...</code></pre>
 <p>Then, inspect residuals across explanatory variables. The variability along the explanatory variable should be consistant. Look out for cone shapes!</p>
-<p><img src="images/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="images/03-C/unnamed-chunk-5-1.png" width="672" /></p>
 <p>Looks like we have cones, our data is hetergeneous/heteroskedastic. Now it’s time to investigate variance covariates. There are several possible types of relationships between variance and covariates.</p>
 <table>
 <thead>
@@ -689,7 +689,7 @@ M.gls2 &lt;-<span class="st"> </span><span class="kw">gls</span>(Testisweight ~<
 
 E &lt;-<span class="st"> </span><span class="kw">resid</span>(M.lm)
 <span class="kw">coplot</span>(E~DML|fMONTH,<span class="dt">data=</span>Squid)</code></pre></div>
-<p><img src="images/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="images/03-C/unnamed-chunk-12-1.png" width="672" /></p>
 <p>Now, let’s look at all the different types of variance-covariate relationships</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vf3 &lt;-<span class="st"> </span><span class="kw">varPower</span>(<span class="dt">form =</span>~<span class="st"> </span>DML)
 M.gls3 &lt;-<span class="st"> </span><span class="kw">gls</span>(Testisweight ~<span class="st"> </span>DML *<span class="st"> </span>fMONTH,
@@ -741,12 +741,12 @@ M.gls8&lt;-<span class="kw">gls</span>(Testisweight ~<span class="st"> </span>DM
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">E1 &lt;-<span class="st"> </span><span class="kw">resid</span>(M.gls4)
 <span class="kw">coplot</span>(E1 ~<span class="st"> </span>DML |<span class="st"> </span>fMONTH,<span class="dt">ylab=</span><span class="st">&quot;Ordinary residuals&quot;</span>,
       <span class="dt">data =</span> Squid)</code></pre></div>
-<p><img src="images/unnamed-chunk-15-1.png" width="672" /></p>
+<p><img src="images/03-C/unnamed-chunk-15-1.png" width="672" /></p>
 <p>Turns out we should actually look at normalized residuals for model validation. Calculate the observed minus the fitted values and then divide by the square root of the variance. There shouldn’t be any heteroskedasticity.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">E2 &lt;-<span class="st"> </span><span class="kw">resid</span>(M.gls4, <span class="dt">type =</span> <span class="st">&quot;normalized&quot;</span>)
 <span class="kw">coplot</span>(E2 ~<span class="st"> </span>DML |<span class="st"> </span>fMONTH, <span class="dt">data =</span> Squid,
        <span class="dt">ylab =</span> <span class="st">&quot;Normalised residuals&quot;</span>)</code></pre></div>
-<p><img src="images/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="images/03-C/unnamed-chunk-16-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(M.gls4)</code></pre></div>
 <pre><code>## Denom. DF: 764 
 ##             numDF   F-value p-value
@@ -778,7 +778,7 @@ M.gls8&lt;-<span class="kw">gls</span>(Testisweight ~<span class="st"> </span>DM
 ##  $ Concentration: num  2.49 1.19 3.83 3.04 2.19 ...
 ##  $ fTreatment   : Factor w/ 2 levels &quot;Algae&quot;,&quot;NoAlgae&quot;: 2 2 2 2 2 2 2 2 2 2 ...
 ##  $ fNutrient    : Factor w/ 3 levels &quot;NH4&quot;,&quot;NO3&quot;,&quot;PO3&quot;: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
-<p><img src="images/unnamed-chunk-19-1.png" width="672" /><img src="images/unnamed-chunk-19-2.png" width="672" /></p>
+<p><img src="images/03-C/unnamed-chunk-19-1.png" width="672" /><img src="images/03-C/unnamed-chunk-19-2.png" width="672" /></p>
 <p><strong>Create several models with different variance covariates</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(nlme)
 
@@ -1021,7 +1021,7 @@ op&lt;-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw
 <span class="dt">main=</span><span class="st">&quot;Residuals versus fitted values&quot;</span>)
 <span class="co">#identify(Fit,E)</span>
 <span class="kw">hist</span>(E,<span class="dt">nclass=</span><span class="dv">15</span>)</code></pre></div>
-<p><img src="images/unnamed-chunk-34-1.png" width="672" /></p>
+<p><img src="images/03-C/unnamed-chunk-34-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(op)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(MFinal)</code></pre></div>
 <pre><code>## Generalized least squares fit by REML
@@ -1061,9 +1061,9 @@ op&lt;-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw
 ## Residual standard error: 0.8195605 
 ## Degrees of freedom: 108 total; 102 residual</code></pre>
 <p>Explore findings graphically</p>
-<p><img src="images/unnamed-chunk-36-1.png" width="672" /></p>
-<p><img src="images/unnamed-chunk-37-1.png" width="672" /></p>
-<p><img src="images/unnamed-chunk-38-1.png" width="672" /></p>
+<p><img src="images/03-C/unnamed-chunk-36-1.png" width="672" /></p>
+<p><img src="images/03-C/unnamed-chunk-37-1.png" width="672" /></p>
+<p><img src="images/03-C/unnamed-chunk-38-1.png" width="672" /></p>
 </div>
 </div>
 </div>
