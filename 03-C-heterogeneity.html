@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Tad" />
+<meta name="author" content="Tad &amp; Anna Rasmussen" />
 
 
 <title>Dealing with heterogeneity</title>
@@ -26,6 +26,49 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
 
 
 <style type="text/css">
@@ -513,7 +556,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Dealing with heterogeneity</h1>
-<h4 class="author"><em>Tad</em></h4>
+<h4 class="author"><em>Tad &amp; Anna Rasmussen</em></h4>
 
 </div>
 
@@ -527,9 +570,510 @@ div.tocify {
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
+<p>Random/explanatory variables are heterskedastic if there are sub-populations that have different variabilities from others.“Variability” could be quantified by the variance or other measures of statistical dispersion.</p>
+<p>Why is it a problem in regression??</p>
+<p>Want models that consistantly predict response variable across different values of the explanatory variable. So if you plot residuals (the difference between modeled and actual data) the residuals should be uniform across the explanatory variable. If not, then this indicates heterogeneity/ heteroskedasticity. Modeling errors are assumed to be uncorrelated and uniform in tests so heterskedasticity is a problem.</p>
+<p>Code and data from <em>Mixed Effects Models and Extensions in Ecology with R</em> (2009) Zuur, Ieno, Walker, Saveliev and Smith. <em>Springer</em> available at <a href="www.highstat.com">highstat.com</a></p>
+<div id="example-1-squid-testis-weight-v.-dorsal-mantle-length" class="section level4">
+<h4>Example 1: Squid testis weight v. dorsal mantle length</h4>
+<p>Load the data, relevant code, and libraries.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Squid &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;data/Squid.txt&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">dec=</span><span class="st">&quot;,&quot;</span>) 
+<span class="kw">source</span>(<span class="st">&quot;code/HighstatLibV10.R&quot;</span>)</code></pre></div>
+<p>A good first step is to investigate structure of the Squid data set.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(Squid)</code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    768 obs. of  6 variables:
+##  $ Specimen    : int  1017 1034 1070 1070 1019 1002 1001 1013 1002 1006 ...
+##  $ YEAR        : int  1991 1990 1990 1990 1990 1990 1991 1990 1990 1990 ...
+##  $ MONTH       : int  2 9 12 11 8 10 5 7 7 7 ...
+##  $ DML         : int  136 144 108 130 121 117 133 105 109 97 ...
+##  $ Testisweight: num  0.006 0.008 0.008 0.011 0.012 0.012 0.013 0.015 0.017 0.017 ...
+##  $ fMONTH      : num  2 9 12 11 8 10 5 7 7 7 ...</code></pre>
+<p>Then, inspect residuals across explanatory variables. The variability along the explanatory variable should be consistant. Look out for cone shapes!</p>
+<p><img src="images/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Looks like we have cones, our data is hetergeneous/heteroskedastic. Now it’s time to investigate variance covariates. There are several possible types of relationships between variance and covariates.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">R function</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">VarFixed</td>
+<td align="left">Fixed variance</td>
+</tr>
+<tr class="even">
+<td align="left">VarIdent</td>
+<td align="left">Different variances per stratum</td>
+</tr>
+<tr class="odd">
+<td align="left">VarPower</td>
+<td align="left">Power of the variance covariate</td>
+</tr>
+<tr class="even">
+<td align="left">VarExp</td>
+<td align="left">Exponential of the variance covariate</td>
+</tr>
+<tr class="odd">
+<td align="left">VarConstPower</td>
+<td align="left">Constant plus power of the variance covariate</td>
+</tr>
+<tr class="even">
+<td align="left">VarComb</td>
+<td align="left">A combination of variance functions</td>
+</tr>
+</tbody>
+</table>
+<p>Let’s start with a simple linear model and GLS (generalized least squares) model with fixed variance along DML (variance that is proportional to DML).</p>
+<p>*Note unweighted gls is just a lm</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(nlme)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M.lm&lt;-<span class="kw">gls</span>(Testisweight~DML*fMONTH,<span class="dt">data=</span>Squid)
+vf1Fixed&lt;-<span class="kw">varFixed</span>(~DML)
+M.gls1&lt;-<span class="kw">gls</span>(Testisweight~DML*fMONTH,
+              <span class="dt">weights=</span>vf1Fixed,<span class="dt">data=</span>Squid)
+<span class="kw">anova</span>(M.lm,M.gls1)</code></pre></div>
+<pre><code>##        Model df      AIC      BIC    logLik
+## M.lm       1  5 4018.646 4041.839 -2004.323
+## M.gls1     2  5 3881.736 3904.929 -1935.868</code></pre>
+<p>Now allow for different variance for each month</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vf2 &lt;-<span class="st"> </span><span class="kw">varIdent</span>(<span class="dt">form=</span> ~<span class="st"> </span><span class="dv">1</span>|fMONTH)
+M.gls2 &lt;-<span class="st"> </span><span class="kw">gls</span>(Testisweight ~<span class="st"> </span>DML*fMONTH,
+              <span class="dt">weights=</span>vf2, <span class="dt">data =</span>Squid)
+<span class="kw">anova</span>(M.lm,M.gls1,M.gls2)</code></pre></div>
+<pre><code>##        Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+## M.lm       1  5 4018.646 4041.839 -2004.323                        
+## M.gls1     2  5 3881.736 3904.929 -1935.868                        
+## M.gls2     3 16 3935.014 4009.232 -1951.507 2 vs 3 31.27845   0.001</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(M.lm,M.gls2)</code></pre></div>
+<pre><code>##        Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+## M.lm       1  5 4018.646 4041.839 -2004.323                        
+## M.gls2     2 16 3935.014 4009.232 -1951.507 1 vs 2 105.6319  &lt;.0001</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(M.gls2)</code></pre></div>
+<pre><code>## Generalized least squares fit by REML
+##   Model: Testisweight ~ DML * fMONTH 
+##   Data: Squid 
+##        AIC      BIC    logLik
+##   3935.014 4009.232 -1951.507
+## 
+## Variance function:
+##  Structure: Different standard deviations per stratum
+##  Formula: ~1 | fMONTH 
+##  Parameter estimates:
+##         2         9        12        11         8        10         5 
+## 1.0000000 2.0240070 1.0331137 1.0370932 2.4282018 1.4202513 1.7449295 
+##         7         6         4         1         3 
+## 1.7786732 1.4326270 0.9858497 2.3423333 1.2697344 
+## 
+## Coefficients:
+##                  Value Std.Error   t-value p-value
+## (Intercept) -0.8912961 0.7607499 -1.171602  0.2417
+## DML          0.0197630 0.0028702  6.885595  0.0000
+## fMONTH      -0.6514433 0.0894567 -7.282216  0.0000
+## DML:fMONTH   0.0035094 0.0003502 10.021619  0.0000
+## 
+##  Correlation: 
+##            (Intr) DML    fMONTH
+## DML        -0.952              
+## fMONTH     -0.905  0.873       
+## DML:fMONTH  0.841 -0.897 -0.950
+## 
+## Standardized residuals:
+##         Min          Q1         Med          Q3         Max 
+## -4.22130363 -0.81016158 -0.07261451  0.64362148  4.50320233 
+## 
+## Residual standard error: 2.02763 
+## Degrees of freedom: 768 total; 764 residual</code></pre>
+<p>Let’s look at the residuals across months to further investigate. Graphs yay!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lattice)
+
+E &lt;-<span class="st"> </span><span class="kw">resid</span>(M.lm)
+<span class="kw">coplot</span>(E~DML|fMONTH,<span class="dt">data=</span>Squid)</code></pre></div>
+<p><img src="images/unnamed-chunk-12-1.png" width="672" /></p>
+<p>Now, let’s look at all the different types of variance-covariate relationships</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vf3 &lt;-<span class="st"> </span><span class="kw">varPower</span>(<span class="dt">form =</span>~<span class="st"> </span>DML)
+M.gls3 &lt;-<span class="st"> </span><span class="kw">gls</span>(Testisweight ~<span class="st"> </span>DML *<span class="st"> </span>fMONTH,
+              <span class="dt">weights =</span> vf3,<span class="dt">data=</span>Squid)
+
+vf4 &lt;-<span class="st"> </span><span class="kw">varPower</span>(<span class="dt">form=</span>~<span class="st"> </span>DML |<span class="st"> </span>fMONTH)
+M.gls4&lt;-<span class="kw">gls</span>(Testisweight ~<span class="st"> </span>DML *<span class="st"> </span>fMONTH, <span class="dt">data =</span> Squid,
+              <span class="dt">weights =</span> vf4)
+
+
+vf5 &lt;-<span class="st"> </span><span class="kw">varExp</span>(<span class="dt">form =</span>~<span class="st"> </span>DML)
+M.gls5 &lt;-<span class="st"> </span><span class="kw">gls</span>(Testisweight ~<span class="st"> </span>DML *<span class="st"> </span>fMONTH,
+              <span class="dt">weights =</span> vf5, <span class="dt">data =</span> Squid)
+
+
+vf6&lt;-<span class="kw">varConstPower</span>(<span class="dt">form =</span>~<span class="st"> </span>DML)
+M.gls6&lt;-<span class="kw">gls</span>(Testisweight ~<span class="st"> </span>DML *<span class="st"> </span>fMONTH,
+            <span class="dt">weights =</span> vf6, <span class="dt">data =</span> Squid)
+
+
+vf7 &lt;-<span class="st"> </span><span class="kw">varConstPower</span>(<span class="dt">form =</span>~<span class="st"> </span>DML |<span class="st"> </span>fMONTH)
+M.gls7&lt;-<span class="kw">gls</span>(Testisweight ~<span class="st"> </span>DML *<span class="st"> </span>fMONTH,
+              <span class="dt">weights =</span> vf7, <span class="dt">data =</span> Squid)
+
+vf8 &lt;-<span class="st"> </span><span class="kw">varComb</span>(<span class="kw">varIdent</span>(<span class="dt">form=</span> ~<span class="st"> </span><span class="dv">1</span> |<span class="st"> </span>fMONTH) ,
+                 <span class="kw">varExp</span>(<span class="dt">form =</span>~<span class="st"> </span>DML) )
+M.gls8&lt;-<span class="kw">gls</span>(Testisweight ~<span class="st"> </span>DML *<span class="st"> </span>fMONTH,
+              <span class="dt">weights =</span> vf8, <span class="dt">data =</span> Squid)
+
+<span class="kw">anova</span>(M.lm,M.gls1,M.gls2,M.gls3,M.gls4,
+        M.gls5,M.gls6,M.gls7,M.gls8)</code></pre></div>
+<pre><code>##        Model df      AIC      BIC    logLik   Test   L.Ratio p-value
+## M.lm       1  5 4018.646 4041.839 -2004.323                         
+## M.gls1     2  5 3881.736 3904.929 -1935.868                         
+## M.gls2     3 16 3935.014 4009.232 -1951.507 2 vs 3  31.27845  0.0010
+## M.gls3     4  6 3747.039 3774.871 -1867.520 3 vs 4 167.97531  &lt;.0001
+## M.gls4     5 17 3710.649 3789.505 -1838.324 4 vs 5  58.39022  &lt;.0001
+## M.gls5     6  6 3769.062 3796.893 -1878.531 5 vs 6  80.41269  &lt;.0001
+## M.gls6     7  7 3749.039 3781.509 -1867.520 6 vs 7  22.02218  &lt;.0001
+## M.gls7     8 29 3734.649 3869.168 -1838.325 7 vs 8  58.39033  &lt;.0001
+## M.gls8     9 17 3728.888 3807.744 -1847.444 8 vs 9  18.23897  0.1086</code></pre>
+<p>Ooh la la looks like varPower(form=~ DML | fMONTH) is the best model</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(M.lm,M.gls4)</code></pre></div>
+<pre><code>##        Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+## M.lm       1  5 4018.646 4041.839 -2004.323                        
+## M.gls4     2 17 3710.649 3789.505 -1838.324 1 vs 2 331.9975  &lt;.0001</code></pre>
+<p>Let’s graphically confirm.</p>
+<p>First look at ordinary residuals</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">E1 &lt;-<span class="st"> </span><span class="kw">resid</span>(M.gls4)
+<span class="kw">coplot</span>(E1 ~<span class="st"> </span>DML |<span class="st"> </span>fMONTH,<span class="dt">ylab=</span><span class="st">&quot;Ordinary residuals&quot;</span>,
+      <span class="dt">data =</span> Squid)</code></pre></div>
+<p><img src="images/unnamed-chunk-15-1.png" width="672" /></p>
+<p>Turns out we should actually look at normalized residuals for model validation. Calculate the observed minus the fitted values and then divide by the square root of the variance. There shouldn’t be any heteroskedasticity.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">E2 &lt;-<span class="st"> </span><span class="kw">resid</span>(M.gls4, <span class="dt">type =</span> <span class="st">&quot;normalized&quot;</span>)
+<span class="kw">coplot</span>(E2 ~<span class="st"> </span>DML |<span class="st"> </span>fMONTH, <span class="dt">data =</span> Squid,
+       <span class="dt">ylab =</span> <span class="st">&quot;Normalised residuals&quot;</span>)</code></pre></div>
+<p><img src="images/unnamed-chunk-16-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(M.gls4)</code></pre></div>
+<pre><code>## Denom. DF: 764 
+##             numDF   F-value p-value
+## (Intercept)     1 1711.0375  &lt;.0001
+## DML             1  869.0616  &lt;.0001
+## fMONTH          1    2.0289  0.1547
+## DML:fMONTH      1    7.6579  0.0058</code></pre>
+<p>Some notes for picking var functions from the book:</p>
+<ul>
+<li>If the variance covariate is a nominal variable use varIdent.</li>
+<li>varFixed assumes that the variance of the residuals is linearly related to a variance covariate.</li>
+<li>varPower should not be used if the variance covariate takes the value of zero.</li>
+</ul>
+<p>If you want more!</p>
+</div>
+<div id="second-example-benthic-biodiversity-in-nutrient-amended-tanks" class="section level4">
+<h4>Second example: Benthic Biodiversity in nutrient amended tanks</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Biodiversity &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;data/Biodiversity.txt&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">dec=</span><span class="st">&quot;,&quot;</span>) 
+<span class="kw">source</span>(<span class="st">&quot;code/HighstatLibV10.R&quot;</span>)
+
+<span class="kw">library</span>(nlme)</code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    108 obs. of  9 variables:
+##  $ MU           : int  1 1 1 2 2 2 3 3 3 4 ...
+##  $ Mesocosm     : int  1 1 1 2 2 2 3 3 3 4 ...
+##  $ Abundance    : int  0 0 0 4 4 4 8 8 8 8 ...
+##  $ Biomass      : num  0 0 0 0.5 0.5 0.5 1 1 1 1 ...
+##  $ Treatment    : Factor w/ 2 levels &quot;Algae&quot;,&quot;NoAlgae&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ Nutrient     : Factor w/ 3 levels &quot;NH4&quot;,&quot;NO3&quot;,&quot;PO3&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ Concentration: num  2.49 1.19 3.83 3.04 2.19 ...
+##  $ fTreatment   : Factor w/ 2 levels &quot;Algae&quot;,&quot;NoAlgae&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ fNutrient    : Factor w/ 3 levels &quot;NH4&quot;,&quot;NO3&quot;,&quot;PO3&quot;: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
+<p><img src="images/unnamed-chunk-19-1.png" width="672" /><img src="images/unnamed-chunk-19-2.png" width="672" /></p>
+<p><strong>Create several models with different variance covariates</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(nlme)
+
+M0&lt;-<span class="kw">gls</span>(Concentration~Biomass*fTreatment*fNutrient, ## linear model without any variance covariates
+      <span class="dt">data =</span> Biodiv)
+M1A&lt;-<span class="kw">gls</span>(Concentration~Biomass*fTreatment*
+<span class="st">    </span>fNutrient,<span class="dt">weights=</span><span class="kw">varIdent</span>(
+    <span class="dt">form=</span>~<span class="dv">1</span>|fTreatment*fNutrient),
+    <span class="dt">data =</span> Biodiv) ## just one variance covariate per nutrient enrichment combination
+M1B&lt;-<span class="kw">gls</span>(Concentration~Biomass*fTreatment*
+<span class="st">    </span>fNutrient,
+    <span class="dt">weights=</span><span class="kw">varIdent</span>(<span class="dt">form=</span>~<span class="dv">1</span>|fNutrient),
+    <span class="dt">data=</span>Biodiv) ## Nutrient covariates
+M1C&lt;-<span class="kw">gls</span>(Concentration~Biomass*fTreatment*
+<span class="st">    </span>fNutrient,
+    <span class="dt">weights=</span><span class="kw">varIdent</span>(<span class="dt">form=</span>~<span class="dv">1</span>|fTreatment),
+    <span class="dt">data =</span> Biodiv) ## Enrichment covariates
+
+
+<span class="kw">anova</span>(M0,M1A,M1B,M1C)</code></pre></div>
+<pre><code>##     Model df      AIC      BIC    logLik   Test   L.Ratio p-value
+## M0      1 13 534.5203 567.8569 -254.2602                         
+## M1A     2 18 330.1298 376.2881 -147.0649 1 vs 2 214.39054  &lt;.0001
+## M1B     3 15 380.0830 418.5482 -175.0415 2 vs 3  55.95320  &lt;.0001
+## M1C     4 14 439.7639 475.6647 -205.8819 3 vs 4  61.68087  &lt;.0001</code></pre>
+<p>Looks like <code>varIdent</code> is best because nominal variables are important</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(M1A)</code></pre></div>
+<pre><code>## Denom. DF: 96 
+##                              numDF   F-value p-value
+## (Intercept)                      1 205.73777  &lt;.0001
+## Biomass                          1   1.22179  0.2718
+## fTreatment                       1  14.62897  0.0002
+## fNutrient                        2   1.57754  0.2118
+## Biomass:fTreatment               1   0.26657  0.6068
+## Biomass:fNutrient                2   4.17802  0.0182
+## fTreatment:fNutrient             2 121.57149  &lt;.0001
+## Biomass:fTreatment:fNutrient     2   1.09043  0.3402</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(M1A)</code></pre></div>
+<pre><code>## Generalized least squares fit by REML
+##   Model: Concentration ~ Biomass * fTreatment * fNutrient 
+##   Data: Biodiv 
+##        AIC      BIC    logLik
+##   330.1298 376.2881 -147.0649
+## 
+## Variance function:
+##  Structure: Different standard deviations per stratum
+##  Formula: ~1 | fTreatment * fNutrient 
+##  Parameter estimates:
+## NoAlgae*NO3   Algae*NO3 NoAlgae*NH4   Algae*NH4 NoAlgae*PO3   Algae*PO3 
+##   1.0000000   0.5722142   1.4163868   9.4464102   0.4997455   1.2528435 
+## 
+## Coefficients:
+##                                             Value Std.Error   t-value
+## (Intercept)                             13.732722  3.036860  4.522014
+## Biomass                                  2.048667  2.551473  0.802935
+## fTreatmentNoAlgae                      -13.249694  3.070807 -4.314727
+## fNutrientNO3                           -13.626056  3.042426 -4.478681
+## fNutrientPO3                           -11.498913  3.063452 -3.753580
+## Biomass:fTreatmentNoAlgae               -1.447933  2.579994 -0.561216
+## Biomass:fNutrientNO3                    -2.043667  2.556149 -0.799510
+## Biomass:fNutrientPO3                    -1.862453  2.573815 -0.723616
+## fTreatmentNoAlgae:fNutrientNO3          16.022361  3.093064  5.180093
+## fTreatmentNoAlgae:fNutrientPO3          11.430101  3.101272  3.685617
+## Biomass:fTreatmentNoAlgae:fNutrientNO3   0.846933  2.598694  0.325907
+## Biomass:fTreatmentNoAlgae:fNutrientPO3   1.522827  2.605590  0.584446
+##                                        p-value
+## (Intercept)                             0.0000
+## Biomass                                 0.4240
+## fTreatmentNoAlgae                       0.0000
+## fNutrientNO3                            0.0000
+## fNutrientPO3                            0.0003
+## Biomass:fTreatmentNoAlgae               0.5760
+## Biomass:fNutrientNO3                    0.4260
+## Biomass:fNutrientPO3                    0.4711
+## fTreatmentNoAlgae:fNutrientNO3          0.0000
+## fTreatmentNoAlgae:fNutrientPO3          0.0004
+## Biomass:fTreatmentNoAlgae:fNutrientNO3  0.7452
+## Biomass:fTreatmentNoAlgae:fNutrientPO3  0.5603
+## 
+##  Correlation: 
+##                                        (Intr) Biomss fTrtNA fNtNO3 fNtPO3
+## Biomass                                -0.840                            
+## fTreatmentNoAlgae                      -0.989  0.831                     
+## fNutrientNO3                           -0.998  0.839  0.987              
+## fNutrientPO3                           -0.991  0.833  0.980  0.990       
+## Biomass:fTreatmentNoAlgae               0.831 -0.989 -0.840 -0.829 -0.824
+## Biomass:fNutrientNO3                    0.839 -0.998 -0.829 -0.840 -0.831
+## Biomass:fNutrientPO3                    0.833 -0.991 -0.824 -0.831 -0.840
+## fTreatmentNoAlgae:fNutrientNO3          0.982 -0.825 -0.993 -0.984 -0.973
+## fTreatmentNoAlgae:fNutrientPO3          0.979 -0.823 -0.990 -0.977 -0.988
+## Biomass:fTreatmentNoAlgae:fNutrientNO3 -0.825  0.982  0.834  0.826  0.818
+## Biomass:fTreatmentNoAlgae:fNutrientPO3 -0.823  0.979  0.832  0.821  0.830
+##                                        Bm:TNA B:NNO3 B:NPO3 fTNA:NN
+## Biomass                                                            
+## fTreatmentNoAlgae                                                  
+## fNutrientNO3                                                       
+## fNutrientPO3                                                       
+## Biomass:fTreatmentNoAlgae                                          
+## Biomass:fNutrientNO3                    0.987                      
+## Biomass:fNutrientPO3                    0.980  0.990               
+## fTreatmentNoAlgae:fNutrientNO3          0.834  0.826  0.818        
+## fTreatmentNoAlgae:fNutrientPO3          0.832  0.821  0.830  0.983 
+## Biomass:fTreatmentNoAlgae:fNutrientNO3 -0.993 -0.984 -0.973 -0.840 
+## Biomass:fTreatmentNoAlgae:fNutrientPO3 -0.990 -0.977 -0.988 -0.826 
+##                                        fTNA:NP B:TNA:NN
+## Biomass                                                
+## fTreatmentNoAlgae                                      
+## fNutrientNO3                                           
+## fNutrientPO3                                           
+## Biomass:fTreatmentNoAlgae                              
+## Biomass:fNutrientNO3                                   
+## Biomass:fNutrientPO3                                   
+## fTreatmentNoAlgae:fNutrientNO3                         
+## fTreatmentNoAlgae:fNutrientPO3                         
+## Biomass:fTreatmentNoAlgae:fNutrientNO3 -0.826          
+## Biomass:fTreatmentNoAlgae:fNutrientPO3 -0.840   0.983  
+## 
+## Standardized residuals:
+##        Min         Q1        Med         Q3        Max 
+## -2.2905730 -0.5536841 -0.2296708  0.5618761  3.8825074 
+## 
+## Residual standard error: 0.7396985 
+## Degrees of freedom: 108 total; 96 residual</code></pre>
+<p><strong>Drop the three-way interaction term</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M2A1&lt;-<span class="kw">gls</span>(Concentration ~<span class="st"> </span>Biomass +<span class="st"> </span>fTreatment +
+<span class="st">           </span>fNutrient +
+<span class="st">           </span>Biomass:fTreatment +
+<span class="st">           </span>Biomass:fNutrient +
+<span class="st">           </span>fTreatment:fNutrient +
+<span class="st">           </span>Biomass:fTreatment:fNutrient,
+           <span class="dt">weights =</span> <span class="kw">varIdent</span>(<span class="dt">form =</span>~<span class="st"> </span><span class="dv">1</span> |<span class="st"> </span>fTreatment *
+<span class="st">                                         </span>fNutrient),
+           <span class="dt">method =</span> <span class="st">&quot;ML&quot;</span>, <span class="dt">data =</span> Biodiv)
+
+M2A2&lt;-<span class="kw">gls</span>(Concentration ~<span class="st"> </span>Biomass +<span class="st"> </span>fTreatment +
+<span class="st">           </span>Nutrient +
+<span class="st">           </span>Biomass:fTreatment +
+<span class="st">           </span>Biomass:fNutrient +
+<span class="st">           </span>fTreatment:fNutrient,
+           <span class="dt">weights=</span><span class="kw">varIdent</span>(<span class="dt">form =</span>~<span class="st"> </span><span class="dv">1</span> |
+<span class="st">                                      </span>fTreatment*
+<span class="st">                                      </span>fNutrient),
+          <span class="dt">method=</span><span class="st">&quot;ML&quot;</span>, <span class="dt">data =</span> Biodiv)
+
+<span class="kw">anova</span>(M2A1,M2A2)</code></pre></div>
+<pre><code>##      Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+## M2A1     1 18 321.0648 369.3432 -142.5324                        
+## M2A2     2 16 319.4653 362.3794 -143.7327 1 vs 2 2.400507  0.3011</code></pre>
+<p><strong>Next, assess the significance of all three of the two-way interactions using ANOVAs</strong></p>
+<p><em>Drop Biomass:Treatment</em></p>
+<pre><code>##          Model df      AIC      BIC    logLik   Test L.Ratio p-value
+## M3.Full      1 16 319.4653 362.3794 -143.7327                       
+## M3.Drop1     2 15 319.3730 359.6050 -144.6865 1 vs 2 1.90768  0.1672</code></pre>
+<p><em>Drop Biomass:Nutrient</em></p>
+<pre><code>##          Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+## M3.Full      1 16 319.4653 362.3794 -143.7327                        
+## M3.Drop2     2 14 323.2165 360.7664 -147.6083 1 vs 2 7.751179  0.0207</code></pre>
+<p><em>Drop Treatment:Nutrient</em></p>
+<pre><code>##          Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+## M3.Full      1 16 319.4653 362.3794 -143.7327                        
+## M3.Drop3     2 14 403.3288 440.8786 -187.6644 1 vs 2 87.86346  &lt;.0001</code></pre>
+<p>Conclusion: drop Biomass:fTreatment</p>
+<p><strong>Alternative coding</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fFull&lt;-<span class="kw">formula</span>(Concentration~Biomass+fTreatment+fNutrient+
+<span class="st">          </span>Biomass:fTreatment+
+<span class="st">          </span>Biomass:fNutrient+
+<span class="st">          </span>fTreatment:fNutrient)
+          
+M3.Full&lt;-<span class="kw">gls</span>(fFull,
+          <span class="dt">weights=</span>vfOptim,
+          <span class="dt">method=</span><span class="st">&quot;ML&quot;</span>,<span class="dt">data=</span>Biodiv)
+
+
+<span class="co">#Drop Biomass:fTreatment</span>
+M3.Drop1&lt;-<span class="kw">update</span>(M3.Full,.~.-Biomass:fTreatment)
+<span class="kw">anova</span>(M3.Full,M3.Drop1)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Drop Biomass:fNutrient</span>
+M3.Drop2&lt;-<span class="kw">update</span>(M3.Full,.~.-Biomass:fNutrient)
+<span class="kw">anova</span>(M3.Full,M3.Drop2)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#fTreatment:fNutrient</span>
+M3.Drop3&lt;-<span class="kw">update</span>(M3.Full,.~.-fTreatment:fNutrient)
+<span class="kw">anova</span>(M3.Full,M3.Drop3)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">##Full model
+M4.Full&lt;-<span class="kw">gls</span>(Concentration~Biomass+fTreatment+fNutrient+
+<span class="st">          </span>Biomass:fNutrient+
+<span class="st">          </span>fTreatment:fNutrient,
+          <span class="dt">weights=</span>vfOptim,
+          <span class="dt">method=</span><span class="st">&quot;ML&quot;</span>,<span class="dt">data=</span>Biodiv)
+
+<span class="co">#Drop Biomass:fNutrient</span>
+M4.Drop1 &lt;-<span class="st"> </span><span class="kw">update</span>(M4.Full, .~. -Biomass:fNutrient )
+<span class="kw">anova</span>(M4.Full,M4.Drop1)
+
+<span class="co">#Drop fTreatment:fNutrient</span>
+M4.Drop2 &lt;-<span class="st"> </span><span class="kw">update</span>(M4.Full, .~. -fTreatment:fNutrient )
+<span class="kw">anova</span>(M4.Full,M4.Drop2)</code></pre></div>
+<p><strong>Continue dropping variables</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M5.Full&lt;-<span class="kw">gls</span>(Concentration~Biomass+fTreatment+fNutrient+
+<span class="st">          </span>fTreatment:fNutrient,
+          <span class="dt">weights=</span>vfOptim,
+          <span class="dt">method=</span><span class="st">&quot;ML&quot;</span>,<span class="dt">data=</span>Biodiv)
+
+<span class="co">#Drop fTreatment:fNutrient</span>
+M5.Drop1 &lt;-<span class="st"> </span><span class="kw">update</span>(M5.Full, .~. -fTreatment:fNutrient)
+<span class="kw">anova</span>(M5.Full,M5.Drop1)</code></pre></div>
+<pre><code>##          Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+## M5.Full      1 13 321.7872 356.6549 -147.8936                        
+## M5.Drop1     2 11 406.7950 436.2985 -192.3975 1 vs 2 89.00786  &lt;.0001</code></pre>
+<p><strong>Drop Biomass</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M5.Drop2 &lt;-<span class="st"> </span><span class="kw">update</span>(M5.Full, .~. -Biomass)
+<span class="kw">anova</span>(M5.Full,M5.Drop2)</code></pre></div>
+<pre><code>##          Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+## M5.Full      1 13 321.7872 356.6549 -147.8936                        
+## M5.Drop2     2 12 321.2595 353.4450 -148.6297 1 vs 2 1.472279   0.225</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#New full model</span>
+M6.Full&lt;-<span class="kw">gls</span>(Concentration~fTreatment+fNutrient+
+<span class="st">          </span>fTreatment:fNutrient,
+          <span class="dt">weights=</span>vfOptim,
+          <span class="dt">method=</span><span class="st">&quot;ML&quot;</span>,<span class="dt">data=</span>Biodiv)
+
+M6.Drop1 &lt;-<span class="st"> </span><span class="kw">update</span>(M6.Full, .~. -fTreatment:fNutrient)
+<span class="kw">anova</span>(M6.Full,M6.Drop1)</code></pre></div>
+<pre><code>##          Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+## M6.Full      1 12 321.2595 353.4450 -148.6297                        
+## M6.Drop1     2 10 406.0323 432.8536 -193.0161 1 vs 2 88.77283  &lt;.0001</code></pre>
+<div id="the-aftermath" class="section level5">
+<h5>The aftermath</h5>
+<p>Final model after insignificant variables are dropped</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MFinal&lt;-<span class="kw">gls</span>(Concentration~fTreatment+fNutrient+
+<span class="st">          </span>fTreatment:fNutrient,
+          <span class="dt">weights=</span>vfOptim,
+          <span class="dt">method=</span><span class="st">&quot;REML&quot;</span>,<span class="dt">data=</span>Biodiv)
+
+
+E&lt;-<span class="kw">resid</span>(MFinal,<span class="dt">type=</span><span class="st">&quot;normalized&quot;</span>)
+Fit=<span class="kw">fitted</span>(MFinal)
+
+op&lt;-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
+<span class="kw">plot</span>(<span class="dt">x=</span>Fit,<span class="dt">y=</span>E,<span class="dt">xlab=</span><span class="st">&quot;Fitted values&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;Residuals&quot;</span>,
+<span class="dt">main=</span><span class="st">&quot;Residuals versus fitted values&quot;</span>)
+<span class="co">#identify(Fit,E)</span>
+<span class="kw">hist</span>(E,<span class="dt">nclass=</span><span class="dv">15</span>)</code></pre></div>
+<p><img src="images/unnamed-chunk-34-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(op)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(MFinal)</code></pre></div>
+<pre><code>## Generalized least squares fit by REML
+##   Model: Concentration ~ fTreatment + fNutrient + fTreatment:fNutrient 
+##   Data: Biodiv 
+##        AIC      BIC    logLik
+##   327.9174 359.4171 -151.9587
+## 
+## Variance function:
+##  Structure: Different standard deviations per stratum
+##  Formula: ~1 | fTreatment * fNutrient 
+##  Parameter estimates:
+## NoAlgae*NO3   Algae*NO3 NoAlgae*NH4   Algae*NH4 NoAlgae*PO3   Algae*PO3 
+##   1.0000000   0.5010466   1.3323362   8.4363584   0.4860658   1.1073351 
+## 
+## Coefficients:
+##                                    Value Std.Error   t-value p-value
+## (Intercept)                     15.78139  1.629670  9.683792       0
+## fTreatmentNoAlgae              -14.69763  1.649868 -8.908365       0
+## fNutrientNO3                   -15.66972  1.632542 -9.598358       0
+## fNutrientPO3                   -13.36137  1.643649 -8.129088       0
+## fTreatmentNoAlgae:fNutrientNO3  16.86929  1.663956 10.138067       0
+## fTreatmentNoAlgae:fNutrientPO3  12.95293  1.666324  7.773353       0
+## 
+##  Correlation: 
+##                                (Intr) fTrtNA fNtNO3 fNtPO3 fTNA:NN
+## fTreatmentNoAlgae              -0.988                             
+## fNutrientNO3                   -0.998  0.986                      
+## fNutrientPO3                   -0.991  0.979  0.990               
+## fTreatmentNoAlgae:fNutrientNO3  0.979 -0.992 -0.981 -0.971        
+## fTreatmentNoAlgae:fNutrientPO3  0.978 -0.990 -0.976 -0.986  0.982 
+## 
+## Standardized residuals:
+##        Min         Q1        Med         Q3        Max 
+## -2.2062707 -0.6078788 -0.2069959  0.5250832  4.0019026 
+## 
+## Residual standard error: 0.8195605 
+## Degrees of freedom: 108 total; 102 residual</code></pre>
+<p>Explore findings graphically</p>
+<p><img src="images/unnamed-chunk-36-1.png" width="672" /></p>
+<p><img src="images/unnamed-chunk-37-1.png" width="672" /></p>
+<p><img src="images/unnamed-chunk-38-1.png" width="672" /></p>
+</div>
+</div>
 </div>
 <div id="discussion-questions" class="section level3">
 <h3>Discussion Questions</h3>
+<ul>
+<li>Are there other ways you deal with heterskedasticity/heterogeneity in regressions?</li>
+<li>Are there faster methods for eliminating interactions and variables than shown in the text? What if you have a lot of random/explanatory variables?</li>
+<li>Are there other types of heterskedasticity you deal with in your data?</li>
+</ul>
 </div>
 
 
@@ -557,7 +1101,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
