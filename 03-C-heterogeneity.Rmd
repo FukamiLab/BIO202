@@ -56,8 +56,8 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
      + $\epsilon_{ij} \sim N(0, \sigma^2 \times |\mathrm{DML}_{ij}|^{2\delta_j})$
   + `V1<-varExp(form =∼ DML)`
      + $\epsilon_{ij} \sim N(0, \sigma^2 \times e^{2 \delta \times \mathrm{DML}_{ij}})$
-  + `V1<-varConstPower(form =∼ DML) `
-     + $\epsilon_{ij} \sim N(0, \sigma^2 \times (\delta_1 + |\mathrm{DML}_{ij}|^{\delta_2}^2))$
+  + `V1<-varConstPower(form =∼ DML)`
+     + $\epsilon_{ij} \sim N(0, \sigma^2 \times (\delta_1 + |\mathrm{DML}_{ij}|^{\delta_2})^2)$
   + `V1<-varComb(varIdent(form =∼ 1 | fMONTH), varExp(form =∼ DML))`
      + $\epsilon_{ij} \sim N(0, \sigma^2_j \times e^{2 \delta \times \mathrm{DML}_{ij}})$
 
