@@ -524,6 +524,73 @@ div.tocify {
 </blockquote>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<div id="from-chapter-2" class="section level4">
+<h4>From Chapter 2</h4>
+<p>“In none of these [35] real data sets could we find a non-trivial example for a linear regression model for which all assumptions held.”</p>
+</div>
+<div id="heterogeneity" class="section level4">
+<h4>Heterogeneity</h4>
+<ul>
+<li><p>One frequently violated assumption = homogeneity, i.e., that residuals are normally distributed with a mean of 0 and a fixed variace, σ2:</p>
+<ul>
+<li>Yi= α + β1<em>X1i + β2</em>X2i + εi</li>
+<li>εi~N(0,σ2)</li>
+</ul></li>
+<li><p>How to check for homogeneity Residuals vs. fitted values (Fig 4.2a)</p></li>
+<li><p>How to identify source of variation in residuals Residuals vs. explanatory variables (Fig. 4.2b, c)</p></li>
+</ul>
+</div>
+<div id="many-variance-structures-table-4.1" class="section level4">
+<h4>Many variance structures (Table 4.1)</h4>
+<ul>
+<li><code>V1&lt;-varFixed(∼DML)</code>
+<ul>
+<li>εi ∼ N(0, σ2 × DMLi ) i = 1, . . . , 768</li>
+</ul></li>
+<li><code>V1&lt;-varIdent(form= ∼ 1 | fMONTH)</code>
+<ul>
+<li>εi j ∼ N(0, σ2j ) j = 1, . . . , 12</li>
+</ul></li>
+<li><code>V1&lt;-varPower(form =∼ DML)</code>
+<ul>
+<li>εij ∼ N(0, σ2 × |DMLi|^2δ)</li>
+</ul></li>
+<li><code>V1&lt;-varPower(form =∼ DML | fMONTH)</code>
+<ul>
+<li>εij ∼ N(0, σ2 × |DMLij|^2δ)</li>
+</ul></li>
+<li><code>V1&lt;-varExp(form =∼ DML)</code>
+<ul>
+<li>εij ∼ N(0, σ2 × e^(2δ×DMLi) )</li>
+</ul></li>
+<li><code>V1&lt;-varConstPower(form =∼ DML)</code>
+<ul>
+<li>εij ∼ N(0, σ2 × (δ1 + |DMLij|^δ2 )^2</li>
+</ul></li>
+<li><code>V1&lt;-varComb(varIdent(form =∼ 1 | fMONTH), varExp(form =∼ DML))</code>
+<ul>
+<li>εij ∼ N(0, σ2j × e^(2δ×DMLij) )</li>
+</ul></li>
+</ul>
+<p>How to choose variance structure? - AIC, e.g., <code>AIC(M.lm, M.gls1, M.gls2)</code></p>
+</div>
+<div id="suggested-protocol" class="section level4">
+<h4>Suggested protocol</h4>
+<ol style="list-style-type: decimal">
+<li>Fit a full model</li>
+<li>Plot standardized residuals vs. each predictor
+<ul>
+<li>If variance shows a relationship with any predictor, re-fit model with a modified variance structure.</li>
+</ul></li>
+<li>Compare models using AIC or LR test
+<ul>
+<li>If better, extract standardized residuals, plot against other factors, and continue to modify variance structure.</li>
+</ul></li>
+<li>Remove non-significant terms from fixed effects, re-examine residual plots (iterative process)</li>
+<li>Interpret</li>
+</ol>
+<hr />
+</div>
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
