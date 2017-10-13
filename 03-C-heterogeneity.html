@@ -576,8 +576,8 @@ div.tocify {
 <ul>
 <li><p>One frequently violated assumption = homogeneity, i.e., that residuals are normally distributed with a mean of 0 and a fixed variace, σ2:</p>
 <ul>
-<li>Yi= α + β1<em>X1i + β2</em>X2i + εi</li>
-<li>εi~N(0,σ2)</li>
+<li><span class="math inline">\(Y_i = \alpha + \beta_1 X_{1i} + \beta_2 X_{2i} + \epsilon_i\)</span></li>
+<li><span class="math inline">\(\epsilon_i \sim N(0, \sigma^2)\)</span></li>
 </ul></li>
 <li><p>How to check for homogeneity Residuals vs. fitted values (Fig 4.2a)</p></li>
 <li><p>How to identify source of variation in residuals Residuals vs. explanatory variables (Fig. 4.2b, c)</p></li>
@@ -588,31 +588,31 @@ div.tocify {
 <ul>
 <li><code>V1&lt;-varFixed(∼DML)</code>
 <ul>
-<li>εi ∼ N(0, σ2 × DMLi ) i = 1, . . . , 768</li>
+<li><span class="math inline">\(\epsilon_i \sim N(0, \sigma^2 \times \mathrm{DML}_i) \ \ i = 1, \ldots, 768\)</span></li>
 </ul></li>
 <li><code>V1&lt;-varIdent(form= ∼ 1 | fMONTH)</code>
 <ul>
-<li>εi j ∼ N(0, σ2j ) j = 1, . . . , 12</li>
+<li><span class="math inline">\(\epsilon_{ij} \sim N(0, \sigma^{2j} \times \mathrm{DML}_i) \ \ j = 1, \ldots, 12\)</span></li>
 </ul></li>
 <li><code>V1&lt;-varPower(form =∼ DML)</code>
 <ul>
-<li>εij ∼ N(0, σ2 × |DMLi|^2δ)</li>
+<li><span class="math inline">\(\epsilon_{ij} \sim N(0, \sigma^2 \times |\mathrm{DML}_i|^{2\delta})\)</span></li>
 </ul></li>
 <li><code>V1&lt;-varPower(form =∼ DML | fMONTH)</code>
 <ul>
-<li>εij ∼ N(0, σ2 × |DMLij|^2δ)</li>
+<li><span class="math inline">\(\epsilon_{ij} \sim N(0, \sigma^2 \times |\mathrm{DML}_{ij}|^{2\delta_j})\)</span></li>
 </ul></li>
 <li><code>V1&lt;-varExp(form =∼ DML)</code>
 <ul>
-<li>εij ∼ N(0, σ2 × e^(2δ×DMLi) )</li>
+<li><span class="math inline">\(\epsilon_{ij} \sim N(0, \sigma^2 \times e^{2 \delta \times \mathrm{DML}_{ij}})\)</span></li>
 </ul></li>
 <li><code>V1&lt;-varConstPower(form =∼ DML)</code>
 <ul>
-<li>εij ∼ N(0, σ2 × (δ1 + |DMLij|^δ2 )^2</li>
+<li><span class="math inline">\(\epsilon_{ij} \sim N(0, \sigma^2 \times (\delta_1 + |\mathrm{DML}_{ij}|^{\delta_2})^2)\)</span></li>
 </ul></li>
 <li><code>V1&lt;-varComb(varIdent(form =∼ 1 | fMONTH), varExp(form =∼ DML))</code>
 <ul>
-<li>εij ∼ N(0, σ2j × e^(2δ×DMLij) )</li>
+<li><span class="math inline">\(\epsilon_{ij} \sim N(0, \sigma^2_j \times e^{2 \delta \times \mathrm{DML}_{ij}})\)</span></li>
 </ul></li>
 </ul>
 <p>How to choose variance structure? - AIC, e.g., <code>AIC(M.lm, M.gls1, M.gls2)</code></p>
@@ -644,8 +644,13 @@ div.tocify {
 <div id="example-1-squid-testis-weight-v.-dorsal-mantle-length" class="section level4">
 <h4>Example 1: Squid testis weight v. dorsal mantle length</h4>
 <p>Load the data, relevant code, and libraries.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Squid &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;data/Squid.txt&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">dec=</span><span class="st">&quot;,&quot;</span>) 
-<span class="kw">source</span>(<span class="st">&quot;code/HighstatLibV10.R&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read in files from local copies on your computer</span>
+Squid &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;data/Squid.txt&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">dec=</span><span class="st">&quot;.&quot;</span>) 
+<span class="kw">source</span>(<span class="st">&quot;code/HighstatLibV10.R&quot;</span>)
+
+<span class="co"># If you do not have these files on your computer use:</span>
+Squid &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;https://raw.githubusercontent.com/fukamilab/BIO202/master/data/Squid.txt&quot;</span>, <span class="dt">header =</span> T)
+<span class="kw">source</span>(<span class="st">&quot;https://raw.githubusercontent.com/fukamilab/BIO202/master/code/HighstatLibV10.R&quot;</span>)</code></pre></div>
 <p>A good first step is to investigate structure of the Squid data set.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(Squid)</code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    768 obs. of  6 variables:
@@ -728,16 +733,16 @@ M.gls2 &lt;-<span class="st"> </span><span class="kw">gls</span>(Testisweight ~<
 ##  Formula: ~1 | fMONTH 
 ##  Parameter estimates:
 ##         2         9        12        11         8        10         5 
-## 1.0000000 2.0240070 1.0331137 1.0370932 2.4282018 1.4202513 1.7449295 
+## 1.0000000 2.0240109 1.0331145 1.0370954 2.4282000 1.4202508 1.7449301 
 ##         7         6         4         1         3 
-## 1.7786732 1.4326270 0.9858497 2.3423333 1.2697344 
+## 1.7786756 1.4326296 0.9858501 2.3423366 1.2697356 
 ## 
 ## Coefficients:
 ##                  Value Std.Error   t-value p-value
-## (Intercept) -0.8912961 0.7607499 -1.171602  0.2417
-## DML          0.0197630 0.0028702  6.885595  0.0000
-## fMONTH      -0.6514433 0.0894567 -7.282216  0.0000
-## DML:fMONTH   0.0035094 0.0003502 10.021619  0.0000
+## (Intercept) -0.8912931 0.7607497 -1.171598  0.2417
+## DML          0.0197630 0.0028702  6.885594  0.0000
+## fMONTH      -0.6514436 0.0894567 -7.282221  0.0000
+## DML:fMONTH   0.0035094 0.0003502 10.021623  0.0000
 ## 
 ##  Correlation: 
 ##            (Intr) DML    fMONTH
@@ -747,9 +752,9 @@ M.gls2 &lt;-<span class="st"> </span><span class="kw">gls</span>(Testisweight ~<
 ## 
 ## Standardized residuals:
 ##         Min          Q1         Med          Q3         Max 
-## -4.22130363 -0.81016158 -0.07261451  0.64362148  4.50320233 
+## -4.22130538 -0.81016250 -0.07261459  0.64362145  4.50319775 
 ## 
-## Residual standard error: 2.02763 
+## Residual standard error: 2.027628 
 ## Degrees of freedom: 768 total; 764 residual</code></pre>
 <p>Let’s look at the residuals across months to further investigate. Graphs yay!</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lattice)
@@ -796,7 +801,7 @@ M.gls8&lt;-<span class="kw">gls</span>(Testisweight ~<span class="st"> </span>DM
 ## M.gls4     5 17 3710.649 3789.505 -1838.324 4 vs 5  58.39022  &lt;.0001
 ## M.gls5     6  6 3769.062 3796.893 -1878.531 5 vs 6  80.41269  &lt;.0001
 ## M.gls6     7  7 3749.039 3781.509 -1867.520 6 vs 7  22.02218  &lt;.0001
-## M.gls7     8 29 3734.649 3869.168 -1838.325 7 vs 8  58.39033  &lt;.0001
+## M.gls7     8 29 3734.649 3869.168 -1838.325 7 vs 8  58.39034  &lt;.0001
 ## M.gls8     9 17 3728.888 3807.744 -1847.444 8 vs 9  18.23897  0.1086</code></pre>
 <p>Ooh la la looks like varPower(form=~ DML | fMONTH) is the best model</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(M.lm,M.gls4)</code></pre></div>
@@ -817,10 +822,10 @@ M.gls8&lt;-<span class="kw">gls</span>(Testisweight ~<span class="st"> </span>DM
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(M.gls4)</code></pre></div>
 <pre><code>## Denom. DF: 764 
 ##             numDF   F-value p-value
-## (Intercept)     1 1711.0375  &lt;.0001
-## DML             1  869.0616  &lt;.0001
-## fMONTH          1    2.0289  0.1547
-## DML:fMONTH      1    7.6579  0.0058</code></pre>
+## (Intercept)     1 1711.0397  &lt;.0001
+## DML             1  869.0627  &lt;.0001
+## fMONTH          1    2.0290  0.1547
+## DML:fMONTH      1    7.6577  0.0058</code></pre>
 <p>Some notes for picking var functions from the book:</p>
 <ul>
 <li>If the variance covariate is a nominal variable use varIdent.</li>
@@ -842,7 +847,7 @@ M.gls8&lt;-<span class="kw">gls</span>(Testisweight ~<span class="st"> </span>DM
 ##  $ Biomass      : num  0 0 0 0.5 0.5 0.5 1 1 1 1 ...
 ##  $ Treatment    : Factor w/ 2 levels &quot;Algae&quot;,&quot;NoAlgae&quot;: 2 2 2 2 2 2 2 2 2 2 ...
 ##  $ Nutrient     : Factor w/ 3 levels &quot;NH4&quot;,&quot;NO3&quot;,&quot;PO3&quot;: 2 2 2 2 2 2 2 2 2 2 ...
-##  $ Concentration: num  2.49 1.19 3.83 3.04 2.19 ...
+##  $ Concentration: num  2.49 1.18 3.83 3.04 2.19 ...
 ##  $ fTreatment   : Factor w/ 2 levels &quot;Algae&quot;,&quot;NoAlgae&quot;: 2 2 2 2 2 2 2 2 2 2 ...
 ##  $ fNutrient    : Factor w/ 3 levels &quot;NH4&quot;,&quot;NO3&quot;,&quot;PO3&quot;: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
 <p><img src="images/03-C/unnamed-chunk-19-1.png" width="672" /><img src="images/03-C/unnamed-chunk-19-2.png" width="672" /></p>
