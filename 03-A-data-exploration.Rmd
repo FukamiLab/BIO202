@@ -73,9 +73,12 @@ Not all steps always needed
 
 
 ### Analysis Example
-```{r, include=FALSE, eval=TRUE}
+
+The code below relies on the `phyloseq` package from [Bioconductor](https://www.bioconductor.org/). See these [instructions](https://joey711.github.io/phyloseq/install.html) for how to install it.
+
+```{r, include=FALSE, eval=FALSE}
 # Load packages
-library(phyloseq)
+library(phyloseq) # from Bioconducter - see instructions for installing
 library(readr)
 library(lattice)
 library(qpcR)
