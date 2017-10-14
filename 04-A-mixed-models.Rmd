@@ -53,7 +53,13 @@ data[ ,1] = proportion of forest cover at 100m radius around sampling site where
 data[ ,3] = the specialization (d') value for each species at each site
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-data <- read.csv(file = "/Users/Beth/Documents/BIO202_2017/data/Specialization_Data_BIO202.csv", header = TRUE)
+#data <- read.csv(file = "/Users/Beth/Documents/BIO202_2017/data/Specialization_Data_BIO202.csv", header = TRUE)
+
+# Beth's data are not availale on our class GitHub repository. 
+# To use this script, download the data from our class Canvas site and place it in the data folder of your working directory.
+# Use this line if you downloaded the data file to the data directory on your computer
+data <- read.csv(file = "data/Specialization_Data_BIO202.csv", header = TRUE)
+
 head(data)
 ```
 
@@ -185,6 +191,43 @@ for(i in 1:length(thirteen2)) {
 }
 
 ```
+<<<<<<< HEAD
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+fixed.effects(Mlme2)
+```
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+random.effects(Mlme2) ## gives the intercept and slope adjustment to the population curve for each hummingbird species. To get the intercept and slope for each individual species you add each species' values below to the fixed effects values (i.e. the population curve values) given above. 
+```
+
+In practical terms, what these numbers mean is that if you were to catch a hummingbird in a site with no forest cover whatsoever (the intercept) and you didn't know what species it was, you would predict that its specialization would be 0.27 because that's the population estimate for all hummingbird species in general. However, if you caught, say, a Garden Emerald hummingbird in a site with no forest cover, because you know the species, you predict that its specialization is 0.27 + 0.14 = 0.41, which is a higher specialization than the population estimate. 
+
+#### Random Effects Model
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+Mlme3 <- lme(Specialization ~ 1, random = ~1|fSpecies, data = data, weights = vf3) 
+summary(Mlme3)
+```
+
+Comparing our models with AIC
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+AIC(M.gls3, Mlme1, Mlme2, Mlme3)
+```
+
+Using this approach we would select our random intercept and random slope model (Mlme2) because it has the lowest AIC
+
+Fitting the final model with Restricted Maximum Liklihood 
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+M1 <- lme(Form, random = ~1 + Polygon.Area.100|fSpecies, data = data, weights = vf3, method = "REML")
+summary(M1)
+```
+
+#### Conclusions 
+
+=======
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 fixed.effects(Mlme2)
@@ -228,7 +271,6 @@ We now have evidence that hummingbird species' specialization, in general, incre
 + If we have data that is nested, must we always use a mixed effects model? What other analytical approaches might provide the same kind of information as MEMs (alternatives)?
 + Honestly, what is the deal with Maximum Liklihood vs. Restricted Maximum Liklihood?
 +Biologically, when would you expect to use the random intercept only model? 
-
 
 
 
