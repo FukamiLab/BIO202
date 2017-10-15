@@ -30,7 +30,55 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
+#### From Chapter 2
+"In none of these [35] real data sets could we find a non-trivial example for a linear regression model for which all assumptions held."
 
+#### Heterogeneity
++ One frequently violated assumption = homogeneity, i.e., that residuals are normally distributed with a mean of 0 and a fixed variace, σ2:
+
+    + $Y_i = \alpha + \beta_1 X_{1i} + \beta_2 X_{2i} + \epsilon_i$
+    + $\epsilon_i \sim N(0, \sigma^2)$
+
++ How to check for homogeneity
+    
+    Residuals vs. fitted values (Fig 4.2a)
+
++ How to identify source of variation in residuals
+    
+    Residuals vs. explanatory variables (Fig. 4.2b, c)
+
+#### Many variance structures (Table 4.1)
+  + `V1<-varFixed(∼DML)`
+     + $\epsilon_i \sim N(0, \sigma^2 \times \mathrm{DML}_i) \ \ i = 1, \ldots, 768$
+  + `V1<-varIdent(form= ∼ 1 | fMONTH)`
+     + $\epsilon_{ij} \sim N(0, \sigma_j^{2}) \ \ j = 1, \ldots, 12$
+  + `V1<-varPower(form =∼ DML)`
+     + $\epsilon_{ij} \sim N(0, \sigma^2 \times |\mathrm{DML}_i|^{2\delta})$
+  + `V1<-varPower(form =∼ DML | fMONTH)`
+     + $\epsilon_{ij} \sim N(0, \sigma^2 \times |\mathrm{DML}_{ij}|^{2\delta_j})$
+  + `V1<-varExp(form =∼ DML)`
+     + $\epsilon_{ij} \sim N(0, \sigma^2 \times e^{2 \delta \times \mathrm{DML}_{ij}})$
+  + `V1<-varConstPower(form =∼ DML)`
+     + $\epsilon_{ij} \sim N(0, \sigma^2 \times (\delta_1 + |\mathrm{DML}_{ij}|^{\delta_2})^2)$
+  + `V1<-varComb(varIdent(form =∼ 1 | fMONTH), varExp(form =∼ DML))`
+     + $\epsilon_{ij} \sim N(0, \sigma^2_j \times e^{2 \delta \times \mathrm{DML}_{ij}})$
+     
+
+How to choose variance structure? - AIC, e.g., `AIC(M.lm, M.gls1, M.gls2)`
+
+#### Suggested protocol
+1. Fit a full model
+2. Plot standardized residuals vs. each predictor
+    + If variance shows a relationship with any predictor,
+      re-fit model with a modified variance structure.
+3. Compare models using AIC or LR test
+    + If better, extract standardized residuals, plot against other factors,
+      and continue to modify variance structure.
+4. Remove non-significant terms from fixed effects, re-examine residual plots (iterative process)
+5. Interpret
+
+
+*** 
 
 ### Analysis Example
 
@@ -48,13 +96,17 @@ Code and data from _Mixed Effects Models and Extensions in Ecology with R_ (2009
 Load the data, relevant code, and libraries.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-Squid <- read.table(file = "data/Squid.txt", header = TRUE, dec=",") 
+# Read in files from local copies on your computer
+Squid <- read.table(file = "data/Squid.txt", header = TRUE, dec=".") 
 source("code/HighstatLibV10.R")
+
+# If you do not have these files on your computer use:
+Squid <- read.table("https://raw.githubusercontent.com/fukamilab/BIO202/master/data/Squid.txt", header = T)
+source("https://raw.githubusercontent.com/fukamilab/BIO202/master/code/HighstatLibV10.R")
 ```
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
-Squid$fMONTH=as.numeric(Squid$MONTH)
-Squid$Testisweight=as.numeric(levels(Squid$Testisweight))[Squid$Testisweight]
+Squid$fMONTH=factor(Squid$MONTH)
 ```
 
 A good first step is to investigate structure of the Squid data set. 

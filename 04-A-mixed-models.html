@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Tad" />
+<meta name="author" content="Tad &amp; Beth" />
 
 
 <title>Mixed-effects models with nested data</title>
@@ -26,6 +26,49 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
 
 
 <style type="text/css">
@@ -513,7 +556,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Mixed-effects models with nested data</h1>
-<h4 class="author"><em>Tad</em></h4>
+<h4 class="author"><em>Tad &amp; Beth</em></h4>
 
 </div>
 
@@ -527,9 +570,412 @@ div.tocify {
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
+<p>The data: 19 plant-hummingbird networks - hummingbirds using plants as nectar resources 19 sites with increasing proportion of forest cover in 100m radius around sampling site (forest is replaced with coffee agriculture in the study region) 13 hummingbird species Plant-hummingbird networks used to calculate hummingbird species’ specialization</p>
+<p>Hummingbird species specialization measured using z-score standardized d’ values One d’ value for each species at each site The greater the d’ value, the more specialized the species</p>
+<div id="question-is-there-a-relationship-between-hummingbird-species-specialization-and-forest-cover" class="section level4">
+<h4>Question: Is there a relationship between hummingbird species specialization and forest cover?</h4>
+<p>Load the data</p>
+<p>This is a dataset of 3 columns: data[ ,1] = proportion of forest cover at 100m radius around sampling site where hummingbird species was caught data[ ,2] = each hummingbird species as a factor at each site it was caught data[ ,3] = the specialization (d’) value for each species at each site</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#data &lt;- read.csv(file = &quot;/Users/Beth/Documents/BIO202_2017/data/Specialization_Data_BIO202.csv&quot;, header = TRUE)</span>
+
+<span class="co"># Beth&#39;s data are not availale on our class GitHub repository. </span>
+<span class="co"># To use this script, download the data from our class Canvas site and place it in the data folder of your working directory.</span>
+<span class="co"># Use this line if you downloaded the data file to the data directory on your computer</span>
+data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> <span class="st">&quot;data/Specialization_Data_BIO202.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)
+
+<span class="kw">head</span>(data)</code></pre></div>
+<pre><code>##   Polygon.Area.100                  fSpecies Specialization
+## 1                1      Charming.Hummingbird      -0.574054
+## 2                1              Green.Hermit       8.986848
+## 3                1 Rufous.tailed.Hummingbird       1.360791
+## 4                1 Snowy.bellied.Hummingbird       1.980888
+## 5                1    Stripe.throated.Hermit       2.902282
+## 6                1  Violet.crowned.Woodnymph       1.662080</code></pre>
+<p>Originally when I did this analysis I followed Zuur et al.’s “10-step process” in the book starting on pg. 130. I do not outline all the steps I took here, but I found it useful in case any of you are interested for future reference.</p>
+<p>All analayses are done using the package ‘nlme’</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(nlme)</code></pre></div>
+<p>Since I want to know if hummingbird specialization changes with increasing forest cover, I can start with a simple linear regression</p>
+<p>Side note: instead of using the lm() function for my linear model, I use the gls() function in case I need to add a variance later on, this way I can compare the model with no variance structure to the model with the variance structure.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Form &lt;-<span class="st"> </span>Specialization ~<span class="st"> </span>Polygon.Area<span class="fl">.100</span>
+M.lm &lt;-<span class="st"> </span><span class="kw">gls</span>(Form, <span class="dt">data =</span> data)
+<span class="kw">plot</span>(Form, <span class="dt">data =</span> data, <span class="dt">xlab =</span> <span class="st">&quot;Forest Cover (100m)&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Specialization (d&#39;)&quot;</span>)
+<span class="kw">abline</span>(M.lm, <span class="dt">lwd =</span> <span class="dv">4</span>)</code></pre></div>
+<p><img src="images/04-A/unnamed-chunk-4-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(M.lm)</code></pre></div>
+<p><img src="images/04-A/unnamed-chunk-5-1.png" width="672" /></p>
+<p>The cone shape in my residuals illustrates that my data are violating the assumption of homogeneity, so I will apply a variance structure to hopefully take care of this.</p>
+<p>The best variance structure I found was the varPower structure</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vf3 &lt;-<span class="st"> </span><span class="kw">varPower</span>(<span class="dt">form =</span> ~Polygon.Area<span class="fl">.100</span>)
+M.gls3 &lt;-<span class="st"> </span><span class="kw">gls</span>(Specialization ~<span class="st"> </span>Polygon.Area<span class="fl">.100</span>, <span class="dt">weights =</span> vf3, <span class="dt">data =</span> data)
+<span class="kw">AIC</span>(M.lm, M.gls3) ## we used the gls function earlier instead of the lm function so we can do this anova</code></pre></div>
+<pre><code>##        df      AIC
+## M.lm    3 908.2300
+## M.gls3  4 851.0649</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(M.gls3) ## you can see the residuals are now less cone-y</code></pre></div>
+<p><img src="images/04-A/unnamed-chunk-7-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(M.gls3)</code></pre></div>
+<pre><code>## Generalized least squares fit by REML
+##   Model: Specialization ~ Polygon.Area.100 
+##   Data: data 
+##        AIC      BIC    logLik
+##   851.0649 863.4399 -421.5325
+## 
+## Variance function:
+##  Structure: Power of variance covariate
+##  Formula: ~Polygon.Area.100 
+##  Parameter estimates:
+##     power 
+## 0.7317331 
+## 
+## Coefficients:
+##                     Value Std.Error  t-value p-value
+## (Intercept)      0.193740 0.3090522 0.626885  0.5316
+## Polygon.Area.100 4.830138 0.8255718 5.850657  0.0000
+## 
+##  Correlation: 
+##                  (Intr)
+## Polygon.Area.100 -0.791
+## 
+## Standardized residuals:
+##        Min         Q1        Med         Q3        Max 
+## -1.5689357 -0.6917083 -0.3274916  0.5277962  2.7803202 
+## 
+## Residual standard error: 5.450152 
+## Degrees of freedom: 165 total; 163 residual</code></pre>
+<p>From the model with the variance structure we can tell that it looks like there is a relationship between hummingbird species specialization and amount of forest cover, so that’s neat.</p>
+<p>Biologically, however, it’s totally possible that each of the 13 hummingbird species has its own relationship between specialization and forest cover. For example, a morphologically specialized hummingbird species that has a really long, curved beak may not be able to display the same degree of change in its specialization as a hummingbird with a medium-length, straight beak.</p>
+<p>In addition, as with the example of the RIKZ data from 5 beaches in the Zuur book Chp. 5, the specialization values of each hummingbird species across the sites are likely to be more related to each other than to the specialization values of other hummingbird species. This makes the data nested.</p>
+<p>Thus, a mixed effects model for nested data is applicable in this case! And, can tell us something neat about the biology as well (hopefully).</p>
+</div>
+<div id="random-intercept-model" class="section level4">
+<h4>Random Intercept Model</h4>
+<p>We can model specialization as a linear function of forest cover where the intercept is allowed to change per hummingbird species. This biologically makes sense because it is expected that each hummingbird species will have its own unique specialization behavior at each site.</p>
+<p>Allowing the intercept to vary for each species is a random intercept model</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mlme1 &lt;-<span class="st"> </span><span class="kw">lme</span>(Form, <span class="dt">random =</span> ~<span class="dv">1</span>|fSpecies, <span class="dt">data =</span> data, <span class="dt">weights =</span> vf3)
+## lme stands for linear mixed effects. In this function you must specify a &quot;random&quot; argument
+## ~1|fSpecies specifies the random intercept model. Remember | in this case means &quot;by&quot; so you are allowing the intercept to vary by species. 
+<span class="kw">summary</span>(Mlme1)</code></pre></div>
+<pre><code>## Linear mixed-effects model fit by REML
+##  Data: data 
+##        AIC      BIC    logLik
+##   807.9522 823.4209 -398.9761
+## 
+## Random effects:
+##  Formula: ~1 | fSpecies
+##         (Intercept) Residual
+## StdDev:    1.425693 4.349495
+## 
+## Variance function:
+##  Structure: Power of variance covariate
+##  Formula: ~Polygon.Area.100 
+##  Parameter estimates:
+##     power 
+## 0.7097861 
+## Fixed effects: list(Form) 
+##                     Value Std.Error  DF  t-value p-value
+## (Intercept)      0.077894 0.4869339 151 0.159969  0.8731
+## Polygon.Area.100 4.678450 0.6992141 151 6.691012  0.0000
+##  Correlation: 
+##                  (Intr)
+## Polygon.Area.100 -0.467
+## 
+## Standardized Within-Group Residuals:
+##        Min         Q1        Med         Q3        Max 
+## -3.1087088 -0.6534845 -0.2104922  0.6095179  3.2441853 
+## 
+## Number of Observations: 165
+## Number of Groups: 13</code></pre>
+<p>The fixed effects part of the output shows that the general equation for the relationship between forest cover and specialization is 0.08 + 4.68*FC.</p>
+<p>This is the average relationship for all the species considered together. However, we are letting each hummingbird species get its own intercept, so each hummingbird species can get its own equation as well. To incorporate the contribution of each species to the equation, we incorporate the random effect of each species into the intercept portion of the equation.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">F0 &lt;-<span class="st"> </span><span class="kw">fitted</span>(Mlme1, <span class="dt">level =</span> <span class="dv">0</span>) ## the fitted, fixed values for the population model. These values are the same for every hummingbird within a site -- this will plot our overall trend line
+F1 &lt;-<span class="st"> </span><span class="kw">fitted</span>(Mlme1, <span class="dt">level =</span> <span class="dv">1</span>) ## the fitted, random values for each hummingbird at each site (within-species fitted values). These vary for every hummingbird within a site -- this will plot the trend line for each individual species
+I &lt;-<span class="st"> </span><span class="kw">order</span>(data$Polygon.Area<span class="fl">.100</span>); Polygon.Area.100s &lt;-<span class="st"> </span><span class="kw">sort</span>(data$Polygon.Area<span class="fl">.100</span>) ## order() gives the sorted row numbers corresponding to increasing forest cover, these numbers will be used to index the correct corresponding values of F0 (see plot function below), sort() gives the actual values of increasing forest cover to plot
+
+thirteen2 &lt;-<span class="st"> </span><span class="kw">unique</span>(data$fSpecies) ## I use this for indexing in my for-loop, it is simply a list of names of every species in the data set (there are thirteen species)
+
+<span class="kw">plot</span>(Polygon.Area.100s, F0[I], <span class="dt">lwd =</span> <span class="dv">4</span>, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Specialization (d&#39;)&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Forest Cover (100m)&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">5</span>, <span class="dv">10</span>)) ## draws average trend line
+
+## following for-loop draws thirteen individual species trend lines
+for(i in <span class="dv">1</span>:<span class="kw">length</span>(thirteen2)) {
+  x1 &lt;-<span class="st"> </span>data$Polygon.Area<span class="fl">.100</span>[data$fSpecies ==<span class="st"> </span>thirteen2[i]]
+  y1 &lt;-<span class="st"> </span>F1[data$fSpecies ==<span class="st"> </span>thirteen2[i]]
+  K &lt;-<span class="st"> </span><span class="kw">order</span>(x1)
+  <span class="kw">lines</span>(<span class="kw">sort</span>(x1), y1[K])
+}</code></pre></div>
+<p><img src="images/04-A/unnamed-chunk-10-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(M.gls3, Mlme1) ## compares the non-random effects model to the random-intercept model - which one fits better? </code></pre></div>
+<pre><code>##        Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+## M.gls3     1  4 851.0649 863.4399 -421.5325                        
+## Mlme1      2  5 807.9522 823.4209 -398.9761 1 vs 2 45.11275  &lt;.0001</code></pre>
+<p>The AIC is lower for the random-intercept model and the L.Ratio is quite high, so the p-value is low (p&lt;0.0001) which is good evidence that the random-effects model is a better fit for the data, and that each species does in fact have its own specialization relationship with forest cover.</p>
+<p>However, we have good reason to think, biologically, that the relationship between specialization and forest cover is different for each hummingbird species (and thus not all species will have a relationship parallel to the population curve).</p>
+<p>Thus, we will now fit a random intercept AND random slope model</p>
+</div>
+<div id="random-intercept-and-slope-model" class="section level4">
+<h4>Random Intercept and Slope Model</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mlme2 &lt;-<span class="st"> </span><span class="kw">lme</span>(Form, <span class="dt">random =</span> ~<span class="dv">1</span> +<span class="st"> </span>Polygon.Area<span class="fl">.100</span>|fSpecies, <span class="dt">data =</span> data, <span class="dt">weights =</span> vf3) ## the &quot;~1&quot; specifies the random intecerpt and &quot;Polygon.Area.100|fSpecies&quot; allows the slope to vary by hummingbird species
+<span class="kw">summary</span>(Mlme2)</code></pre></div>
+<pre><code>## Linear mixed-effects model fit by REML
+##  Data: data 
+##        AIC     BIC    logLik
+##   763.8287 785.485 -374.9144
+## 
+## Random effects:
+##  Formula: ~1 + Polygon.Area.100 | fSpecies
+##  Structure: General positive-definite, Log-Cholesky parametrization
+##                  StdDev    Corr  
+## (Intercept)      0.5185718 (Intr)
+## Polygon.Area.100 4.6121499 -0.079
+## Residual         3.4333447       
+## 
+## Variance function:
+##  Structure: Power of variance covariate
+##  Formula: ~Polygon.Area.100 
+##  Parameter estimates:
+##     power 
+## 0.6460465 
+## Fixed effects: list(Form) 
+##                     Value Std.Error  DF   t-value p-value
+## (Intercept)      0.273699 0.2775939 151 0.9859696  0.3257
+## Polygon.Area.100 3.919556 1.4091936 151 2.7814175  0.0061
+##  Correlation: 
+##                  (Intr)
+## Polygon.Area.100 -0.324
+## 
+## Standardized Within-Group Residuals:
+##        Min         Q1        Med         Q3        Max 
+## -2.7228479 -0.5905337 -0.0581716  0.5215418  3.5139731 
+## 
+## Number of Observations: 165
+## Number of Groups: 13</code></pre>
+<p>The amount of variation around the intercept is 0.52^2 and the random vairation around the slope is 4.61^2 indicating that there is more variation in slopes than in intercepts between the hummingbird species (which is evident when you look at the plot below). There is a correlation between random intercepts and slopes of only -0.079 which is quite low (good).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">AIC</span>(Mlme1, Mlme2) ## does the random intercept model or the random intercept and slope model have a lower AIC? </code></pre></div>
+<pre><code>##       df      AIC
+## Mlme1  5 807.9522
+## Mlme2  7 763.8287</code></pre>
+<p>The random intercept and slope model has a lower AIC than the random intercept model, which is a good sign.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## plotting the random intercept and slope model
+
+F0 &lt;-<span class="st"> </span><span class="kw">fitted</span> (Mlme2, <span class="dt">level =</span> <span class="dv">0</span>)
+F1 &lt;-<span class="st"> </span><span class="kw">fitted</span>(Mlme2, <span class="dt">level =</span> <span class="dv">1</span>)
+I &lt;-<span class="st"> </span><span class="kw">order</span>(data$Polygon.Area<span class="fl">.100</span>); Polygon.Area.100s &lt;-<span class="st"> </span><span class="kw">sort</span>(data$Polygon.Area<span class="fl">.100</span>)
+
+h.cols.rainbow =<span class="st"> </span><span class="kw">rainbow</span>(<span class="dv">13</span>) ## because this time it would be nice to give a different color to each species
+
+<span class="kw">plot</span>(Polygon.Area.100s, F0[I], <span class="dt">lwd =</span> <span class="dv">6</span>, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Specialization (d&#39;)&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Forest Cover (100m)&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">3</span>, <span class="dv">15</span>))
+
+for(i in <span class="dv">1</span>:<span class="kw">length</span>(thirteen2)) {
+  x1 &lt;-<span class="st"> </span>data$Polygon.Area<span class="fl">.100</span>[data$fSpecies ==<span class="st"> </span>thirteen2[i]]
+  y1 &lt;-<span class="st"> </span>F1[data$fSpecies ==<span class="st"> </span>thirteen2[i]]
+  K &lt;-<span class="st"> </span><span class="kw">order</span>(x1)
+  <span class="kw">lines</span>(<span class="kw">sort</span>(x1), y1[K], <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">lty =</span> <span class="dv">4</span>, <span class="dt">col =</span> h.cols.rainbow[i])
+}</code></pre></div>
+<p><img src="images/04-A/unnamed-chunk-14-1.png" width="672" /> &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixed.effects</span>(Mlme2)</code></pre></div>
+<pre><code>##      (Intercept) Polygon.Area.100 
+##        0.2736991        3.9195557</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">random.effects</span>(Mlme2) ## gives the intercept and slope adjustment to the population curve for each hummingbird species. To get the intercept and slope for each individual species you add each species&#39; values below to the fixed effects values (i.e. the population curve values) given above. </code></pre></div>
+<pre><code>##                             (Intercept) Polygon.Area.100
+## Charming.Hummingbird       -0.371743752        0.1196069
+## Garden.Emerald              0.138848695       -2.7304097
+## Green.crowned.Brilliant    -0.343739802       -1.6064965
+## Green.Hermit                0.148005627       10.4221947
+## Long.billed.Starthroat     -0.132222769       -4.3955088
+## Rufous.tailed.Hummingbird   0.041034119        3.6722203
+## Scaly.breasted.Hummingbird -0.343415166       -4.7436235
+## Snowy.bellied.Hummingbird   0.552190446       -2.8180533
+## Stripe.throated.Hermit      0.261321687        0.1362129
+## Violet.crowned.Woodnymph   -0.204904787       -0.9737176
+## Violet.Sabrewing            0.189618494       -3.2726526
+## White.tailed.Emerald        0.056395222        0.2902166
+## White.tipped.Sicklebill     0.008611986        5.9000106</code></pre>
+<p>In practical terms, what these numbers mean is that if you were to catch a hummingbird in a site with no forest cover whatsoever (the intercept) and you didn’t know what species it was, you would predict that its specialization would be 0.27 because that’s the population estimate for all hummingbird species in general. However, if you caught, say, a Garden Emerald hummingbird in a site with no forest cover, because you know the species, you predict that its specialization is 0.27 + 0.14 = 0.41, which is a higher specialization than the population estimate.</p>
+</div>
+<div id="random-effects-model" class="section level4">
+<h4>Random Effects Model</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mlme3 &lt;-<span class="st"> </span><span class="kw">lme</span>(Specialization ~<span class="st"> </span><span class="dv">1</span>, <span class="dt">random =</span> ~<span class="dv">1</span>|fSpecies, <span class="dt">data =</span> data, <span class="dt">weights =</span> vf3) 
+<span class="kw">summary</span>(Mlme3)</code></pre></div>
+<pre><code>## Linear mixed-effects model fit by REML
+##  Data: data 
+##        AIC      BIC    logLik
+##   846.6653 859.0648 -419.3327
+## 
+## Random effects:
+##  Formula: ~1 | fSpecies
+##         (Intercept) Residual
+## StdDev:    1.443682 5.070841
+## 
+## Variance function:
+##  Structure: Power of variance covariate
+##  Formula: ~Polygon.Area.100 
+##  Parameter estimates:
+##     power 
+## 0.7504239 
+## Fixed effects: Specialization ~ 1 
+##                Value Std.Error  DF t-value p-value
+## (Intercept) 1.549056 0.4422072 152 3.50301   6e-04
+## 
+## Standardized Within-Group Residuals:
+##         Min          Q1         Med          Q3         Max 
+## -3.11140157 -0.27351685  0.07591166  0.63584959  3.40459610 
+## 
+## Number of Observations: 165
+## Number of Groups: 13</code></pre>
+<p>Comparing our models with AIC</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">AIC</span>(M.gls3, Mlme1, Mlme2, Mlme3)</code></pre></div>
+<pre><code>##        df      AIC
+## M.gls3  4 851.0649
+## Mlme1   5 807.9522
+## Mlme2   7 763.8287
+## Mlme3   4 846.6653</code></pre>
+<p>Using this approach we would select our random intercept and random slope model (Mlme2) because it has the lowest AIC</p>
+<p>Fitting the final model with Restricted Maximum Liklihood</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M1 &lt;-<span class="st"> </span><span class="kw">lme</span>(Form, <span class="dt">random =</span> ~<span class="dv">1</span> +<span class="st"> </span>Polygon.Area<span class="fl">.100</span>|fSpecies, <span class="dt">data =</span> data, <span class="dt">weights =</span> vf3, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)
+<span class="kw">summary</span>(M1)</code></pre></div>
+<pre><code>## Linear mixed-effects model fit by REML
+##  Data: data 
+##        AIC     BIC    logLik
+##   763.8287 785.485 -374.9144
+## 
+## Random effects:
+##  Formula: ~1 + Polygon.Area.100 | fSpecies
+##  Structure: General positive-definite, Log-Cholesky parametrization
+##                  StdDev    Corr  
+## (Intercept)      0.5185718 (Intr)
+## Polygon.Area.100 4.6121499 -0.079
+## Residual         3.4333447       
+## 
+## Variance function:
+##  Structure: Power of variance covariate
+##  Formula: ~Polygon.Area.100 
+##  Parameter estimates:
+##     power 
+## 0.6460465 
+## Fixed effects: list(Form) 
+##                     Value Std.Error  DF   t-value p-value
+## (Intercept)      0.273699 0.2775939 151 0.9859696  0.3257
+## Polygon.Area.100 3.919556 1.4091936 151 2.7814175  0.0061
+##  Correlation: 
+##                  (Intr)
+## Polygon.Area.100 -0.324
+## 
+## Standardized Within-Group Residuals:
+##        Min         Q1        Med         Q3        Max 
+## -2.7228479 -0.5905337 -0.0581716  0.5215418  3.5139731 
+## 
+## Number of Observations: 165
+## Number of Groups: 13</code></pre>
+</div>
+<div id="conclusions" class="section level4">
+<h4>Conclusions</h4>
+<p>=======</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixed.effects</span>(Mlme2)</code></pre></div>
+<pre><code>##      (Intercept) Polygon.Area.100 
+##        0.2736991        3.9195557</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">random.effects</span>(Mlme2) ## gives the intercept and slope adjustment to the population curve for each hummingbird species. To get the intercept and slope for each individual species you add each species&#39; values below to the fixed effects values (i.e. the population curve values) given above. </code></pre></div>
+<pre><code>##                             (Intercept) Polygon.Area.100
+## Charming.Hummingbird       -0.371743752        0.1196069
+## Garden.Emerald              0.138848695       -2.7304097
+## Green.crowned.Brilliant    -0.343739802       -1.6064965
+## Green.Hermit                0.148005627       10.4221947
+## Long.billed.Starthroat     -0.132222769       -4.3955088
+## Rufous.tailed.Hummingbird   0.041034119        3.6722203
+## Scaly.breasted.Hummingbird -0.343415166       -4.7436235
+## Snowy.bellied.Hummingbird   0.552190446       -2.8180533
+## Stripe.throated.Hermit      0.261321687        0.1362129
+## Violet.crowned.Woodnymph   -0.204904787       -0.9737176
+## Violet.Sabrewing            0.189618494       -3.2726526
+## White.tailed.Emerald        0.056395222        0.2902166
+## White.tipped.Sicklebill     0.008611986        5.9000106</code></pre>
+<p>In practical terms, what these numbers mean is that if you were to catch a hummingbird in a site with no forest cover whatsoever (the intercept) and you didn’t know what species it was, you would predict that its specialization would be 0.27 because that’s the population estimate for all hummingbird species in general. However, if you caught, say, a Garden Emerald hummingbird in a site with no forest cover, because you know the species, you predict that its specialization is 0.27 + 0.14 = 0.41, which is a higher specialization than the population estimate.</p>
+</div>
+<div id="random-effects-model-1" class="section level4">
+<h4>Random Effects Model</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mlme3 &lt;-<span class="st"> </span><span class="kw">lme</span>(Specialization ~<span class="st"> </span><span class="dv">1</span>, <span class="dt">random =</span> ~<span class="dv">1</span>|fSpecies, <span class="dt">data =</span> data, <span class="dt">weights =</span> vf3) 
+<span class="kw">summary</span>(Mlme3)</code></pre></div>
+<pre><code>## Linear mixed-effects model fit by REML
+##  Data: data 
+##        AIC      BIC    logLik
+##   846.6653 859.0648 -419.3327
+## 
+## Random effects:
+##  Formula: ~1 | fSpecies
+##         (Intercept) Residual
+## StdDev:    1.443682 5.070841
+## 
+## Variance function:
+##  Structure: Power of variance covariate
+##  Formula: ~Polygon.Area.100 
+##  Parameter estimates:
+##     power 
+## 0.7504239 
+## Fixed effects: Specialization ~ 1 
+##                Value Std.Error  DF t-value p-value
+## (Intercept) 1.549056 0.4422072 152 3.50301   6e-04
+## 
+## Standardized Within-Group Residuals:
+##         Min          Q1         Med          Q3         Max 
+## -3.11140157 -0.27351685  0.07591166  0.63584959  3.40459610 
+## 
+## Number of Observations: 165
+## Number of Groups: 13</code></pre>
+<p>Comparing our models with AIC</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">AIC</span>(M.gls3, Mlme1, Mlme2, Mlme3)</code></pre></div>
+<pre><code>##        df      AIC
+## M.gls3  4 851.0649
+## Mlme1   5 807.9522
+## Mlme2   7 763.8287
+## Mlme3   4 846.6653</code></pre>
+<p>Using this approach we would select our random intercept and random slope model (Mlme2) because it has the lowest AIC</p>
+<p>Fitting the final model with Restricted Maximum Liklihood</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M1 &lt;-<span class="st"> </span><span class="kw">lme</span>(Form, <span class="dt">random =</span> ~<span class="dv">1</span> +<span class="st"> </span>Polygon.Area<span class="fl">.100</span>|fSpecies, <span class="dt">data =</span> data, <span class="dt">weights =</span> vf3, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)
+<span class="kw">summary</span>(M1)</code></pre></div>
+<pre><code>## Linear mixed-effects model fit by REML
+##  Data: data 
+##        AIC     BIC    logLik
+##   763.8287 785.485 -374.9144
+## 
+## Random effects:
+##  Formula: ~1 + Polygon.Area.100 | fSpecies
+##  Structure: General positive-definite, Log-Cholesky parametrization
+##                  StdDev    Corr  
+## (Intercept)      0.5185718 (Intr)
+## Polygon.Area.100 4.6121499 -0.079
+## Residual         3.4333447       
+## 
+## Variance function:
+##  Structure: Power of variance covariate
+##  Formula: ~Polygon.Area.100 
+##  Parameter estimates:
+##     power 
+## 0.6460465 
+## Fixed effects: list(Form) 
+##                     Value Std.Error  DF   t-value p-value
+## (Intercept)      0.273699 0.2775939 151 0.9859696  0.3257
+## Polygon.Area.100 3.919556 1.4091936 151 2.7814175  0.0061
+##  Correlation: 
+##                  (Intr)
+## Polygon.Area.100 -0.324
+## 
+## Standardized Within-Group Residuals:
+##        Min         Q1        Med         Q3        Max 
+## -2.7228479 -0.5905337 -0.0581716  0.5215418  3.5139731 
+## 
+## Number of Observations: 165
+## Number of Groups: 13</code></pre>
+</div>
+<div id="conclusions-1" class="section level4">
+<h4>Conclusions</h4>
+<p>We now have evidence that hummingbird species’ specialization, in general, increases with increasing forest cover. However, not all hummingbird species show the same relationship; some species show a much greter increase in specialization with forest cover than others. Species becoming less specialized in less forested areas suggests that changes in resource availability as forest cover is lost are potentially forcing species to be less ‘picky’ in disturbed, agricultural areas. Interestingly, the species with the greatest specialization in areas with high forest cover are the ones that change their specialization the most along the forest cover gradient. This suggests that species with low specialization in undisturbed, forested areas do not change their interaction behavior as much as highly specialized species when forest is lost, perhaps because they are already behaving as generalists to begin with.</p>
+</div>
 </div>
 <div id="discussion-questions" class="section level3">
 <h3>Discussion Questions</h3>
+<ul>
+<li>In what other situations might mixed effects models be appropriate? Other examples from peoples own research?</li>
+<li>If we have data that is nested, must we always use a mixed effects model? What other analytical approaches might provide the same kind of information as MEMs (alternatives)?</li>
+<li>Honestly, what is the deal with Maximum Liklihood vs. Restricted Maximum Liklihood? +Biologically, when would you expect to use the random intercept only model?</li>
+</ul>
 </div>
 
 
@@ -557,7 +1003,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
