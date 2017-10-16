@@ -567,6 +567,66 @@ div.tocify {
 </blockquote>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<div id="fixed-vs.random-effects" class="section level4">
+<h4>Fixed vs. random effects</h4>
+<ul>
+<li><p>Fixed and random effects affect mean and variance of y, respectively.</p></li>
+<li><p>Examples</p>
+<pre><code>Fixed: Nutrient added or not, male or female, upland or lowland, wet versus dry, light versus shade, one age versus another
+
+Random: genotype, block within a field, individuals with repeated measures, family, parent</code></pre></li>
+<li><p>Mixed-effects models maximize use of info in the data, compared to 2-stage analysis.</p></li>
+</ul>
+</div>
+<div id="linear-mixed-effects-models" class="section level4">
+<h4>Linear mixed-effects models</h4>
+<ul>
+<li><p>Random intercept model</p></li>
+<li><p>Random intercept and slope model</p></li>
+<li><p>Random effects model</p></li>
+</ul>
+<div class="figure">
+<img src="images/random-effects-plot.png" style="width:50.0%" />
+
+</div>
+</div>
+<div id="model-selection-and-validation" class="section level4">
+<h4>Model selection and validation</h4>
+<ul>
+<li><p>Step 1: fit linear regression</p></li>
+<li><p>Step 2: fit model with gls (so linear regression model can be compared with mixed-effects models)</p></li>
+<li><p>Step 3: choose variance strcuture</p></li>
+<li>Introduce random effects, and/or</li>
+<li><p>Adjust variance structure to take care of heterogeneity</p></li>
+<li><p>Step 4: fit the model</p></li>
+<li><p>Make sure <code>method=&quot;REML&quot;</code></p>
+<p><code>M1.lme=lme(Form, random=~1|Nest, method=&quot;REML&quot;, data=Owls)</code></p></li>
+<li><p>Step 5: compare new mixed-effects model with old</p>
+<p><code>Form &lt;- formula(LogNeg~SexParent*FoodTreatment+SexParent*ArrivalTime)</code></p>
+<p><code>M.gls = gls(Form, data=Owls)</code></p>
+<p><code>M1.lme=lme(Form, random=~1|Nest, method=&quot;REML&quot;, data=Owls)</code></p>
+<p><code>anova(M.gls, M1.lme)</code></p></li>
+<li><p>Stept 6: validate model and, if necessary, repeat steps 4 and 5 until good model is found</p></li>
+<li><p>Steps 7 and 8: find optimal fixed effects structure</p>
+<p>First, interaction terms; drop one at time and compare models</p>
+<p>Use <code>methods=&quot;ML&quot;</code></p></li>
+<li><p>Step 9: refit with REML and validate model</p></li>
+<li><p>Step 10: interpret</p></li>
+<li><p>Step 11: additive model</p></li>
+</ul>
+</div>
+<div id="additional-reading" class="section level4">
+<h4>Additional reading</h4>
+<blockquote>
+<p>Chapter 19. Mixed-Effercts Models, in Crawley 2012 The R Book, 2nd ed. <a href="http://onlinelibrary.wiley.com/doi/10.1002/9780470515075.ch19/summary">link</a></p>
+</blockquote>
+<ul>
+<li><p>Fixed vs. random effects</p></li>
+<li><p>Pseudoreplication</p></li>
+<li><p>More examples of mixed-effects models for different sampling and experimental designs</p></li>
+</ul>
+<hr />
+</div>
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
