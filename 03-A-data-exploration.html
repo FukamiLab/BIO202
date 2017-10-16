@@ -644,20 +644,20 @@ div.tocify {
 <p>Since my data is multivariate, I used sequence count per sample for outlier detection in the following examples.</p>
 <p><strong>Boxplot</strong></p>
 <div class="figure">
-<img src="images/boxplot.png" />
+<img src="images/03-A/boxplot.png" />
 
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(<span class="kw">sample_sums</span>(merged_data),  <span class="dt">ylab =</span> <span class="st">&quot;Sequences per sample&quot;</span>)</code></pre></div>
 <p><strong>Cleveland dotchart</strong></p>
 <div class="figure">
-<img src="images/dotchart.png" />
+<img src="images/03-A/dotchart.png" />
 
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dotchart</span>(<span class="kw">sample_sums</span>(merged_data), <span class="dt">xlab =</span> <span class="st">&quot;Sequences per sample&quot;</span>,
          <span class="dt">ylab =</span> <span class="st">&quot;Samples&quot;</span>, <span class="dt">labels =</span> F)</code></pre></div>
 <p><strong>Plotly - great visualization tool</strong></p>
 <div class="figure">
-<img src="images/ggplot.png" />
+<img src="images/03-A/ggplot.png" />
 
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">seq_num &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">ID=</span><span class="kw">sample_data</span>(merged_data)$ID, <span class="dt">Seq=</span><span class="kw">sample_sums</span>(merged_data))
@@ -667,7 +667,7 @@ dot_gg &lt;-<span class="st"> </span><span class="kw">ggplot</span>(seq_num, <sp
 <p><strong>Dotchart for multiple variables</strong></p>
 <p>Since most of the variables in my dataset are categorical, here I used raw data (sequence count) subsetted by bird species.</p>
 <div class="figure">
-<img src="images/dotchart_variable.png" />
+<img src="images/03-A/dotchart_variable.png" />
 
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Z &lt;-<span class="st"> </span>qpcR:::<span class="kw">cbind.na</span>(<span class="kw">sample_sums</span>(data.BTSA), <span class="kw">sample_sums</span>(data.CCRO), <span class="kw">sample_sums</span>(data.OBNT),
@@ -692,7 +692,7 @@ dot_gg &lt;-<span class="st"> </span><span class="kw">ggplot</span>(seq_num, <sp
 </blockquote>
 <p><strong>Histogram</strong></p>
 <div class="figure">
-<img src="images/histogram.png" />
+<img src="images/03-A/histogram.png" />
 
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(<span class="kw">sample_sums</span>(merged_data), <span class="dt">breaks =</span> <span class="dv">100</span>,<span class="dt">col =</span> <span class="st">&quot;#a6bddb&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Sequences per sample&quot;</span>, <span class="dt">main =</span> <span class="st">&#39; &#39;</span>)</code></pre></div>

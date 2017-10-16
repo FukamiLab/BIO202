@@ -30,6 +30,86 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
+#### Fixed vs. random effects
+
++ Fixed and random effects affect mean and variance of y, respectively.
+
++ Examples
+
+        Fixed: Nutrient added or not, male or female, upland or lowland, wet versus dry, light versus shade, one age versus another
+
+        Random: genotype, block within a field, individuals with repeated measures, family, parent
+
++ Mixed-effects models maximize use of info in the data, compared to 2-stage analysis.
+
+
+#### Linear mixed-effects models
+
++ Random intercept model
+
++ Random intercept and slope model
+
++ Random effects model
+
+![](images/random-effects-plot.png){width=50%}
+
+
+
+
+#### Model selection and validation
+
++ Step 1: fit linear regression
+
++ Step 2: fit model with gls (so linear regression model can be compared with mixed-effects models)
+
++ Step 3: choose variance strcuture
+
+   + Introduce random effects, and/or
+   + Adjust variance structure to take care of heterogeneity
+
++ Step 4: fit the model
+
+   + Make sure `method="REML"`
+
+     `M1.lme=lme(Form, random=~1|Nest, method="REML", data=Owls)`
+
++ Step 5: compare new mixed-effects model with old
+
+     `Form <- formula(LogNeg~SexParent*FoodTreatment+SexParent*ArrivalTime)`
+
+     `M.gls = gls(Form, data=Owls)`
+
+     `M1.lme=lme(Form, random=~1|Nest, method="REML", data=Owls)`
+
+     `anova(M.gls, M1.lme)`
+
++ Stept 6: validate model and, if necessary, repeat steps 4 and 5 until good model is found
+
++ Steps 7 and 8: find optimal fixed effects structure
+
+    First, interaction terms; drop one at time and compare models
+
+    Use `methods="ML"`
+
++ Step 9: refit with REML and validate model
+
++ Step 10: interpret
+
++ Step 11: additive model
+
+
+#### Additional reading
+
+> Chapter 19. Mixed-Effercts Models, in Crawley 2012 The R Book, 2nd ed. [link](http://onlinelibrary.wiley.com/doi/10.1002/9780470515075.ch19/summary)
+
++ Fixed vs. random effects
+
++ Pseudoreplication
+
++ More examples of mixed-effects models for different sampling and experimental designs
+
+
+***
 
 
 ### Analysis Example
