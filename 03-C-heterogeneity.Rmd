@@ -51,7 +51,7 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
   + `V1<-varFixed(∼DML)`
      + $\epsilon_i \sim N(0, \sigma^2 \times \mathrm{DML}_i) \ \ i = 1, \ldots, 768$
   + `V1<-varIdent(form= ∼ 1 | fMONTH)`
-     + $\epsilon_{ij} \sim N(0, \sigma^{2j} \times \mathrm{DML}_i) \ \ j = 1, \ldots, 12$
+     + $\epsilon_{ij} \sim N(0, \sigma_j^{2}) \ \ j = 1, \ldots, 12$
   + `V1<-varPower(form =∼ DML)`
      + $\epsilon_{ij} \sim N(0, \sigma^2 \times |\mathrm{DML}_i|^{2\delta})$
   + `V1<-varPower(form =∼ DML | fMONTH)`
@@ -106,7 +106,7 @@ source("https://raw.githubusercontent.com/fukamilab/BIO202/master/code/HighstatL
 ```
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
-Squid$fMONTH=as.numeric(Squid$MONTH)
+Squid$fMONTH=factor(Squid$MONTH)
 ```
 
 A good first step is to investigate structure of the Squid data set. 
