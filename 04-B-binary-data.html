@@ -611,16 +611,22 @@ div.tocify {
 <div id="my-data" class="section level4">
 <h4>My data:</h4>
 <p>I sampled mosquitoes in 38 sites of varying vegetation cover and microclimate. Given what we know about mosquito responses to microclimate and habitat requirements, I expect that variation in vegetation and microclimate should impact suitability of sites for specific mosquito species, and ultimately impact which/how many mosquitoes are found in a site. I am most interested in <em>Aedes albopictus</em>, the main disease vector species found in this study.</p>
-<p>The data for the purpose of this exercise include: + Presence of <em>Aedes albopictus</em> in sites + Proportion of <em>Aedes albopictus</em> out of total mosquitoes trapped + Mosquito abundance data + Covariates of interest: vegetation cover, average annual minimum temperature</p>
+<p>The data for the purpose of this exercise include:</p>
+<ul>
+<li>Presence of <em>Aedes albopictus</em> in sites</li>
+<li>Proportion of <em>Aedes albopictus</em> out of total mosquitoes trapped</li>
+<li>Mosquito abundance data</li>
+<li>Covariates of interest: vegetation cover, average annual minimum temperature</li>
+</ul>
 <p>I want to investigate the relationship between my environmental covariates and 1) the presence of <em>Aedes albopictus</em>, and 2) the proportion of <em>Aedes albo</em> individuals out of the total trap count of mosquitoes.3) counts of <em>Aedes albo</em></p>
 </div>
 </div>
 <div id="glm-for-presenceabsence-data" class="section level3">
 <h3>GLM for Presence/Absence Data</h3>
+<p>Students in the course can download the data from our Canvas site into a data folder in their working directory.</p>
 <p>First, I’ll read in the data:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read in my data from the BIO 202 GitHub repository</span>
-aedes_dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/FukamiLab/BIO202/master/data/AedesData_EcoStats_Example.csv&quot;</span>) <span class="co">#, col_types = cols(Proportion = col_number())) </span>
-
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read in my data from data folder in your working directory</span>
+aedes_dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/AedesData_EcoStats_Example.csv&quot;</span>) 
 
 <span class="kw">attach</span>(aedes_dat)</code></pre></div>
 <p>Next, I want to do some quick data exploration:</p>

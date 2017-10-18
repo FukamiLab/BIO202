@@ -83,6 +83,7 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 I sampled mosquitoes in 38 sites of varying vegetation cover and microclimate. Given what we know about mosquito responses to microclimate and habitat requirements, I expect that variation in vegetation and microclimate should impact suitability of sites for specific mosquito species, and ultimately impact which/how many mosquitoes are found in a site. I am most interested in *Aedes albopictus*, the main disease vector species found in this study.
 
 The data for the purpose of this exercise include:
+
 + Presence of *Aedes albopictus* in sites
 + Proportion of *Aedes albopictus* out of total mosquitoes trapped
 + Mosquito abundance data
@@ -92,13 +93,14 @@ I want to investigate the relationship between my environmental covariates and 1
 
 ### GLM for Presence/Absence Data
 
+Students in the course can download the data from our Canvas site into a data folder in their working directory.
+
 First, I'll read in the data:
 
 ```{r results = 'hide'}
 
-# Read in my data from the BIO 202 GitHub repository
-aedes_dat <- read.csv("https://raw.githubusercontent.com/FukamiLab/BIO202/master/data/AedesData_EcoStats_Example.csv") #, col_types = cols(Proportion = col_number())) 
-
+# Read in my data from data folder in your working directory
+aedes_dat <- read.csv("data/AedesData_EcoStats_Example.csv") 
 
 attach(aedes_dat)
 
