@@ -37,9 +37,38 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
+Differences between Frequentist and Bayesian approach to statistical inference:
+
+**See Table 8.1 in the reading.**
+
+| Bayesian         | Frequentist       |
+|------------------|-------------------|
+| Make probabalistic statements about our state of knowledge. | Ask how parameter estimates change if data collected many times. |
+| Calculate probability of hypothesis, given observed data.| Calculate probability of data, given null hypothesis. |
+| Likelihood is a function that calculates probability for any set of data and parameters. | Likelihood is a value- the probability of the observed set of data, given a specific model and estimated parameters.|
+| Inference based on samples of parameters from the posterior distribution. | Inference based on null hypothesis tests on values of estimated parameters and their SE.|
+
+Bayesian approach to statistical inference:
+
 + If  $\theta$ is a model and $y$ is observed data, then frequentists estimate $P(y|\theta)$ and Bayesians estimate $P(\theta|y)$.
 + $p(\theta|y)$ (the posterior distibution) $\propto$ $p(\theta)$ (prior information about parameters) $\times p(y|\theta)$ (the likelihood function)
-+
++ Development of algorithms that sample from posterior $p(\theta|y)$ without knowing the prior probability of the data $p(y) = \int p(y|\theta)p(\theta) d\theta$ have made Bayesian inference accessible.
++ Types of posterior distributions:
+    + Joint distribution
+    + Marginal distribution
+    + Conditional distribution
++ Make inferences by summarizing samples of parameters from the posterior distribution:
+    + CrI: credibility intervals are based on quantiles: 90% CrI is between the 0.05 and 0.95 quantiles of the samples of a parameter. Use `quantile()`.
+    + HPD: highest posterior density intervals use parameter values so that probability density within interval is never lower than probability density outside interval. Use `HPDinterval(as.mcmc())`, both functions from `coda` package.
+    + Calculate samples of $\hat{y}$ to estimate uncertainty around predicted mean.
+    + Use calculated samples of $\hat{y}$ together with estimated $\hat{\sigma}$ in the likelihood function to calculate predicted posterior values of data. (Combines uncertainty in parameter estimation with uncertainty in the probability model.)
+
+
+
+Bayesian inference in R
+
++ Use the `sim()` function from `arm` package to simulate samples from the posterior for models fit with `lm()`, `glm()`, `glmer()`.
++ `sim` assumes uniform (flat) prior distributions on all parameters, and calculates the posterior distribution analytically.
 
 ### Analysis Example
 
