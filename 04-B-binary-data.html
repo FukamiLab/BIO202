@@ -9,10 +9,10 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Meghan Howard" />
+<meta name="author" content="Tad and Meghan Howard" />
 
 
-<title>GLM with binary and proportional data</title>
+<title>GLM with count, binary, and proportional data</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -512,8 +512,8 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">GLM with binary and proportional data</h1>
-<h4 class="author"><em>Meghan Howard</em></h4>
+<h1 class="title toc-ignore">GLM with count, binary, and proportional data</h1>
+<h4 class="author"><em>Tad and Meghan Howard</em></h4>
 
 </div>
 
@@ -524,6 +524,44 @@ div.tocify {
 </blockquote>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<div id="poisson-glm-for-count-data-without-overdispersion" class="section level4">
+<h4>Poisson GLM for count data, without overdispersion</h4>
+<ul>
+<li><p><code>family = poisson</code></p></li>
+<li><p>Model selection: AIC or hypothesis testing (z-statistics, <code>drop1()</code>, <code>anova()</code>)</p></li>
+<li><p>Model validation: Use normalized (or Pearson) residuals (as in Ch 4) or deviance residuals (default in R), which give similar results (except for zero-inflated data).</p></li>
+<li><p>Overdispersion (variance is larger than mean): Needs correction when Phi (= D/(n-P)) &gt; 1.5, and quick fix is to use <code>family = quasipoisson</code>, but cost is that se of parameters will be multiplied by sqrt(Phi).</p></li>
+</ul>
+</div>
+<div id="negative-binomial-glm-for-count-data-with-overdispersion" class="section level4">
+<h4>Negative binomial GLM for count data, with overdispersion</h4>
+<ul>
+<li><p>Use when Phi &gt; 15</p></li>
+<li><p><code>glm.nb()</code> in <code>library(MASS)</code> (Modern Applied Statistics with S)</p></li>
+<li><p>Advantage of NB over quasipoisson: <code>step()</code> and <code>stepAIC()</code> can be used for model selection</p></li>
+<li><p>There can be overdispersion in NB GLM, but options for fixing it are scarse in R.</p></li>
+<li><p>Offset: equation 9.18 on p. 240</p>
+<p><code>L0 &lt;- glm(Copepod ~ offset(LVol) + fStation, family = poisson, data = Lice)</code></p></li>
+</ul>
+</div>
+<div id="bernoulli-glm-for-binary-presence-absence-data" class="section level4">
+<h4>Bernoulli GLM for binary (presence-absence) data</h4>
+<ul>
+<li><p>Table 10.1: getting rid of lower (0) and upper (1) bounds of probabilities</p></li>
+<li><p><code>family = binomial</code></p></li>
+<li><p><code>family = binomial(link=&quot;probit&quot;)</code></p></li>
+<li><p><code>family = binomial(link=&quot;cloglog&quot;)</code> - when there are many zeros or many ones</p></li>
+<li><p>Bernoulli GAM (Fig 10.6)</p></li>
+</ul>
+</div>
+<div id="binomial-glm-for-proportional-data" class="section level4">
+<h4>Binomial GLM for proportional data</h4>
+<ul>
+<li><p>Model on p. 255: Yi ~ N(ni, pii)</p></li>
+<li><p><code>family=quasibinomial</code> for overdispersed data</p></li>
+</ul>
+<hr />
+</div>
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
