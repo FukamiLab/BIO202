@@ -530,6 +530,62 @@ div.tocify {
 </blockquote>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<p>Differences between Frequentist and Bayesian approach to statistical inference:</p>
+<p><strong>See Table 8.1 in the reading.</strong></p>
+<table style="width:54%;">
+<colgroup>
+<col width="26%" />
+<col width="27%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Bayesian</th>
+<th>Frequentist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Make probabalistic statements about our state of knowledge.</td>
+<td>Ask how parameter estimates change if data collected many times.</td>
+</tr>
+<tr class="even">
+<td>Calculate probability of hypothesis, given observed data.</td>
+<td>Calculate probability of data, given null hypothesis.</td>
+</tr>
+<tr class="odd">
+<td>Likelihood is a function that calculates probability for any set of data and parameters.</td>
+<td>Likelihood is a value- the probability of the observed set of data, given a specific model and estimated parameters.</td>
+</tr>
+<tr class="even">
+<td>Inference based on samples of parameters from the posterior distribution.</td>
+<td>Inference based on null hypothesis tests on values of estimated parameters and their SE.</td>
+</tr>
+</tbody>
+</table>
+<p>Bayesian approach to statistical inference:</p>
+<ul>
+<li>If <span class="math inline">\(\theta\)</span> is a model and <span class="math inline">\(y\)</span> is observed data, then frequentists estimate <span class="math inline">\(P(y|\theta)\)</span> and Bayesians estimate <span class="math inline">\(P(\theta|y)\)</span>.</li>
+<li><span class="math inline">\(p(\theta|y)\)</span> (the posterior distibution) <span class="math inline">\(\propto\)</span> <span class="math inline">\(p(\theta)\)</span> (prior information about parameters) <span class="math inline">\(\times p(y|\theta)\)</span> (the likelihood function)</li>
+<li>Development of algorithms that sample from posterior <span class="math inline">\(p(\theta|y)\)</span> without knowing the prior probability of the data <span class="math inline">\(p(y) = \int p(y|\theta)p(\theta) d\theta\)</span> have made Bayesian inference accessible.</li>
+<li>Types of posterior distributions:
+<ul>
+<li>Joint distribution</li>
+<li>Marginal distribution</li>
+<li>Conditional distribution</li>
+</ul></li>
+<li>Make inferences by summarizing samples of parameters from the posterior distribution:
+<ul>
+<li>CrI: credibility intervals are based on quantiles: 90% CrI is between the 0.05 and 0.95 quantiles of the samples of a parameter. Use <code>quantile()</code>.</li>
+<li>HPD: highest posterior density intervals use parameter values so that probability density within interval is never lower than probability density outside interval. Use <code>HPDinterval(as.mcmc())</code>, both functions from <code>coda</code> package.</li>
+<li>Calculate samples of <span class="math inline">\(\hat{y}\)</span> to estimate uncertainty around predicted mean.</li>
+<li>Use calculated samples of <span class="math inline">\(\hat{y}\)</span> together with estimated <span class="math inline">\(\hat{\sigma}\)</span> in the likelihood function to calculate predicted posterior values of data. (Combines uncertainty in parameter estimation with uncertainty in the probability model.)</li>
+</ul></li>
+</ul>
+<p>Bayesian inference in R</p>
+<ul>
+<li>Use the <code>sim()</code> function from <code>arm</code> package to simulate samples from the posterior for models fit with <code>lm()</code>, <code>glm()</code>, <code>glmer()</code>.</li>
+<li><code>sim</code> assumes uniform (flat) prior distributions on all parameters, and calculates the posterior distribution analytically.</li>
+</ul>
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>

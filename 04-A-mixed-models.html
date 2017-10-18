@@ -830,7 +830,7 @@ for(i in <span class="dv">1</span>:<span class="kw">length</span>(thirteen2)) {
   K &lt;-<span class="st"> </span><span class="kw">order</span>(x1)
   <span class="kw">lines</span>(<span class="kw">sort</span>(x1), y1[K], <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">lty =</span> <span class="dv">4</span>, <span class="dt">col =</span> h.cols.rainbow[i])
 }</code></pre></div>
-<p><img src="images/04-A/unnamed-chunk-14-1.png" width="672" /> &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</p>
+<p><img src="images/04-A/unnamed-chunk-14-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixed.effects</span>(Mlme2)</code></pre></div>
 <pre><code>##      (Intercept) Polygon.Area.100 
 ##        0.2736991        3.9195557</code></pre>
@@ -927,104 +927,6 @@ for(i in <span class="dv">1</span>:<span class="kw">length</span>(thirteen2)) {
 ## Number of Groups: 13</code></pre>
 </div>
 <div id="conclusions" class="section level4">
-<h4>Conclusions</h4>
-<p>=======</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixed.effects</span>(Mlme2)</code></pre></div>
-<pre><code>##      (Intercept) Polygon.Area.100 
-##        0.2736991        3.9195557</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">random.effects</span>(Mlme2) ## gives the intercept and slope adjustment to the population curve for each hummingbird species. To get the intercept and slope for each individual species you add each species&#39; values below to the fixed effects values (i.e. the population curve values) given above. </code></pre></div>
-<pre><code>##                             (Intercept) Polygon.Area.100
-## Charming.Hummingbird       -0.371743752        0.1196069
-## Garden.Emerald              0.138848695       -2.7304097
-## Green.crowned.Brilliant    -0.343739802       -1.6064965
-## Green.Hermit                0.148005627       10.4221947
-## Long.billed.Starthroat     -0.132222769       -4.3955088
-## Rufous.tailed.Hummingbird   0.041034119        3.6722203
-## Scaly.breasted.Hummingbird -0.343415166       -4.7436235
-## Snowy.bellied.Hummingbird   0.552190446       -2.8180533
-## Stripe.throated.Hermit      0.261321687        0.1362129
-## Violet.crowned.Woodnymph   -0.204904787       -0.9737176
-## Violet.Sabrewing            0.189618494       -3.2726526
-## White.tailed.Emerald        0.056395222        0.2902166
-## White.tipped.Sicklebill     0.008611986        5.9000106</code></pre>
-<p>In practical terms, what these numbers mean is that if you were to catch a hummingbird in a site with no forest cover whatsoever (the intercept) and you didn’t know what species it was, you would predict that its specialization would be 0.27 because that’s the population estimate for all hummingbird species in general. However, if you caught, say, a Garden Emerald hummingbird in a site with no forest cover, because you know the species, you predict that its specialization is 0.27 + 0.14 = 0.41, which is a higher specialization than the population estimate.</p>
-</div>
-<div id="random-effects-model-1" class="section level4">
-<h4>Random Effects Model</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mlme3 &lt;-<span class="st"> </span><span class="kw">lme</span>(Specialization ~<span class="st"> </span><span class="dv">1</span>, <span class="dt">random =</span> ~<span class="dv">1</span>|fSpecies, <span class="dt">data =</span> data, <span class="dt">weights =</span> vf3) 
-<span class="kw">summary</span>(Mlme3)</code></pre></div>
-<pre><code>## Linear mixed-effects model fit by REML
-##  Data: data 
-##        AIC      BIC    logLik
-##   846.6653 859.0648 -419.3327
-## 
-## Random effects:
-##  Formula: ~1 | fSpecies
-##         (Intercept) Residual
-## StdDev:    1.443682 5.070841
-## 
-## Variance function:
-##  Structure: Power of variance covariate
-##  Formula: ~Polygon.Area.100 
-##  Parameter estimates:
-##     power 
-## 0.7504239 
-## Fixed effects: Specialization ~ 1 
-##                Value Std.Error  DF t-value p-value
-## (Intercept) 1.549056 0.4422072 152 3.50301   6e-04
-## 
-## Standardized Within-Group Residuals:
-##         Min          Q1         Med          Q3         Max 
-## -3.11140157 -0.27351685  0.07591166  0.63584959  3.40459610 
-## 
-## Number of Observations: 165
-## Number of Groups: 13</code></pre>
-<p>Comparing our models with AIC</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">AIC</span>(M.gls3, Mlme1, Mlme2, Mlme3)</code></pre></div>
-<pre><code>##        df      AIC
-## M.gls3  4 851.0649
-## Mlme1   5 807.9522
-## Mlme2   7 763.8287
-## Mlme3   4 846.6653</code></pre>
-<p>Using this approach we would select our random intercept and random slope model (Mlme2) because it has the lowest AIC</p>
-<p>Fitting the final model with Restricted Maximum Liklihood</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M1 &lt;-<span class="st"> </span><span class="kw">lme</span>(Form, <span class="dt">random =</span> ~<span class="dv">1</span> +<span class="st"> </span>Polygon.Area<span class="fl">.100</span>|fSpecies, <span class="dt">data =</span> data, <span class="dt">weights =</span> vf3, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)
-<span class="kw">summary</span>(M1)</code></pre></div>
-<pre><code>## Linear mixed-effects model fit by REML
-##  Data: data 
-##        AIC     BIC    logLik
-##   763.8287 785.485 -374.9144
-## 
-## Random effects:
-##  Formula: ~1 + Polygon.Area.100 | fSpecies
-##  Structure: General positive-definite, Log-Cholesky parametrization
-##                  StdDev    Corr  
-## (Intercept)      0.5185718 (Intr)
-## Polygon.Area.100 4.6121499 -0.079
-## Residual         3.4333447       
-## 
-## Variance function:
-##  Structure: Power of variance covariate
-##  Formula: ~Polygon.Area.100 
-##  Parameter estimates:
-##     power 
-## 0.6460465 
-## Fixed effects: list(Form) 
-##                     Value Std.Error  DF   t-value p-value
-## (Intercept)      0.273699 0.2775939 151 0.9859696  0.3257
-## Polygon.Area.100 3.919556 1.4091936 151 2.7814175  0.0061
-##  Correlation: 
-##                  (Intr)
-## Polygon.Area.100 -0.324
-## 
-## Standardized Within-Group Residuals:
-##        Min         Q1        Med         Q3        Max 
-## -2.7228479 -0.5905337 -0.0581716  0.5215418  3.5139731 
-## 
-## Number of Observations: 165
-## Number of Groups: 13</code></pre>
-</div>
-<div id="conclusions-1" class="section level4">
 <h4>Conclusions</h4>
 <p>We now have evidence that hummingbird species’ specialization, in general, increases with increasing forest cover. However, not all hummingbird species show the same relationship; some species show a much greter increase in specialization with forest cover than others. Species becoming less specialized in less forested areas suggests that changes in resource availability as forest cover is lost are potentially forcing species to be less ‘picky’ in disturbed, agricultural areas. Interestingly, the species with the greatest specialization in areas with high forest cover are the ones that change their specialization the most along the forest cover gradient. This suggests that species with low specialization in undisturbed, forested areas do not change their interaction behavior as much as highly specialized species when forest is lost, perhaps because they are already behaving as generalists to begin with.</p>
 </div>

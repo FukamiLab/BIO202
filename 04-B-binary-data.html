@@ -26,6 +26,49 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
 
 
 <style type="text/css">
@@ -565,9 +608,234 @@ div.tocify {
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
+<div id="my-data" class="section level4">
+<h4>My data:</h4>
+<p>I sampled mosquitoes in 38 sites of varying vegetation cover and microclimate. Given what we know about mosquito responses to microclimate and habitat requirements, I expect that variation in vegetation and microclimate should impact suitability of sites for specific mosquito species, and ultimately impact which/how many mosquitoes are found in a site. I am most interested in <em>Aedes albopictus</em>, the main disease vector species found in this study.</p>
+<p>The data for the purpose of this exercise include:</p>
+<ul>
+<li>Presence of <em>Aedes albopictus</em> in sites</li>
+<li>Proportion of <em>Aedes albopictus</em> out of total mosquitoes trapped</li>
+<li>Mosquito abundance data</li>
+<li>Covariates of interest: vegetation cover, average annual minimum temperature</li>
+</ul>
+<p>I want to investigate the relationship between my environmental covariates and 1) the presence of <em>Aedes albopictus</em>, and 2) the proportion of <em>Aedes albo</em> individuals out of the total trap count of mosquitoes.3) counts of <em>Aedes albo</em></p>
+</div>
+</div>
+<div id="glm-for-presenceabsence-data" class="section level3">
+<h3>GLM for Presence/Absence Data</h3>
+<p>Students in the course can download the data from our Canvas site into a data folder in their working directory.</p>
+<p>First, I’ll read in the data:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read in my data from data folder in your working directory</span>
+aedes_dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/AedesData_EcoStats_Example.csv&quot;</span>) 
+
+<span class="kw">attach</span>(aedes_dat)</code></pre></div>
+<p>Next, I want to do some quick data exploration:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(Proportion, <span class="dt">breaks=</span><span class="dv">16</span>, <span class="dt">xlab =</span> <span class="st">&quot;aedes proportion&quot;</span>, <span class="dt">freq =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p><img src="images/04-B/unnamed-chunk-3-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(aedes, <span class="dt">breaks=</span><span class="dv">16</span>, <span class="dt">xlab =</span> <span class="st">&quot;vegetation cover&quot;</span>, <span class="dt">freq =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p><img src="images/04-B/unnamed-chunk-3-2.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dotchart</span>(aedes, <span class="dt">xlab =</span> <span class="st">&quot;Aedes count&quot;</span>,
+         <span class="dt">ylab =</span> <span class="st">&quot;Order of data&quot;</span>, <span class="dt">labels =</span> F)</code></pre></div>
+<p><img src="images/04-B/unnamed-chunk-3-3.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dotchart</span>(Proportion, <span class="dt">xlab =</span> <span class="st">&quot;Proportion Aedes&quot;</span>,
+         <span class="dt">ylab =</span> <span class="st">&quot;Order of data&quot;</span>, <span class="dt">labels =</span> F)</code></pre></div>
+<p><img src="images/04-B/unnamed-chunk-3-4.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(Vegetation,Presence)</code></pre></div>
+<p><img src="images/04-B/unnamed-chunk-3-5.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(TempMin, Presence)</code></pre></div>
+<p><img src="images/04-B/unnamed-chunk-3-6.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(Vegetation,Proportion)</code></pre></div>
+<p><img src="images/04-B/unnamed-chunk-3-7.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#quick visual check of veg/temp covariation</span>
+<span class="kw">plot</span>(Vegetation,TempMin)</code></pre></div>
+<p><img src="images/04-B/unnamed-chunk-3-8.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cov</span>(Vegetation,TempMin) <span class="co">#Pearson correlation coefficient (default)</span></code></pre></div>
+<div class="figure">
+<img src="images/04-B/aedes_count.png" />
+
+</div>
+<p>The count and proportion data are definitely zero-inflated. The highest values that are up for evaluation as outliers are not considerably larger than the others, so I am going to keep them.</p>
+<p>I am going to try fitting a binomial glm for the presence/absence data using vegetation cover and minimum temp. I will use the standard link function (logit). Both logit and probit link functions assume that you have approximately an equal number of zeros and ones…and I do!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model1 &lt;-<span class="st"> </span><span class="kw">glm</span>(Presence ~<span class="st"> </span>Vegetation +<span class="st"> </span>TempMin, <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),
+          <span class="dt">data =</span> aedes_dat)
+
+<span class="kw">summary</span>(model1)</code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = Presence ~ Vegetation + TempMin, family = binomial(link = &quot;logit&quot;), 
+##     data = aedes_dat)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -2.16890  -0.99378  -0.07501   0.99064   1.50534  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)  5.39261    4.41440   1.222   0.2219  
+## Vegetation  -0.07886    0.03660  -2.155   0.0312 *
+## TempMin     -0.01587    0.16782  -0.095   0.9247  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 52.679  on 37  degrees of freedom
+## Residual deviance: 43.933  on 35  degrees of freedom
+## AIC: 49.933
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#load car library for easy VIF function</span>
+<span class="kw">library</span>(car)</code></pre></div>
+<pre><code>## Warning: package &#39;car&#39; was built under R version 3.3.3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vif</span>(model1)</code></pre></div>
+<pre><code>## Vegetation    TempMin 
+##   1.404985   1.404985</code></pre>
+<p>Looks like minimum temperature is not significant. I have a p-value &lt; 0.05 for vegetation, so I’ll drop minimum temperature in the model.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model2 &lt;-<span class="st"> </span><span class="kw">glm</span>(Presence ~<span class="st"> </span>Vegetation, <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),
+          <span class="dt">data =</span> aedes_dat)
+
+<span class="kw">summary</span>(model2)</code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = Presence ~ Vegetation, family = binomial(link = &quot;logit&quot;), 
+##     data = aedes_dat)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -2.16875  -0.99543  -0.07211   0.98946   1.50902  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)  5.02479    2.05386   2.447   0.0144 *
+## Vegetation  -0.07703    0.03088  -2.494   0.0126 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 52.679  on 37  degrees of freedom
+## Residual deviance: 43.942  on 36  degrees of freedom
+## AIC: 47.942
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<p>And now I can plot the predicted relationship.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#create new covariate values within observed range for predictions</span>
+pred1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Vegetation =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">20</span>,
+                                    <span class="dt">to =</span> <span class="dv">95</span>, <span class="dt">by =</span> <span class="dv">5</span>))
+
+Pred &lt;-<span class="st"> </span><span class="kw">predict</span>(model2, <span class="dt">newdata =</span> pred1, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)
+
+<span class="kw">plot</span>(<span class="dt">x =</span> Vegetation, <span class="dt">y =</span> Presence)
+<span class="kw">lines</span>(pred1$Vegetation, Pred)</code></pre></div>
+<p><img src="images/04-B/unnamed-chunk-6-1.png" width="672" /></p>
+<div class="figure">
+<img src="images/04-B/binom_fit.png" />
+
+</div>
+</div>
+<div id="glm-for-proportional-data" class="section level3">
+<h3>GLM for Proportional Data</h3>
+<p>I’ll now try using the response variable that is the proportion of <em>Ae. albo</em> out of the whole sample of mosquitoes per site. I’m still going to stick with vegetation cover in a simple regression.</p>
+<div class="figure">
+<img src="images/04-B/prop_veg.png" />
+
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model3 &lt;-<span class="st"> </span><span class="kw">glm</span>(Proportion ~<span class="st"> </span>Vegetation, <span class="dt">family =</span> binomial,
+          <span class="dt">data =</span> aedes_dat)</code></pre></div>
+<pre><code>## Warning: non-integer #successes in a binomial glm!</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(model3)</code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = Proportion ~ Vegetation, family = binomial, data = aedes_dat)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.0104  -0.5257  -0.3454   0.3424   1.1523  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept)  1.13912    1.83392   0.621    0.535
+## Vegetation  -0.04293    0.02996  -1.433    0.152
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 14.334  on 37  degrees of freedom
+## Residual deviance: 12.132  on 36  degrees of freedom
+## AIC: 25.903
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>Big realization: I probably need to deal with nonlinear responses in my data. I expect that there will be a density of <em>Aedes</em> around species-specific optimal conditions.</p>
+<p><em>Friends, What’s next on this front?</em></p>
+</div>
+<div id="glm-for-count-data" class="section level3">
+<h3>GLM for count data</h3>
+<p>I am also interested in general changes in mosquito abundance across the land use gradient. A few studies have shown an increase in overall abundance with forest cover.</p>
+<p>Again, I’ll start with data exploration and will take a look at the total mosquito abundance data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(Total, <span class="dt">breaks=</span><span class="dv">50</span>, <span class="dt">xlab =</span> <span class="st">&quot;Total mosquitoes&quot;</span>, <span class="dt">main =</span> <span class="ot">NULL</span>, <span class="dt">freq =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p><img src="images/04-B/unnamed-chunk-8-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dotchart</span>(Total, <span class="dt">xlab =</span> <span class="st">&quot;Total mosquitoes&quot;</span>,
+         <span class="dt">ylab =</span> <span class="st">&quot;Order of data&quot;</span>, <span class="dt">labels =</span> F)</code></pre></div>
+<p><img src="images/04-B/unnamed-chunk-8-2.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(Vegetation,Total)</code></pre></div>
+<p><img src="images/04-B/unnamed-chunk-8-3.png" width="672" /></p>
+<div class="figure">
+<img src="images/04-B/total_hist.png" />
+
+</div>
+<div class="figure">
+<img src="images/04-B/dot_total.png" />
+
+</div>
+<div class="figure">
+<img src="images/04-B/veg_total.png" />
+
+</div>
+<p>So I’ve got some really big values at a few sites that had tons of mosquitoes, and they could have a huge influence on my model. <em>What to do?</em></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">total.mod1 &lt;-<span class="st"> </span><span class="kw">glm</span>(Total ~<span class="st"> </span>Vegetation, <span class="dt">family =</span> poisson,
+          <span class="dt">data =</span> aedes_dat)
+
+<span class="kw">summary</span>(total.mod1)</code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = Total ~ Vegetation, family = poisson, data = aedes_dat)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -12.518   -4.969   -2.744    1.616   19.567  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -1.139980   0.173682  -6.564 5.25e-11 ***
+## Vegetation   0.065094   0.002209  29.467  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 2640.9  on 37  degrees of freedom
+## Residual deviance: 1642.6  on 36  degrees of freedom
+## AIC: 1808.4
+## 
+## Number of Fisher Scoring iterations: 6</code></pre>
+<p>As expected, I have a significant result. I can calculate the explained deviance as the authors do in section <em>9.5.3</em>, and if this were an accepted result, I would find that vegetation explains 37.8% of the variation in mosquito abundance.</p>
+<p>I’ll plot the prediction…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Pred2 &lt;-<span class="st"> </span><span class="kw">predict</span>(total.mod1, <span class="dt">newdata =</span> pred1, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)
+
+<span class="kw">plot</span>(<span class="dt">x =</span> Vegetation, <span class="dt">y =</span> Total)
+<span class="kw">lines</span>(pred1$Vegetation, Pred2)</code></pre></div>
+<p><img src="images/04-B/unnamed-chunk-10-1.png" width="672" /></p>
+<div class="figure">
+<img src="images/04-B/total_pred.png" />
+
+</div>
+<p>Given that the dispersion parameter is 1, this suggests that I do not have to worry about overdispersion.</p>
+<p>Next, validation: <em>We need to take the residuals of choice (e.g. deviance) and plot them against (i) the fitted values, (ii) each explanatory variable in the model, (iii) each explanatory variable not in the model (the ones not used in the model, or the ones dropped during the model selection procedure), (iv) against time, and (v) against spatial coordinates, if relevant. We do not want to see any patterns in these graphs. If we do, then there is something wrong, and we need to work out what it is.</em></p>
 </div>
 <div id="discussion-questions" class="section level3">
 <h3>Discussion Questions</h3>
+<p><strong>Q1:</strong> How to validate a binomial GLM model?</p>
+<p><strong>Q2:</strong> What are potential reasons for choosing between a quasi-Poisson model or negative binomial model to deal with overdispersion?</p>
+<p><strong>Q3:</strong> I thought these 2 chapters had a lot of information to take in…what are <em>your</em> questions?</p>
 </div>
 
 
