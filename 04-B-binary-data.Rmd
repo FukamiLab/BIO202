@@ -1,7 +1,7 @@
 ---
 layout: topic
-title: "GLM with binary and proportional data"
-author: Meghan Howard
+title: "GLM with count, binary, and proportional data"
+author: Tad and Meghan Howard
 output: html_document
 ---
 
@@ -30,6 +30,50 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
+#### Poisson GLM for count data, without overdispersion
+
+* `family = poisson`
+
+* Model selection: AIC or hypothesis testing (z-statistics, `drop1()`, `anova()`)
+
+* Model validation: Use normalized (or Pearson) residuals (as in Ch 4) or deviance residuals (default in R), which give similar results (except for zero-inflated data).
+
+* Overdispersion (variance is larger than mean): Needs correction when Phi (= D/(n-P)) > 1.5, and quick fix is to use `family = quasipoisson`, but cost is that se of parameters will be multiplied by sqrt(Phi).
+
+#### Negative binomial GLM for count data, with overdispersion
+
++ Use when Phi > 15
+
++ `glm.nb()` in `library(MASS)` (Modern Applied Statistics with S)
+
++ Advantage of NB over quasipoisson: `step()` and `stepAIC()` can be used for model selection
+
++ There can be overdispersion in NB GLM, but options for fixing it are scarse in R.
+
++ Offset: equation 9.18 on p. 240
+
+     `L0 <- glm(Copepod ~ offset(LVol) + fStation, family = poisson, data = Lice)`
+
+#### Bernoulli GLM for binary (presence-absence) data
+
++ Table 10.1: getting rid of lower (0) and upper (1) bounds of probabilities
+
++ `family = binomial`
+   
+   * `family = binomial(link="probit")`
+
+   * `family = binomial(link="cloglog")` - when there are many zeros or many ones
+
++ Bernoulli GAM (Fig 10.6)
+
+#### Binomial GLM for proportional data
+
++ Model on p. 255: Yi ~ N(ni, pii)
+
++ `family=quasibinomial` for overdispersed data
+
+
+***
 
 
 ### Analysis Example
