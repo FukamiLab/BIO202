@@ -124,7 +124,7 @@ plot(Vegetation,Proportion)
 
 #quick visual check of veg/temp covariation
 plot(Vegetation,TempMin)
-cov(Vegetation,TempMin) #Pearson correlation coefficient (default)
+cor(Vegetation,TempMin) #Pearson correlation coefficient (default)
 
 ```
 
@@ -135,7 +135,7 @@ The count and proportion data are definitely zero-inflated. The highest values t
 I am going to try fitting a binomial glm for the presence/absence data using vegetation cover and minimum temp. I will use the standard link function (logit). Both logit and probit link functions assume that you have approximately an equal
 number of zeros and ones...and I do!
 
-```{r}
+```{r warning = FALSE}
 
 model1 <- glm(Presence ~ Vegetation + TempMin, family = binomial(link = "logit"),
           data = aedes_dat)
@@ -148,7 +148,7 @@ vif(model1)
 
 ```
 
-Looks like minimum temperature is not significant. I have a p-value < 0.05 for vegetation, so I'll drop minimum temperature in the model.
+Looks like minimum temperature is not significant when Vegetation is included. I have a p-value < 0.05 for vegetation, so I'll drop minimum temperature in the model.
 
 ```{r}
 
@@ -176,6 +176,14 @@ lines(pred1$Vegetation, Pred)
 
 ![](images/04-B/binom_fit.png)
 
+I can use a likelihood ratio test to determine whether the model without minimum temperature is better.
+
+```{r}
+# LR test by dropping each term shows that Vegetation should be retained.
+drop1(model1, test = "Chi")
+
+```
+
 ### GLM for Proportional Data
 
 I'll now try using the response variable that is the proportion of *Ae. albo* out of the whole sample of mosquitoes per site. I'm still going to stick with vegetation cover in a simple regression.
@@ -194,6 +202,8 @@ summary(model3)
 Big realization: I probably need to deal with nonlinear responses in my data. I expect that there will be a density of *Aedes* around species-specific optimal conditions.
 
 *Friends, What's next on this front?*
+
+In class we discussed using a quadratic term or GAM.
 
 ### GLM for count data
 
@@ -258,7 +268,21 @@ Next, validation:
 **Q3:** I thought these 2 chapters had a lot of information to take in...what are *your* questions?
 
 
+****
 
+### After-class follow-up
+
+#### Quantile regression
+
++ Here is a package "quantreg" and a vignette:
+
+https://cran.r-project.org/web/packages/quantreg/index.html
+
+https://cran.ms.unimelb.edu.au/web/packages/quantreg/vignettes/rq.pdf
+
++ This looks like a good introduction, although not so recent:
+
+http://onlinelibrary.wiley.com/doi/10.1890/1540-9295(2003)001[0412:AGITQR]2.0.CO;2/abstract
 
 
 
