@@ -37,7 +37,9 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
-
++ If  $\theta$ is a model and $y$ is observed data, then frequentists estimate $P(y|\theta)$ and Bayesians estimate $P(\theta|y)$.
++ $p(\theta|y)$ (the posterior distibution) $\propto$ $p(\theta)$ (prior information about parameters) $\times p(y|\theta)$ (the likelihood function)
++
 
 ### Analysis Example
 
