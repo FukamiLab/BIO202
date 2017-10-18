@@ -649,7 +649,7 @@ aedes_dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span c
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#quick visual check of veg/temp covariation</span>
 <span class="kw">plot</span>(Vegetation,TempMin)</code></pre></div>
 <p><img src="images/04-B/unnamed-chunk-3-8.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cov</span>(Vegetation,TempMin) <span class="co">#Pearson correlation coefficient (default)</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(Vegetation,TempMin) <span class="co">#Pearson correlation coefficient (default)</span></code></pre></div>
 <div class="figure">
 <img src="images/04-B/aedes_count.png" />
 
@@ -685,12 +685,11 @@ aedes_dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span c
 ## 
 ## Number of Fisher Scoring iterations: 4</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#load car library for easy VIF function</span>
-<span class="kw">library</span>(car)</code></pre></div>
-<pre><code>## Warning: package &#39;car&#39; was built under R version 3.3.3</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vif</span>(model1)</code></pre></div>
+<span class="kw">library</span>(car)
+<span class="kw">vif</span>(model1)</code></pre></div>
 <pre><code>## Vegetation    TempMin 
 ##   1.404985   1.404985</code></pre>
-<p>Looks like minimum temperature is not significant. I have a p-value &lt; 0.05 for vegetation, so I’ll drop minimum temperature in the model.</p>
+<p>Looks like minimum temperature is not significant when Vegetation is included. I have a p-value &lt; 0.05 for vegetation, so I’ll drop minimum temperature in the model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model2 &lt;-<span class="st"> </span><span class="kw">glm</span>(Presence ~<span class="st"> </span>Vegetation, <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),
           <span class="dt">data =</span> aedes_dat)
 
@@ -732,6 +731,19 @@ Pred &lt;-<span class="st"> </span><span class="kw">predict</span>(model2, <span
 <img src="images/04-B/binom_fit.png" />
 
 </div>
+<p>I can use a likelihood ratio test to determine whether the model without minimum temperature is better.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># LR test by dropping each term shows that Vegetation should be retained.</span>
+<span class="kw">drop1</span>(model1, <span class="dt">test =</span> <span class="st">&quot;Chi&quot;</span>)</code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## Presence ~ Vegetation + TempMin
+##            Df Deviance    AIC    LRT Pr(&gt;Chi)  
+## &lt;none&gt;          43.933 49.933                  
+## Vegetation  1   49.951 53.951 6.0184  0.01416 *
+## TempMin     1   43.942 47.942 0.0089  0.92465  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
 <div id="glm-for-proportional-data" class="section level3">
 <h3>GLM for Proportional Data</h3>
@@ -766,18 +778,19 @@ Pred &lt;-<span class="st"> </span><span class="kw">predict</span>(model2, <span
 ## Number of Fisher Scoring iterations: 5</code></pre>
 <p>Big realization: I probably need to deal with nonlinear responses in my data. I expect that there will be a density of <em>Aedes</em> around species-specific optimal conditions.</p>
 <p><em>Friends, What’s next on this front?</em></p>
+<p>In class we discussed using a quadratic term or GAM.</p>
 </div>
 <div id="glm-for-count-data" class="section level3">
 <h3>GLM for count data</h3>
 <p>I am also interested in general changes in mosquito abundance across the land use gradient. A few studies have shown an increase in overall abundance with forest cover.</p>
 <p>Again, I’ll start with data exploration and will take a look at the total mosquito abundance data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(Total, <span class="dt">breaks=</span><span class="dv">50</span>, <span class="dt">xlab =</span> <span class="st">&quot;Total mosquitoes&quot;</span>, <span class="dt">main =</span> <span class="ot">NULL</span>, <span class="dt">freq =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<p><img src="images/04-B/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="images/04-B/unnamed-chunk-9-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dotchart</span>(Total, <span class="dt">xlab =</span> <span class="st">&quot;Total mosquitoes&quot;</span>,
          <span class="dt">ylab =</span> <span class="st">&quot;Order of data&quot;</span>, <span class="dt">labels =</span> F)</code></pre></div>
-<p><img src="images/04-B/unnamed-chunk-8-2.png" width="672" /></p>
+<p><img src="images/04-B/unnamed-chunk-9-2.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(Vegetation,Total)</code></pre></div>
-<p><img src="images/04-B/unnamed-chunk-8-3.png" width="672" /></p>
+<p><img src="images/04-B/unnamed-chunk-9-3.png" width="672" /></p>
 <div class="figure">
 <img src="images/04-B/total_hist.png" />
 
@@ -823,7 +836,7 @@ Pred &lt;-<span class="st"> </span><span class="kw">predict</span>(model2, <span
 
 <span class="kw">plot</span>(<span class="dt">x =</span> Vegetation, <span class="dt">y =</span> Total)
 <span class="kw">lines</span>(pred1$Vegetation, Pred2)</code></pre></div>
-<p><img src="images/04-B/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="images/04-B/unnamed-chunk-11-1.png" width="672" /></p>
 <div class="figure">
 <img src="images/04-B/total_pred.png" />
 
@@ -836,6 +849,22 @@ Pred &lt;-<span class="st"> </span><span class="kw">predict</span>(model2, <span
 <p><strong>Q1:</strong> How to validate a binomial GLM model?</p>
 <p><strong>Q2:</strong> What are potential reasons for choosing between a quasi-Poisson model or negative binomial model to deal with overdispersion?</p>
 <p><strong>Q3:</strong> I thought these 2 chapters had a lot of information to take in…what are <em>your</em> questions?</p>
+<hr />
+</div>
+<div id="after-class-follow-up" class="section level3">
+<h3>After-class follow-up</h3>
+<div id="quantile-regression" class="section level4">
+<h4>Quantile regression</h4>
+<ul>
+<li>Here is a package “quantreg” and a vignette:</li>
+</ul>
+<p><a href="https://cran.r-project.org/web/packages/quantreg/index.html" class="uri">https://cran.r-project.org/web/packages/quantreg/index.html</a></p>
+<p><a href="https://cran.ms.unimelb.edu.au/web/packages/quantreg/vignettes/rq.pdf" class="uri">https://cran.ms.unimelb.edu.au/web/packages/quantreg/vignettes/rq.pdf</a></p>
+<ul>
+<li>This looks like a good introduction, although not so recent:</li>
+</ul>
+<p><a href="http://onlinelibrary.wiley.com/doi/10.1890/1540-9295(2003)001%5B0412:AGITQR%5D2.0.CO;2/abstract" class="uri">http://onlinelibrary.wiley.com/doi/10.1890/1540-9295(2003)001[0412:AGITQR]2.0.CO;2/abstract</a></p>
+</div>
 </div>
 
 
