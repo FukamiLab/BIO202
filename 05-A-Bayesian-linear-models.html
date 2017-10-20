@@ -531,7 +531,7 @@ div.tocify {
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
 <p>Differences between Frequentist and Bayesian approach to statistical inference:</p>
-<p><strong>See Table 8.1 in the reading.</strong></p>
+<p><strong>See Table 3.1 in the reading.</strong></p>
 <table style="width:54%;">
 <colgroup>
 <col width="26%" />
@@ -562,29 +562,59 @@ div.tocify {
 </tr>
 </tbody>
 </table>
-<p>Bayesian approach to statistical inference:</p>
+<p><strong>Bayesian approach to statistical inference:</strong></p>
+<p>If <span class="math inline">\(\theta\)</span> is a model and <span class="math inline">\(y\)</span> is observed data, then frequentists estimate <span class="math inline">\(P(y|\theta)\)</span> and Bayesians estimate <span class="math inline">\(P(\theta|y)\)</span>. Bayesians use:</p>
+<p><span class="math display">\[p(\theta|y) = \frac{p(y|\theta) p(\theta)}{p(y)}\]</span></p>
+<p><span class="math inline">\(p(\theta|y)\)</span> is the posterior distibution, <span class="math inline">\(p(\theta)\)</span> is our prior information about what values the parameters can take, and <span class="math inline">\(p(y|\theta)\)</span> is the likelihood function that gives the probability of an observed data point given a set of parameter values and a model.</p>
 <ul>
-<li>If <span class="math inline">\(\theta\)</span> is a model and <span class="math inline">\(y\)</span> is observed data, then frequentists estimate <span class="math inline">\(P(y|\theta)\)</span> and Bayesians estimate <span class="math inline">\(P(\theta|y)\)</span>.</li>
-<li><span class="math inline">\(p(\theta|y)\)</span> (the posterior distibution) <span class="math inline">\(\propto\)</span> <span class="math inline">\(p(\theta)\)</span> (prior information about parameters) <span class="math inline">\(\times p(y|\theta)\)</span> (the likelihood function)</li>
-<li>Development of algorithms that sample from posterior <span class="math inline">\(p(\theta|y)\)</span> without knowing the prior probability of the data <span class="math inline">\(p(y) = \int p(y|\theta)p(\theta) d\theta\)</span> have made Bayesian inference accessible.</li>
+<li><p>Development of algorithms that sample from posterior <span class="math inline">\(p(\theta|y)\)</span> without knowing the prior probability of the data <span class="math inline">\(p(y) = \int p(y|\theta)p(\theta) d\theta\)</span> have made Bayesian inference accessible.</p></li>
 <li>Types of posterior distributions:
 <ul>
-<li>Joint distribution</li>
-<li>Marginal distribution</li>
-<li>Conditional distribution</li>
+<li>Joint distribution: gives probability of a set of parameter values. (Plot parameter samples to see whether parameters are correlated!)</li>
+<li>Marginal distribution: gives probabilty for a particular parameter summed over all values of other parameters. (This is what you get if you summarize parameter samples independently.)</li>
+<li>Conditional distribution: gives probabilty for a particular parameter holding other parameters at specific values.</li>
 </ul></li>
-<li>Make inferences by summarizing samples of parameters from the posterior distribution:
+<li><p>Inference is based on <strong>visualizing</strong> and summarizing the posterior distributions of parameters, predicted future observations, and quantities calculated from parameters.</p></li>
+<li>Make inferences (e.g. about effects of covariates) by summarizing samples of parameters from the posterior distribution:
 <ul>
-<li>CrI: credibility intervals are based on quantiles: 90% CrI is between the 0.05 and 0.95 quantiles of the samples of a parameter. Use <code>quantile()</code>.</li>
-<li>HPD: highest posterior density intervals use parameter values so that probability density within interval is never lower than probability density outside interval. Use <code>HPDinterval(as.mcmc())</code>, both functions from <code>coda</code> package.</li>
-<li>Calculate samples of <span class="math inline">\(\hat{y}\)</span> to estimate uncertainty around predicted mean.</li>
-<li>Use calculated samples of <span class="math inline">\(\hat{y}\)</span> together with estimated <span class="math inline">\(\hat{\sigma}\)</span> in the likelihood function to calculate predicted posterior values of data. (Combines uncertainty in parameter estimation with uncertainty in the probability model.)</li>
+<li>Calculate median of samples to see central tendency of marginal distribution of a parameter.</li>
+<li>Visualize uncertainty with credibility intervals (CrI). These give two values of a parameter between which a given percentage of samples occur.
+<ul>
+<li>Can be based on quantiles (symmetric), e.g. 90% CrI is between the 0.05 and 0.95 quantiles of the samples of a parameter (use <code>quantile()</code>)</li>
+<li>Can be the interval with the highest posterior density (HPD): probability density within interval is never lower than probability density outside interval (use <code>HPDinterval(as.mcmc())</code>, both functions from <code>coda</code> package).</li>
 </ul></li>
+<li>Calculate <span class="math inline">\(\hat{y}\)</span> from samples of parameters to estimate uncertainty around predicted mean.</li>
+</ul></li>
+<li>Make inferences about uncertainty in future observations by sampling from the posterior predictive distribution.
+<ul>
+<li>Use calculated samples of <span class="math inline">\(\hat{y}\)</span> together with the likelihood (and potentially samples of <span class="math inline">\(\hat{\sigma}\)</span>) to predict future observations.</li>
+<li>Combines uncertainty in parameter estimation with uncertainty in the probability model.</li>
+</ul></li>
+<li>Can easily calculate probabilities associated any hypothesis derived from model parameters:
+<ul>
+<li>Probability that future observations will be between two values.</li>
+<li>Probability that the variance of <span class="math inline">\(y\)</span> among sites is greater than the variance of <span class="math inline">\(y\)</span> within sites.</li>
+<li>Other examples?</li>
+</ul></li>
+<li><p>Bayesians use log pointwise predictive density to estimate model fit, which is analogous to the log-likelihood in Frequentist inference (see Chapter 5 and 11.2 in Korner-Nievergelt et al. 2015). For each observed outcome, it calculates the average probability of observing that outcome across all of the samples from the posterior, then adds together the ln of these probabilities.</p></li>
+<li><p>Before drawing conclusions, make sure to assess the model assumptions and validate the model by looking at the residual deviance and plotting residuals.</p></li>
 </ul>
-<p>Bayesian inference in R</p>
+<p><strong>Model notation</strong></p>
+<p>To use Bayesian methods you should learn how to write down your model using matrix notation. Practice doing this with every model you fit and identifying what the columns and rows are in each matrix. Doing so will make it easier to write your own models in BUGS or Stan, which will be necessary for fitting more complex models.</p>
+<p><span class="math display">\[\mathbf{y} \sim Pois(\boldsymbol{\hat{\lambda}})\\
+log(\boldsymbol{\hat{\lambda}}) = \mathbf{X}\boldsymbol{\hat{\beta}}\]</span></p>
+<p><span class="math inline">\(\mathbf{y}\)</span> is a vector of observations (of counts) with length <span class="math inline">\(n\)</span>.</p>
+<p><span class="math inline">\(\boldsymbol{\hat{\lambda}}\)</span> is a vector of the estimated mean for each observation (has length <span class="math inline">\(n\)</span>).</p>
+<p><span class="math inline">\(\mathbf{X}\)</span> is a matrix with <span class="math inline">\(n\)</span> rows and <span class="math inline">\(p\)</span> with the observed values of the <span class="math inline">\(p - 1\)</span> covariates in each of the rows. (Note that we have an initial column of all <span class="math inline">\(1\)</span> to estimate the mean.)</p>
+<p><span class="math inline">\(\boldsymbol{\hat{\beta}}\)</span> is a vector of the parameters to be estimated with length <span class="math inline">\(p\)</span>.</p>
+<p><strong>Bayesian inference in R</strong></p>
 <ul>
 <li>Use the <code>sim()</code> function from <code>arm</code> package to simulate samples from the posterior for models fit with <code>lm()</code>, <code>glm()</code>, <code>glmer()</code>.</li>
-<li><code>sim</code> assumes uniform (flat) prior distributions on all parameters, and calculates the posterior distribution analytically.</li>
+<li><code>sim()</code> assumes uniform (flat) prior distributions on all parameters, calculates the posterior distribution analytically, then generates random samples from this distribution.</li>
+<li>Table 8.1 gives good summary of possible GLM likelihood functions and their common link functions.</li>
+<li><code>model.matrix()</code> makes it easy to create design matrices for calculating fitted values (<span class="math inline">\(\hat{y}\)</span>) from samples of parameters.</li>
+<li>Use the <code>apply()</code> function to summarize the matrix of parameter samples returned by <code>sim(model, n.sim)@coef</code>. <code>apply(matrix, 1, fun)</code> applies a function <code>fun</code> to the rows of the matrix whereas <code>apply(matrix, 2, fun)</code> applies the function to the columns.</li>
+<li>Use <code>%*%</code> to do matrix multiplication to calculate <span class="math inline">\(\hat{y}\)</span> from samples of parameters and values of covariates.</li>
 </ul>
 </div>
 <div id="analysis-example" class="section level3">
