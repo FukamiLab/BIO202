@@ -567,6 +567,63 @@ div.tocify {
 </blockquote>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<div id="definition-and-why-it-is-a-problem" class="section level4">
+<h4>Definition and why it is a problem</h4>
+<ul>
+<li><p>When the number of zeros is so large that the data do not readily fit standard distributions (e.g. normal, Poisson, binomial, negative-binomial and beta), the data set is referred to as zero inflated (Heilbron 1994; Tu 2002).</p></li>
+<li><p>The source of the zeroes matters: Non-detection (false zeros) or true zeroes?</p></li>
+</ul>
+</div>
+<div id="a-special-case-zero-truncated-count-data" class="section level4">
+<h4>A special case: zero-truncated count data</h4>
+<ul>
+<li><p>e.g., Number of days that road-kills remain on the road</p></li>
+<li><p>Poisson and NB models can be adjusted to exclude the probability that yi = 0 (equation 11.8 on p. 265).</p></li>
+<li><p><code>family = pospoisson</code> and <code>family = posnegbinomial</code> in VGAM package</p></li>
+</ul>
+</div>
+<div id="more-often-we-get-too-many-zeros-zero-inflated" class="section level4">
+<h4>More often, we get too many zeros (zero-inflated)</h4>
+<ul>
+<li><p>How to detect zero-inflation: Frequency plot to know how many zeroes we would expect</p></li>
+<li><p>Zero-inflation can cause overdispersion (but accounting for zero-inflation does not necessarily remove overdispersion).</p></li>
+<li><p>Two-part and mixture models for zero-inflated data (Table 11.1).</p></li>
+<li><p>Fundamental difference: In two-part models, the count process cannot produce zeros (the distribution is zero-truncated). In mixture models, it can.</p></li>
+<li><p>In other words, two-part models do not distinguish true and false zeros (Fig 11.4), whereas mixture models do, at least statistically (Fig 11.5).</p></li>
+</ul>
+</div>
+<div id="two-part-models" class="section level4">
+<h4>Two-part models</h4>
+<ul>
+<li><p>Source of zeroes is NOT considered</p></li>
+<li><p>First step: zero or nonzero? Binomial model used to model probability of zeroes</p></li>
+<li><p>Second step: zero-truncated model used to model the count data</p></li>
+<li><p>Can do this separately (two models) or combine to use one model (<code>hurdle()</code> in pscl package)</p></li>
+</ul>
+</div>
+<div id="mixture-models" class="section level4">
+<h4>Mixture models</h4>
+<ul>
+<li><p>Zeroes are modeled explicitly as coming from multiple processes: true zeroes and false zeroes are modeled as being generated from different processes</p></li>
+<li><p><code>zeroinfl()</code> in pscl package</p></li>
+</ul>
+</div>
+<div id="steps" class="section level4">
+<h4>Steps</h4>
+<ol style="list-style-type: decimal">
+<li><p>Choose model type</p></li>
+<li><p>Prune variables (<code>drop1()</code>)</p></li>
+<li><p>Model validation (extract residuals and plot vs. all predictors or measured variables)</p></li>
+<li><p>Model interpretation</p></li>
+</ol>
+</div>
+<div id="but-how-to-choose-model-type" class="section level4">
+<h4>But how to choose model type?</h4>
+<ul>
+<li>Options: common sense, model validation, information criteria, hypothesis tests (Poisson or NB), comparison of observed and fitted values</li>
+</ul>
+<hr />
+</div>
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
