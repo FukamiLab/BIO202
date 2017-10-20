@@ -30,6 +30,65 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
+#### Definition and why it is a problem
+
++ When the number of zeros is so large that the data do not readily fit standard distributions (e.g. normal, Poisson, binomial, negative-binomial and beta), the data set is referred to as zero inflated (Heilbron 1994; Tu 2002).
+
++ The source of the zeroes matters: Non-detection (false zeros) or true zeroes?
+
+#### A special case: zero-truncated count data
+
++ e.g., Number of days that road-kills remain on the road
+
++ Poisson and NB models can be adjusted to exclude the probability that yi = 0 (equation 11.8 on p. 265).
+
++ `family = pospoisson` and `family = posnegbinomial` in VGAM package
+
+#### More often, we get too many zeros (zero-inflated)
+
++ How to detect zero-inflation: Frequency plot to know how many zeroes we would expect
+
++ Zero-inflation can cause overdispersion (but accounting for zero-inflation does not necessarily remove overdispersion).
+
++ Two-part and mixture models for zero-inflated data (Table 11.1).
+
++ Fundamental difference: In two-part models, the count process cannot produce zeros (the distribution is zero-truncated). In mixture models, it can.
+
++ In other words, two-part models do not distinguish true and false zeros (Fig 11.4), whereas mixture models do, at least statistically (Fig 11.5).
+
+#### Two-part models
+
++ Source of zeroes is NOT considered
+
++ First step: zero or nonzero? Binomial model used to model probability of zeroes
+
++ Second step: zero-truncated model used to model the count data
+
++ Can do this separately (two models) or combine to use one model (`hurdle()` in pscl package)
+
+#### Mixture models
+
++ Zeroes are modeled explicitly as coming from multiple processes: true zeroes and false zeroes are modeled as being generated from different processes
+
++ `zeroinfl()` in pscl package
+
+#### Steps
+
+1. Choose model type
+
+2. Prune variables (`drop1()`)
+
+3. Model validation (extract residuals and plot vs. all predictors or measured variables)
+
+4. Model interpretation
+
+#### But how to choose model type?
+
++ Options: common sense, model validation, information criteria, hypothesis tests (Poisson or NB), comparison of observed and fitted values
+
+
+***
+
 
 
 ### Analysis Example
