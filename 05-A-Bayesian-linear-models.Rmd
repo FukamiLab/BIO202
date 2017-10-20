@@ -63,7 +63,58 @@ $p(\theta|y)$ is the posterior distibution,  $p(\theta)$ is our prior informatio
     + Joint distribution: gives probability of a set of parameter values. (Plot parameter samples to see whether parameters are correlated!)
     + Marginal distribution: gives probabilty for a particular parameter summed over all values of other parameters. (This is what you get if you summarize parameter samples independently.)
     + Conditional distribution: gives probabilty for a particular parameter holding other parameters at specific values.
-   
+
+Joint posterior distribution of $\beta_0$ and $\beta_1$:
+```{r echo = FALSE, warning = FALSE}
+library(ggplot2)
+
+# Make fake random sample of parameters:
+beta1 <- rnorm(5000, 6, 2)
+beta0 <- 6 - beta1 + rnorm(5000, 0, 2)
+beta <- data.frame(beta0, beta1)
+
+# Plot joint posterior
+ggplot(beta, aes(x = beta0, y = beta1)) + 
+  geom_point(alpha = 0.5) + 
+  geom_hline(yintercept = 4, color = 'red') +
+  geom_hline(yintercept = 8, color = 'blue') +
+  labs(x = expression(beta[0]), 
+       y = expression(beta[1])
+  )
+
+```
+
+Marginal distribution of $\beta_0$:
+```{r echo = FALSE, warning = FALSE}
+ggplot(beta, aes(x = beta0)) +
+  geom_freqpoly(binwidth = 1) + 
+  labs(x = expression(beta[0]),
+       y = "Num. samples")
+
+```
+
+Conditional distribution of $\beta_0$ when $\beta_1 = 4$ (red line) or $\beta_1 = 8$ (blue line).
+
+```{r echo = FALSE, warning = FALSE}
+library(tidyr)
+
+beta0_4 <- 6 - 4 + rnorm(1000, 0, 2)
+beta0_8 <- 6 - 8 + rnorm(1000, 0, 2)
+beta_cond <- data.frame(beta0_4, beta0_8)
+
+beta_long <- beta_cond %>%
+  gather(key = "parm_cond", value = "value")
+
+ggplot(beta_long, aes(x = value, color = parm_cond)) +
+  geom_freqpoly(binwidth = 1) + 
+  scale_color_manual(values = c("red", "blue"), labels = expression(beta[1]==4, beta[1]==8)) + 
+  labs(x = expression(beta[0]),
+       y = "Num. samples",
+       color = NULL)
+
+```
+
+
 + Inference is based on **visualizing** and summarizing the posterior distributions of parameters, predicted future observations, and quantities calculated from parameters.
     
 + Make inferences (e.g. about effects of covariates) by summarizing samples of parameters from the posterior distribution:
