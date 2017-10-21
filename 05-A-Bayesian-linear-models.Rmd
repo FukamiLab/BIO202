@@ -147,7 +147,7 @@ $\mathbf{y}$ is a vector of observations (of counts) with length $n$.
 
 $\boldsymbol{\hat{\lambda}}$ is a vector of the estimated mean for each observation (has length $n$).
 
-$\mathbf{X}$ is a matrix with $n$ rows and $p$ with the observed values of the $p - 1$ covariates in each of the rows. (Note that we have an initial column of all $1$ to estimate the mean.)
+$\mathbf{X}$ is a matrix with $n$ rows and $p$ columns with the observed values of the $p - 1$ covariates in each of the rows. (Note that we have an initial column of all $1$ to estimate the mean.)
 
 $\boldsymbol{\hat{\beta}}$ is a vector of the parameters to be estimated with length $p$.
 
