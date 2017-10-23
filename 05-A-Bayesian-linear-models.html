@@ -725,54 +725,46 @@ M1 &lt;-<span class="st"> </span><span class="kw">lm</span>(ABUND ~<span class="
 <h5>Simulate values for theta and sigma</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#install.packages(&#39;arm&#39;)</span>
 <span class="kw">library</span>(arm)</code></pre></div>
-<pre><code>## Warning: package &#39;arm&#39; was built under R version 3.3.3</code></pre>
 <pre><code>## Loading required package: MASS</code></pre>
-<pre><code>## Warning: package &#39;MASS&#39; was built under R version 3.3.3</code></pre>
 <pre><code>## Loading required package: Matrix</code></pre>
-<pre><code>## Warning: package &#39;Matrix&#39; was built under R version 3.3.3</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;Matrix&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:tidyr&#39;:
 ## 
 ##     expand</code></pre>
 <pre><code>## Loading required package: lme4</code></pre>
-<pre><code>## Warning: package &#39;lme4&#39; was built under R version 3.3.3</code></pre>
 <pre><code>## 
 ## arm (Version 1.9-3, built: 2016-11-21)</code></pre>
 <pre><code>## Working directory is C:/Users/jrcoyle/Documents/Stanford/BIO202/GitHub</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nsim &lt;-<span class="dv">1000</span> <span class="co"># number of simulations can be changed to whatever you want</span>
 bsim &lt;-<span class="st"> </span><span class="kw">sim</span>(M1, <span class="dt">n.sim=</span>nsim)
-<span class="kw">str</span>(sim)</code></pre></div>
-<pre><code>## Formal class &#39;standardGeneric&#39; [package &quot;methods&quot;] with 8 slots
-##   ..@ .Data     :function (object, ...)  
-##   ..@ generic   : atomic [1:1] sim
-##   .. ..- attr(*, &quot;package&quot;)= chr &quot;arm&quot;
-##   ..@ package   : chr &quot;arm&quot;
-##   ..@ group     : list()
-##   ..@ valueClass: chr(0) 
-##   ..@ signature : chr &quot;object&quot;
-##   ..@ default   : NULL
-##   ..@ skeleton  : language (function (object, ...)  stop(&quot;invalid call in method dispatch to &#39;sim&#39; (no default method)&quot;,  ...</code></pre>
+<span class="kw">str</span>(bsim)</code></pre></div>
+<pre><code>## Formal class &#39;sim&#39; [package &quot;arm&quot;] with 2 slots
+##   ..@ coef : num [1:1000, 1:2] 4.22 6.67 8.6 2.58 6.29 ...
+##   .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. ..$ : NULL
+##   .. .. ..$ : chr [1:2] &quot;(Intercept)&quot; &quot;ALT&quot;
+##   ..@ sigma: num [1:1000] 11.18 10.82 10.12 10.28 8.67 ...</code></pre>
 <p>sim() produces an object of class sim that contains “coef” (1000 simulated values for theta, i.e. your parameters) and “sigma” containing the 1000 values for standard deviation.</p>
 </div>
 <div id="summary-statistics-to-describe-posterior-knowledge-about-the-parameters-theta-and-the-variance" class="section level5">
 <h5>Summary statistics to describe posterior knowledge about the parameters (theta) and the variance</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(<span class="kw">coef</span>(bsim), <span class="dv">2</span>, quantile, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="co"># parameters</span></code></pre></div>
 <pre><code>##       (Intercept)        ALT
-## 2.5%    -3.609984 0.03187504
-## 97.5%   15.104432 0.15341193</code></pre>
+## 2.5%    -4.289248 0.02918328
+## 97.5%   15.312500 0.15793703</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(bsim@sigma, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="co"># variance</span></code></pre></div>
 <pre><code>##      2.5%     97.5% 
-##  8.324295 12.485257</code></pre>
+##  8.372159 12.366565</code></pre>
 </div>
 <div id="what-if-we-want-to-test-hypotheses-about-our-data-using-the-posterior-distribution" class="section level5">
 <h5>What if we want to test hypotheses about our data using the posterior distribution?</h5>
 <p><strong>H1.</strong></p>
 <p><strong>H2.</strong> How sure are we that the slope parameter for ALT is larger than .05, .1, .2?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(<span class="kw">coef</span>(bsim)[,<span class="dv">2</span>]&gt;.<span class="dv">05</span>)/nsim <span class="co"># 93% confident that the slope is greater than .05</span></code></pre></div>
-<pre><code>## [1] 0.927</code></pre>
+<pre><code>## [1] 0.92</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(<span class="kw">coef</span>(bsim)[,<span class="dv">2</span>]&gt;.<span class="dv">1</span>)/nsim <span class="co"># 44% confident that the slope is greater than .1</span></code></pre></div>
-<pre><code>## [1] 0.433</code></pre>
+<pre><code>## [1] 0.449</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(<span class="kw">coef</span>(bsim)[,<span class="dv">2</span>]&gt;.<span class="dv">2</span>)/nsim <span class="co"># 0.1% confident that the slope is greater than .2</span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 </div>
@@ -832,11 +824,11 @@ for(i in <span class="dv">1</span>:nsim) newy[,i] &lt;-<span class="st"> </span>
 <h5>From these predicted future values, we can give an estimate for the proportion of observations (i.e. density of birds) greater than #, given the mean altitude =</h5>
 <p><strong>EX1.</strong> If ALT=60, what is the estimated proportion of observations greater than 20?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(newy[newdat$ALT==<span class="dv">60</span>,]&gt;<span class="dv">20</span>)/nsim</code></pre></div>
-<pre><code>## [1] 0.19</code></pre>
+<pre><code>## [1] 0.198</code></pre>
 <p>Thus we expect 20% of future observations with ALT=60 to have a density of birds greater than 20</p>
 <p><strong>EX2.</strong> IF ALT=120, what is the estimated proportion of observations greater than 20?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(newy[newdat$ALT==<span class="dv">120</span>,]&gt;<span class="dv">20</span>)/nsim</code></pre></div>
-<pre><code>## [1] 0.35</code></pre>
+<pre><code>## [1] 0.36</code></pre>
 <p>Thus we expect 39% of future observations with ALT=120 to have a density of birds greater than 20</p>
 <p>Another reason to learn this is because once you have a more complicated model (e.g. mixed models), the frequentist methods to obtain confidence intervals of fitted values are much more complicated than the Bayesian method presented here. The code we learned here can be used for mixed models and generalized linear mixed models with minor changes.</p>
 </div>

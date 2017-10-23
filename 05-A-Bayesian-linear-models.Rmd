@@ -68,6 +68,9 @@ Joint posterior distribution of $\beta_0$ and $\beta_1$:
 ```{r echo = FALSE, warning = FALSE}
 library(ggplot2)
 
+# Set random seed so figures aren't changed every time
+set.seed(13)
+
 # Make fake random sample of parameters:
 beta1 <- rnorm(5000, 6, 2)
 beta0 <- 6 - beta1 + rnorm(5000, 0, 2)
@@ -200,12 +203,12 @@ Now lets use sim() in the package 'arm' on the model we produced 'M1'. Sim() dra
 
 
 ##### Simulate values for theta and sigma 
-```{r include = TRUE}
+```{r include = TRUE, warning = FALSE}
 #install.packages('arm')
 library(arm)
 nsim <-1000 # number of simulations can be changed to whatever you want
 bsim <- sim(M1, n.sim=nsim)
-str(sim)
+str(bsim)
 ```
 sim() produces an object of class sim that contains "coef" (1000 simulated values for theta, i.e. your parameters) and "sigma" containing the 1000 values for standard deviation.
 
