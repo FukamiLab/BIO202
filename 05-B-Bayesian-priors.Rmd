@@ -116,6 +116,11 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 10. Proceed with model selection and validation by examining information criteria (WAIC) and residuals. Repeat steps 1-10 as needed to find an acceptable model.
 11. Use samples from final model after the burn-in period to make inferences.
 
+**R Tools**
+
++ The `coda` package is frequently used to visualize MCMC results.
++ Check out the `ggmcmc` package for plotting MCMC results with `ggplot2`: [website](http://xavier-fim.net/packages/ggmcmc/)
+
 
 
 ### Analysis Example
