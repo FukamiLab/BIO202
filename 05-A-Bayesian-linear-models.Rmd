@@ -161,11 +161,166 @@ $\boldsymbol{\hat{\beta}}$ is a vector of the parameters to be estimated with le
 + Use the `apply()` function to summarize the matrix of parameter samples returned by `sim(model, n.sim)@coef`. `apply(matrix, 1, fun)` applies a function `fun` to the rows of the matrix whereas `apply(matrix, 2, fun)` applies the function to the columns.
 + Use `%*%` to do matrix multiplication to calculate $\hat{y}$ from samples of parameters and values of covariates.
 
+
+
+
+
 ### Analysis Example
+Let's use the data from Appendix A of the Zuur book, where we are looking at the density of birds within 56 forest patches. ABUND= the density of birds in a forest patch (continuous response variable), ALT= mean altitude of the patch (continuous explanatory variable). We want to know how mean altitude of the forest patch influences the number of birds within the patch. This code comes from Chapter 3 and Chapter 4.1 in Korner-Nievergelt et al. 2015. *Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.
+
+#### Step 1: Fit a linear model  
+Remember you could use any linear model from lm() glm() or glmer() but we are going to use a lm() example.  
+```{r include = TRUE}
+# clear your environment
+rm(list=ls()) 
+
+# read in the data
+Loyn<- read.table(file = "/Users/jamiemcdevitt-irwin/Dropbox/Jamie/Stanford/3_Courses/Biol202/Week3_linearmodels_intro/ZuurDataMixedModelling/Loyn.txt", header = TRUE, dec = ".")   
+
+# let's take a quick look at the data
+head(Loyn)
+
+# run a linear regression with just one of the explanatory variables: ALT
+M1 <- lm(ABUND ~ ALT, data = Loyn) # least squares fit 
+summary(M1)
+summary(M1)$sigma # pull out the residual standard error 
+
+```
+To get an idea of how sim() draws upon our model, let's first write out this model fully.  
+**Random**   
+$ABUND_i \sim N(\hat{ABUND_i}, \hat{sigma})$    
+**Deterministic**    
+$\hat{ABUND_i} = \hat{beta_0} + \hat{beta_1} * ALT_i$  
 
 
+#### Step 2: Draw Conclusions
+Now lets use sim() in the package 'arm' on the model we produced 'M1'. Sim() draws a random value from the marginal posterior distribution of sigma and then draws random values from the conditional posterior distribution of $\beta$ (i.e. the parameters in the model, in our case the intercept and slope for ALT). These posterior distributions describe the range of plausible parameter values given the data and the model. They express our uncertainty about the model parameters. 
+
+
+##### Simulate values for theta and sigma 
+```{r include = TRUE}
+#install.packages('arm')
+library(arm)
+nsim <-1000 # number of simulations can be changed to whatever you want
+bsim <- sim(M1, n.sim=nsim)
+str(sim)
+```
+sim() produces an object of class sim that contains "coef" (1000 simulated values for theta, i.e. your parameters) and "sigma" containing the 1000 values for variance
+
+##### Summary statistics to describe posterior knowledge about the parameters (theta) and the variance
+```{r include = TRUE}
+apply(coef(bsim), 2, quantile, prob=c(0.025, 0.975)) # parameters
+
+quantile(bsim@sigma, prob=c(0.025, 0.975)) # variance
+```
+
+
+##### What if we want to test hypotheses about our data using the posterior distribution?    
+**H1.** How sure are we that the density is greater than 1? 10? 100?
+```{r include = TRUE}
+
+mean(bsim@coef>1) # 41% probability that the density is greater than 1
+mean(bsim@coef>10) # 9% probability that the density is greater than 10
+mean(bsim@coef>100) # 0% probability that the density is greater than 100
+```
+Note: this is not the proportion of densities measured that are over 1/10/100, it just expresses what we can infer about the true population mean from the observations we measured
+
+**H2.** How sure are we that the slope parameter for ALT is larger than .05, .1, .2?
+```{r include = TRUE}
+sum(coef(bsim)[,2]>.05)/nsim # 93% confident that the slope is greater than .05
+sum(coef(bsim)[,2]>.1)/nsim # 44% confident that the slope is greater than .1
+sum(coef(bsim)[,2]>.2)/nsim # 0.1% confident that the slope is greater than .2
+
+```
+
+##### What if we want to look at the effect of x (ALT) on y (ABUND) graphically and include information about the uncertainty of the parameter estimates?
+
+We use simulated values from the posterior distribution of model parameters. The simulation of the posterior distribution gives 1000 pairs of intercepts and slopes that describe 1000 different regression lines. We then draw these lines to show the uncertainty in our regression line estimation
+
+```{r include = TRUE}
+
+plot(Loyn$ALT, Loyn$ABUND, pch=16, las=1, cex.lab=1.2) 
+for(i in 1:nsim) abline(coef(bsim)[i,1], coef(bsim)[i,2], col=rgb(0,0,0,0.05)) # add semitransparent regression lines
+
+
+```
+
+So the above plot shows you the 1000 possible regression lines that were simulated from the sim() function. The points on the plot are the original values of ABUND vs ALT  
+
+##### Plot the 95% CrI's
+95% CrI's: credible interval within which we expect the true parameter value to be with a probability of 0.95  
+```{r include = TRUE}
+# first we must define new x-values for which we could like to make fitted values
+# find the max and min of ALT
+min(Loyn$ALT) # 60
+max(Loyn$ALT) # 260
+# now save these x-values because we want to then predict values past these 
+newdat <- data.frame(ALT=seq(60, 260, by=0.1))
+
+newmodmat <- model.matrix(~ALT, data=newdat) # create a matrix that contains these new x-values
+fitmat <- matrix(ncol=nsim, nrow=nrow(newdat)) # then calculate the 1000 fitted values for each new x value using matrix multiplication
+for(i in 1:nsim) fitmat[,i] <- newmodmat %*% coef(bsim)[i,] # %*% is for matrix multiplication, recall that bsim is the object sim() produced for our model M1
+# so you are multiplying the new x values created from the min and max of x by the bsim values  
+plot(Loyn$ALT,Loyn$ABUND, pch=16, las=1, cex.lab=1.2)
+abline(M1, lw=2) # add line from our original model
+lines(newdat$ALT, apply(fitmat, 1, quantile, prob=0.025), lty=3)
+lines(newdat$ALT, apply(fitmat, 1, quantile, prob=0.975), lty=3)  
+
+```
+  
+We are 95% sure the true regression line (black line) is within the credible interval (dotted lines)
+
+
+
+##### What if we want to predict future observations?
+```{r include = TRUE}
+# prepare matrix for simulated new data
+newy <- matrix(ncol=nsim, nrow=nrow(newdat)) # recall newdata is the new x values we created earlier  
+
+# for each simulated fitted value (x=ALT), simulate one new y-value (y=ABUND)
+for(i in 1:nsim) newy[,i] <- rnorm(nrow(newdat),mean=fitmat[,i],sd=bsim@sigma[i]) 
+
+# call the plot with the 95% credible interval prior to adding the 95% interval of simulated predictive distribution
+plot(Loyn$ALT,Loyn$ABUND, pch=16, las=1, cex.lab=1.2)
+abline(M1, lw=2) # add line from our original model
+lines(newdat$ALT, apply(fitmat, 1, quantile, prob=0.025), lty=3)
+lines(newdat$ALT, apply(fitmat, 1, quantile, prob=0.975), lty=3)
+
+# 95% interval of simulated predictive distribution
+lines(newdat$ALT, apply(newy, 1, quantile, prob=0.025), lty=2) 
+lines(newdat$ALT, apply(newy, 1, quantile, prob=0.975), lty=2)
+
+
+```
+
+Thus, future observations are expected to be within the interval defined by the broken lines in the figure above with a probability of 0.95.
+
+Note: compared to a frequentist approach (predict()), this takes a lot more code. However, when you have a simulated the posterior predictive distribution, you have more information than is contained in the frequentist prediction interval. For example, you can test hypotheses about future observations (see code below)
+
+
+##### From these predicted future values, we can give an estimate for the proportion of observations (i.e. density of birds) greater than #, given the mean altitude = #
+**EX1.** If ALT=60, what is the estimated proportion of observations greater than 20?
+```{r include = TRUE}
+sum(newy[newdat$ALT==60,]>20)/nsim
+```
+Thus we expect 22% of future observations with ALT=60 to have a density of birds greater than 20
+
+
+**EX2.** IF ALT=120, what is the estimated proportion of observations greater than 20?
+```{r include = TRUE}
+sum(newy[newdat$ALT==120,]>20)/nsim
+
+```
+Thus we expect 39% of future observations with ALT=120 to have a density of birds greater than 20
+
+
+Another reason to learn this is because once you have a more complicated model (e.g. mixed models), the frequentist methods to obtain confidence intervals of fitted values are much more complicated than the Bayesian method presented here. The code we learned here can be used for mixed models and generalized linear mixed models with minor changes.   
 
 ### Discussion Questions
+1) Why is it harder to obtain CI for fitted values in frequentist approaches?  
+2) When/Why would you bother to use sim() if you don't have priors? Would it help validate your lm()?   
+3) What type of prior knowledge could you think of adding to this example data (X=Altitude, Y=Density) (if it existed)?    
+4) Where would the priors go into the model equation (i.e. write out the model equation in matrices, where would the priors be?)?  
 
 
 
