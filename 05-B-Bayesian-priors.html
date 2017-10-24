@@ -520,13 +520,151 @@ div.tocify {
 
 <p><strong>Assigned Reading:</strong></p>
 <blockquote>
-<p>Chapters 12 and 15 in Korner-Nievergelt et al. 2015. <em>Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.</em> Elsevier.<a href="http://www.sciencedirect.com/science/book/9780128013700">link</a></p>
+<p>Chapters 12 and 15 in Korner-Nievergelt et al. 2015. <em>Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.</em> Elsevier. <a href="http://www.sciencedirect.com/science/book/9780128013700">link</a></p>
 </blockquote>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<p><strong>Why use (weakly) informative priors?</strong></p>
+<ul>
+<li>Uniform priors are unlikely representations of our actual prior state of knowledge.</li>
+<li>Supplying prior distributions with some information allows us to fit models that cannot be fit with frequentist methods. (example- all binary outcomes are the same or binary outcomes separated by a covariate)</li>
+<li>Supplying prior information mirrors the scientific process.</li>
+<li>Supplying prior information makes our assumptions explicit.</li>
+</ul>
+<p><strong>How do we fit models with non-uniform priors?</strong></p>
+<ul>
+<li>To fit models with non-uniform priors we need to simulate parameter samples with MCMC.</li>
+<li>Mathematics proves that, given enough time, MCMC simulation methods produce samples of parameters from the joint posterior distribution.</li>
+<li>Once convinced that an MCMC chain has converged to the posterior, we can use samples from it to make inferences in the same way that we used samples from <code>sim</code>, which were calculed analytically.</li>
+<li>If you don’t have a lot of prior information, do a sensititivity analysis (where you change the prior distributions) to make sure that prior choice is not unduly influencing inference.</li>
+</ul>
+<p><strong>How do you choose prior distributions?</strong></p>
+<ul>
+<li>Make sure that the prior distribution covers all possible values of a parameter and doesn’t allow any values that are impossible. (E.g. <span class="math inline">\(\sigma\)</span> must be positive)</li>
+<li>Read <a href="https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations">this advice</a> from the Stan community.</li>
+</ul>
+<p><strong>How do you make inferences from MCMC output?</strong></p>
+<ul>
+<li>MCMC <em>converges</em> to the correct posterior distribution. Therefore initial samples are not from the distribution and we don’t want to make inference from them.
+<ul>
+<li>BUGS: called “burn-in”, examine trace plot of full chain and decide on cut-off.</li>
+<li>Stan: called “warm-up”, not actually a Markov chain and will be automatically droped from samples if using <code>rstan</code> package.</li>
+</ul></li>
+<li>Markov chains are autocorrelated (adjacent values depend on one another), especially when parameters are correlated.
+<ul>
+<li>To get 1000 independent samples, you may need to run the chain for much longer than 1000 post-burnin iterations.</li>
+<li>Can use “thinning” to avoid storing chain values that you won’t actually use (e.g. save only 1 in 10 samples).</li>
+<li>Use the <em>effective sample size</em> (<code>n.eff</code>) to determine how many independent samples are possible from your chains (and run longer if necessary).</li>
+</ul></li>
+</ul>
+<p><strong>How might MCMC fail?</strong></p>
+<ul>
+<li>High autocorrelation within chains and correlation between parameters can cause:
+<ul>
+<li>Chains get stuck and don’t sample from the full posterior distribution (e.g. show bad mixing).</li>
+<li>Multiple chains don’t sample from the same posterior distribution (initial starting values influence samples).</li>
+</ul></li>
+<li><p>Complex models (especially hierarchical models) required longer to converge.</p></li>
+<li>Models will converge faster with mathematical tricks:
+<ul>
+<li>Center and scale predictors (<code>scale(x, center = TRUE, scale = TRUE)</code> will do: <code>(x - mean(x))/sd(x)</code>).</li>
+<li>Use reparametrization to make it easier to estimate parameters, such as the variance of a random effect. See section 27, Optimizing Stan Code for Efficiency, on p. 333 in the <a href="http://mc-stan.org/users/documentation/">Stan User’s Guide and Documentation</a>.</li>
+</ul></li>
+<li><p>There is not enough data to estimate a parameter and the prior distribution is very vague.</p></li>
+</ul>
+<p><strong>How can you tell that MCMC results are reliable?</strong></p>
+<ul>
+<li>Trace plots that show the value of each parameter through “time” should show good “mixing”.</li>
+<li>Trace plots from separate “chains” should converge on the same values.</li>
+<li><span class="math inline">\(\hat{R} &lt; 1.02\)</span> shows that variance across multiple chains is the same.</li>
+</ul>
+<p><strong>Software comparison</strong></p>
+<table>
+<colgroup>
+<col width="47%" />
+<col width="52%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>OpenBUGS (also WinBUGS, JAGS)</th>
+<th>Stan</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Older = more textbook and tutorial examples.</td>
+<td>Newer = more active development.</td>
+</tr>
+<tr class="even">
+<td>Uses Gibbs sampling, Metropolis-Hastings algoritm or slice sampling.</td>
+<td>Uses Hamiltonian Monte Carlo sampling and optimization-based point estimation.</td>
+</tr>
+<tr class="odd">
+<td>Some details can be implicit.</td>
+<td>All model details must be explicit.</td>
+</tr>
+<tr class="even">
+<td>Slower computation.</td>
+<td>Faster computation, especially for hierarchical models and large data sets.</td>
+</tr>
+<tr class="odd">
+<td>Limited number of functions available.</td>
+<td>Many functions avaible.</td>
+</tr>
+<tr class="even">
+<td>Write models using loops.</td>
+<td>Write models using loops or vector algebra.</td>
+</tr>
+<tr class="odd">
+<td>Can only provide data used to fit the model.</td>
+<td>Can provide extraneous data.</td>
+</tr>
+<tr class="even">
+<td>Must provide initial values.</td>
+<td>Initial values optional.</td>
+</tr>
+<tr class="odd">
+<td>Chains more autocorrelated.</td>
+<td>Chains less autocorrelated.</td>
+</tr>
+<tr class="even">
+<td>Detailed <a href="http://www.openbugs.net/w/Documentation">documentation and examples</a></td>
+<td>Detailed <a href="http://mc-stan.org/users/documentation/index.html">documentation and examples</a>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Steps:</strong></p>
+<ol start="0" style="list-style-type: decimal">
+<li>Install <a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">Stan</a> or <a href="http://www.openbugs.net/w/Downloads">OpenBUGS</a> or <a href="http://mcmc-jags.sourceforge.net/">JAGS</a></li>
+<li>Write down the model(s) you want to fit on paper.</li>
+<li>Specify prior distributions for all unknown parameters.</li>
+<li>Convert the model(s) to Stan (or BUGS) code in a text file.</li>
+<li>Create R objects containing the data needed to fit the model(s).</li>
+<li>Use <code>rstan</code> or <code>R2OpenBUGS</code> or <code>R2jags</code> (or other package) to fit the models in R by referencing the model text file.</li>
+<li>Examine trace plots, <span class="math inline">\(\hat{R}\)</span> and effective samples sizes for each parameter.</li>
+<li>Examine correlations between parameters.</li>
+<li>Decide whether chains are sampling from the posterior distribution.</li>
+<li>Check whether priors are unduly influencing posterior.</li>
+<li>Proceed with model selection and validation by examining information criteria (WAIC) and residuals. Repeat steps 1-10 as needed to find an acceptable model.</li>
+<li>Use samples from final model after the burn-in period to make inferences.</li>
+</ol>
+<p><strong>R Tools</strong></p>
+<ul>
+<li>The <code>coda</code> package is frequently used to visualize MCMC results.</li>
+<li>Check out the <code>ggmcmc</code> package for plotting MCMC results with <code>ggplot2</code>: <a href="http://xavier-fim.net/packages/ggmcmc/">website</a></li>
+</ul>
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
+<p>Should demonstrate:</p>
+<ul>
+<li>stan model code</li>
+<li>fitting a model with the rstan package</li>
+<li>examining Rhat and n.eff for convergence</li>
+<li>extracting samples from a fitted</li>
+<li>plotting traceplots to look for convergence</li>
+<li>plotting model prediction with CrI</li>
+</ul>
 </div>
 <div id="discussion-questions" class="section level3">
 <h3>Discussion Questions</h3>

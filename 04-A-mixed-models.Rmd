@@ -30,6 +30,86 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
+#### Fixed vs. random effects
+
++ Fixed and random effects affect mean and variance of y, respectively.
+
++ Examples
+
+        Fixed: Nutrient added or not, male or female, upland or lowland, wet versus dry, light versus shade, one age versus another
+
+        Random: genotype, block within a field, individuals with repeated measures, family, parent
+
++ Mixed-effects models maximize use of info in the data, compared to 2-stage analysis.
+
+
+#### Linear mixed-effects models
+
++ Random intercept model
+
++ Random intercept and slope model
+
++ Random effects model
+
+![](images/random-effects-plot.png){width=50%}
+
+
+
+
+#### Model selection and validation
+
++ Step 1: fit linear regression
+
++ Step 2: fit model with gls (so linear regression model can be compared with mixed-effects models)
+
++ Step 3: choose variance strcuture
+
+   + Introduce random effects, and/or
+   + Adjust variance structure to take care of heterogeneity
+
++ Step 4: fit the model
+
+   + Make sure `method="REML"`
+
+     `M1.lme=lme(Form, random=~1|Nest, method="REML", data=Owls)`
+
++ Step 5: compare new mixed-effects model with old
+
+     `Form <- formula(LogNeg~SexParent*FoodTreatment+SexParent*ArrivalTime)`
+
+     `M.gls = gls(Form, data=Owls)`
+
+     `M1.lme=lme(Form, random=~1|Nest, method="REML", data=Owls)`
+
+     `anova(M.gls, M1.lme)`
+
++ Stept 6: validate model and, if necessary, repeat steps 4 and 5 until good model is found
+
++ Steps 7 and 8: find optimal fixed effects structure
+
+    First, interaction terms; drop one at time and compare models
+
+    Use `methods="ML"`
+
++ Step 9: refit with REML and validate model
+
++ Step 10: interpret
+
++ Step 11: additive model
+
+
+#### Additional reading
+
+> Chapter 19. Mixed-Effercts Models, in Crawley 2012 The R Book, 2nd ed. [link](http://onlinelibrary.wiley.com/doi/10.1002/9780470515075.ch19/summary)
+
++ Fixed vs. random effects
+
++ Pseudoreplication
+
++ More examples of mixed-effects models for different sampling and experimental designs
+
+
+***
 
 
 ### Analysis Example
@@ -51,6 +131,7 @@ Load the data
 This is a dataset of 3 columns: 
 data[ ,1] = proportion of forest cover at 100m radius around sampling site where hummingbird species was caught data[ ,2] = each hummingbird species as a factor at each site it was caught
 data[ ,3] = the specialization (d') value for each species at each site
+
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 #data <- read.csv(file = "/Users/Beth/Documents/BIO202_2017/data/Specialization_Data_BIO202.csv", header = TRUE)
@@ -191,43 +272,6 @@ for(i in 1:length(thirteen2)) {
 }
 
 ```
-<<<<<<< HEAD
-
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
-fixed.effects(Mlme2)
-```
-
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
-random.effects(Mlme2) ## gives the intercept and slope adjustment to the population curve for each hummingbird species. To get the intercept and slope for each individual species you add each species' values below to the fixed effects values (i.e. the population curve values) given above. 
-```
-
-In practical terms, what these numbers mean is that if you were to catch a hummingbird in a site with no forest cover whatsoever (the intercept) and you didn't know what species it was, you would predict that its specialization would be 0.27 because that's the population estimate for all hummingbird species in general. However, if you caught, say, a Garden Emerald hummingbird in a site with no forest cover, because you know the species, you predict that its specialization is 0.27 + 0.14 = 0.41, which is a higher specialization than the population estimate. 
-
-#### Random Effects Model
-
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
-Mlme3 <- lme(Specialization ~ 1, random = ~1|fSpecies, data = data, weights = vf3) 
-summary(Mlme3)
-```
-
-Comparing our models with AIC
-
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
-AIC(M.gls3, Mlme1, Mlme2, Mlme3)
-```
-
-Using this approach we would select our random intercept and random slope model (Mlme2) because it has the lowest AIC
-
-Fitting the final model with Restricted Maximum Liklihood 
-
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
-M1 <- lme(Form, random = ~1 + Polygon.Area.100|fSpecies, data = data, weights = vf3, method = "REML")
-summary(M1)
-```
-
-#### Conclusions 
-
-=======
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 fixed.effects(Mlme2)
@@ -271,6 +315,5 @@ We now have evidence that hummingbird species' specialization, in general, incre
 + If we have data that is nested, must we always use a mixed effects model? What other analytical approaches might provide the same kind of information as MEMs (alternatives)?
 + Honestly, what is the deal with Maximum Liklihood vs. Restricted Maximum Liklihood?
 +Biologically, when would you expect to use the random intercept only model? 
-
 
 
