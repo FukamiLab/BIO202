@@ -48,16 +48,16 @@ Each student will complete the results section to include in a paper to submit f
 |      | Wed | Oct. 25  | Topic 8. [Bayesian inference with prior information](05-B-Bayesian-priors.html)   | Jes       | Nicole     |
 |      | Fri | Oct. 27  | Topic 9. [Advanced Bayesian model example](05-C-Advanced-bayesian-example.html)   | Jes       | Lizzie     |
 | 6    | Mon | Oct. 30  | Topic 10. [Unconstrained ordination](06-A-unconstrained-ordination.html)          | Tad       | Anna       |
-|      | Wed | Nov. 1   | Topic 11. [Constrained ordination](06-B-constrained-ordination.html)              | Tad       | Meghan     |
+|      | Wed | Nov. 1   | Topic 11. [Constrained ordination](06-B-constrained-ordination.html)              | Tad       | Jamie     |
 |      | Fri | Nov. 3   | Topic 12. [Comparing multivariate data](06-C-matrix-comparison.html) (symmetric methods)| Jes       | Priscilla  |
 | 7    | Mon | Nov. 6   | Mid-term project presentation & discussion                                        |           |            |
 |      | Wed | Nov. 8   | Mid-term project presentation & discussion                                        |           |            |
 |      | Fri | Nov. 10  | Mid-term project presentation & discussion                                        |           |            |
-| 8    | Mon | Nov. 13  | Topic 13. [Visualization of spatial data](08-A-mapping.html)                    | Tad       | Marissa    |
-|      | Wed | Nov. 15  | Topic 14. [Spatial regression](08-B-spatial-regression.html)  | Jes       | Sandra     |
-|      | Fri | Nov. 17  | Topic 15. [Ordination approach to spatial analysis](08-C-spatial-ordination.html)                       | Jes       | Tyler      |
+| 8    | Mon | Nov. 13  | Topic 13. [Visualization of spatial data](08-A-mapping.html)                    | Tad       | Tyler    |
+|      | Wed | Nov. 15  | Topic 14. [Spatial regression](08-B-spatial-regression.html)  | Jes       | Marissa     |
+|      | Fri | Nov. 17  | Topic 15. [Ordination approach to spatial analysis](08-C-spatial-ordination.html)                       | Jes       | Sandra      |
 |RECESS|     |          | Thanksgiving                                                                      |           |            |
-| 9    | Mon | Nov. 27  | Topic 16. Selected by class: time-series analysis                                 | Lizzie    | Jamie      |
+| 9    | Mon | Nov. 27  | Topic 16. Selected by class: time-series analysis                                 | Lizzie    |       |
 |      | Wed | Nov. 29  | Topic 17. Selected by class: network analysis                                     | Beth      | Nicole     |
 |      | Fri | Dec. 1   | Topic 18. Selected by class: occupancy models                                     | Nick      |            |
 | 10   | Mon | Dec. 4   | Final project presentations                                                       |           |            |

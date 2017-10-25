@@ -62,6 +62,7 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
     + To get 1000 independent samples, you may need to run the chain for much longer than 1000 post-burnin iterations.
     + Can use "thinning" to avoid storing chain values that you won't actually use (e.g. save only 1 in 10 samples).
     + Use the *effective sample size* (`n.eff`) to determine how many independent samples are possible from your chains (and run longer if necessary).
+    + Here's a paper suggests when you should and shouldn't thin MCMC chains: [Link and Eaton 2011](http://onlinelibrary.wiley.com/doi/10.1111/j.2041-210X.2011.00131.x/abstract)
 
 **How might MCMC fail?**
 
@@ -165,7 +166,7 @@ We're going to pick prior distributions for our model parameters $\sigma$, $\bet
 Ideally, priors should be obtained from (or based on) results from previous studies. We want to be able to merge prior knowledge with information from our given dataset. The priors should be chosen so that they contain information about the range of possible values for a parameter and the plausible shape of the distribution of these values. 
 
 ##### Parameter: Intercept and slope ($\hat{\beta_k}$)
-Unfortunately, I'm not that familiar with the "bird density and altitude" literature, so I don't know what an optimal prior should look like. However, it is reasonable to assume that the intercept and the slope parameters can range from negative to positive values and that values near the endpoints (moving towards $-\infty$ and $\infty$) are less common. As mentioned in the book, a standard weakly informative prior for a $\beta_k$ parameter is a normal distribution with a mean at about 0 and a standard deviation of about 5, so $Norm(\mu = 10, \sigma = 5)$. 
+Unfortunately, I'm not that familiar with the "bird density and altitude" literature, so I don't know what an optimal prior should look like. However, it is reasonable to assume that the intercept and the slope parameters can range from negative to positive values and that values near the endpoints (moving towards $-\infty$ and $\infty$) are less common. As mentioned in the book, a standard weakly informative prior for a $\beta_k$ parameter is a normal distribution with a mean at about 0 and a standard deviation of about 5, so $Norm(\mu = 10, \sigma = 5)$. (Note: this depends on the units of our data, so we should probably do a thought experiment to decide whether the distributions shown below are reasonable for the actual values of bird density and altitude in our data.)
 
 ```{r include = TRUE}
 # Probability density function of the intercept and slope prior
