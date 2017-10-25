@@ -137,14 +137,11 @@ The art of choosing prior distributions (or "priors") is covered in Chapter 15 i
 #### Step 1: The model
 Again, the dataset we're going to use is shown below (but we're only interested in the variables ABUND and ALT).
 ```{r include = TRUE}
-# Set working directory - modify as needed
-#setwd("~/Box Sync/Classes/BIO 202/Weekly Material/Week 5")
 
 # Load dataset
-#data <- read.table("Data/Loyn.txt", header=T)
-Loyn <- read.table("data/Loyn.txt", header = TRUE)
+Loyn <- read.table("data/Loyn.txt", header=T)   
 
- # Show information about the dataset
+# Show information about the dataset
 str(Loyn)
 ```
 
@@ -216,6 +213,8 @@ model {
 }
 ```
 
+<br>
+
 #### Step 4 & 5: Data objects in R and MCMC simulations using Stan
 In a separate R script we can start by loading the R package `rstan` and defining our data objects from our dataset. Then, we run the MCMC simulations using the function `stan()`. Here, we choose to run 5 independent Markov chains for each parameter under 1000 iterations. 
 
@@ -225,7 +224,7 @@ In a separate R script we can start by loading the R package `rstan` and definin
 library(rstan)
 
 # Set working directory - modify as needed
-#setwd("~/Box Sync/Classes/BIO 202/Weekly Material/Week 5")
+setwd("~/Box Sync/Classes/BIO 202/Weekly Material/Week 5")
 
 # Declare data for Stan
 y <- Loyn$ABUND
@@ -234,8 +233,8 @@ N <- nrow(Loyn)
 datax <- list("N", "x", "y")
 
 # Run Stan
-#mod <- stan(file = "Code/05-B.stan", data=datax, chains=5, iter=1000)
-mod <- stan(file = "code/05-B.stan", data=datax, chains=5, iter=1000)
+mod <- stan(file = "Code/mcmc.stan", data=datax, chains=5, iter=1000)
+
 ```
 
 
@@ -246,7 +245,7 @@ mod <- stan(file = "code/05-B.stan", data=datax, chains=5, iter=1000)
 ```{r include = TRUE}
 print(mod, c("beta", "sigma")) # Printing the MCMC output
 ```
-In the output above, `mean` refers to the mean of the marginal posterior distribution from the simulations for each parameter, `se_mean` refers to the the standard error of the simulations (MCMC error) since `se_mean = sd/n_eff`, and `sd` refers to the standard deviation of the marginal posterior distribution from the simulations for each parameter. The percentages are the quantiles of the posterior distribution for each parameter. Finally, `n_eff` is the effective sample size and the potential scale reduction factor, $\hat{R}$, is basically 1, which is good since it's supposed to be $< 1.02$. **Note:** `beta[1]` $= \beta_0$ and `beta[2]` $= \beta_1$.
+In the output above, `mean` refers to the mean of the marginal posterior distribution from the simulations for each parameter, `se_mean` refers to the the standard error of the simulations (MCMC error) since `se_mean = sd/n_eff`, and `sd` refers to the standard deviation of the marginal posterior distribution from the simulations for each parameter. The percentages are the quantiles of the posterior distribution for each parameter. Finally, `n_eff` is the effective sample size and the potential scale reduction factor, $\hat{R}$, is basically 1, which is good since it's supposed to be $< 1.02$. It is comparing the uncertainty (or variation) between chains with the uncertainty within a chain. **Note:** `beta[1]` $= \beta_0$ and `beta[2]` $= \beta_1$.
 
 To test for the unwanted non-convergence (!) we can plot traceplots (iterations against parameter sample values).
 
@@ -258,17 +257,58 @@ traceplot(mod, "sigma")
 
 It seems like all 5 chains converged after about 500 iterations, so that is good. This means that we have obtained posterior distributions for our three parameters that could be used for Bayesian inference. 
 
+Next, lets use the `ggmcmc` R package to visualize our MCMC results a bit more.
+
+```{r include = TRUE, message=FALSE, warning=FALSE}
+# Loading graphics packages
+library(ggplot2)
+library(ggmcmc)
+
+# Save MCMC output as a ggs data frame
+mcmcData <- ggs(mod) 
+
+str(mcmcData)
+```
+
+```{r include = TRUE}
+ggs_histogram(mcmcData)
+```
+
+
+```{r include = TRUE}
+ggs_density(mcmcData)
+```
+
+
+```{r include = TRUE}
+ggs_traceplot(mcmcData)
+```
+
+```{r include = TRUE}
+ggs_autocorrelation(mcmcData)
+```
+
+```{r include = TRUE}
+ggs_crosscorrelation(mcmcData)
+```
+
+More functions for performing MCMC posterior distribution analysis can be found [here](http://xavier-fim.net/packages/ggmcmc/).
+
+
 <br>
 
 #### Step 7: Extracting MCMC results and testing for parameter correlations
 
 If parameters are correlated then MCMC can fail as explained in the Key Points section.
 ```{r include = TRUE}
-modSims <- extract(mod) # Extracting our parameters from the MCMC output and save it as a new data frame
+# Extracting our parameters from the MCMC output and save it as a new data frame
+modSims <- rstan::extract(mod) 
+
 str(modSims)
 ```
 
 ```{r include = TRUE}
+# Scatter plots of parameters to look for correlations
 plot(modSims$beta[,1], modSims$beta[,2], xlab="beta_0", ylab="beta_1")
 plot(modSims$beta[,1], modSims$sigma, xlab="beta_0", ylab="sigma")
 plot(modSims$beta[,2], modSims$sigma, xlab="beta_1", ylab="sigma")
@@ -278,9 +318,11 @@ There seems to be correlation between the intercept parameter $\beta_0$ and the 
 
 Normally, we would perform a prior sensitity analysis to see whether the posterior distributions are influenced by the defined prior distributions and maybe modify our priors accordingly until we are fully satisfied with our model (and repeating steps 1-7).
 
+<br>
+
 #### Step 8: Inferences
 
-Now that we have our joint posterior distribution $p(\theta | y)$ we can perform Bayesian inference much like in the previous seminar session.
+Now that we have our joint posterior distribution $p(\theta | y)$ we can perform Bayesian inference much like in the previous seminar session (based on similar code).
 
 ```{r include = TRUE}
 newData <- data.frame(x=seq(min(Loyn$ALT), max(Loyn$ALT), by=0.1)) 
@@ -296,13 +338,15 @@ for(i in 1:nsim){
   fitmat[,i] <- newMatrix %*% modSims$beta[i,] 
 }
 
+# 95% CrI lines
 newData$fitupper <- apply(fitmat, 1, quantile, prob=0.975)
 newData$fitlower <- apply(fitmat, 1, quantile, prob=0.025) 
 
-linearModel <- lm(ABUND ~ ALT, Loyn)
+# Linear regression
+linearModel <- lm(ABUND ~ ALT, Loyn) 
 
 plot(Loyn$ALT,Loyn$ABUND, pch=16, las=1, cex.lab=1.2, xlab="Mean altitude of a patch", ylab="Density of birds in a patch")
-abline(linearModel, lw=2)
+abline(linearModel, lw=2) # Linear regression line
 lines(newData$x, newData$fitupper, lty=3)
 lines(newData$x, newData$fitlower, lty=3) 
 
