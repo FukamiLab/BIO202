@@ -520,7 +520,7 @@ div.tocify {
 
 <p><strong>Assigned Reading:</strong></p>
 <blockquote>
-<p>TBD by students: one example from Chapter 14 in Korner-Nievergelt et al. 2015. <em>Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.</em> Elsevier. <a href="http://www.sciencedirect.com/science/book/9780128013700">link</a></p>
+<p>Section 14.2 in Korner-Nievergelt et al. 2015. <em>Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.</em> Elsevier. <a href="http://www.sciencedirect.com/science/book/9780128013700">link</a></p>
 </blockquote>
 <p><strong>Optional Reading:</strong></p>
 <blockquote>
@@ -529,6 +529,11 @@ div.tocify {
 </blockquote>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<p>We want to fit a zero-inflated Poisson mixed-effects model, but the <code>hurdle()</code> and <code>zeroinfl()</code> functions from the <code>pscl</code> package don’t allow random effects. A Bayesian approach is more flexible and will allow us to fit this model.</p>
+<p><strong>The Model</strong></p>
+<p><span class="math display">\[z_{it} \sim Bernoulli(\theta_{it})\]</span> <span class="math display">\[logit(\theta_{it}) = a_1 + a_2 year_t + \epsilon_{nestID[i]}\]</span> <span class="math display">\[y_{it} \sim Poisson(\lambda_{it}(1 - z_{it}))\]</span></p>
+<p><span class="math display">\[log(\lambda_{it}) = b_1 + b_2 year_t\]</span></p>
+<p><span class="math display">\[\epsilon_{nestID} \sim Norm(0, \sigma_n)\]</span></p>
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
