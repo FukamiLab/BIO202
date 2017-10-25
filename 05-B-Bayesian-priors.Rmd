@@ -121,22 +121,206 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 + The `coda` package is frequently used to visualize MCMC results.
 + Check out the `ggmcmc` package for plotting MCMC results with `ggplot2`: [website](http://xavier-fim.net/packages/ggmcmc/)
 
-
+<br>
 
 ### Analysis Example
 
+In this analysis example, we're going to build on the material covered in the last seminar
+[Bayesian Inference from Linear Models](https://fukamilab.github.io/BIO202/05-A-Bayesian-linear-models.html). This will enable us to see the similarities and focus more on the differences between the two approaches: (1) using uniform prior distributions (i.e., flat priors or "noninformative" priors), and (2) using non-uniform prior distributions (i.e., informative priors) to perform Bayesian inference. 
 
-Should demonstrate:
+We will use the same dataset as before (Appendix A in Zuur et al. 2009. *Mixed Effects Models and Extensions in Ecology with R*). Again, we're are going to look at how density of birds in a forest patch (continuous response variable = ABUND) differs by the mean altitude of a patch (continuous explanatory variable = ALT). **However, this time we will apply prior distributions containing "prior knowledge" about the parameters used in our model.**
 
- + stan model code
- + fitting a model with the rstan package
- + examining Rhat and n.eff for convergence
- + extracting samples from a fitted
- + plotting traceplots to look for convergence
- + plotting model prediction with CrI 
+The art of choosing prior distributions (or "priors") is covered in Chapter 15 in Korner-Nievergelt et al. 2015. *Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.* Most of the code is borrowed from section 12.3 (MCMC using Stan) in the same book.
+
+<br>
+
+#### Step 1: The model
+Again, the dataset we're going to use is shown below (but we're only interested in the variables ABUND and ALT).
+```{r include = TRUE}
+# Set working directory - modify as needed
+#setwd("~/Box Sync/Classes/BIO 202/Weekly Material/Week 5")
+
+# Load dataset
+#data <- read.table("Data/Loyn.txt", header=T)
+Loyn <- read.table("data/Loyn.txt", header = TRUE)
+
+ # Show information about the dataset
+str(Loyn)
+```
+
+Although priors could be used for more complex models, we're going to use a similar linear model as before (with the exception of adding the priors) where $y =$ ABUND, $x =$ ALT, $\sigma =$ standard deviation, $\beta_0 =$ intercept, $\beta_1 =$ slope, $Norm() =$ normal distribution and $Cauchy()[0,] =$ truncated Cauchy distribution.
+
+**Stochastic part**   
+$y_i \sim Norm(\hat{y_i}, \hat{\sigma} )$ 
+
+$\hat{\beta_k} \sim Norm(0, 5)$
+
+$\hat{\sigma} \sim Cauchy(0, 5)[0,]$
+
+**Deterministic part**    
+$\hat{y_i} = \hat{\beta_0} + \hat{\beta_1} x_i$  
+
+
+<br>
+
+#### Step 2: The priors
+We're going to pick prior distributions for our model parameters $\sigma$, $\beta_0$ and $\beta_1$.
+Ideally, priors should be obtained from (or based on) results from previous studies. We want to be able to merge prior knowledge with information from our given dataset. The priors should be chosen so that they contain information about the range of possible values for a parameter and the plausible shape of the distribution of these values. 
+
+##### Parameter: Intercept and slope ($\hat{\beta_k}$)
+Unfortunately, I'm not that familiar with the "bird density and altitude" literature, so I don't know what an optimal prior should look like. However, it is reasonable to assume that the intercept and the slope parameters can range from negative to positive values and that values near the endpoints (moving towards $-\infty$ and $\infty$) are less common. As mentioned in the book, a standard weakly informative prior for a $\beta_k$ parameter is a normal distribution with a mean at about 0 and a standard deviation of about 5, so $Norm(\mu = 10, \sigma = 5)$. 
+
+```{r include = TRUE}
+# Probability density function of the intercept and slope prior
+xseq <- seq(-15, 15, 0.001)
+plot(xseq, dnorm(xseq, 0, 5), type="l", xlab="", ylab="", yaxt="n", main="Intercept and slope parameter prior")
+```
+
+
+
+##### Parameter: Sigma ($\hat{\sigma}$ )
+Choosing a prior for variance is tricky, especially without any previous knowledge about this particular bird-altitude system. We will thus use a standard weakly informative prior using a truncated Cauchy distribution with non-negative values (as described in the book).
+
+```{r include = TRUE}
+# Probability density function of the variance (or rather standard deviation, sigma)
+xseq <- seq(-15, 15, 0.001)
+plot(xseq, dcauchy(xseq, location = 0, scale = 5), type="l", xlab="", ylab="", yaxt="n", main="Sigma parameter prior", xlim=c(0.55,15))
+
+```
+
+<br>
+
+#### Step 3: Stan code
+Here, we are converting the model into Stan code in a separate .stan text file (e.g., mcmc.stan). There are three main blocks of code: (1) data, (2) parameters and (3) model. Comments are preceded by `//`. The sample size `N` is the only "new" object that has to be declared and we define it as a non-negative integer. The beta ($\beta$) vector contains two elements, `beta[1]` $= \beta_0$ and `beta[2]` $= \beta_1$, and sigma ($\sigma$) is defined as a real continuous non-negative object.
+
+```
+data {
+  //Data objects declared
+    int<lower=0> N; //Sample size for MCMC simulations
+    vector[N] y; 
+    vector[N] x;
+}
+
+parameters {
+  //Model parameter objects declared
+    vector[2] beta;
+    real<lower=0> sigma; 
+}
+
+model {
+  //Prior distributions 
+    beta ~ normal(0,5);
+    sigma ~ cauchy(0,5);
+  //Likelihood 
+    y ~ normal(beta[1] + beta[2] * x, sigma);
+}
+```
+
+#### Step 4 & 5: Data objects in R and MCMC simulations using Stan
+In a separate R script we can start by loading the R package `rstan` and defining our data objects from our dataset. Then, we run the MCMC simulations using the function `stan()`. Here, we choose to run 5 independent Markov chains for each parameter under 1000 iterations. 
+
+```{r include = TRUE, results='hide', message=FALSE, warning=FALSE}
+
+# Load Stan package
+library(rstan)
+
+# Set working directory - modify as needed
+#setwd("~/Box Sync/Classes/BIO 202/Weekly Material/Week 5")
+
+# Declare data for Stan
+y <- Loyn$ABUND
+x <- Loyn$ALT
+N <- nrow(Loyn)
+datax <- list("N", "x", "y")
+
+# Run Stan
+#mod <- stan(file = "Code/05-B.stan", data=datax, chains=5, iter=1000)
+mod <- stan(file = "code/05-B.stan", data=datax, chains=5, iter=1000)
+```
+
+
+<br>
+
+#### Step 6: MCMC analysis
+
+```{r include = TRUE}
+print(mod, c("beta", "sigma")) # Printing the MCMC output
+```
+In the output above, `mean` refers to the mean of the marginal posterior distribution from the simulations for each parameter, `se_mean` refers to the the standard error of the simulations (MCMC error) since `se_mean = sd/n_eff`, and `sd` refers to the standard deviation of the marginal posterior distribution from the simulations for each parameter. The percentages are the quantiles of the posterior distribution for each parameter. Finally, `n_eff` is the effective sample size and the potential scale reduction factor, $\hat{R}$, is basically 1, which is good since it's supposed to be $< 1.02$. **Note:** `beta[1]` $= \beta_0$ and `beta[2]` $= \beta_1$.
+
+To test for the unwanted non-convergence (!) we can plot traceplots (iterations against parameter sample values).
+
+```{r include = TRUE}
+traceplot(mod, "beta[1]") 
+traceplot(mod, "beta[2]") 
+traceplot(mod, "sigma")
+```
+
+It seems like all 5 chains converged after about 500 iterations, so that is good. This means that we have obtained posterior distributions for our three parameters that could be used for Bayesian inference. 
+
+<br>
+
+#### Step 7: Extracting MCMC results and testing for parameter correlations
+
+If parameters are correlated then MCMC can fail as explained in the Key Points section.
+```{r include = TRUE}
+modSims <- extract(mod) # Extracting our parameters from the MCMC output and save it as a new data frame
+str(modSims)
+```
+
+```{r include = TRUE}
+plot(modSims$beta[,1], modSims$beta[,2], xlab="beta_0", ylab="beta_1")
+plot(modSims$beta[,1], modSims$sigma, xlab="beta_0", ylab="sigma")
+plot(modSims$beta[,2], modSims$sigma, xlab="beta_1", ylab="sigma")
+```
+
+There seems to be correlation between the intercept parameter $\beta_0$ and the slope parameter $\beta_1$, which actually makes sense. This might explain why it took about 500 iterations to convergence on a joint posterior distribution for the parameters. Thankfully, the $\sigma$ parameter does not correlate with any of the other parameters.
+
+Normally, we would perform a prior sensitity analysis to see whether the posterior distributions are influenced by the defined prior distributions and maybe modify our priors accordingly until we are fully satisfied with our model (and repeating steps 1-7).
+
+#### Step 8: Inferences
+
+Now that we have our joint posterior distribution $p(\theta | y)$ we can perform Bayesian inference much like in the previous seminar session.
+
+```{r include = TRUE}
+newData <- data.frame(x=seq(min(Loyn$ALT), max(Loyn$ALT), by=0.1)) 
+
+newMatrix <- model.matrix(~x, newData)
+
+b <- apply(modSims$beta, 2, mean)
+newData$mod <- newMatrix %*% b
+nsim <- nrow(modSims$beta)
+
+fitmat <- matrix(ncol=nsim, nrow=nrow(newData)) 
+for(i in 1:nsim){
+  fitmat[,i] <- newMatrix %*% modSims$beta[i,] 
+}
+
+newData$fitupper <- apply(fitmat, 1, quantile, prob=0.975)
+newData$fitlower <- apply(fitmat, 1, quantile, prob=0.025) 
+
+linearModel <- lm(ABUND ~ ALT, Loyn)
+
+plot(Loyn$ALT,Loyn$ABUND, pch=16, las=1, cex.lab=1.2, xlab="Mean altitude of a patch", ylab="Density of birds in a patch")
+abline(linearModel, lw=2)
+lines(newData$x, newData$fitupper, lty=3)
+lines(newData$x, newData$fitlower, lty=3) 
+
+```
+
+The regression line (solid) is supposed to act as a reference for the 95% CrI (dashed lines) obtained with prior information when comparing it with the CrI obtained with uniform priors in the previous seminar. The results using non-uniform priors differ only slightly, as expected.
+
+
 
 
 ### Discussion Questions
+
++ Why is the $\hat{R}$ threshold set at 1.02 (or less strictly at 1.1)?
++ How can mixing or homogenours sampling be discerned in the traceplots? 
++ What's the golden rule when it comes to choosing optimal priors? They should not be (1) too strong, so that they are not providing us with additional information (not found in the dataset - too much overlap between prior and posterior), but also not too weak (2) to not influence the results due to lack of prior knowledge. Is there a better way than exploring different options via trail and error?
+
+
+
 
 
 
