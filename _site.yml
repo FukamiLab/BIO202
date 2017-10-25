@@ -78,12 +78,12 @@ navbar:
           href: 07-midquarter-tyler.html
     - text: "W8"
       menu:
-        - text: "Spatial regression"
-          href: 08-A-spatial-regression.html
-        - text: "Ordination approach to spatial analysis"
-          href: 08-B-spatial-ordination.html
         - text: "Visualizing spatial data"
-          href: 08-C-mapping.html
+          href: 08-A-mapping.html
+        - text: "Spatial regression"
+          href: 08-B-spatial-regression.html
+        - text: "Ordination approach to spatial analysis"
+          href: 08-C-spatial-ordination.html
     - text: "W9"
       menu:
         - text: "Topic 19"

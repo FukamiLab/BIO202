@@ -233,7 +233,15 @@ N <- nrow(Loyn)
 datax <- list("N", "x", "y")
 
 # Run Stan
-mod <- stan(file = "code/05-B.stan", data=datax, chains=3, iter=1000)
+#mod <- stan(file = "code/05-B.stan", data=datax, chains=3, iter=1000)
+
+# Save the mod object as an RData file to read in later (so you don't have to redo simulation)
+#save(mod, file = "data/05-B-stanmod.RData")
+
+# Here is another way to first compile the model before sampling from it so that you don't have to re-run the compiling
+
+# Read the mod object back in
+load("data/05-B-stanmod.RData")
 
 ```
 
