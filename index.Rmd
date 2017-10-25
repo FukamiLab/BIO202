@@ -53,9 +53,9 @@ Each student will complete the results section to include in a paper to submit f
 | 7    | Mon | Nov. 6   | Mid-term project presentation & discussion                                        |           |            |
 |      | Wed | Nov. 8   | Mid-term project presentation & discussion                                        |           |            |
 |      | Fri | Nov. 10  | Mid-term project presentation & discussion                                        |           |            |
-| 8    | Mon | Nov. 13  | Topic 13. [Spatial regression](08-A-spatial-regression.html)                      | Jes       | Marissa    |
-|      | Wed | Nov. 15  | Topic 14. [Ordination approach to spatial analysis](08-B-spatial-ordination.html) | Jes       | Sandra     |
-|      | Fri | Nov. 17  | Topic 15. [Visualization of spatial data](08-C-mapping.html)                      | Jes       | Tyler      |
+| 8    | Mon | Nov. 13  | Topic 13. [Visualization of spatial data](08-A-mapping.html)                    | Tad       | Marissa    |
+|      | Wed | Nov. 15  | Topic 14. [Spatial regression](08-B-spatial-regression.html)  | Jes       | Sandra     |
+|      | Fri | Nov. 17  | Topic 15. [Ordination approach to spatial analysis](08-C-spatial-ordination.html)                       | Jes       | Tyler      |
 |RECESS|     |          | Thanksgiving                                                                      |           |            |
 | 9    | Mon | Nov. 27  | Topic 16. Selected by class: time-series analysis                                 | Lizzie    | Jamie      |
 |      | Wed | Nov. 29  | Topic 17. Selected by class: network analysis                                     | Beth      | Nicole     |

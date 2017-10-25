@@ -233,7 +233,15 @@ N <- nrow(Loyn)
 datax <- list("N", "x", "y")
 
 # Run Stan
-mod <- stan(file = "code/05-B.stan", data=datax, chains=5, iter=1000)
+#mod <- stan(file = "code/05-B.stan", data=datax, chains=3, iter=1000)
+
+# Save the mod object as an RData file to read in later (so you don't have to redo simulation)
+#save(mod, file = "data/05-B-stanmod.RData")
+
+# Here is another way to first compile the model before sampling from it so that you don't have to re-run the compiling
+
+# Read the mod object back in
+load("data/05-B-stanmod.RData")
 
 ```
 
@@ -360,7 +368,7 @@ The regression line (solid) is supposed to act as a reference for the 95% CrI (d
 ### Discussion Questions
 
 + Why is the $\hat{R}$ threshold set at 1.02 (or less strictly at 1.1)?
-+ How can mixing or homogenours sampling be discerned in the traceplots? 
++ How can mixing or homogenous sampling be discerned in the traceplots? 
 + What's the golden rule when it comes to choosing optimal priors? They should not be (1) too strong, so that they are not providing us with additional information (not found in the dataset - too much overlap between prior and posterior), but also not too weak (2) to not influence the results due to lack of prior knowledge. Is there a better way than exploring different options via trail and error?
 
 
