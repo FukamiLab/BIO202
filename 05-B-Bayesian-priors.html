@@ -777,6 +777,7 @@ model {
   //Likelihood 
     y ~ normal(beta[1] + beta[2] * x, sigma);
 }</code></pre>
+<p><br></p>
 </div>
 <div id="step-4-5-data-objects-in-r-and-mcmc-simulations-using-stan" class="section level4">
 <h4>Step 4 &amp; 5: Data objects in R and MCMC simulations using Stan</h4>
@@ -805,15 +806,15 @@ mod &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">
 ## post-warmup draws per chain=500, total post-warmup draws=2500.
 ## 
 ##          mean se_mean   sd  2.5%  25%  50%   75% 97.5% n_eff Rhat
-## beta[1]  3.00    0.10 3.38 -3.53 0.66 2.96  5.21  9.72  1085    1
-## beta[2]  0.11    0.00 0.02  0.06 0.10 0.11  0.13  0.16  1107    1
-## sigma   10.07    0.03 0.99  8.37 9.37 9.99 10.67 12.20  1300    1
+## beta[1]  3.06    0.11 3.44 -3.57 0.72 3.06  5.39  9.85  1074 1.01
+## beta[2]  0.11    0.00 0.02  0.06 0.09 0.11  0.13  0.16  1065 1.00
+## sigma   10.07    0.03 0.97  8.36 9.39 9.98 10.66 12.23  1106 1.00
 ## 
-## Samples were drawn using NUTS(diag_e) at Wed Oct 25 06:19:35 2017.
+## Samples were drawn using NUTS(diag_e) at Wed Oct 25 07:23:39 2017.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
-<p>In the output above, <code>mean</code> refers to the mean of the marginal posterior distribution from the simulations for each parameter, <code>se_mean</code> refers to the the standard error of the simulations (MCMC error) since <code>se_mean = sd/n_eff</code>, and <code>sd</code> refers to the standard deviation of the marginal posterior distribution from the simulations for each parameter. The percentages are the quantiles of the posterior distribution for each parameter. Finally, <code>n_eff</code> is the effective sample size and the potential scale reduction factor, <span class="math inline">\(\hat{R}\)</span>, is basically 1, which is good since it’s supposed to be <span class="math inline">\(&lt; 1.02\)</span>. <strong>Note:</strong> <code>beta[1]</code> <span class="math inline">\(= \beta_0\)</span> and <code>beta[2]</code> <span class="math inline">\(= \beta_1\)</span>.</p>
+<p>In the output above, <code>mean</code> refers to the mean of the marginal posterior distribution from the simulations for each parameter, <code>se_mean</code> refers to the the standard error of the simulations (MCMC error) since <code>se_mean = sd/n_eff</code>, and <code>sd</code> refers to the standard deviation of the marginal posterior distribution from the simulations for each parameter. The percentages are the quantiles of the posterior distribution for each parameter. Finally, <code>n_eff</code> is the effective sample size and the potential scale reduction factor, <span class="math inline">\(\hat{R}\)</span>, is basically 1, which is good since it’s supposed to be <span class="math inline">\(&lt; 1.02\)</span>. It is comparing the uncertainty (or variation) between chains with the uncertainty within a chain. <strong>Note:</strong> <code>beta[1]</code> <span class="math inline">\(= \beta_0\)</span> and <code>beta[2]</code> <span class="math inline">\(= \beta_1\)</span>.</p>
 <p>To test for the unwanted non-convergence (!) we can plot traceplots (iterations against parameter sample values).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">traceplot</span>(mod, <span class="st">&quot;beta[1]&quot;</span>) </code></pre></div>
 <p><img src="images/05-B/unnamed-chunk-7-1.png" width="672" /></p>
@@ -822,36 +823,71 @@ mod &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">traceplot</span>(mod, <span class="st">&quot;sigma&quot;</span>)</code></pre></div>
 <p><img src="images/05-B/unnamed-chunk-7-3.png" width="672" /></p>
 <p>It seems like all 5 chains converged after about 500 iterations, so that is good. This means that we have obtained posterior distributions for our three parameters that could be used for Bayesian inference.</p>
+<p>Next, lets use the <code>ggmcmc</code> R package to visualize our MCMC results a bit more.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Loading graphics packages</span>
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(ggmcmc)
+
+<span class="co"># Save MCMC output as a ggs data frame</span>
+mcmcData &lt;-<span class="st"> </span><span class="kw">ggs</span>(mod) 
+
+<span class="kw">str</span>(mcmcData)</code></pre></div>
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    7500 obs. of  4 variables:
+##  $ Iteration: num  1 2 3 4 5 6 7 8 9 10 ...
+##  $ Chain    : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ Parameter: Factor w/ 3 levels &quot;beta[1]&quot;,&quot;beta[2]&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ value    : num  2.783 7.785 3.5 0.526 0.373 ...
+##  - attr(*, &quot;nChains&quot;)= int 5
+##  - attr(*, &quot;nParameters&quot;)= int 3
+##  - attr(*, &quot;nIterations&quot;)= num 500
+##  - attr(*, &quot;nBurnin&quot;)= num 500
+##  - attr(*, &quot;nThin&quot;)= num 1
+##  - attr(*, &quot;description&quot;)= chr &quot;mcmc&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggs_histogram</span>(mcmcData)</code></pre></div>
+<p><img src="images/05-B/unnamed-chunk-9-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggs_density</span>(mcmcData)</code></pre></div>
+<p><img src="images/05-B/unnamed-chunk-10-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggs_traceplot</span>(mcmcData)</code></pre></div>
+<p><img src="images/05-B/unnamed-chunk-11-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggs_autocorrelation</span>(mcmcData)</code></pre></div>
+<p><img src="images/05-B/unnamed-chunk-12-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggs_crosscorrelation</span>(mcmcData)</code></pre></div>
+<p><img src="images/05-B/unnamed-chunk-13-1.png" width="672" /></p>
+<p>More functions for performing MCMC posterior distribution analysis can be found <a href="http://xavier-fim.net/packages/ggmcmc/">here</a>.</p>
 <p><br></p>
 </div>
 <div id="step-7-extracting-mcmc-results-and-testing-for-parameter-correlations" class="section level4">
 <h4>Step 7: Extracting MCMC results and testing for parameter correlations</h4>
 <p>If parameters are correlated then MCMC can fail as explained in the Key Points section.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">modSims &lt;-<span class="st"> </span><span class="kw">extract</span>(mod) <span class="co"># Extracting our parameters from the MCMC output and save it as a new data frame</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Extracting our parameters from the MCMC output and save it as a new data frame</span>
+modSims &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(mod) 
+
 <span class="kw">str</span>(modSims)</code></pre></div>
 <pre><code>## List of 3
-##  $ beta : num [1:2500, 1:2] 4.85 4.92 3.46 2.68 5.92 ...
+##  $ beta : num [1:2500, 1:2] 5.37 -0.859 -0.182 -0.257 5.516 ...
 ##   ..- attr(*, &quot;dimnames&quot;)=List of 2
 ##   .. ..$ iterations: NULL
 ##   .. ..$           : NULL
-##  $ sigma: num [1:2500(1d)] 8.69 9.45 9.2 9.44 8.89 ...
+##  $ sigma: num [1:2500(1d)] 10.38 9.16 10.28 9.63 10.9 ...
 ##   ..- attr(*, &quot;dimnames&quot;)=List of 1
 ##   .. ..$ iterations: NULL
-##  $ lp__ : num [1:2500(1d)] -157 -156 -156 -156 -159 ...
+##  $ lp__ : num [1:2500(1d)] -157 -157 -156 -156 -157 ...
 ##   ..- attr(*, &quot;dimnames&quot;)=List of 1
 ##   .. ..$ iterations: NULL</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(modSims<span class="op">$</span>beta[,<span class="dv">1</span>], modSims<span class="op">$</span>beta[,<span class="dv">2</span>], <span class="dt">xlab=</span><span class="st">&quot;beta_0&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;beta_1&quot;</span>)</code></pre></div>
-<p><img src="images/05-B/unnamed-chunk-9-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Scatter plots of parameters to look for correlations</span>
+<span class="kw">plot</span>(modSims<span class="op">$</span>beta[,<span class="dv">1</span>], modSims<span class="op">$</span>beta[,<span class="dv">2</span>], <span class="dt">xlab=</span><span class="st">&quot;beta_0&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;beta_1&quot;</span>)</code></pre></div>
+<p><img src="images/05-B/unnamed-chunk-15-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(modSims<span class="op">$</span>beta[,<span class="dv">1</span>], modSims<span class="op">$</span>sigma, <span class="dt">xlab=</span><span class="st">&quot;beta_0&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;sigma&quot;</span>)</code></pre></div>
-<p><img src="images/05-B/unnamed-chunk-9-2.png" width="672" /></p>
+<p><img src="images/05-B/unnamed-chunk-15-2.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(modSims<span class="op">$</span>beta[,<span class="dv">2</span>], modSims<span class="op">$</span>sigma, <span class="dt">xlab=</span><span class="st">&quot;beta_1&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;sigma&quot;</span>)</code></pre></div>
-<p><img src="images/05-B/unnamed-chunk-9-3.png" width="672" /></p>
+<p><img src="images/05-B/unnamed-chunk-15-3.png" width="672" /></p>
 <p>There seems to be correlation between the intercept parameter <span class="math inline">\(\beta_0\)</span> and the slope parameter <span class="math inline">\(\beta_1\)</span>, which actually makes sense. This might explain why it took about 500 iterations to convergence on a joint posterior distribution for the parameters. Thankfully, the <span class="math inline">\(\sigma\)</span> parameter does not correlate with any of the other parameters.</p>
 <p>Normally, we would perform a prior sensitity analysis to see whether the posterior distributions are influenced by the defined prior distributions and maybe modify our priors accordingly until we are fully satisfied with our model (and repeating steps 1-7).</p>
+<p><br></p>
 </div>
 <div id="step-8-inferences" class="section level4">
 <h4>Step 8: Inferences</h4>
-<p>Now that we have our joint posterior distribution <span class="math inline">\(p(\theta | y)\)</span> we can perform Bayesian inference much like in the previous seminar session.</p>
+<p>Now that we have our joint posterior distribution <span class="math inline">\(p(\theta | y)\)</span> we can perform Bayesian inference much like in the previous seminar session (based on similar code).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newData &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="kw">seq</span>(<span class="kw">min</span>(data<span class="op">$</span>ALT), <span class="kw">max</span>(data<span class="op">$</span>ALT), <span class="dt">by=</span><span class="fl">0.1</span>)) 
 
 newMatrix &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span>x, newData)
@@ -865,16 +901,18 @@ fitmat &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class=
   fitmat[,i] &lt;-<span class="st"> </span>newMatrix <span class="op">%*%</span><span class="st"> </span>modSims<span class="op">$</span>beta[i,] 
 }
 
+<span class="co"># 95% CrI lines</span>
 newData<span class="op">$</span>fitupper &lt;-<span class="st"> </span><span class="kw">apply</span>(fitmat, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.975</span>)
 newData<span class="op">$</span>fitlower &lt;-<span class="st"> </span><span class="kw">apply</span>(fitmat, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.025</span>) 
 
-linearModel &lt;-<span class="st"> </span><span class="kw">lm</span>(ABUND <span class="op">~</span><span class="st"> </span>ALT, data)
+<span class="co"># Linear regression</span>
+linearModel &lt;-<span class="st"> </span><span class="kw">lm</span>(ABUND <span class="op">~</span><span class="st"> </span>ALT, data) 
 
 <span class="kw">plot</span>(data<span class="op">$</span>ALT,data<span class="op">$</span>ABUND, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">las=</span><span class="dv">1</span>, <span class="dt">cex.lab=</span><span class="fl">1.2</span>, <span class="dt">xlab=</span><span class="st">&quot;Mean altitude of a patch&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Density of birds in a patch&quot;</span>)
-<span class="kw">abline</span>(linearModel, <span class="dt">lw=</span><span class="dv">2</span>)
+<span class="kw">abline</span>(linearModel, <span class="dt">lw=</span><span class="dv">2</span>) <span class="co"># Linear regression line</span>
 <span class="kw">lines</span>(newData<span class="op">$</span>x, newData<span class="op">$</span>fitupper, <span class="dt">lty=</span><span class="dv">3</span>)
 <span class="kw">lines</span>(newData<span class="op">$</span>x, newData<span class="op">$</span>fitlower, <span class="dt">lty=</span><span class="dv">3</span>) </code></pre></div>
-<p><img src="images/05-B/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="images/05-B/unnamed-chunk-16-1.png" width="672" /></p>
 <p>The regression line (solid) is supposed to act as a reference for the 95% CrI (dashed lines) obtained with prior information when comparing it with the CrI obtained with uniform priors in the previous seminar. The results using non-uniform priors differ only slightly, as expected.</p>
 </div>
 </div>
