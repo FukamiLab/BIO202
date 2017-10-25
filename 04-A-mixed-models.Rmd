@@ -115,38 +115,41 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 ### Analysis Example
 
 The data:
-  19 plant-hummingbird networks - hummingbirds using plants as nectar resources
-  19 sites with increasing proportion of forest cover in 100m radius around sampling site (forest is replaced with coffee agriculture in the study region)
-  13 hummingbird species
-  Plant-hummingbird networks used to calculate hummingbird species' specialization
+
+  * 19 plant-hummingbird networks - hummingbirds using plants as nectar resources  
+  * 19 sites with increasing proportion of forest cover in 100m radius around sampling site (forest is replaced with coffee agriculture in the study region)  
+  * 13 hummingbird species  
+  * Plant-hummingbird networks used to calculate hummingbird species' specialization  
 
 Hummingbird species specialization measured using z-score standardized d' values
-  One d' value for each species at each site
-  The greater the d' value, the more specialized the species
+
+  * One d' value for each species at each site  
+  * The greater the d' value, the more specialized the species  
   
 #### Question: Is there a relationship between hummingbird species specialization and forest cover? 
 
 Load the data
 
-This is a dataset of 3 columns: 
-data[ ,1] = proportion of forest cover at 100m radius around sampling site where hummingbird species was caught data[ ,2] = each hummingbird species as a factor at each site it was caught
-data[ ,3] = the specialization (d') value for each species at each site
+This is a dataset of 3 columns:
+
+* data[ ,1] = proportion of forest cover at 100m radius around sampling site where hummingbird species was caught  
+* data[ ,2] = each hummingbird species as a factor at each site it was caught  
+* data[ ,3] = the specialization (d') value for each species at each site  
 
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-#data <- read.csv(file = "/Users/Beth/Documents/BIO202_2017/data/Specialization_Data_BIO202.csv", header = TRUE)
 
 # Beth's data are not availale on our class GitHub repository. 
 # To use this script, download the data from our class Canvas site and place it in the data folder of your working directory.
 # Use this line if you downloaded the data file to the data directory on your computer
-data <- read.csv(file = "data/Specialization_Data_BIO202.csv", header = TRUE)
+spec <- read.csv(file = "data/Specialization_Data_BIO202.csv", header = TRUE)
+head(spec)
 
-head(data)
 ```
 
 Originally when I did this analysis I followed Zuur et al.'s "10-step process" in the book starting on pg. 130. I do not outline all the steps I took here, but I found it useful in case any of you are interested for future reference. 
 
-All analayses are done using the package 'nlme'
+All analayses are done using the package `{nlme}` but can also be done in `{lme4}`
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 library(nlme)
@@ -154,12 +157,12 @@ library(nlme)
 
 Since I want to know if hummingbird specialization changes with increasing forest cover, I can start with a simple linear regression 
 
-Side note: instead of using the lm() function for my linear model, I use the gls() function in case I need to add a variance later on, this way I can compare the model with no variance structure to the model with the variance structure.
+Side note: instead of using the `lm()` function for my linear model, I use the `gls()` function in case I need to add a variance later on, this way I can compare the model with no variance structure to the model with the variance structure.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 Form <- Specialization ~ Polygon.Area.100
-M.lm <- gls(Form, data = data)
-plot(Form, data = data, xlab = "Forest Cover (100m)", ylab = "Specialization (d')")
+M.lm <- gls(Form, data = spec)
+plot(Form, data = spec, xlab = "Forest Cover (100m)", ylab = "Specialization (d')")
 abline(M.lm, lwd = 4)
 ```
 
@@ -172,8 +175,10 @@ The cone shape in my residuals illustrates that my data are violating the assump
 The best variance structure I found was the varPower structure
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-vf3 <- varPower(form = ~Polygon.Area.100)
-M.gls3 <- gls(Specialization ~ Polygon.Area.100, weights = vf3, data = data)
+vf3 <- varPower(form = ~Polygon.Area.100) ## power of the covariate variance structure = the variance of the residuals multiplied with the power of the absolute value of the variance covariate forest cover
+## nested within linear model so can be compared to linear model fit using log likelihood ratio
+## Variance covariate can not have values equal to zero
+M.gls3 <- gls(Specialization ~ Polygon.Area.100, weights = vf3, data = spec)
 AIC(M.lm, M.gls3) ## we used the gls function earlier instead of the lm function so we can do this anova
 ```
 
@@ -191,7 +196,7 @@ Biologically, however, it's totally possible that each of the 13 hummingbird spe
 
 In addition, as with the example of the RIKZ data from 5 beaches in the Zuur book Chp. 5, the specialization values of each hummingbird species across the sites are likely to be more related to each other than to the specialization values of other hummingbird species. This makes the data nested.
 
-Thus, a mixed effects model for nested data is applicable in this case! And, can tell us something neat about the biology as well (hopefully). 
+Thus, a mixed effects model for nested data is applicable in this case! 
 
 #### Random Intercept Model
 
@@ -200,29 +205,29 @@ We can model specialization as a linear function of forest cover where the inter
 Allowing the intercept to vary for each species is a random intercept model
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-Mlme1 <- lme(Form, random = ~1|fSpecies, data = data, weights = vf3)
+Mlme1 <- lme(Form, random = ~1|fSpecies, data = spec, weights = vf3)
 ## lme stands for linear mixed effects. In this function you must specify a "random" argument
 ## ~1|fSpecies specifies the random intercept model. Remember | in this case means "by" so you are allowing the intercept to vary by species. 
 summary(Mlme1)
 ```
 
-The fixed effects part of the output shows that the general equation for the relationship between forest cover and specialization is 0.08 + 4.68*FC. 
+The fixed effects part of the output shows that the general equation for the relationship between forest cover (FC) and specialization is $0.08 + 4.68*FC$. 
 
 This is the average relationship for all the species considered together. However, we are letting each hummingbird species get its own intercept, so each hummingbird species can get its own equation as well. To incorporate the contribution of each species to the equation, we incorporate the random effect of each species into the intercept portion of the equation.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 F0 <- fitted(Mlme1, level = 0) ## the fitted, fixed values for the population model. These values are the same for every hummingbird within a site -- this will plot our overall trend line
 F1 <- fitted(Mlme1, level = 1) ## the fitted, random values for each hummingbird at each site (within-species fitted values). These vary for every hummingbird within a site -- this will plot the trend line for each individual species
-I <- order(data$Polygon.Area.100); Polygon.Area.100s <- sort(data$Polygon.Area.100) ## order() gives the sorted row numbers corresponding to increasing forest cover, these numbers will be used to index the correct corresponding values of F0 (see plot function below), sort() gives the actual values of increasing forest cover to plot
+I <- order(spec$Polygon.Area.100); Polygon.Area.100s <- sort(spec$Polygon.Area.100) ## order() gives the sorted row numbers corresponding to increasing forest cover, these numbers will be used to index the correct corresponding values of F0 (see plot function below), sort() gives the actual values of increasing forest cover to plot
 
-thirteen2 <- unique(data$fSpecies) ## I use this for indexing in my for-loop, it is simply a list of names of every species in the data set (there are thirteen species)
+thirteen2 <- unique(spec$fSpecies) ## I use this for indexing in my for-loop, it is simply a list of names of every species in the data set (there are thirteen species)
 
 plot(Polygon.Area.100s, F0[I], lwd = 4, type = "l", ylab = "Specialization (d')", xlab = "Forest Cover (100m)", ylim = c(-5, 10)) ## draws average trend line
 
 ## following for-loop draws thirteen individual species trend lines
 for(i in 1:length(thirteen2)) {
-  x1 <- data$Polygon.Area.100[data$fSpecies == thirteen2[i]]
-  y1 <- F1[data$fSpecies == thirteen2[i]]
+  x1 <- spec$Polygon.Area.100[spec$fSpecies == thirteen2[i]]
+  y1 <- F1[spec$fSpecies == thirteen2[i]]
   K <- order(x1)
   lines(sort(x1), y1[K])
 }
@@ -241,11 +246,11 @@ Thus, we will now fit a random intercept AND random slope model
 #### Random Intercept and Slope Model
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-Mlme2 <- lme(Form, random = ~1 + Polygon.Area.100|fSpecies, data = data, weights = vf3) ## the "~1" specifies the random intecerpt and "Polygon.Area.100|fSpecies" allows the slope to vary by hummingbird species
+Mlme2 <- lme(Form, random = ~1 + Polygon.Area.100|fSpecies, data = spec, weights = vf3) ## the "~1" specifies the random intecerpt and "Polygon.Area.100|fSpecies" allows the slope to vary by hummingbird species
 summary(Mlme2)
 ```
 
-The amount of variation around the intercept is 0.52^2 and the random vairation around the slope is 4.61^2 indicating that there is more variation in slopes than in intercepts between the hummingbird species (which is evident when you look at the plot below). There is a correlation between random intercepts and slopes of only -0.079 which is quite low (good). 
+The amount of variation around the intercept is 0.52^2^ and the random vairation around the slope is 4.61^2^ indicating that there is more variation in slopes than in intercepts between the hummingbird species (which is evident when you look at the plot below). There is a correlation between random intercepts and slopes of only -0.079 which is quite low (good). 
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 AIC(Mlme1, Mlme2) ## does the random intercept model or the random intercept and slope model have a lower AIC? 
@@ -258,15 +263,15 @@ The random intercept and slope model has a lower AIC than the random intercept m
 
 F0 <- fitted (Mlme2, level = 0)
 F1 <- fitted(Mlme2, level = 1)
-I <- order(data$Polygon.Area.100); Polygon.Area.100s <- sort(data$Polygon.Area.100)
+I <- order(spec$Polygon.Area.100); Polygon.Area.100s <- sort(spec$Polygon.Area.100)
 
 h.cols.rainbow = rainbow(13) ## because this time it would be nice to give a different color to each species
 
 plot(Polygon.Area.100s, F0[I], lwd = 6, type = "l", ylab = "Specialization (d')", xlab = "Forest Cover (100m)", ylim = c(-3, 15))
 
 for(i in 1:length(thirteen2)) {
-  x1 <- data$Polygon.Area.100[data$fSpecies == thirteen2[i]]
-  y1 <- F1[data$fSpecies == thirteen2[i]]
+  x1 <- spec$Polygon.Area.100[spec$fSpecies == thirteen2[i]]
+  y1 <- F1[spec$fSpecies == thirteen2[i]]
   K <- order(x1)
   lines(sort(x1), y1[K], lwd = 2, lty = 4, col = h.cols.rainbow[i])
 }
@@ -286,7 +291,7 @@ In practical terms, what these numbers mean is that if you were to catch a hummi
 #### Random Effects Model
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-Mlme3 <- lme(Specialization ~ 1, random = ~1|fSpecies, data = data, weights = vf3) 
+Mlme3 <- lme(Specialization ~ 1, random = ~1|fSpecies, data = spec, weights = vf3) 
 summary(Mlme3)
 ```
 
@@ -301,19 +306,86 @@ Using this approach we would select our random intercept and random slope model 
 Fitting the final model with Restricted Maximum Liklihood 
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-M1 <- lme(Form, random = ~1 + Polygon.Area.100|fSpecies, data = data, weights = vf3, method = "REML")
+M1 <- lme(Form, random = ~1 + Polygon.Area.100|fSpecies, data = spec, weights = vf3, method = "REML")
 summary(M1)
 ```
 
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+fixed.effects(Mlme2)
+```
+
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+random.effects(Mlme2) ## gives the intercept and slope adjustment to the population curve for each hummingbird species. To get the intercept and slope for each individual species you add each species' values below to the fixed effects values (i.e. the population curve values) given above. 
+```
+
+In practical terms, what these numbers mean is that if you were to catch a hummingbird in a site with no forest cover whatsoever (the intercept) and you didn't know what species it was, you would predict that its specialization would be 0.27 because that's the population estimate for all hummingbird species in general. However, if you caught, say, a Garden Emerald hummingbird in a site with no forest cover, because you know the species, you predict that its specialization is $0.27 + 0.14 = 0.41$, which is a higher specialization than the population estimate. 
+
+Another (easier) way to see the parameter estimates for each species is simply using the function `coef()`
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+coef(Mlme2)
+```
+
+#### Random Effects Model
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+Mlme3 <- lme(Specialization ~ 1, random = ~1|fSpecies, data = spec, weights = vf3) 
+summary(Mlme3)
+```
+
+Random effects only graph
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+## plotting the random intercept and slope model
+
+F0 <- fitted (Mlme3, level = 0)
+F1 <- fitted(Mlme3, level = 1)
+I <- order(spec$Polygon.Area.100); Polygon.Area.100s <- sort(spec$Polygon.Area.100)
+
+h.cols.rainbow = rainbow(13) ## because this time it would be nice to give a different color to each species
+
+plot(Polygon.Area.100s, F0[I], lwd = 6, type = "l", ylab = "Specialization (d')", xlab = "Forest Cover (100m)", ylim = c(-3, 15))
+
+for(i in 1:length(thirteen2)) {
+  x1 <- spec$Polygon.Area.100[spec$fSpecies == thirteen2[i]]
+  y1 <- F1[spec$fSpecies == thirteen2[i]]
+  K <- order(x1)
+  lines(sort(x1), y1[K], lwd = 2, lty = 4, col = h.cols.rainbow[i])
+}
+
+```
+
+Comparing our models with AIC
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+AIC(M.gls3, Mlme1, Mlme2, Mlme3)
+```
+
+Using this approach we would select our random intercept and random slope model (Mlme2) because it has the lowest AIC
+
+Fitting the final model with Restricted Maximum Liklihood 
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+M1 <- lme(Form, random = ~1 + Polygon.Area.100|fSpecies, data = spec, weights = vf3, method = "REML")
+summary(M1)
+```
+
+
 #### Conclusions 
 
-We now have evidence that hummingbird species' specialization, in general, increases with increasing forest cover. However, not all hummingbird species show the same relationship; some species show a much greter increase in specialization with forest cover than others. Species becoming less specialized in less forested areas suggests that changes in resource availability as forest cover is lost are potentially forcing species to be less 'picky' in disturbed, agricultural areas. Interestingly, the species with the greatest specialization in areas with high forest cover are the ones that change their specialization the most along the forest cover gradient. This suggests that species with low specialization in undisturbed, forested areas do not change their interaction behavior as much as highly specialized species when forest is lost, perhaps because they are already behaving as generalists to begin with. 
+We now have evidence that hummingbird species' specialization, in general, increases with increasing forest cover. However, not all hummingbird species show the same relationship; some species show a much greter increase in specialization with forest cover than others. Species becoming less specialized in less forested areas suggests that changes in resource availability as forest cover is lost are potentially forcing species to be less 'picky' in disturbed, agricultural areas. 
 
 ### Discussion Questions
 
-+ In what other situations might mixed effects models be appropriate? Other examples from peoples own research?
-+ If we have data that is nested, must we always use a mixed effects model? What other analytical approaches might provide the same kind of information as MEMs (alternatives)?
-+ Honestly, what is the deal with Maximum Liklihood vs. Restricted Maximum Liklihood?
-+Biologically, when would you expect to use the random intercept only model? 
+* In what other situations might mixed effects models be appropriate? Other examples from peoples own research?  
+* If we have data that is nested, must we always use a mixed effects model? What other analytical approaches might provide the same kind of information as MEMs (alternatives)?  
+* What is the deal with Maximum Liklihood vs. Restricted Maximum Liklihood?  
+* Biologically, when would you expect to use the random intercept only model?   
+* How do you deal with data with mulitple levels of heirarchy?  
+* What is a random effects only model useful for? 
+
+
+
 
 
