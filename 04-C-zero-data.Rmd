@@ -30,13 +30,275 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
+#### Definition and why it is a problem
+
++ When the number of zeros is so large that the data do not readily fit standard distributions (e.g. normal, Poisson, binomial, negative-binomial and beta), the data set is referred to as zero inflated (Heilbron 1994; Tu 2002).
+
++ The source of the zeroes matters: Non-detection (false zeros) or true zeroes?
+
+#### A special case: zero-truncated count data
+
++ e.g., Number of days that road-kills remain on the road
+
++ Poisson and NB models can be adjusted to exclude the probability that yi = 0 (equation 11.8 on p. 265).
+
++ `family = pospoisson` and `family = posnegbinomial` in VGAM package
+
+#### More often, we get too many zeros (zero-inflated)
+
++ How to detect zero-inflation: Frequency plot to know how many zeroes we would expect
+
++ Zero-inflation can cause overdispersion (but accounting for zero-inflation does not necessarily remove overdispersion).
+
++ Two-part and mixture models for zero-inflated data (Table 11.1).
+
++ Fundamental difference: In two-part models, the count process cannot produce zeros (the distribution is zero-truncated). In mixture models, it can.
+
++ In other words, two-part models do not distinguish true and false zeros (Fig 11.4), whereas mixture models do, at least statistically (Fig 11.5).
+
+#### Two-part models
+
++ Source of zeroes is NOT considered
+
++ First step: zero or nonzero? Binomial model used to model probability of zeroes
+
++ Second step: zero-truncated model used to model the count data
+
++ Can do this separately (two models) or combine to use one model (`hurdle()` in pscl package)
+
+#### Mixture models
+
++ Zeroes are modeled explicitly as coming from multiple processes: true zeroes and false zeroes are modeled as being generated from different processes
+
++ `zeroinfl()` in pscl package
+
+#### Steps
+
+1. Choose model type
+
+2. Prune variables (`drop1()`)
+
+3. Model validation (extract residuals and plot vs. all predictors or measured variables)
+
+4. Model interpretation
+
+#### But how to choose model type?
+
++ Options: common sense, model validation, information criteria, hypothesis tests (Poisson or NB), comparison of observed and fitted values
+
+
+***
+
 
 
 ### Analysis Example
 
+```{r, message=FALSE, warning=FALSE }
+# Read in OBFL data
+
+OBFL <- read.csv('./data/OBFL.csv', 
+                 header = T)
+
+############################################################
+library(lattice)
+library(MASS)
+require(pscl) # alternatively can use package ZIM for zero-inflated models
+library(lmtest)
+
+```
+
+Data includes counts of ochre-bellied flycatcher (OBFL) captures across deforestation and agricultural intensification gradient in southern Costa Rica. Specifically, sampling date, Counts (number of captures at site on a given day), Site Code and standardized mean canopy cover at the site (Canopy.std).
+
+Here we will be looking at the relationship between number of captured individuals and canopy cover using a series of GLMs to deal with overdispersion. In reality we could use a GLMM with this data, but we will stick with GLMs for simplicity.
+
+
+The steps and code use for these anlyses pull from heavily from:   
+1. *Zuur, A. F., Ieno, E. N., Walker, N., Saveliev, A. A. and Smith, G. M. 2009. Mixed Effects Models and Extensions in Ecology with R.*    
+2. *Zuur, A. F. and Ieno, E. N. 2016. Beginner's Guide to Zero-Inflated Models with R.*  
+
+### Relationship between Counts and Canopy Cover
+```{r pressure, echo=FALSE}
+plot(Counts ~ Canopy.std,
+     data = OBFL)
+```
+
+Let's do a quick check for Zero-Inflation in the data
+```{r}
+100*sum(OBFL$Counts == 0)/nrow(OBFL)
+```
+That's pretty high! ~ 40% of our data are zeros
+
+While our data seems to be zero-inflated, this doesn't necessarily mean we need to use a zero-inflated model. In many cases, the covariates may predict the zeros under a Poisson or Negative Binomial model. So let's start with the simplest model, a Poisson GLM.
+
+### Poisson GLM
+$Counts_i \sim Poisson(\mu_i)$  
+$E(Counts_i) = \mu_i$  
+$var(Counts_i) = \mu_i$     
+$log(\mu_i) = \alpha + \beta_1 * Canopy.std_i$  
+```{r}
+## Poisson GLM
+M1 <- glm(Counts ~ Canopy.std,
+          family = 'poisson',
+          data = OBFL)
+
+summary(M1)
+
+## Check for over/underdispersion in the model
+E2 <- resid(M1, type = "pearson")
+N  <- nrow(OBFL)
+p  <- length(coef(M1))   
+sum(E2^2) / (N - p)
+
+
+```
+Looks like our model produces overdisperion. There are many reasons why this might be the case, but for now we are going to try to use a negative binomial GLM using the 'glm.nb' function in the 'MASS' package
+
+### Negative Binomial GLM
+$Counts_i \sim NB(\mu_i, theta)$  
+$E(Counts_i) = \mu_i$  
+$var(Counts_i) = (\mu_i + \mu_i^{2})/theta$   
+$log(\mu_i) = \alpha + \beta_1 * Canopy.std_i$  
+```{r}
+M2 <- glm.nb(Counts ~ Canopy.std,
+             data = OBFL)
+
+summary(M2)
+
+
+
+# Dispersion statistic
+E2 <- resid(M2, type = "pearson")
+N  <- nrow(OBFL)
+p  <- length(coef(M2)) + 1  # '+1' is for variance parameter in NB
+sum(E2^2) / (N - p)
+```
+Looks like the Negative Binomial GLM resulted in some minor underdispersion. In some cases, this might be OK. But in reality, we want to avoid both under- and overdispersion.  
+Overdispersion can bias parameter estimates and produce false significant relationships.
+On the otherhand, underdisperion can mask truly significant relationships. So let's try to avoid all of this.
+
+### Zero-Inflated Poisson GLM
+$Counts_i  \sim   ZIP(\mu_i, \pi_i)$      
+$E(Counts_i) = \mu_i * (1-\pi_i)$  
+$var(Counts_i) = (1-\pi_i) * (\mu_i + \pi_i * \mu_i^{2})$  
+$log(\mu_i) = \beta_1 + \beta_2 * Canopy.std$  
+$log(\pi_i) = \gamma_1 + \gamma_2 * Canopy.std$ 
+
+In zero-inflated models, it is possible to choose different predictors for the counts and for the zero-inflation. You might expect different variables to be driving presence/absence vs. total number of individuals. We will keep it simple and use the same covariate in both parts.
+```{r}
+M3 <- zeroinfl(Counts ~ Canopy.std | ## Predictor for the Poisson process
+                 Canopy.std, ## Predictor for the Bernoulli process;
+               dist = 'poisson',
+               data = OBFL)
+
+summary(M3)
+
+# Dispersion statistic
+E2 <- resid(M3, type = "pearson")
+N  <- nrow(OBFL)
+p  <- length(coef(M3))  
+sum(E2^2) / (N - p)
+```
+Still a some overdispersion in the ZIP. Let's try a ZINB
+
+### Zero-Inflated Negative Binomial GLM
+$Counts_i  \sim   ZINB(\mu_i, \pi_i)$  **_Not actually sure how to formulate this part for ZINB??_**    
+$E(Counts_i) = \mu_i * (1-\pi_i)$  
+$var(Counts_i) = (1-\pi_i) * (\mu_i + \pi_i^{2}/k) + \mu_i^{2} * (\pi_i^{2} + \pi_i)$  
+$log(\mu_i) = \beta_1 + \beta_2 * Canopy.std$  
+$log(\pi_i) = \gamma_1 + \gamma_2 * Canopy.std$ 
+
+```{r}
+M4 <- zeroinfl(Counts ~ Canopy.std |
+                 Canopy.std,
+               dist = 'negbin',
+               data = OBFL)
+summary(M4)
+
+# Dispersion Statistic
+E2 <- resid(M4, type = "pearson")
+N  <- nrow(OBFL)
+p  <- length(coef(M4)) + 1 # '+1' is due to theta
+sum(E2^2) / (N - p)
+
+```
+This is really close to 1, which looks great.
+
+We can compare the two zero-inflated models using the Likelihood ratio test
+```{r}
+lrtest(M3, M4)
+```
+Results show that the second model- the ZINB- is the best choice.
+So let's stick with this model and plot the results
+
+
+### Sketch fitted and predicted values
+```{r, echo=FALSE}
+MyData <- expand.grid(Canopy.std = seq(-1.31, 1.53, length = 25))
+
+X.c <- model.matrix( ~ 1 + Canopy.std, data = MyData)
+X.b <- model.matrix( ~ 1 + Canopy.std, data = MyData)
+
+eta.mu <- X.c %*% coef(M4, model = 'count')
+eta.Pi <- X.b %*% coef(M4, model = 'zero')
+
+
+MyData$mu <- exp(eta.mu)
+MyData$Pi <- exp(eta.Pi)/(1+exp(eta.Pi))
+MyData$ExpY <- (1-MyData$Pi) * MyData$mu
+
+par(mfrow = c(1,3), mar = c(5,5,2,2))
+
+plot(x = OBFL$Canopy.std,
+     y = OBFL$Counts,
+     xlab = "\nMean Canopy\nCover (standardized)",
+     ylab = "Zero inflated data",
+     cex = 1,
+     pch = 16,
+     cex.lab = 1,
+     cex.main = 1,
+     main = "Count part")
+
+lines(x = MyData$Canopy.std, 
+      y = MyData$mu,
+      lwd = 5)   
+
+plot(x = MyData$Canopy.std,
+     y = as.numeric(MyData$mu==0),
+     xlab = "\nMean Canopy\nCover (standardized)",
+     ylab = "Probability of false zero",
+     cex = 1,
+     pch = 16,
+     cex.lab = 1,
+     cex.main = 1,
+     main = "Binary part",
+     ylim = c(0,1))
+      
+lines(x = MyData$Canopy.std, 
+      y = MyData$Pi,
+      lwd = 5)         
+
+plot(x = OBFL$Canopy.std,
+     y = OBFL$Counts,
+     xlab = "\nMean Canopy\nCover (standardized)",
+     ylab = "Zero inflated data",
+     cex = 1,
+     pch = 16,
+     main = "Expected values",
+     cex.main = 1,
+     cex.lab = 1)
+lines(x = MyData$Canopy.std, 
+      y = MyData$ExpY,
+      lwd = 7)   
+
+```
 
 
 ### Discussion Questions
+
+1. When might you add differet covariates into the Bernoulli vs Poisson/NB portion of Zero-inflated models?  
+2. How close to 1 do dispersion statistics need to be?
+3. Anyone have experience with the two-step Zero-Altered models?
+
 
 
 

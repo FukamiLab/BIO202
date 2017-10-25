@@ -657,14 +657,11 @@ Random: genotype, block within a field, individuals with repeated measures, fami
 </li>
 <li>data[ ,3] = the specialization (d’) value for each species at each site</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> <span class="st">&quot;/Users/Beth/Documents/BIO202_2017/data/Specialization_Data_BIO202.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)
-
-<span class="co"># Beth&#39;s data are not availale on our class GitHub repository. </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Beth&#39;s data are not availale on our class GitHub repository. </span>
 <span class="co"># To use this script, download the data from our class Canvas site and place it in the data folder of your working directory.</span>
 <span class="co"># Use this line if you downloaded the data file to the data directory on your computer</span>
-<span class="co">#data &lt;- read.csv(file = &quot;data/Specialization_Data_BIO202.csv&quot;, header = TRUE)</span>
-
-<span class="kw">head</span>(data)</code></pre></div>
+spec &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> <span class="st">&quot;data/Specialization_Data_BIO202.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)
+<span class="kw">head</span>(spec)</code></pre></div>
 <pre><code>##   Polygon.Area.100                  fSpecies Specialization
 ## 1                1      Charming.Hummingbird      -0.574054
 ## 2                1              Green.Hermit       8.986848
@@ -678,8 +675,8 @@ Random: genotype, block within a field, individuals with repeated measures, fami
 <p>Since I want to know if hummingbird specialization changes with increasing forest cover, I can start with a simple linear regression</p>
 <p>Side note: instead of using the <code>lm()</code> function for my linear model, I use the <code>gls()</code> function in case I need to add a variance later on, this way I can compare the model with no variance structure to the model with the variance structure.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Form &lt;-<span class="st"> </span>Specialization ~<span class="st"> </span>Polygon.Area<span class="fl">.100</span>
-M.lm &lt;-<span class="st"> </span><span class="kw">gls</span>(Form, <span class="dt">data =</span> data)
-<span class="kw">plot</span>(Form, <span class="dt">data =</span> data, <span class="dt">xlab =</span> <span class="st">&quot;Forest Cover (100m)&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Specialization (d&#39;)&quot;</span>)
+M.lm &lt;-<span class="st"> </span><span class="kw">gls</span>(Form, <span class="dt">data =</span> spec)
+<span class="kw">plot</span>(Form, <span class="dt">data =</span> spec, <span class="dt">xlab =</span> <span class="st">&quot;Forest Cover (100m)&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Specialization (d&#39;)&quot;</span>)
 <span class="kw">abline</span>(M.lm, <span class="dt">lwd =</span> <span class="dv">4</span>)</code></pre></div>
 <p><img src="images/04-A/unnamed-chunk-4-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(M.lm)</code></pre></div>
@@ -689,7 +686,7 @@ M.lm &lt;-<span class="st"> </span><span class="kw">gls</span>(Form, <span class
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vf3 &lt;-<span class="st"> </span><span class="kw">varPower</span>(<span class="dt">form =</span> ~Polygon.Area<span class="fl">.100</span>) ## power of the covariate variance structure = the variance of the residuals multiplied with the power of the absolute value of the variance covariate forest cover
 ## nested within linear model so can be compared to linear model fit using log likelihood ratio
 ## Variance covariate can not have values equal to zero
-M.gls3 &lt;-<span class="st"> </span><span class="kw">gls</span>(Specialization ~<span class="st"> </span>Polygon.Area<span class="fl">.100</span>, <span class="dt">weights =</span> vf3, <span class="dt">data =</span> data)
+M.gls3 &lt;-<span class="st"> </span><span class="kw">gls</span>(Specialization ~<span class="st"> </span>Polygon.Area<span class="fl">.100</span>, <span class="dt">weights =</span> vf3, <span class="dt">data =</span> spec)
 <span class="kw">AIC</span>(M.lm, M.gls3) ## we used the gls function earlier instead of the lm function so we can do this anova</code></pre></div>
 <pre><code>##        df      AIC
 ## M.lm    3 908.2300
@@ -699,7 +696,7 @@ M.gls3 &lt;-<span class="st"> </span><span class="kw">gls</span>(Specialization 
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(M.gls3)</code></pre></div>
 <pre><code>## Generalized least squares fit by REML
 ##   Model: Specialization ~ Polygon.Area.100 
-##   Data: data 
+##   Data: spec 
 ##        AIC      BIC    logLik
 ##   851.0649 863.4399 -421.5325
 ## 
@@ -734,12 +731,12 @@ M.gls3 &lt;-<span class="st"> </span><span class="kw">gls</span>(Specialization 
 <h4>Random Intercept Model</h4>
 <p>We can model specialization as a linear function of forest cover where the intercept is allowed to change per hummingbird species. This biologically makes sense because it is expected that each hummingbird species will have its own unique specialization behavior at each site.</p>
 <p>Allowing the intercept to vary for each species is a random intercept model</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mlme1 &lt;-<span class="st"> </span><span class="kw">lme</span>(Form, <span class="dt">random =</span> ~<span class="dv">1</span>|fSpecies, <span class="dt">data =</span> data, <span class="dt">weights =</span> vf3)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mlme1 &lt;-<span class="st"> </span><span class="kw">lme</span>(Form, <span class="dt">random =</span> ~<span class="dv">1</span>|fSpecies, <span class="dt">data =</span> spec, <span class="dt">weights =</span> vf3)
 ## lme stands for linear mixed effects. In this function you must specify a &quot;random&quot; argument
 ## ~1|fSpecies specifies the random intercept model. Remember | in this case means &quot;by&quot; so you are allowing the intercept to vary by species. 
 <span class="kw">summary</span>(Mlme1)</code></pre></div>
 <pre><code>## Linear mixed-effects model fit by REML
-##  Data: data 
+##  Data: spec 
 ##        AIC      BIC    logLik
 ##   807.9522 823.4209 -398.9761
 ## 
@@ -772,16 +769,16 @@ M.gls3 &lt;-<span class="st"> </span><span class="kw">gls</span>(Specialization 
 <p>This is the average relationship for all the species considered together. However, we are letting each hummingbird species get its own intercept, so each hummingbird species can get its own equation as well. To incorporate the contribution of each species to the equation, we incorporate the random effect of each species into the intercept portion of the equation.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">F0 &lt;-<span class="st"> </span><span class="kw">fitted</span>(Mlme1, <span class="dt">level =</span> <span class="dv">0</span>) ## the fitted, fixed values for the population model. These values are the same for every hummingbird within a site -- this will plot our overall trend line
 F1 &lt;-<span class="st"> </span><span class="kw">fitted</span>(Mlme1, <span class="dt">level =</span> <span class="dv">1</span>) ## the fitted, random values for each hummingbird at each site (within-species fitted values). These vary for every hummingbird within a site -- this will plot the trend line for each individual species
-I &lt;-<span class="st"> </span><span class="kw">order</span>(data$Polygon.Area<span class="fl">.100</span>); Polygon.Area.100s &lt;-<span class="st"> </span><span class="kw">sort</span>(data$Polygon.Area<span class="fl">.100</span>) ## order() gives the sorted row numbers corresponding to increasing forest cover, these numbers will be used to index the correct corresponding values of F0 (see plot function below), sort() gives the actual values of increasing forest cover to plot
+I &lt;-<span class="st"> </span><span class="kw">order</span>(spec$Polygon.Area<span class="fl">.100</span>); Polygon.Area.100s &lt;-<span class="st"> </span><span class="kw">sort</span>(spec$Polygon.Area<span class="fl">.100</span>) ## order() gives the sorted row numbers corresponding to increasing forest cover, these numbers will be used to index the correct corresponding values of F0 (see plot function below), sort() gives the actual values of increasing forest cover to plot
 
-thirteen2 &lt;-<span class="st"> </span><span class="kw">unique</span>(data$fSpecies) ## I use this for indexing in my for-loop, it is simply a list of names of every species in the data set (there are thirteen species)
+thirteen2 &lt;-<span class="st"> </span><span class="kw">unique</span>(spec$fSpecies) ## I use this for indexing in my for-loop, it is simply a list of names of every species in the data set (there are thirteen species)
 
 <span class="kw">plot</span>(Polygon.Area.100s, F0[I], <span class="dt">lwd =</span> <span class="dv">4</span>, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Specialization (d&#39;)&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Forest Cover (100m)&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">5</span>, <span class="dv">10</span>)) ## draws average trend line
 
 ## following for-loop draws thirteen individual species trend lines
 for(i in <span class="dv">1</span>:<span class="kw">length</span>(thirteen2)) {
-  x1 &lt;-<span class="st"> </span>data$Polygon.Area<span class="fl">.100</span>[data$fSpecies ==<span class="st"> </span>thirteen2[i]]
-  y1 &lt;-<span class="st"> </span>F1[data$fSpecies ==<span class="st"> </span>thirteen2[i]]
+  x1 &lt;-<span class="st"> </span>spec$Polygon.Area<span class="fl">.100</span>[spec$fSpecies ==<span class="st"> </span>thirteen2[i]]
+  y1 &lt;-<span class="st"> </span>F1[spec$fSpecies ==<span class="st"> </span>thirteen2[i]]
   K &lt;-<span class="st"> </span><span class="kw">order</span>(x1)
   <span class="kw">lines</span>(<span class="kw">sort</span>(x1), y1[K])
 }</code></pre></div>
@@ -796,10 +793,10 @@ for(i in <span class="dv">1</span>:<span class="kw">length</span>(thirteen2)) {
 </div>
 <div id="random-intercept-and-slope-model" class="section level4">
 <h4>Random Intercept and Slope Model</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mlme2 &lt;-<span class="st"> </span><span class="kw">lme</span>(Form, <span class="dt">random =</span> ~<span class="dv">1</span> +<span class="st"> </span>Polygon.Area<span class="fl">.100</span>|fSpecies, <span class="dt">data =</span> data, <span class="dt">weights =</span> vf3) ## the &quot;~1&quot; specifies the random intecerpt and &quot;Polygon.Area.100|fSpecies&quot; allows the slope to vary by hummingbird species
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mlme2 &lt;-<span class="st"> </span><span class="kw">lme</span>(Form, <span class="dt">random =</span> ~<span class="dv">1</span> +<span class="st"> </span>Polygon.Area<span class="fl">.100</span>|fSpecies, <span class="dt">data =</span> spec, <span class="dt">weights =</span> vf3) ## the &quot;~1&quot; specifies the random intecerpt and &quot;Polygon.Area.100|fSpecies&quot; allows the slope to vary by hummingbird species
 <span class="kw">summary</span>(Mlme2)</code></pre></div>
 <pre><code>## Linear mixed-effects model fit by REML
-##  Data: data 
+##  Data: spec 
 ##        AIC     BIC    logLik
 ##   763.8287 785.485 -374.9144
 ## 
@@ -841,19 +838,19 @@ for(i in <span class="dv">1</span>:<span class="kw">length</span>(thirteen2)) {
 
 F0 &lt;-<span class="st"> </span><span class="kw">fitted</span> (Mlme2, <span class="dt">level =</span> <span class="dv">0</span>)
 F1 &lt;-<span class="st"> </span><span class="kw">fitted</span>(Mlme2, <span class="dt">level =</span> <span class="dv">1</span>)
-I &lt;-<span class="st"> </span><span class="kw">order</span>(data$Polygon.Area<span class="fl">.100</span>); Polygon.Area.100s &lt;-<span class="st"> </span><span class="kw">sort</span>(data$Polygon.Area<span class="fl">.100</span>)
+I &lt;-<span class="st"> </span><span class="kw">order</span>(spec$Polygon.Area<span class="fl">.100</span>); Polygon.Area.100s &lt;-<span class="st"> </span><span class="kw">sort</span>(spec$Polygon.Area<span class="fl">.100</span>)
 
 h.cols.rainbow =<span class="st"> </span><span class="kw">rainbow</span>(<span class="dv">13</span>) ## because this time it would be nice to give a different color to each species
 
 <span class="kw">plot</span>(Polygon.Area.100s, F0[I], <span class="dt">lwd =</span> <span class="dv">6</span>, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Specialization (d&#39;)&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Forest Cover (100m)&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">3</span>, <span class="dv">15</span>))
 
 for(i in <span class="dv">1</span>:<span class="kw">length</span>(thirteen2)) {
-  x1 &lt;-<span class="st"> </span>data$Polygon.Area<span class="fl">.100</span>[data$fSpecies ==<span class="st"> </span>thirteen2[i]]
-  y1 &lt;-<span class="st"> </span>F1[data$fSpecies ==<span class="st"> </span>thirteen2[i]]
+  x1 &lt;-<span class="st"> </span>spec$Polygon.Area<span class="fl">.100</span>[spec$fSpecies ==<span class="st"> </span>thirteen2[i]]
+  y1 &lt;-<span class="st"> </span>F1[spec$fSpecies ==<span class="st"> </span>thirteen2[i]]
   K &lt;-<span class="st"> </span><span class="kw">order</span>(x1)
   <span class="kw">lines</span>(<span class="kw">sort</span>(x1), y1[K], <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">lty =</span> <span class="dv">4</span>, <span class="dt">col =</span> h.cols.rainbow[i])
 }</code></pre></div>
-<p><img src="images/04-A/unnamed-chunk-14-1.png" width="672" /> &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</p>
+<p><img src="images/04-A/unnamed-chunk-14-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixed.effects</span>(Mlme2)</code></pre></div>
 <pre><code>##      (Intercept) Polygon.Area.100 
 ##        0.2736991        3.9195557</code></pre>
@@ -876,10 +873,10 @@ for(i in <span class="dv">1</span>:<span class="kw">length</span>(thirteen2)) {
 </div>
 <div id="random-effects-model" class="section level4">
 <h4>Random Effects Model</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mlme3 &lt;-<span class="st"> </span><span class="kw">lme</span>(Specialization ~<span class="st"> </span><span class="dv">1</span>, <span class="dt">random =</span> ~<span class="dv">1</span>|fSpecies, <span class="dt">data =</span> data, <span class="dt">weights =</span> vf3) 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mlme3 &lt;-<span class="st"> </span><span class="kw">lme</span>(Specialization ~<span class="st"> </span><span class="dv">1</span>, <span class="dt">random =</span> ~<span class="dv">1</span>|fSpecies, <span class="dt">data =</span> spec, <span class="dt">weights =</span> vf3) 
 <span class="kw">summary</span>(Mlme3)</code></pre></div>
 <pre><code>## Linear mixed-effects model fit by REML
-##  Data: data 
+##  Data: spec 
 ##        AIC      BIC    logLik
 ##   846.6653 859.0648 -419.3327
 ## 
@@ -913,10 +910,10 @@ for(i in <span class="dv">1</span>:<span class="kw">length</span>(thirteen2)) {
 ## Mlme3   4 846.6653</code></pre>
 <p>Using this approach we would select our random intercept and random slope model (Mlme2) because it has the lowest AIC</p>
 <p>Fitting the final model with Restricted Maximum Liklihood</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M1 &lt;-<span class="st"> </span><span class="kw">lme</span>(Form, <span class="dt">random =</span> ~<span class="dv">1</span> +<span class="st"> </span>Polygon.Area<span class="fl">.100</span>|fSpecies, <span class="dt">data =</span> data, <span class="dt">weights =</span> vf3, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M1 &lt;-<span class="st"> </span><span class="kw">lme</span>(Form, <span class="dt">random =</span> ~<span class="dv">1</span> +<span class="st"> </span>Polygon.Area<span class="fl">.100</span>|fSpecies, <span class="dt">data =</span> spec, <span class="dt">weights =</span> vf3, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)
 <span class="kw">summary</span>(M1)</code></pre></div>
 <pre><code>## Linear mixed-effects model fit by REML
-##  Data: data 
+##  Data: spec 
 ##        AIC     BIC    logLik
 ##   763.8287 785.485 -374.9144
 ## 
@@ -986,10 +983,10 @@ for(i in <span class="dv">1</span>:<span class="kw">length</span>(thirteen2)) {
 </div>
 <div id="random-effects-model-1" class="section level4">
 <h4>Random Effects Model</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mlme3 &lt;-<span class="st"> </span><span class="kw">lme</span>(Specialization ~<span class="st"> </span><span class="dv">1</span>, <span class="dt">random =</span> ~<span class="dv">1</span>|fSpecies, <span class="dt">data =</span> data, <span class="dt">weights =</span> vf3) 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mlme3 &lt;-<span class="st"> </span><span class="kw">lme</span>(Specialization ~<span class="st"> </span><span class="dv">1</span>, <span class="dt">random =</span> ~<span class="dv">1</span>|fSpecies, <span class="dt">data =</span> spec, <span class="dt">weights =</span> vf3) 
 <span class="kw">summary</span>(Mlme3)</code></pre></div>
 <pre><code>## Linear mixed-effects model fit by REML
-##  Data: data 
+##  Data: spec 
 ##        AIC      BIC    logLik
 ##   846.6653 859.0648 -419.3327
 ## 
@@ -1019,15 +1016,15 @@ for(i in <span class="dv">1</span>:<span class="kw">length</span>(thirteen2)) {
 
 F0 &lt;-<span class="st"> </span><span class="kw">fitted</span> (Mlme3, <span class="dt">level =</span> <span class="dv">0</span>)
 F1 &lt;-<span class="st"> </span><span class="kw">fitted</span>(Mlme3, <span class="dt">level =</span> <span class="dv">1</span>)
-I &lt;-<span class="st"> </span><span class="kw">order</span>(data$Polygon.Area<span class="fl">.100</span>); Polygon.Area.100s &lt;-<span class="st"> </span><span class="kw">sort</span>(data$Polygon.Area<span class="fl">.100</span>)
+I &lt;-<span class="st"> </span><span class="kw">order</span>(spec$Polygon.Area<span class="fl">.100</span>); Polygon.Area.100s &lt;-<span class="st"> </span><span class="kw">sort</span>(spec$Polygon.Area<span class="fl">.100</span>)
 
 h.cols.rainbow =<span class="st"> </span><span class="kw">rainbow</span>(<span class="dv">13</span>) ## because this time it would be nice to give a different color to each species
 
 <span class="kw">plot</span>(Polygon.Area.100s, F0[I], <span class="dt">lwd =</span> <span class="dv">6</span>, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Specialization (d&#39;)&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Forest Cover (100m)&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">3</span>, <span class="dv">15</span>))
 
 for(i in <span class="dv">1</span>:<span class="kw">length</span>(thirteen2)) {
-  x1 &lt;-<span class="st"> </span>data$Polygon.Area<span class="fl">.100</span>[data$fSpecies ==<span class="st"> </span>thirteen2[i]]
-  y1 &lt;-<span class="st"> </span>F1[data$fSpecies ==<span class="st"> </span>thirteen2[i]]
+  x1 &lt;-<span class="st"> </span>spec$Polygon.Area<span class="fl">.100</span>[spec$fSpecies ==<span class="st"> </span>thirteen2[i]]
+  y1 &lt;-<span class="st"> </span>F1[spec$fSpecies ==<span class="st"> </span>thirteen2[i]]
   K &lt;-<span class="st"> </span><span class="kw">order</span>(x1)
   <span class="kw">lines</span>(<span class="kw">sort</span>(x1), y1[K], <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">lty =</span> <span class="dv">4</span>, <span class="dt">col =</span> h.cols.rainbow[i])
 }</code></pre></div>
@@ -1041,10 +1038,10 @@ for(i in <span class="dv">1</span>:<span class="kw">length</span>(thirteen2)) {
 ## Mlme3   4 846.6653</code></pre>
 <p>Using this approach we would select our random intercept and random slope model (Mlme2) because it has the lowest AIC</p>
 <p>Fitting the final model with Restricted Maximum Liklihood</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M1 &lt;-<span class="st"> </span><span class="kw">lme</span>(Form, <span class="dt">random =</span> ~<span class="dv">1</span> +<span class="st"> </span>Polygon.Area<span class="fl">.100</span>|fSpecies, <span class="dt">data =</span> data, <span class="dt">weights =</span> vf3, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M1 &lt;-<span class="st"> </span><span class="kw">lme</span>(Form, <span class="dt">random =</span> ~<span class="dv">1</span> +<span class="st"> </span>Polygon.Area<span class="fl">.100</span>|fSpecies, <span class="dt">data =</span> spec, <span class="dt">weights =</span> vf3, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>)
 <span class="kw">summary</span>(M1)</code></pre></div>
 <pre><code>## Linear mixed-effects model fit by REML
-##  Data: data 
+##  Data: spec 
 ##        AIC     BIC    logLik
 ##   763.8287 785.485 -374.9144
 ## 
