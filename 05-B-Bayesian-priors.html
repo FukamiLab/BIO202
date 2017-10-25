@@ -26,6 +26,49 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
 
 
 <style type="text/css">
@@ -520,16 +563,328 @@ div.tocify {
 
 <p><strong>Assigned Reading:</strong></p>
 <blockquote>
-<p>Chapters 12 and 15 in Korner-Nievergelt et al. 2015. <em>Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.</em> Elsevier.<a href="http://www.sciencedirect.com/science/book/9780128013700">link</a></p>
+<p>Chapters 12 and 15 in Korner-Nievergelt et al. 2015. <em>Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.</em> Elsevier. <a href="http://www.sciencedirect.com/science/book/9780128013700">link</a></p>
 </blockquote>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<p><strong>Why use (weakly) informative priors?</strong></p>
+<ul>
+<li>Uniform priors are unlikely representations of our actual prior state of knowledge.</li>
+<li>Supplying prior distributions with some information allows us to fit models that cannot be fit with frequentist methods. (example- all binary outcomes are the same or binary outcomes separated by a covariate)</li>
+<li>Supplying prior information mirrors the scientific process.</li>
+<li>Supplying prior information makes our assumptions explicit.</li>
+</ul>
+<p><strong>How do we fit models with non-uniform priors?</strong></p>
+<ul>
+<li>To fit models with non-uniform priors we need to simulate parameter samples with MCMC.</li>
+<li>Mathematics proves that, given enough time, MCMC simulation methods produce samples of parameters from the joint posterior distribution.</li>
+<li>Once convinced that an MCMC chain has converged to the posterior, we can use samples from it to make inferences in the same way that we used samples from <code>sim</code>, which were calculed analytically.</li>
+<li>If you don’t have a lot of prior information, do a sensititivity analysis (where you change the prior distributions) to make sure that prior choice is not unduly influencing inference.</li>
+</ul>
+<p><strong>How do you choose prior distributions?</strong></p>
+<ul>
+<li>Make sure that the prior distribution covers all possible values of a parameter and doesn’t allow any values that are impossible. (E.g. <span class="math inline">\(\sigma\)</span> must be positive)</li>
+<li>Read <a href="https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations">this advice</a> from the Stan community.</li>
+</ul>
+<p><strong>How do you make inferences from MCMC output?</strong></p>
+<ul>
+<li>MCMC <em>converges</em> to the correct posterior distribution. Therefore initial samples are not from the distribution and we don’t want to make inference from them.
+<ul>
+<li>BUGS: called “burn-in”, examine trace plot of full chain and decide on cut-off.</li>
+<li>Stan: called “warm-up”, not actually a Markov chain and will be automatically droped from samples if using <code>rstan</code> package.</li>
+</ul></li>
+<li>Markov chains are autocorrelated (adjacent values depend on one another), especially when parameters are correlated.
+<ul>
+<li>To get 1000 independent samples, you may need to run the chain for much longer than 1000 post-burnin iterations.</li>
+<li>Can use “thinning” to avoid storing chain values that you won’t actually use (e.g. save only 1 in 10 samples).</li>
+<li>Use the <em>effective sample size</em> (<code>n.eff</code>) to determine how many independent samples are possible from your chains (and run longer if necessary).</li>
+</ul></li>
+</ul>
+<p><strong>How might MCMC fail?</strong></p>
+<ul>
+<li>High autocorrelation within chains and correlation between parameters can cause:
+<ul>
+<li>Chains get stuck and don’t sample from the full posterior distribution (e.g. show bad mixing).</li>
+<li>Multiple chains don’t sample from the same posterior distribution (initial starting values influence samples).</li>
+</ul></li>
+<li><p>Complex models (especially hierarchical models) required longer to converge.</p></li>
+<li>Models will converge faster with mathematical tricks:
+<ul>
+<li>Center and scale predictors (<code>scale(x, center = TRUE, scale = TRUE)</code> will do: <code>(x - mean(x))/sd(x)</code>).</li>
+<li>Use reparametrization to make it easier to estimate parameters, such as the variance of a random effect. See section 27, Optimizing Stan Code for Efficiency, on p. 333 in the <a href="http://mc-stan.org/users/documentation/">Stan User’s Guide and Documentation</a>.</li>
+</ul></li>
+<li><p>There is not enough data to estimate a parameter and the prior distribution is very vague.</p></li>
+</ul>
+<p><strong>How can you tell that MCMC results are reliable?</strong></p>
+<ul>
+<li>Trace plots that show the value of each parameter through “time” should show good “mixing”.</li>
+<li>Trace plots from separate “chains” should converge on the same values.</li>
+<li><span class="math inline">\(\hat{R} &lt; 1.02\)</span> shows that variance across multiple chains is the same.</li>
+</ul>
+<p><strong>Software comparison</strong></p>
+<table>
+<colgroup>
+<col width="47%" />
+<col width="52%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>OpenBUGS (also WinBUGS, JAGS)</th>
+<th>Stan</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Older = more textbook and tutorial examples.</td>
+<td>Newer = more active development.</td>
+</tr>
+<tr class="even">
+<td>Uses Gibbs sampling, Metropolis-Hastings algoritm or slice sampling.</td>
+<td>Uses Hamiltonian Monte Carlo sampling and optimization-based point estimation.</td>
+</tr>
+<tr class="odd">
+<td>Some details can be implicit.</td>
+<td>All model details must be explicit.</td>
+</tr>
+<tr class="even">
+<td>Slower computation.</td>
+<td>Faster computation, especially for hierarchical models and large data sets.</td>
+</tr>
+<tr class="odd">
+<td>Limited number of functions available.</td>
+<td>Many functions avaible.</td>
+</tr>
+<tr class="even">
+<td>Write models using loops.</td>
+<td>Write models using loops or vector algebra.</td>
+</tr>
+<tr class="odd">
+<td>Can only provide data used to fit the model.</td>
+<td>Can provide extraneous data.</td>
+</tr>
+<tr class="even">
+<td>Must provide initial values.</td>
+<td>Initial values optional.</td>
+</tr>
+<tr class="odd">
+<td>Chains more autocorrelated.</td>
+<td>Chains less autocorrelated.</td>
+</tr>
+<tr class="even">
+<td>Detailed <a href="http://www.openbugs.net/w/Documentation">documentation and examples</a></td>
+<td>Detailed <a href="http://mc-stan.org/users/documentation/index.html">documentation and examples</a>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Steps:</strong></p>
+<ol start="0" style="list-style-type: decimal">
+<li>Install <a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">Stan</a> or <a href="http://www.openbugs.net/w/Downloads">OpenBUGS</a> or <a href="http://mcmc-jags.sourceforge.net/">JAGS</a></li>
+<li>Write down the model(s) you want to fit on paper.</li>
+<li>Specify prior distributions for all unknown parameters.</li>
+<li>Convert the model(s) to Stan (or BUGS) code in a text file.</li>
+<li>Create R objects containing the data needed to fit the model(s).</li>
+<li>Use <code>rstan</code> or <code>R2OpenBUGS</code> or <code>R2jags</code> (or other package) to fit the models in R by referencing the model text file.</li>
+<li>Examine trace plots, <span class="math inline">\(\hat{R}\)</span> and effective samples sizes for each parameter.</li>
+<li>Examine correlations between parameters.</li>
+<li>Decide whether chains are sampling from the posterior distribution.</li>
+<li>Check whether priors are unduly influencing posterior.</li>
+<li>Proceed with model selection and validation by examining information criteria (WAIC) and residuals. Repeat steps 1-10 as needed to find an acceptable model.</li>
+<li>Use samples from final model after the burn-in period to make inferences.</li>
+</ol>
+<p><strong>R Tools</strong></p>
+<ul>
+<li>The <code>coda</code> package is frequently used to visualize MCMC results.</li>
+<li>Check out the <code>ggmcmc</code> package for plotting MCMC results with <code>ggplot2</code>: <a href="http://xavier-fim.net/packages/ggmcmc/">website</a></li>
+</ul>
+<p><br></p>
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
+<p>In this analysis example, we’re going to build on the material covered in the last seminar <a href="https://fukamilab.github.io/BIO202/05-A-Bayesian-linear-models.html">Bayesian Inference from Linear Models</a>. This will enable us to see the similarities and focus more on the differences between the two approaches: (1) using uniform prior distributions (i.e., flat priors or “noninformative” priors), and (2) using non-uniform prior distributions (i.e., informative priors) to perform Bayesian inference.</p>
+<p>We will use the same dataset as before (Appendix A in Zuur et al. 2009. <em>Mixed Effects Models and Extensions in Ecology with R</em>). Again, we’re are going to look at how density of birds in a forest patch (continuous response variable = ABUND) differs by the mean altitude of a patch (continuous explanatory variable = ALT). <strong>However, this time we will apply prior distributions containing “prior knowledge” about the parameters used in our model.</strong></p>
+<p>The art of choosing prior distributions (or “priors”) is covered in Chapter 15 in Korner-Nievergelt et al. 2015. <em>Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.</em> Most of the code is borrowed from section 12.3 (MCMC using Stan) in the same book.</p>
+<p><br></p>
+<div id="step-1-the-model" class="section level4">
+<h4>Step 1: The model</h4>
+<p>Again, the dataset we’re going to use is shown below (but we’re only interested in the variables ABUND and ALT).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set working directory - modify as needed</span>
+<span class="kw">setwd</span>(<span class="st">&quot;~/Box Sync/Classes/BIO 202/Weekly Material/Week 5&quot;</span>)
+
+<span class="co"># Load dataset</span>
+data &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;Data/Loyn.txt&quot;</span>, <span class="dt">header=</span>T)   
+
+<span class="co"># Show information about the dataset</span>
+<span class="kw">str</span>(data)</code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    56 obs. of  8 variables:
+##  $ Site   : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ ABUND  : num  5.3 2 1.5 17.1 13.8 14.1 3.8 2.2 3.3 3 ...
+##  $ AREA   : num  0.1 0.5 0.5 1 1 1 1 1 1 1 ...
+##  $ DIST   : int  39 234 104 66 246 234 467 284 156 311 ...
+##  $ LDIST  : int  39 234 311 66 246 285 467 1829 156 571 ...
+##  $ YR.ISOL: int  1968 1920 1900 1966 1918 1965 1955 1920 1965 1900 ...
+##  $ GRAZE  : int  2 5 5 3 5 3 5 5 4 5 ...
+##  $ ALT    : int  160 60 140 160 140 130 90 60 130 130 ...</code></pre>
+<p>Although priors could be used for more complex models, we’re going to use a similar linear model as before (with the exception of adding the priors) where <span class="math inline">\(y =\)</span> ABUND, <span class="math inline">\(x =\)</span> ALT, <span class="math inline">\(\sigma =\)</span> standard deviation, <span class="math inline">\(\beta_0 =\)</span> intercept, <span class="math inline">\(\beta_1 =\)</span> slope, <span class="math inline">\(Norm() =\)</span> normal distribution and <span class="math inline">\(Cauchy()[0,] =\)</span> truncated Cauchy distribution.</p>
+<p><strong>Stochastic part</strong><br />
+<span class="math inline">\(y_i \sim Norm(\hat{y_i}, \hat{\sigma} )\)</span></p>
+<p><span class="math inline">\(\hat{\beta_k} \sim Norm(0, 5)\)</span></p>
+<p><span class="math inline">\(\hat{\sigma} \sim Cauchy(0, 5)[0,]\)</span></p>
+<p><strong>Deterministic part</strong><br />
+<span class="math inline">\(\hat{y_i} = \hat{\beta_0} + \hat{\beta_1} x_i\)</span></p>
+<p><br></p>
+</div>
+<div id="step-2-the-priors" class="section level4">
+<h4>Step 2: The priors</h4>
+<p>We’re going to pick prior distributions for our model parameters <span class="math inline">\(\sigma\)</span>, <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>. Ideally, priors should be obtained from (or based on) results from previous studies. We want to be able to merge prior knowledge with information from our given dataset. The priors should be chosen so that they contain information about the range of possible values for a parameter and the plausible shape of the distribution of these values.</p>
+<div id="parameter-intercept-and-slope-hatbeta_k" class="section level5">
+<h5>Parameter: Intercept and slope (<span class="math inline">\(\hat{\beta_k}\)</span>)</h5>
+<p>Unfortunately, I’m not that familiar with the “bird density and altitude” literature, so I don’t know what an optimal prior should look like. However, it is reasonable to assume that the intercept and the slope parameters can range from negative to positive values and that values near the endpoints (moving towards <span class="math inline">\(-\infty\)</span> and <span class="math inline">\(\infty\)</span>) are less common. As mentioned in the book, a standard weakly informative prior for a <span class="math inline">\(\beta_k\)</span> parameter is a normal distribution with a mean at about 0 and a standard deviation of about 5, so <span class="math inline">\(Norm(\mu = 10, \sigma = 5)\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Probability density function of the intercept and slope prior</span>
+xseq &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">15</span>, <span class="fl">0.001</span>)
+<span class="kw">plot</span>(xseq, <span class="kw">dnorm</span>(xseq, <span class="dv">0</span>, <span class="dv">5</span>), <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;&quot;</span>, <span class="dt">yaxt=</span><span class="st">&quot;n&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Intercept and slope parameter prior&quot;</span>)</code></pre></div>
+<p><img src="images/05-B/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="parameter-sigma-hatsigma" class="section level5">
+<h5>Parameter: Sigma (<span class="math inline">\(\hat{\sigma}\)</span> )</h5>
+<p>Choosing a prior for variance is tricky, especially without any previous knowledge about this particular bird-altitude system. We will thus use a standard weakly informative prior using a truncated Cauchy distribution with non-negative values (as described in the book).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Probability density function of the variance (or rather standard deviation, sigma)</span>
+xseq &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">15</span>, <span class="fl">0.001</span>)
+<span class="kw">plot</span>(xseq, <span class="kw">dcauchy</span>(xseq, <span class="dt">location =</span> <span class="dv">0</span>, <span class="dt">scale =</span> <span class="dv">5</span>), <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;&quot;</span>, <span class="dt">yaxt=</span><span class="st">&quot;n&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Sigma parameter prior&quot;</span>, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="fl">0.55</span>,<span class="dv">15</span>))</code></pre></div>
+<p><img src="images/05-B/unnamed-chunk-4-1.png" width="672" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="step-3-stan-code" class="section level4">
+<h4>Step 3: Stan code</h4>
+<p>Here, we are converting the model into Stan code in a separate .stan text file (e.g., mcmc.stan). There are three main blocks of code: (1) data, (2) parameters and (3) model. Comments are preceded by <code>//</code>. The sample size <code>N</code> is the only “new” object that has to be declared and we define it as a non-negative integer. The beta (<span class="math inline">\(\beta\)</span>) vector contains two elements, <code>beta[1]</code> <span class="math inline">\(= \beta_0\)</span> and <code>beta[2]</code> <span class="math inline">\(= \beta_1\)</span>, and sigma (<span class="math inline">\(\sigma\)</span>) is defined as a real continuous non-negative object.</p>
+<pre><code>data {
+  //Data objects declared
+    int&lt;lower=0&gt; N; //Sample size for MCMC simulations
+    vector[N] y; 
+    vector[N] x;
+}
+
+parameters {
+  //Model parameter objects declared
+    vector[2] beta;
+    real&lt;lower=0&gt; sigma; 
+}
+
+model {
+  //Prior distributions 
+    beta ~ normal(0,5);
+    sigma ~ cauchy(0,5);
+  //Likelihood 
+    y ~ normal(beta[1] + beta[2] * x, sigma);
+}</code></pre>
+</div>
+<div id="step-4-5-data-objects-in-r-and-mcmc-simulations-using-stan" class="section level4">
+<h4>Step 4 &amp; 5: Data objects in R and MCMC simulations using Stan</h4>
+<p>In a separate R script we can start by loading the R package <code>rstan</code> and defining our data objects from our dataset. Then, we run the MCMC simulations using the function <code>stan()</code>. Here, we choose to run 5 independent Markov chains for each parameter under 1000 iterations.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load Stan package</span>
+<span class="kw">library</span>(rstan)
+
+<span class="co"># Set working directory - modify as needed</span>
+<span class="kw">setwd</span>(<span class="st">&quot;~/Box Sync/Classes/BIO 202/Weekly Material/Week 5&quot;</span>)
+
+<span class="co"># Declare data for Stan</span>
+y &lt;-<span class="st"> </span>data<span class="op">$</span>ABUND
+x &lt;-<span class="st"> </span>data<span class="op">$</span>ALT
+N &lt;-<span class="st"> </span><span class="kw">nrow</span>(data)
+datax &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;N&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>)
+
+<span class="co"># Run Stan</span>
+mod &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">file =</span> <span class="st">&quot;Code/mcmc.stan&quot;</span>, <span class="dt">data=</span>datax, <span class="dt">chains=</span><span class="dv">5</span>, <span class="dt">iter=</span><span class="dv">1000</span>)</code></pre></div>
+<p><br></p>
+</div>
+<div id="step-6-mcmc-analysis" class="section level4">
+<h4>Step 6: MCMC analysis</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(mod, <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>)) <span class="co"># Printing the MCMC output</span></code></pre></div>
+<pre><code>## Inference for Stan model: mcmc.
+## 5 chains, each with iter=1000; warmup=500; thin=1; 
+## post-warmup draws per chain=500, total post-warmup draws=2500.
+## 
+##          mean se_mean   sd  2.5%  25%  50%   75% 97.5% n_eff Rhat
+## beta[1]  3.00    0.10 3.38 -3.53 0.66 2.96  5.21  9.72  1085    1
+## beta[2]  0.11    0.00 0.02  0.06 0.10 0.11  0.13  0.16  1107    1
+## sigma   10.07    0.03 0.99  8.37 9.37 9.99 10.67 12.20  1300    1
+## 
+## Samples were drawn using NUTS(diag_e) at Wed Oct 25 06:19:35 2017.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<p>In the output above, <code>mean</code> refers to the mean of the marginal posterior distribution from the simulations for each parameter, <code>se_mean</code> refers to the the standard error of the simulations (MCMC error) since <code>se_mean = sd/n_eff</code>, and <code>sd</code> refers to the standard deviation of the marginal posterior distribution from the simulations for each parameter. The percentages are the quantiles of the posterior distribution for each parameter. Finally, <code>n_eff</code> is the effective sample size and the potential scale reduction factor, <span class="math inline">\(\hat{R}\)</span>, is basically 1, which is good since it’s supposed to be <span class="math inline">\(&lt; 1.02\)</span>. <strong>Note:</strong> <code>beta[1]</code> <span class="math inline">\(= \beta_0\)</span> and <code>beta[2]</code> <span class="math inline">\(= \beta_1\)</span>.</p>
+<p>To test for the unwanted non-convergence (!) we can plot traceplots (iterations against parameter sample values).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">traceplot</span>(mod, <span class="st">&quot;beta[1]&quot;</span>) </code></pre></div>
+<p><img src="images/05-B/unnamed-chunk-7-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">traceplot</span>(mod, <span class="st">&quot;beta[2]&quot;</span>) </code></pre></div>
+<p><img src="images/05-B/unnamed-chunk-7-2.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">traceplot</span>(mod, <span class="st">&quot;sigma&quot;</span>)</code></pre></div>
+<p><img src="images/05-B/unnamed-chunk-7-3.png" width="672" /></p>
+<p>It seems like all 5 chains converged after about 500 iterations, so that is good. This means that we have obtained posterior distributions for our three parameters that could be used for Bayesian inference.</p>
+<p><br></p>
+</div>
+<div id="step-7-extracting-mcmc-results-and-testing-for-parameter-correlations" class="section level4">
+<h4>Step 7: Extracting MCMC results and testing for parameter correlations</h4>
+<p>If parameters are correlated then MCMC can fail as explained in the Key Points section.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">modSims &lt;-<span class="st"> </span><span class="kw">extract</span>(mod) <span class="co"># Extracting our parameters from the MCMC output and save it as a new data frame</span>
+<span class="kw">str</span>(modSims)</code></pre></div>
+<pre><code>## List of 3
+##  $ beta : num [1:2500, 1:2] 4.85 4.92 3.46 2.68 5.92 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ iterations: NULL
+##   .. ..$           : NULL
+##  $ sigma: num [1:2500(1d)] 8.69 9.45 9.2 9.44 8.89 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 1
+##   .. ..$ iterations: NULL
+##  $ lp__ : num [1:2500(1d)] -157 -156 -156 -156 -159 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 1
+##   .. ..$ iterations: NULL</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(modSims<span class="op">$</span>beta[,<span class="dv">1</span>], modSims<span class="op">$</span>beta[,<span class="dv">2</span>], <span class="dt">xlab=</span><span class="st">&quot;beta_0&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;beta_1&quot;</span>)</code></pre></div>
+<p><img src="images/05-B/unnamed-chunk-9-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(modSims<span class="op">$</span>beta[,<span class="dv">1</span>], modSims<span class="op">$</span>sigma, <span class="dt">xlab=</span><span class="st">&quot;beta_0&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;sigma&quot;</span>)</code></pre></div>
+<p><img src="images/05-B/unnamed-chunk-9-2.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(modSims<span class="op">$</span>beta[,<span class="dv">2</span>], modSims<span class="op">$</span>sigma, <span class="dt">xlab=</span><span class="st">&quot;beta_1&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;sigma&quot;</span>)</code></pre></div>
+<p><img src="images/05-B/unnamed-chunk-9-3.png" width="672" /></p>
+<p>There seems to be correlation between the intercept parameter <span class="math inline">\(\beta_0\)</span> and the slope parameter <span class="math inline">\(\beta_1\)</span>, which actually makes sense. This might explain why it took about 500 iterations to convergence on a joint posterior distribution for the parameters. Thankfully, the <span class="math inline">\(\sigma\)</span> parameter does not correlate with any of the other parameters.</p>
+<p>Normally, we would perform a prior sensitity analysis to see whether the posterior distributions are influenced by the defined prior distributions and maybe modify our priors accordingly until we are fully satisfied with our model (and repeating steps 1-7).</p>
+</div>
+<div id="step-8-inferences" class="section level4">
+<h4>Step 8: Inferences</h4>
+<p>Now that we have our joint posterior distribution <span class="math inline">\(p(\theta | y)\)</span> we can perform Bayesian inference much like in the previous seminar session.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newData &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="kw">seq</span>(<span class="kw">min</span>(data<span class="op">$</span>ALT), <span class="kw">max</span>(data<span class="op">$</span>ALT), <span class="dt">by=</span><span class="fl">0.1</span>)) 
+
+newMatrix &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span>x, newData)
+
+b &lt;-<span class="st"> </span><span class="kw">apply</span>(modSims<span class="op">$</span>beta, <span class="dv">2</span>, mean)
+newData<span class="op">$</span>mod &lt;-<span class="st"> </span>newMatrix <span class="op">%*%</span><span class="st"> </span>b
+nsim &lt;-<span class="st"> </span><span class="kw">nrow</span>(modSims<span class="op">$</span>beta)
+
+fitmat &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">ncol=</span>nsim, <span class="dt">nrow=</span><span class="kw">nrow</span>(newData)) 
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nsim){
+  fitmat[,i] &lt;-<span class="st"> </span>newMatrix <span class="op">%*%</span><span class="st"> </span>modSims<span class="op">$</span>beta[i,] 
+}
+
+newData<span class="op">$</span>fitupper &lt;-<span class="st"> </span><span class="kw">apply</span>(fitmat, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.975</span>)
+newData<span class="op">$</span>fitlower &lt;-<span class="st"> </span><span class="kw">apply</span>(fitmat, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.025</span>) 
+
+linearModel &lt;-<span class="st"> </span><span class="kw">lm</span>(ABUND <span class="op">~</span><span class="st"> </span>ALT, data)
+
+<span class="kw">plot</span>(data<span class="op">$</span>ALT,data<span class="op">$</span>ABUND, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">las=</span><span class="dv">1</span>, <span class="dt">cex.lab=</span><span class="fl">1.2</span>, <span class="dt">xlab=</span><span class="st">&quot;Mean altitude of a patch&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Density of birds in a patch&quot;</span>)
+<span class="kw">abline</span>(linearModel, <span class="dt">lw=</span><span class="dv">2</span>)
+<span class="kw">lines</span>(newData<span class="op">$</span>x, newData<span class="op">$</span>fitupper, <span class="dt">lty=</span><span class="dv">3</span>)
+<span class="kw">lines</span>(newData<span class="op">$</span>x, newData<span class="op">$</span>fitlower, <span class="dt">lty=</span><span class="dv">3</span>) </code></pre></div>
+<p><img src="images/05-B/unnamed-chunk-10-1.png" width="672" /></p>
+<p>The regression line (solid) is supposed to act as a reference for the 95% CrI (dashed lines) obtained with prior information when comparing it with the CrI obtained with uniform priors in the previous seminar. The results using non-uniform priors differ only slightly, as expected.</p>
+</div>
 </div>
 <div id="discussion-questions" class="section level3">
 <h3>Discussion Questions</h3>
+<ul>
+<li>Why is the <span class="math inline">\(\hat{R}\)</span> threshold set at 1.02 (or less strictly at 1.1)?</li>
+<li>How can mixing or homogenours sampling be discerned in the traceplots?</li>
+<li>What’s the golden rule when it comes to choosing optimal priors? They should not be (1) too strong, so that they are not providing us with additional information (not found in the dataset - too much overlap between prior and posterior), but also not too weak (2) to not influence the results due to lack of prior knowledge. Is there a better way than exploring different options via trail and error?</li>
+</ul>
 </div>
 
 
