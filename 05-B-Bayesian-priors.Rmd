@@ -224,7 +224,7 @@ In a separate R script we can start by loading the R package `rstan` and definin
 library(rstan)
 
 # Set working directory - modify as needed
-setwd("~/Box Sync/Classes/BIO 202/Weekly Material/Week 5")
+#setwd("~/Box Sync/Classes/BIO 202/Weekly Material/Week 5")
 
 # Declare data for Stan
 y <- Loyn$ABUND
@@ -233,7 +233,7 @@ N <- nrow(Loyn)
 datax <- list("N", "x", "y")
 
 # Run Stan
-mod <- stan(file = "Code/mcmc.stan", data=datax, chains=5, iter=1000)
+mod <- stan(file = "code/05-B.stan", data=datax, chains=5, iter=1000)
 
 ```
 

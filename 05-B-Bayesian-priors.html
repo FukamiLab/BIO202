@@ -737,7 +737,7 @@ Loyn &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span clas
 <h5>Parameter: Intercept and slope (<span class="math inline">\(\hat{\beta_k}\)</span>)</h5>
 <p>Unfortunately, I’m not that familiar with the “bird density and altitude” literature, so I don’t know what an optimal prior should look like. However, it is reasonable to assume that the intercept and the slope parameters can range from negative to positive values and that values near the endpoints (moving towards <span class="math inline">\(-\infty\)</span> and <span class="math inline">\(\infty\)</span>) are less common. As mentioned in the book, a standard weakly informative prior for a <span class="math inline">\(\beta_k\)</span> parameter is a normal distribution with a mean at about 0 and a standard deviation of about 5, so <span class="math inline">\(Norm(\mu = 10, \sigma = 5)\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Probability density function of the intercept and slope prior</span>
-xseq &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">15</span>, <span class="fl">0.001</span>)
+xseq &lt;-<span class="st"> </span><span class="kw">seq</span>(-<span class="dv">15</span>, <span class="dv">15</span>, <span class="fl">0.001</span>)
 <span class="kw">plot</span>(xseq, <span class="kw">dnorm</span>(xseq, <span class="dv">0</span>, <span class="dv">5</span>), <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;&quot;</span>, <span class="dt">yaxt=</span><span class="st">&quot;n&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Intercept and slope parameter prior&quot;</span>)</code></pre></div>
 <p><img src="images/05-B/unnamed-chunk-3-1.png" width="672" /></p>
 </div>
@@ -745,7 +745,7 @@ xseq &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">
 <h5>Parameter: Sigma (<span class="math inline">\(\hat{\sigma}\)</span> )</h5>
 <p>Choosing a prior for variance is tricky, especially without any previous knowledge about this particular bird-altitude system. We will thus use a standard weakly informative prior using a truncated Cauchy distribution with non-negative values (as described in the book).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Probability density function of the variance (or rather standard deviation, sigma)</span>
-xseq &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">15</span>, <span class="fl">0.001</span>)
+xseq &lt;-<span class="st"> </span><span class="kw">seq</span>(-<span class="dv">15</span>, <span class="dv">15</span>, <span class="fl">0.001</span>)
 <span class="kw">plot</span>(xseq, <span class="kw">dcauchy</span>(xseq, <span class="dt">location =</span> <span class="dv">0</span>, <span class="dt">scale =</span> <span class="dv">5</span>), <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;&quot;</span>, <span class="dt">yaxt=</span><span class="st">&quot;n&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Sigma parameter prior&quot;</span>, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="fl">0.55</span>,<span class="dv">15</span>))</code></pre></div>
 <p><img src="images/05-B/unnamed-chunk-4-1.png" width="672" /></p>
 <p><br></p>
@@ -783,31 +783,31 @@ model {
 <span class="kw">library</span>(rstan)
 
 <span class="co"># Set working directory - modify as needed</span>
-<span class="kw">setwd</span>(<span class="st">&quot;~/Box Sync/Classes/BIO 202/Weekly Material/Week 5&quot;</span>)
+<span class="co">#setwd(&quot;~/Box Sync/Classes/BIO 202/Weekly Material/Week 5&quot;)</span>
 
 <span class="co"># Declare data for Stan</span>
-y &lt;-<span class="st"> </span>Loyn<span class="op">$</span>ABUND
-x &lt;-<span class="st"> </span>Loyn<span class="op">$</span>ALT
+y &lt;-<span class="st"> </span>Loyn$ABUND
+x &lt;-<span class="st"> </span>Loyn$ALT
 N &lt;-<span class="st"> </span><span class="kw">nrow</span>(Loyn)
 datax &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;N&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>)
 
 <span class="co"># Run Stan</span>
-mod &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">file =</span> <span class="st">&quot;Code/mcmc.stan&quot;</span>, <span class="dt">data=</span>datax, <span class="dt">chains=</span><span class="dv">5</span>, <span class="dt">iter=</span><span class="dv">1000</span>)</code></pre></div>
+mod &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">file =</span> <span class="st">&quot;code/05-B.stan&quot;</span>, <span class="dt">data=</span>datax, <span class="dt">chains=</span><span class="dv">5</span>, <span class="dt">iter=</span><span class="dv">1000</span>)</code></pre></div>
 <p><br></p>
 </div>
 <div id="step-6-mcmc-analysis" class="section level4">
 <h4>Step 6: MCMC analysis</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(mod, <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>)) <span class="co"># Printing the MCMC output</span></code></pre></div>
-<pre><code>## Inference for Stan model: mcmc.
+<pre><code>## Inference for Stan model: 05-B.
 ## 5 chains, each with iter=1000; warmup=500; thin=1; 
 ## post-warmup draws per chain=500, total post-warmup draws=2500.
 ## 
 ##          mean se_mean   sd  2.5%  25%  50%   75% 97.5% n_eff Rhat
-## beta[1]  2.87    0.11 3.52 -4.03 0.48 2.92  5.30  9.58   939    1
-## beta[2]  0.11    0.00 0.02  0.07 0.10 0.11  0.13  0.16   941    1
-## sigma   10.05    0.03 0.95  8.39 9.38 9.95 10.65 12.10  1230    1
+## beta[1]  2.89    0.10 3.49 -4.16 0.66 2.86  5.24  9.69  1164    1
+## beta[2]  0.11    0.00 0.02  0.07 0.10 0.11  0.13  0.16  1191    1
+## sigma   10.09    0.03 1.02  8.31 9.40 9.97 10.67 12.33  1145    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Wed Oct 25 09:03:41 2017.
+## Samples were drawn using NUTS(diag_e) at Wed Oct 25 09:16:01 2017.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -833,13 +833,13 @@ mcmcData &lt;-<span class="st"> </span><span class="kw">ggs</span>(mod)
 ##  $ Iteration: num  1 2 3 4 5 6 7 8 9 10 ...
 ##  $ Chain    : int  1 1 1 1 1 1 1 1 1 1 ...
 ##  $ Parameter: Factor w/ 3 levels &quot;beta[1]&quot;,&quot;beta[2]&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
-##  $ value    : num  -1.771 -0.151 0.317 4.506 0.357 ...
+##  $ value    : num  8.22 4.08 -1.93 -2.52 7.46 ...
 ##  - attr(*, &quot;nChains&quot;)= int 5
 ##  - attr(*, &quot;nParameters&quot;)= int 3
 ##  - attr(*, &quot;nIterations&quot;)= num 500
 ##  - attr(*, &quot;nBurnin&quot;)= num 500
 ##  - attr(*, &quot;nThin&quot;)= num 1
-##  - attr(*, &quot;description&quot;)= chr &quot;mcmc&quot;</code></pre>
+##  - attr(*, &quot;description&quot;)= chr &quot;05-B&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggs_histogram</span>(mcmcData)</code></pre></div>
 <p><img src="images/05-B/unnamed-chunk-9-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggs_density</span>(mcmcData)</code></pre></div>
@@ -857,26 +857,26 @@ mcmcData &lt;-<span class="st"> </span><span class="kw">ggs</span>(mod)
 <h4>Step 7: Extracting MCMC results and testing for parameter correlations</h4>
 <p>If parameters are correlated then MCMC can fail as explained in the Key Points section.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Extracting our parameters from the MCMC output and save it as a new data frame</span>
-modSims &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(mod) 
+modSims &lt;-<span class="st"> </span>rstan::<span class="kw">extract</span>(mod) 
 
 <span class="kw">str</span>(modSims)</code></pre></div>
 <pre><code>## List of 3
-##  $ beta : num [1:2500, 1:2] 7.19 6.85 4.79 4.29 5.2 ...
+##  $ beta : num [1:2500, 1:2] 3.85 5.36 1.6 7.47 4.21 ...
 ##   ..- attr(*, &quot;dimnames&quot;)=List of 2
 ##   .. ..$ iterations: NULL
 ##   .. ..$           : NULL
-##  $ sigma: num [1:2500(1d)] 9.46 9.11 9.52 9.28 10.18 ...
+##  $ sigma: num [1:2500(1d)] 11.76 9.53 9.93 9.6 11.46 ...
 ##   ..- attr(*, &quot;dimnames&quot;)=List of 1
 ##   .. ..$ iterations: NULL
-##  $ lp__ : num [1:2500(1d)] -157 -157 -156 -158 -156 ...
+##  $ lp__ : num [1:2500(1d)] -157 -156 -156 -157 -158 ...
 ##   ..- attr(*, &quot;dimnames&quot;)=List of 1
 ##   .. ..$ iterations: NULL</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Scatter plots of parameters to look for correlations</span>
-<span class="kw">plot</span>(modSims<span class="op">$</span>beta[,<span class="dv">1</span>], modSims<span class="op">$</span>beta[,<span class="dv">2</span>], <span class="dt">xlab=</span><span class="st">&quot;beta_0&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;beta_1&quot;</span>)</code></pre></div>
+<span class="kw">plot</span>(modSims$beta[,<span class="dv">1</span>], modSims$beta[,<span class="dv">2</span>], <span class="dt">xlab=</span><span class="st">&quot;beta_0&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;beta_1&quot;</span>)</code></pre></div>
 <p><img src="images/05-B/unnamed-chunk-15-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(modSims<span class="op">$</span>beta[,<span class="dv">1</span>], modSims<span class="op">$</span>sigma, <span class="dt">xlab=</span><span class="st">&quot;beta_0&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;sigma&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(modSims$beta[,<span class="dv">1</span>], modSims$sigma, <span class="dt">xlab=</span><span class="st">&quot;beta_0&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;sigma&quot;</span>)</code></pre></div>
 <p><img src="images/05-B/unnamed-chunk-15-2.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(modSims<span class="op">$</span>beta[,<span class="dv">2</span>], modSims<span class="op">$</span>sigma, <span class="dt">xlab=</span><span class="st">&quot;beta_1&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;sigma&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(modSims$beta[,<span class="dv">2</span>], modSims$sigma, <span class="dt">xlab=</span><span class="st">&quot;beta_1&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;sigma&quot;</span>)</code></pre></div>
 <p><img src="images/05-B/unnamed-chunk-15-3.png" width="672" /></p>
 <p>There seems to be correlation between the intercept parameter <span class="math inline">\(\beta_0\)</span> and the slope parameter <span class="math inline">\(\beta_1\)</span>, which actually makes sense. This might explain why it took about 500 iterations to convergence on a joint posterior distribution for the parameters. Thankfully, the <span class="math inline">\(\sigma\)</span> parameter does not correlate with any of the other parameters.</p>
 <p>Normally, we would perform a prior sensitity analysis to see whether the posterior distributions are influenced by the defined prior distributions and maybe modify our priors accordingly until we are fully satisfied with our model (and repeating steps 1-7).</p>
@@ -885,30 +885,30 @@ modSims &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class
 <div id="step-8-inferences" class="section level4">
 <h4>Step 8: Inferences</h4>
 <p>Now that we have our joint posterior distribution <span class="math inline">\(p(\theta | y)\)</span> we can perform Bayesian inference much like in the previous seminar session (based on similar code).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newData &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="kw">seq</span>(<span class="kw">min</span>(Loyn<span class="op">$</span>ALT), <span class="kw">max</span>(Loyn<span class="op">$</span>ALT), <span class="dt">by=</span><span class="fl">0.1</span>)) 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newData &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="kw">seq</span>(<span class="kw">min</span>(Loyn$ALT), <span class="kw">max</span>(Loyn$ALT), <span class="dt">by=</span><span class="fl">0.1</span>)) 
 
-newMatrix &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span>x, newData)
+newMatrix &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(~x, newData)
 
-b &lt;-<span class="st"> </span><span class="kw">apply</span>(modSims<span class="op">$</span>beta, <span class="dv">2</span>, mean)
-newData<span class="op">$</span>mod &lt;-<span class="st"> </span>newMatrix <span class="op">%*%</span><span class="st"> </span>b
-nsim &lt;-<span class="st"> </span><span class="kw">nrow</span>(modSims<span class="op">$</span>beta)
+b &lt;-<span class="st"> </span><span class="kw">apply</span>(modSims$beta, <span class="dv">2</span>, mean)
+newData$mod &lt;-<span class="st"> </span>newMatrix %*%<span class="st"> </span>b
+nsim &lt;-<span class="st"> </span><span class="kw">nrow</span>(modSims$beta)
 
 fitmat &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">ncol=</span>nsim, <span class="dt">nrow=</span><span class="kw">nrow</span>(newData)) 
-<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nsim){
-  fitmat[,i] &lt;-<span class="st"> </span>newMatrix <span class="op">%*%</span><span class="st"> </span>modSims<span class="op">$</span>beta[i,] 
+for(i in <span class="dv">1</span>:nsim){
+  fitmat[,i] &lt;-<span class="st"> </span>newMatrix %*%<span class="st"> </span>modSims$beta[i,] 
 }
 
 <span class="co"># 95% CrI lines</span>
-newData<span class="op">$</span>fitupper &lt;-<span class="st"> </span><span class="kw">apply</span>(fitmat, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.975</span>)
-newData<span class="op">$</span>fitlower &lt;-<span class="st"> </span><span class="kw">apply</span>(fitmat, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.025</span>) 
+newData$fitupper &lt;-<span class="st"> </span><span class="kw">apply</span>(fitmat, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.975</span>)
+newData$fitlower &lt;-<span class="st"> </span><span class="kw">apply</span>(fitmat, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.025</span>) 
 
 <span class="co"># Linear regression</span>
-linearModel &lt;-<span class="st"> </span><span class="kw">lm</span>(ABUND <span class="op">~</span><span class="st"> </span>ALT, Loyn) 
+linearModel &lt;-<span class="st"> </span><span class="kw">lm</span>(ABUND ~<span class="st"> </span>ALT, Loyn) 
 
-<span class="kw">plot</span>(Loyn<span class="op">$</span>ALT,Loyn<span class="op">$</span>ABUND, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">las=</span><span class="dv">1</span>, <span class="dt">cex.lab=</span><span class="fl">1.2</span>, <span class="dt">xlab=</span><span class="st">&quot;Mean altitude of a patch&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Density of birds in a patch&quot;</span>)
+<span class="kw">plot</span>(Loyn$ALT,Loyn$ABUND, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">las=</span><span class="dv">1</span>, <span class="dt">cex.lab=</span><span class="fl">1.2</span>, <span class="dt">xlab=</span><span class="st">&quot;Mean altitude of a patch&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Density of birds in a patch&quot;</span>)
 <span class="kw">abline</span>(linearModel, <span class="dt">lw=</span><span class="dv">2</span>) <span class="co"># Linear regression line</span>
-<span class="kw">lines</span>(newData<span class="op">$</span>x, newData<span class="op">$</span>fitupper, <span class="dt">lty=</span><span class="dv">3</span>)
-<span class="kw">lines</span>(newData<span class="op">$</span>x, newData<span class="op">$</span>fitlower, <span class="dt">lty=</span><span class="dv">3</span>) </code></pre></div>
+<span class="kw">lines</span>(newData$x, newData$fitupper, <span class="dt">lty=</span><span class="dv">3</span>)
+<span class="kw">lines</span>(newData$x, newData$fitlower, <span class="dt">lty=</span><span class="dv">3</span>) </code></pre></div>
 <p><img src="images/05-B/unnamed-chunk-16-1.png" width="672" /></p>
 <p>The regression line (solid) is supposed to act as a reference for the 95% CrI (dashed lines) obtained with prior information when comparing it with the CrI obtained with uniform priors in the previous seminar. The results using non-uniform priors differ only slightly, as expected.</p>
 </div>
