@@ -792,22 +792,22 @@ N &lt;-<span class="st"> </span><span class="kw">nrow</span>(Loyn)
 datax &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;N&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>)
 
 <span class="co"># Run Stan</span>
-mod &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">file =</span> <span class="st">&quot;code/05-B.stan&quot;</span>, <span class="dt">data=</span>datax, <span class="dt">chains=</span><span class="dv">5</span>, <span class="dt">iter=</span><span class="dv">1000</span>)</code></pre></div>
+mod &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">file =</span> <span class="st">&quot;code/05-B.stan&quot;</span>, <span class="dt">data=</span>datax, <span class="dt">chains=</span><span class="dv">3</span>, <span class="dt">iter=</span><span class="dv">1000</span>)</code></pre></div>
 <p><br></p>
 </div>
 <div id="step-6-mcmc-analysis" class="section level4">
 <h4>Step 6: MCMC analysis</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(mod, <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>)) <span class="co"># Printing the MCMC output</span></code></pre></div>
 <pre><code>## Inference for Stan model: 05-B.
-## 5 chains, each with iter=1000; warmup=500; thin=1; 
-## post-warmup draws per chain=500, total post-warmup draws=2500.
+## 3 chains, each with iter=1000; warmup=500; thin=1; 
+## post-warmup draws per chain=500, total post-warmup draws=1500.
 ## 
 ##          mean se_mean   sd  2.5%  25%  50%   75% 97.5% n_eff Rhat
-## beta[1]  2.89    0.10 3.49 -4.16 0.66 2.86  5.24  9.69  1164    1
-## beta[2]  0.11    0.00 0.02  0.07 0.10 0.11  0.13  0.16  1191    1
-## sigma   10.09    0.03 1.02  8.31 9.40 9.97 10.67 12.33  1145    1
+## beta[1]  2.81    0.16 3.37 -3.81 0.41 2.95  5.02  9.11   420 1.01
+## beta[2]  0.11    0.00 0.02  0.07 0.10 0.11  0.13  0.16   409 1.01
+## sigma   10.07    0.04 1.00  8.34 9.37 9.95 10.68 12.28   762 1.00
 ## 
-## Samples were drawn using NUTS(diag_e) at Wed Oct 25 09:16:01 2017.
+## Samples were drawn using NUTS(diag_e) at Wed Oct 25 10:35:37 2017.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -829,12 +829,12 @@ mod &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">
 mcmcData &lt;-<span class="st"> </span><span class="kw">ggs</span>(mod) 
 
 <span class="kw">str</span>(mcmcData)</code></pre></div>
-<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    7500 obs. of  4 variables:
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    4500 obs. of  4 variables:
 ##  $ Iteration: num  1 2 3 4 5 6 7 8 9 10 ...
 ##  $ Chain    : int  1 1 1 1 1 1 1 1 1 1 ...
 ##  $ Parameter: Factor w/ 3 levels &quot;beta[1]&quot;,&quot;beta[2]&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
-##  $ value    : num  8.22 4.08 -1.93 -2.52 7.46 ...
-##  - attr(*, &quot;nChains&quot;)= int 5
+##  $ value    : num  1.8 1.24 3.03 7.03 1.2 ...
+##  - attr(*, &quot;nChains&quot;)= int 3
 ##  - attr(*, &quot;nParameters&quot;)= int 3
 ##  - attr(*, &quot;nIterations&quot;)= num 500
 ##  - attr(*, &quot;nBurnin&quot;)= num 500
@@ -861,14 +861,14 @@ modSims &lt;-<span class="st"> </span>rstan::<span class="kw">extract</span>(mod
 
 <span class="kw">str</span>(modSims)</code></pre></div>
 <pre><code>## List of 3
-##  $ beta : num [1:2500, 1:2] 3.85 5.36 1.6 7.47 4.21 ...
+##  $ beta : num [1:1500, 1:2] 2.457 2.9453 -0.0883 -1.2331 -1.0676 ...
 ##   ..- attr(*, &quot;dimnames&quot;)=List of 2
 ##   .. ..$ iterations: NULL
 ##   .. ..$           : NULL
-##  $ sigma: num [1:2500(1d)] 11.76 9.53 9.93 9.6 11.46 ...
+##  $ sigma: num [1:1500(1d)] 10.71 9.83 9.62 9.45 9.33 ...
 ##   ..- attr(*, &quot;dimnames&quot;)=List of 1
 ##   .. ..$ iterations: NULL
-##  $ lp__ : num [1:2500(1d)] -157 -156 -156 -157 -158 ...
+##  $ lp__ : num [1:1500(1d)] -156 -156 -156 -157 -157 ...
 ##   ..- attr(*, &quot;dimnames&quot;)=List of 1
 ##   .. ..$ iterations: NULL</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Scatter plots of parameters to look for correlations</span>
@@ -917,7 +917,7 @@ linearModel &lt;-<span class="st"> </span><span class="kw">lm</span>(ABUND ~<spa
 <h3>Discussion Questions</h3>
 <ul>
 <li>Why is the <span class="math inline">\(\hat{R}\)</span> threshold set at 1.02 (or less strictly at 1.1)?</li>
-<li>How can mixing or homogenours sampling be discerned in the traceplots?</li>
+<li>How can mixing or homogenous sampling be discerned in the traceplots?</li>
 <li>What’s the golden rule when it comes to choosing optimal priors? They should not be (1) too strong, so that they are not providing us with additional information (not found in the dataset - too much overlap between prior and posterior), but also not too weak (2) to not influence the results due to lack of prior knowledge. Is there a better way than exploring different options via trail and error?</li>
 </ul>
 </div>
