@@ -26,6 +26,49 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
 
 
 <style type="text/css">
@@ -524,12 +567,295 @@ div.tocify {
 </blockquote>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<div id="definition-and-why-it-is-a-problem" class="section level4">
+<h4>Definition and why it is a problem</h4>
+<ul>
+<li><p>When the number of zeros is so large that the data do not readily fit standard distributions (e.g. normal, Poisson, binomial, negative-binomial and beta), the data set is referred to as zero inflated (Heilbron 1994; Tu 2002).</p></li>
+<li><p>The source of the zeroes matters: Non-detection (false zeros) or true zeroes?</p></li>
+</ul>
+</div>
+<div id="a-special-case-zero-truncated-count-data" class="section level4">
+<h4>A special case: zero-truncated count data</h4>
+<ul>
+<li><p>e.g., Number of days that road-kills remain on the road</p></li>
+<li><p>Poisson and NB models can be adjusted to exclude the probability that yi = 0 (equation 11.8 on p. 265).</p></li>
+<li><p><code>family = pospoisson</code> and <code>family = posnegbinomial</code> in VGAM package</p></li>
+</ul>
+</div>
+<div id="more-often-we-get-too-many-zeros-zero-inflated" class="section level4">
+<h4>More often, we get too many zeros (zero-inflated)</h4>
+<ul>
+<li><p>How to detect zero-inflation: Frequency plot to know how many zeroes we would expect</p></li>
+<li><p>Zero-inflation can cause overdispersion (but accounting for zero-inflation does not necessarily remove overdispersion).</p></li>
+<li><p>Two-part and mixture models for zero-inflated data (Table 11.1).</p></li>
+<li><p>Fundamental difference: In two-part models, the count process cannot produce zeros (the distribution is zero-truncated). In mixture models, it can.</p></li>
+<li><p>In other words, two-part models do not distinguish true and false zeros (Fig 11.4), whereas mixture models do, at least statistically (Fig 11.5).</p></li>
+</ul>
+</div>
+<div id="two-part-models" class="section level4">
+<h4>Two-part models</h4>
+<ul>
+<li><p>Source of zeroes is NOT considered</p></li>
+<li><p>First step: zero or nonzero? Binomial model used to model probability of zeroes</p></li>
+<li><p>Second step: zero-truncated model used to model the count data</p></li>
+<li><p>Can do this separately (two models) or combine to use one model (<code>hurdle()</code> in pscl package)</p></li>
+</ul>
+</div>
+<div id="mixture-models" class="section level4">
+<h4>Mixture models</h4>
+<ul>
+<li><p>Zeroes are modeled explicitly as coming from multiple processes: true zeroes and false zeroes are modeled as being generated from different processes</p></li>
+<li><p><code>zeroinfl()</code> in pscl package</p></li>
+</ul>
+</div>
+<div id="steps" class="section level4">
+<h4>Steps</h4>
+<ol style="list-style-type: decimal">
+<li><p>Choose model type</p></li>
+<li><p>Prune variables (<code>drop1()</code>)</p></li>
+<li><p>Model validation (extract residuals and plot vs. all predictors or measured variables)</p></li>
+<li><p>Model interpretation</p></li>
+</ol>
+</div>
+<div id="but-how-to-choose-model-type" class="section level4">
+<h4>But how to choose model type?</h4>
+<ul>
+<li>Options: common sense, model validation, information criteria, hypothesis tests (Poisson or NB), comparison of observed and fitted values</li>
+</ul>
+<hr />
+</div>
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read in OBFL data</span>
+
+OBFL &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&#39;./data/OBFL.csv&#39;</span>, 
+                 <span class="dt">header =</span> T)
+
+############################################################
+<span class="kw">library</span>(lattice)
+<span class="kw">library</span>(MASS)
+<span class="kw">require</span>(pscl) <span class="co"># alternatively can use package ZIM for zero-inflated models</span>
+<span class="kw">library</span>(lmtest)</code></pre></div>
+<p>Data includes counts of ochre-bellied flycatcher (OBFL) captures across deforestation and agricultural intensification gradient in southern Costa Rica. Specifically, sampling date, Counts (number of captures at site on a given day), Site Code and standardized mean canopy cover at the site (Canopy.std).</p>
+<p>Here we will be looking at the relationship between number of captured individuals and canopy cover using a series of GLMs to deal with overdispersion. In reality we could use a GLMM with this data, but we will stick with GLMs for simplicity.</p>
+<p>The steps and code use for these anlyses pull from heavily from:<br />
+1. <em>Zuur, A. F., Ieno, E. N., Walker, N., Saveliev, A. A. and Smith, G. M. 2009. Mixed Effects Models and Extensions in Ecology with R.</em><br />
+2. <em>Zuur, A. F. and Ieno, E. N. 2016. Beginner’s Guide to Zero-Inflated Models with R.</em></p>
+</div>
+<div id="relationship-between-counts-and-canopy-cover" class="section level3">
+<h3>Relationship between Counts and Canopy Cover</h3>
+<p><img src="images/04-C/pressure-1.png" width="672" /></p>
+<p>Let’s do a quick check for Zero-Inflation in the data</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">100</span>*<span class="kw">sum</span>(OBFL$Counts ==<span class="st"> </span><span class="dv">0</span>)/<span class="kw">nrow</span>(OBFL)</code></pre></div>
+<pre><code>## [1] 40.36697</code></pre>
+<p>That’s pretty high! ~ 40% of our data are zeros</p>
+<p>While our data seems to be zero-inflated, this doesn’t necessarily mean we need to use a zero-inflated model. In many cases, the covariates may predict the zeros under a Poisson or Negative Binomial model. So let’s start with the simplest model, a Poisson GLM.</p>
+</div>
+<div id="poisson-glm" class="section level3">
+<h3>Poisson GLM</h3>
+<p><span class="math inline">\(Counts_i \sim Poisson(\mu_i)\)</span><br />
+<span class="math inline">\(E(Counts_i) = \mu_i\)</span><br />
+<span class="math inline">\(var(Counts_i) = \mu_i\)</span><br />
+<span class="math inline">\(log(\mu_i) = \alpha + \beta_1 * Canopy.std_i\)</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Poisson GLM
+M1 &lt;-<span class="st"> </span><span class="kw">glm</span>(Counts ~<span class="st"> </span>Canopy.std,
+          <span class="dt">family =</span> <span class="st">&#39;poisson&#39;</span>,
+          <span class="dt">data =</span> OBFL)
+
+<span class="kw">summary</span>(M1)</code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = Counts ~ Canopy.std, family = &quot;poisson&quot;, data = OBFL)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.8609  -1.1927  -0.9465   0.6633   3.7112  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  0.21602    0.09701   2.227    0.026 *  
+## Canopy.std   0.77757    0.08953   8.685   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 286.66  on 108  degrees of freedom
+## Residual deviance: 195.32  on 107  degrees of freedom
+## AIC: 373.4
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Check for over/underdispersion in the model
+E2 &lt;-<span class="st"> </span><span class="kw">resid</span>(M1, <span class="dt">type =</span> <span class="st">&quot;pearson&quot;</span>)
+N  &lt;-<span class="st"> </span><span class="kw">nrow</span>(OBFL)
+p  &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">coef</span>(M1))   
+<span class="kw">sum</span>(E2^<span class="dv">2</span>) /<span class="st"> </span>(N -<span class="st"> </span>p)</code></pre></div>
+<pre><code>## [1] 1.809869</code></pre>
+<p>Looks like our model produces overdisperion. There are many reasons why this might be the case, but for now we are going to try to use a negative binomial GLM using the ‘glm.nb’ function in the ‘MASS’ package</p>
+</div>
+<div id="negative-binomial-glm" class="section level3">
+<h3>Negative Binomial GLM</h3>
+<p><span class="math inline">\(Counts_i \sim NB(\mu_i, theta)\)</span><br />
+<span class="math inline">\(E(Counts_i) = \mu_i\)</span><br />
+<span class="math inline">\(var(Counts_i) = (\mu_i + \mu_i^{2})/theta\)</span><br />
+<span class="math inline">\(log(\mu_i) = \alpha + \beta_1 * Canopy.std_i\)</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M2 &lt;-<span class="st"> </span><span class="kw">glm.nb</span>(Counts ~<span class="st"> </span>Canopy.std,
+             <span class="dt">data =</span> OBFL)
+
+<span class="kw">summary</span>(M2)</code></pre></div>
+<pre><code>## 
+## Call:
+## glm.nb(formula = Counts ~ Canopy.std, data = OBFL, init.theta = 1.864363167, 
+##     link = log)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.1169  -1.0006  -0.7327   0.4588   2.1316  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   0.1952     0.1223   1.597     0.11    
+## Canopy.std    0.8290     0.1194   6.945 3.78e-12 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for Negative Binomial(1.8644) family taken to be 1)
+## 
+##     Null deviance: 162.32  on 108  degrees of freedom
+## Residual deviance: 109.99  on 107  degrees of freedom
+## AIC: 346.13
+## 
+## Number of Fisher Scoring iterations: 1
+## 
+## 
+##               Theta:  1.864 
+##           Std. Err.:  0.610 
+## 
+##  2 x log-likelihood:  -340.135</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Dispersion statistic</span>
+E2 &lt;-<span class="st"> </span><span class="kw">resid</span>(M2, <span class="dt">type =</span> <span class="st">&quot;pearson&quot;</span>)
+N  &lt;-<span class="st"> </span><span class="kw">nrow</span>(OBFL)
+p  &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">coef</span>(M2)) +<span class="st"> </span><span class="dv">1</span>  <span class="co"># &#39;+1&#39; is for variance parameter in NB</span>
+<span class="kw">sum</span>(E2^<span class="dv">2</span>) /<span class="st"> </span>(N -<span class="st"> </span>p)</code></pre></div>
+<pre><code>## [1] 0.9773875</code></pre>
+<p>Looks like the Negative Binomial GLM resulted in some minor underdispersion. In some cases, this might be OK. But in reality, we want to avoid both under- and overdispersion.<br />
+Overdispersion can bias parameter estimates and produce false significant relationships. On the otherhand, underdisperion can mask truly significant relationships. So let’s try to avoid all of this.</p>
+</div>
+<div id="zero-inflated-poisson-glm" class="section level3">
+<h3>Zero-Inflated Poisson GLM</h3>
+<p><span class="math inline">\(Counts_i \sim ZIP(\mu_i, \pi_i)\)</span><br />
+<span class="math inline">\(E(Counts_i) = \mu_i * (1-\pi_i)\)</span><br />
+<span class="math inline">\(var(Counts_i) = (1-\pi_i) * (\mu_i + \pi_i * \mu_i^{2})\)</span><br />
+<span class="math inline">\(log(\mu_i) = \beta_1 + \beta_2 * Canopy.std\)</span><br />
+<span class="math inline">\(log(\pi_i) = \gamma_1 + \gamma_2 * Canopy.std\)</span></p>
+<p>In zero-inflated models, it is possible to choose different predictors for the counts and for the zero-inflation. You might expect different variables to be driving presence/absence vs. total number of individuals. We will keep it simple and use the same covariate in both parts.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M3 &lt;-<span class="st"> </span><span class="kw">zeroinfl</span>(Counts ~<span class="st"> </span>Canopy.std |<span class="st"> </span>## Predictor for the Poisson process
+<span class="st">                 </span>Canopy.std, ## Predictor for the Bernoulli process;
+               <span class="dt">dist =</span> <span class="st">&#39;poisson&#39;</span>,
+               <span class="dt">data =</span> OBFL)
+
+<span class="kw">summary</span>(M3)</code></pre></div>
+<pre><code>## 
+## Call:
+## zeroinfl(formula = Counts ~ Canopy.std | Canopy.std, data = OBFL, 
+##     dist = &quot;poisson&quot;)
+## 
+## Pearson residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.7794 -0.6838 -0.4998  0.6525  4.1540 
+## 
+## Count model coefficients (poisson with log link):
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   0.5515     0.1440   3.830 0.000128 ***
+## Canopy.std    0.5951     0.1443   4.123 3.73e-05 ***
+## 
+## Zero-inflation model coefficients (binomial with logit link):
+##             Estimate Std. Error z value Pr(&gt;|z|)   
+## (Intercept)  -1.1273     0.3643  -3.094  0.00197 **
+## Canopy.std   -1.0102     0.4406  -2.293  0.02185 * 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1 
+## 
+## Number of iterations in BFGS optimization: 11 
+## Log-likelihood: -177.1 on 4 Df</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Dispersion statistic</span>
+E2 &lt;-<span class="st"> </span><span class="kw">resid</span>(M3, <span class="dt">type =</span> <span class="st">&quot;pearson&quot;</span>)
+N  &lt;-<span class="st"> </span><span class="kw">nrow</span>(OBFL)
+p  &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">coef</span>(M3))  
+<span class="kw">sum</span>(E2^<span class="dv">2</span>) /<span class="st"> </span>(N -<span class="st"> </span>p)</code></pre></div>
+<pre><code>## [1] 1.368017</code></pre>
+<p>Still a some overdispersion in the ZIP. Let’s try a ZINB</p>
+</div>
+<div id="zero-inflated-negative-binomial-glm" class="section level3">
+<h3>Zero-Inflated Negative Binomial GLM</h3>
+<p><span class="math inline">\(Counts_i \sim ZINB(\mu_i, \pi_i)\)</span> <strong><em>Not actually sure how to formulate this part for ZINB??</em></strong><br />
+<span class="math inline">\(E(Counts_i) = \mu_i * (1-\pi_i)\)</span><br />
+<span class="math inline">\(var(Counts_i) = (1-\pi_i) * (\mu_i + \pi_i^{2}/k) + \mu_i^{2} * (\pi_i^{2} + \pi_i)\)</span><br />
+<span class="math inline">\(log(\mu_i) = \beta_1 + \beta_2 * Canopy.std\)</span><br />
+<span class="math inline">\(log(\pi_i) = \gamma_1 + \gamma_2 * Canopy.std\)</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">M4 &lt;-<span class="st"> </span><span class="kw">zeroinfl</span>(Counts ~<span class="st"> </span>Canopy.std |
+<span class="st">                 </span>Canopy.std,
+               <span class="dt">dist =</span> <span class="st">&#39;negbin&#39;</span>,
+               <span class="dt">data =</span> OBFL)
+<span class="kw">summary</span>(M4)</code></pre></div>
+<pre><code>## 
+## Call:
+## zeroinfl(formula = Counts ~ Canopy.std | Canopy.std, data = OBFL, 
+##     dist = &quot;negbin&quot;)
+## 
+## Pearson residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.1964 -0.6732 -0.4155  0.5077  3.9661 
+## 
+## Count model coefficients (negbin with log link):
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   0.4323     0.1737   2.489  0.01280 *  
+## Canopy.std    0.5892     0.1710   3.446  0.00057 ***
+## Log(theta)    0.8332     0.3672   2.269  0.02326 *  
+## 
+## Zero-inflation model coefficients (binomial with logit link):
+##             Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)   -3.082      1.481  -2.081   0.0374 *
+## Canopy.std    -2.725      1.238  -2.201   0.0278 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1 
+## 
+## Theta = 2.3008 
+## Number of iterations in BFGS optimization: 18 
+## Log-likelihood: -168.4 on 5 Df</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Dispersion Statistic</span>
+E2 &lt;-<span class="st"> </span><span class="kw">resid</span>(M4, <span class="dt">type =</span> <span class="st">&quot;pearson&quot;</span>)
+N  &lt;-<span class="st"> </span><span class="kw">nrow</span>(OBFL)
+p  &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">coef</span>(M4)) +<span class="st"> </span><span class="dv">1</span> <span class="co"># &#39;+1&#39; is due to theta</span>
+<span class="kw">sum</span>(E2^<span class="dv">2</span>) /<span class="st"> </span>(N -<span class="st"> </span>p)</code></pre></div>
+<pre><code>## [1] 0.992081</code></pre>
+<p>This is really close to 1, which looks great.</p>
+<p>We can compare the two zero-inflated models using the Likelihood ratio test</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lrtest</span>(M3, M4)</code></pre></div>
+<pre><code>## Likelihood ratio test
+## 
+## Model 1: Counts ~ Canopy.std | Canopy.std
+## Model 2: Counts ~ Canopy.std | Canopy.std
+##   #Df  LogLik Df  Chisq Pr(&gt;Chisq)    
+## 1   4 -177.14                         
+## 2   5 -168.37  1 17.538  2.816e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Results show that the second model- the ZINB- is the best choice. So let’s stick with this model and plot the results</p>
+</div>
+<div id="sketch-fitted-and-predicted-values" class="section level3">
+<h3>Sketch fitted and predicted values</h3>
+<p><img src="images/04-C/unnamed-chunk-9-1.png" width="672" /></p>
 </div>
 <div id="discussion-questions" class="section level3">
 <h3>Discussion Questions</h3>
+<ol style="list-style-type: decimal">
+<li>When might you add differet covariates into the Bernoulli vs Poisson/NB portion of Zero-inflated models?<br />
+</li>
+<li>How close to 1 do dispersion statistics need to be?</li>
+<li>Anyone have experience with the two-step Zero-Altered models?</li>
+</ol>
 </div>
 
 
