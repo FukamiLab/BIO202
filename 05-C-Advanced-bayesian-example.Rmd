@@ -13,7 +13,7 @@ output: html_document
 
 > Chapters 16 and 17 in Korner-Nievergelt et al. 2015. *Bayesian data analysis in ecology using linear models with R, BUGS, and Stan.* Elsevier. [link](http://www.sciencedirect.com/science/book/9780128013700)
 >
-> \* These chapters contain a data analysis checklist and information on how to report analyses in scientific papers.
+> \* These chapters contain a data analysis checklist and information on how to report analyses in scientific papers. Chapter 17 is particularly useful because it gives verbatim text for how you should describe the models that you fit.
 
 ```{r include = FALSE}
 # This code block sets up the r session when the page is rendered to html
@@ -39,14 +39,32 @@ We want to fit a zero-inflated Poisson mixed-effects model, but the `hurdle()` a
 
 **The Model**
 
+Today's example is a zero-inflated Poisson model with a random intercept in the portion of the model controlling zero-inflation. This example is taken directly from Section 14.2 of Korner-Nievergelt et al. (2015). (See above citation.) 
+
+In the following model, the subscript $i$ denotes a specific nestID and the subscript $t$ denotes a specific sampling year. Bold variables are vectors.
+
+
+Create an unobserved (latent) variable $\mathbf{z}$ that equals 1 with probability $\boldsymbol{\theta}$.
 
 $$z_{it} \sim Bernoulli(\theta_{it})$$
-$$logit(\theta_{it}) = a_1 + a_2 year_t + \epsilon_{nestID[i]}$$
+
+If $\mathbf{z}$ is 1, then the observed variable $\mathbf{y}$ is 0. Otherwise, $\mathbf{y}$ is Poisson distributed with mean $\boldsymbol{\lambda}$ (I.e. This is a mixture model because $\mathbf{y}$ can be 0 for two different reasons.)
+
 $$y_{it} \sim Poisson(\lambda_{it}(1 - z_{it}))$$
+
+The log odds that $\mathbf{z}$ is 1 depends linearly on year ($a_2$) and different nestIDs are allowed to have different effects ($\boldsymbol{\epsilon_{nestID}}$) on the overall mean ($a_1$) 
+
+$$logit(\theta_{it}) = a_1 + a_2 year_t + \epsilon_{nestID[i]}$$
+
+However, the effects of different nestIDs are constrained to come from a Normal distribution with mean $0$ and variance $\sigma_n^2$. Hence they are a "random" effect.
+
+$$\epsilon_{nestID} \sim Norm(0, \sigma_n)$$
+
+If $\mathbf{z}$ is $0$, then (the log of) the expected value of $\mathbf{y}$ depends linearly on year ($b_2$).
 
 $$log(\lambda_{it}) = b_1 + b_2 year_t$$
 
-$$\epsilon_{nestID} \sim Norm(0, \sigma_n)$$
+
 
 
 
