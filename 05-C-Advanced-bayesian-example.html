@@ -531,9 +531,18 @@ div.tocify {
 <h3>Key Points</h3>
 <p>We want to fit a zero-inflated Poisson mixed-effects model, but the <code>hurdle()</code> and <code>zeroinfl()</code> functions from the <code>pscl</code> package don’t allow random effects. A Bayesian approach is more flexible and will allow us to fit this model.</p>
 <p><strong>The Model</strong></p>
-<p><span class="math display">\[z_{it} \sim Bernoulli(\theta_{it})\]</span> <span class="math display">\[logit(\theta_{it}) = a_1 + a_2 year_t + \epsilon_{nestID[i]}\]</span> <span class="math display">\[y_{it} \sim Poisson(\lambda_{it}(1 - z_{it}))\]</span></p>
-<p><span class="math display">\[log(\lambda_{it}) = b_1 + b_2 year_t\]</span></p>
+<p>Today’s example is a zero-inflated Poisson model with a random intercept in the portion of the model controlling zero-inflation. This example is taken directly from Section 14.2 of Korner-Nievergelt et al. (2015). (See above citation.)</p>
+<p>In the following model, the subscript <span class="math inline">\(i\)</span> denotes a specific nestID and the subscript <span class="math inline">\(t\)</span> denotes a specific sampling year. Bold variables are vectors.</p>
+<p>Create an unobserved (latent) variable <span class="math inline">\(\mathbf{z}\)</span> that equals 1 with probability <span class="math inline">\(\boldsymbol{\theta}\)</span>.</p>
+<p><span class="math display">\[z_{it} \sim Bernoulli(\theta_{it})\]</span></p>
+<p>If <span class="math inline">\(\mathbf{z}\)</span> is 1, then the observed variable <span class="math inline">\(\mathbf{y}\)</span> is 0. Otherwise, <span class="math inline">\(\mathbf{y}\)</span> is Poisson distributed with mean <span class="math inline">\(\boldsymbol{\lambda}\)</span> (I.e. This is a mixture model because <span class="math inline">\(\mathbf{y}\)</span> can be 0 for two different reasons.)</p>
+<p><span class="math display">\[y_{it} \sim Poisson(\lambda_{it}(1 - z_{it}))\]</span></p>
+<p>The log odds that <span class="math inline">\(\mathbf{z}\)</span> is 1 depends linearly on year (<span class="math inline">\(a_2\)</span>) and different nestIDs are allowed to have different effects (<span class="math inline">\(\boldsymbol{\epsilon_{nestID}}\)</span>) on the overall mean (<span class="math inline">\(a_1\)</span>)</p>
+<p><span class="math display">\[logit(\theta_{it}) = a_1 + a_2 year_t + \epsilon_{nestID[i]}\]</span></p>
+<p>However, the effects of different nestIDs are constrained to come from a Normal distribution with mean <span class="math inline">\(0\)</span> and variance <span class="math inline">\(\sigma_n^2\)</span>. Hence they are a “random” effect.</p>
 <p><span class="math display">\[\epsilon_{nestID} \sim Norm(0, \sigma_n)\]</span></p>
+<p>If <span class="math inline">\(\mathbf{z}\)</span> is <span class="math inline">\(0\)</span>, then (the log of) the expected value of <span class="math inline">\(\mathbf{y}\)</span> depends linearly on year (<span class="math inline">\(b_2\)</span>).</p>
+<p><span class="math display">\[log(\lambda_{it}) = b_1 + b_2 year_t\]</span></p>
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
