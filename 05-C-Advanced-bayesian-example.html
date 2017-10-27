@@ -703,7 +703,7 @@ for(r in <span class="dv">1</span>:<span class="dv">4</span>){
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">propzeros &lt;-<span class="st"> </span><span class="kw">apply</span>(yrep, <span class="dv">2</span>, function(x) <span class="kw">mean</span>(x==<span class="dv">0</span>)) <span class="co"># </span>
 <span class="kw">quantile</span>(propzeros, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))</code></pre></div>
 <pre><code>##      2.5%       50%     97.5% 
-## 0.3230088 0.3610619 0.3991150</code></pre>
+## 0.3238938 0.3601770 0.3978097</code></pre>
 <p><em>Examine results</em></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(modsims$a, <span class="dv">2</span>, quantile, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.957</span>))</code></pre></div>
 <pre><code>##        
@@ -790,6 +790,105 @@ newdat$avnnestupr &lt;-<span class="st"> </span><span class="kw">apply</span>(av
 <li>What other information would be helpful to validate your zero-inflated model?</li>
 <li>What’s it all about, Alfie?</li>
 </ul>
+<div id="updated-model-code" class="section level4">
+<h4>Updated model code</h4>
+<p>The 05-C.stan used old functions that will be removed from the next version of Stan (<code>increment_log_prob()</code>). The code file 05-C-updated.stan replaces these functions with their new version.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Note: Compile and run the model for a few iterations to make sure everything is working.</span>
+mod &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">file =</span> <span class="st">&quot;code/05-C-updated.stan&quot;</span>, <span class="dt">data =</span> datax, <span class="dt">chains =</span> <span class="dv">3</span>, <span class="dt">iter =</span> <span class="dv">10</span>)</code></pre></div>
+<pre><code>## In file included from C:/Program Files/R/R-3.3.1/library/BH/include/boost/config.hpp:39:0,
+##                  from C:/Program Files/R/R-3.3.1/library/BH/include/boost/math/tools/config.hpp:13,
+##                  from C:/Program Files/R/R-3.3.1/library/StanHeaders/include/stan/math/rev/core/var.hpp:7,
+##                  from C:/Program Files/R/R-3.3.1/library/StanHeaders/include/stan/math/rev/core/gevv_vvv_vari.hpp:5,
+##                  from C:/Program Files/R/R-3.3.1/library/StanHeaders/include/stan/math/rev/core.hpp:12,
+##                  from C:/Program Files/R/R-3.3.1/library/StanHeaders/include/stan/math/rev/mat.hpp:4,
+##                  from C:/Program Files/R/R-3.3.1/library/StanHeaders/include/stan/math.hpp:4,
+##                  from C:/Program Files/R/R-3.3.1/library/StanHeaders/include/src/stan/model/model_header.hpp:4,
+##                  from file325c27dc3c35.cpp:8:
+## C:/Program Files/R/R-3.3.1/library/BH/include/boost/config/compiler/gcc.hpp:186:0: warning: &quot;BOOST_NO_CXX11_RVALUE_REFERENCES&quot; redefined
+##  #  define BOOST_NO_CXX11_RVALUE_REFERENCES
+##  ^
+## &lt;command-line&gt;:0:0: note: this is the location of the previous definition
+## cc1plus.exe: warning: unrecognized command line option &quot;-Wno-ignored-attributes&quot;
+## 
+## SAMPLING FOR MODEL &#39;05-C-updated&#39; NOW (CHAIN 1).
+## 
+## Gradient evaluation took 0 seconds
+## 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+## Adjust your expectations accordingly!
+## 
+## 
+## WARNING: No variance estimation is
+##          performed for num_warmup &lt; 20
+## 
+## Iteration: 1 / 10 [ 10%]  (Warmup)
+## Iteration: 2 / 10 [ 20%]  (Warmup)
+## Iteration: 3 / 10 [ 30%]  (Warmup)
+## Iteration: 4 / 10 [ 40%]  (Warmup)
+## Iteration: 5 / 10 [ 50%]  (Warmup)
+## Iteration: 6 / 10 [ 60%]  (Sampling)
+## Iteration: 7 / 10 [ 70%]  (Sampling)
+## Iteration: 8 / 10 [ 80%]  (Sampling)
+## Iteration: 9 / 10 [ 90%]  (Sampling)
+## Iteration: 10 / 10 [100%]  (Sampling)
+## 
+##  Elapsed Time: 0.08 seconds (Warm-up)
+##                0.004 seconds (Sampling)
+##                0.084 seconds (Total)
+## 
+## 
+## SAMPLING FOR MODEL &#39;05-C-updated&#39; NOW (CHAIN 2).
+## 
+## Gradient evaluation took 0 seconds
+## 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+## Adjust your expectations accordingly!
+## 
+## 
+## WARNING: No variance estimation is
+##          performed for num_warmup &lt; 20
+## 
+## Iteration: 1 / 10 [ 10%]  (Warmup)
+## Iteration: 2 / 10 [ 20%]  (Warmup)
+## Iteration: 3 / 10 [ 30%]  (Warmup)
+## Iteration: 4 / 10 [ 40%]  (Warmup)
+## Iteration: 5 / 10 [ 50%]  (Warmup)
+## Iteration: 6 / 10 [ 60%]  (Sampling)
+## Iteration: 7 / 10 [ 70%]  (Sampling)
+## Iteration: 8 / 10 [ 80%]  (Sampling)
+## Iteration: 9 / 10 [ 90%]  (Sampling)
+## Iteration: 10 / 10 [100%]  (Sampling)
+## 
+##  Elapsed Time: 0.131 seconds (Warm-up)
+##                0 seconds (Sampling)
+##                0.131 seconds (Total)
+## 
+## 
+## SAMPLING FOR MODEL &#39;05-C-updated&#39; NOW (CHAIN 3).
+## 
+## Gradient evaluation took 0 seconds
+## 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+## Adjust your expectations accordingly!
+## 
+## 
+## WARNING: No variance estimation is
+##          performed for num_warmup &lt; 20
+## 
+## Iteration: 1 / 10 [ 10%]  (Warmup)
+## Iteration: 2 / 10 [ 20%]  (Warmup)
+## Iteration: 3 / 10 [ 30%]  (Warmup)
+## Iteration: 4 / 10 [ 40%]  (Warmup)
+## Iteration: 5 / 10 [ 50%]  (Warmup)
+## Iteration: 6 / 10 [ 60%]  (Sampling)
+## Iteration: 7 / 10 [ 70%]  (Sampling)
+## Iteration: 8 / 10 [ 80%]  (Sampling)
+## Iteration: 9 / 10 [ 90%]  (Sampling)
+## Iteration: 10 / 10 [100%]  (Sampling)
+## 
+##  Elapsed Time: 0.299 seconds (Warm-up)
+##                0.005 seconds (Sampling)
+##                0.304 seconds (Total)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Then run the same model for more iterations.</span>
+<span class="co">#modfit &lt;- stan(fit = mod, iter = 1000, chains = 3)</span></code></pre></div>
+</div>
 </div>
 
 

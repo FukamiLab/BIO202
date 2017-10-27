@@ -311,5 +311,17 @@ mtext("Year", outer=TRUE, side=1, line=2, cex=1.2)
 + What's it all about, Alfie?
 
 
+#### Updated model code
+
+The 05-C.stan used old functions that will be removed from the next version of Stan (`increment_log_prob()`). The code file 05-C-updated.stan replaces these functions with their new version.
+
+```{r, warning = FALSE}
+# Note: Compile and run the model for a few iterations to make sure everything is working.
+mod <- stan(file = "code/05-C-updated.stan", data = datax, chains = 3, iter = 10)
+
+# Then run the same model for more iterations.
+#modfit <- stan(fit = mod, iter = 1000, chains = 3)
+
+```
 
 
