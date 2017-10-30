@@ -473,13 +473,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="08-A-spatial-regression.html">Spatial regression</a>
+      <a href="08-A-mapping.html">Visualizing spatial data</a>
     </li>
     <li>
-      <a href="08-B-spatial-ordination.html">Ordination approach to spatial analysis</a>
+      <a href="08-B-spatial-regression.html">Spatial regression</a>
     </li>
     <li>
-      <a href="08-C-mapping.html">Visualizing spatial data</a>
+      <a href="08-C-spatial-ordination.html">Ordination approach to spatial analysis</a>
     </li>
   </ul>
 </li>
@@ -574,7 +574,7 @@ div.tocify {
 <div id="heterogeneity" class="section level4">
 <h4>Heterogeneity</h4>
 <ul>
-<li><p>One frequently violated assumption = homogeneity, i.e., that residuals are normally distributed with a mean of 0 and a fixed variace, σ2:</p>
+<li><p>One frequently violated assumption = homogeneity, i.e., that residuals are normally distributed with a mean of 0 and a fixed variace, Ïƒ2:</p>
 <ul>
 <li><span class="math inline">\(Y_i = \alpha + \beta_1 X_{1i} + \beta_2 X_{2i} + \epsilon_i\)</span></li>
 <li><span class="math inline">\(\epsilon_i \sim N(0, \sigma^2)\)</span></li>
@@ -588,31 +588,31 @@ div.tocify {
 <div id="many-variance-structures-table-4.1" class="section level4">
 <h4>Many variance structures (Table 4.1)</h4>
 <ul>
-<li><code>V1&lt;-varFixed(∼DML)</code>
+<li><code>V1&lt;-varFixed(âˆ¼DML)</code>
 <ul>
 <li><span class="math inline">\(\epsilon_i \sim N(0, \sigma^2 \times \mathrm{DML}_i) \ \ i = 1, \ldots, 768\)</span></li>
 </ul></li>
-<li><code>V1&lt;-varIdent(form= ∼ 1 | fMONTH)</code>
+<li><code>V1&lt;-varIdent(form= âˆ¼ 1 | fMONTH)</code>
 <ul>
 <li><span class="math inline">\(\epsilon_{ij} \sim N(0, \sigma_j^{2}) \ \ j = 1, \ldots, 12\)</span></li>
 </ul></li>
-<li><code>V1&lt;-varPower(form =∼ DML)</code>
+<li><code>V1&lt;-varPower(form =âˆ¼ DML)</code>
 <ul>
 <li><span class="math inline">\(\epsilon_{ij} \sim N(0, \sigma^2 \times |\mathrm{DML}_i|^{2\delta})\)</span></li>
 </ul></li>
-<li><code>V1&lt;-varPower(form =∼ DML | fMONTH)</code>
+<li><code>V1&lt;-varPower(form =âˆ¼ DML | fMONTH)</code>
 <ul>
 <li><span class="math inline">\(\epsilon_{ij} \sim N(0, \sigma^2 \times |\mathrm{DML}_{ij}|^{2\delta_j})\)</span></li>
 </ul></li>
-<li><code>V1&lt;-varExp(form =∼ DML)</code>
+<li><code>V1&lt;-varExp(form =âˆ¼ DML)</code>
 <ul>
 <li><span class="math inline">\(\epsilon_{ij} \sim N(0, \sigma^2 \times e^{2 \delta \times \mathrm{DML}_{ij}})\)</span></li>
 </ul></li>
-<li><code>V1&lt;-varConstPower(form =∼ DML)</code>
+<li><code>V1&lt;-varConstPower(form =âˆ¼ DML)</code>
 <ul>
 <li><span class="math inline">\(\epsilon_{ij} \sim N(0, \sigma^2 \times (\delta_1 + |\mathrm{DML}_{ij}|^{\delta_2})^2)\)</span></li>
 </ul></li>
-<li><code>V1&lt;-varComb(varIdent(form =∼ 1 | fMONTH), varExp(form =∼ DML))</code>
+<li><code>V1&lt;-varComb(varIdent(form =âˆ¼ 1 | fMONTH), varExp(form =âˆ¼ DML))</code>
 <ul>
 <li><span class="math inline">\(\epsilon_{ij} \sim N(0, \sigma^2_j \times e^{2 \delta \times \mathrm{DML}_{ij}})\)</span></li>
 </ul></li>

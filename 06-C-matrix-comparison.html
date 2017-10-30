@@ -430,13 +430,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="08-A-spatial-regression.html">Spatial regression</a>
+      <a href="08-A-mapping.html">Visualizing spatial data</a>
     </li>
     <li>
-      <a href="08-B-spatial-ordination.html">Ordination approach to spatial analysis</a>
+      <a href="08-B-spatial-regression.html">Spatial regression</a>
     </li>
     <li>
-      <a href="08-C-mapping.html">Visualizing spatial data</a>
+      <a href="08-C-spatial-ordination.html">Ordination approach to spatial analysis</a>
     </li>
   </ul>
 </li>
@@ -521,10 +521,105 @@ div.tocify {
 
 <p><strong>Assigned Reading:</strong></p>
 <blockquote>
-<p>Sections 10.5 and 11.5 from: Legendre, P. and L. Legendre. 2012. <em>Numerical Ecology</em>. Elsevier. <a href="http://www.sciencedirect.com/science/bookseries/01678892/24">link</a></p>
+<p>Sections 10.5 (p. 597) and 11.5 (p. 696) from: Legendre, P. and L. Legendre. 2012. <em>Numerical Ecology</em>. Elsevier. <a href="http://www.sciencedirect.com/science/bookseries/01678892/24">link</a></p>
 </blockquote>
+<p><em>Skim the math to whatever degree you desire.</em></p>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<p>Use a symmetric methods when you don’t have a hypothesis about the direction of effects between two matrices.</p>
+<p><em>Examples? Counter-examples?</em></p>
+<div id="compare-similaritydistance-matrices" class="section level4">
+<h4><strong>Compare similarity/distance matrices</strong></h4>
+<p><em>“These methods should not be used to test hypotheses about relationships between the original data tables.”</em></p>
+<ul>
+<li>Use Chapter 7 to choose an appropriate distance measure for your data.</li>
+</ul>
+<p><strong>Mantel test</strong></p>
+<ul>
+<li>Box 10.2 on p. 600</li>
+<li>Tests whether distances among objects are monotonically related to one another.</li>
+<li>Steps:
+<ul>
+<li>Compute a Mantel statistic that is the scalar product of the values product of (non-diagonal) values in (half of) the two distance matrices. (See Figure 10.19 on p. 599)
+<ul>
+<li><span class="math inline">\(z_M\)</span> : raw distances</li>
+<li><span class="math inline">\(r_M\)</span> : use standardized distances and divide by <span class="math inline">\(n(n-1)/2 - 1\)</span> to get value between -1 and 1.</li>
+</ul></li>
+<li>Test whether <span class="math inline">\(z_M\)</span> is significantly larger than expected by permuting the objects in one of the original data matrices used to compute one of the distance matrices. The generates a distribution of potential <span class="math inline">\(z_M\)</span> values under the null hypothesis.</li>
+</ul></li>
+<li>Use Spearman (rank-based) correlation coefficient is non-linearity expected.</li>
+<li>Distance matrices must be derived independently from one another on the same set of objects.</li>
+<li>Many applications of Mantel test probably should be done using canonical analysis(e.g. distribution of organisms with respect to environment controlling for distance among sites)</li>
+<li>Do not use Mantel test to make conclusions about correlations in the original data.</li>
+<li>R functions:</li>
+</ul>
+<p><strong>Analysis of Similarity (ANOSIM)</strong></p>
+<ul>
+<li>Tests whether distances between groups are greater than within groups.</li>
+<li>Steps:
+<ul>
+<li>Rank distances within the distance matrix, then compute the statistic <span class="math inline">\(R = \frac{mean(rank_{between}) - mean(rank_{within})}{n(n-1)/4}\)</span>.</li>
+<li>Test whether <span class="math inline">\(R\)</span> is larger than expected by permuting original objects.</li>
+</ul></li>
+<li>Groups should be defined <em>a priori</em> and not derived from distances.</li>
+</ul>
+</div>
+<div id="compare-two-data-tables" class="section level4">
+<h4><strong>Compare two data tables</strong></h4>
+<ul>
+<li>Methods often used to jointly analyze variation two communities at the same set of sites.</li>
+<li>Do not use to compare matrices that measure the same variables (e.g. before-after studies or control-impact experiments) because the analysis does not know that the variables are the same. (Use RDA or PCA instead.)</li>
+<li>Both methods can handle more variables than observations (e.g. more species than sites) as well as collinearity among variables.</li>
+</ul>
+<p><strong>Co-inertia analysis</strong></p>
+<ul>
+<li>Creates an ordination based on two covariance between two data matrices and plots both matrices in the same ordination space along with their variables.</li>
+<li>Steps:
+<ul>
+<li>Calculate cross-covariance matrix between variables in two matrices.</li>
+<li>Calculate eigenvalues and eigenvectors of covariance matrix. Eigenvectors give the axes of the ordination.</li>
+<li>Project the two matrices in the ordination space and use arrows to connect the two points measured on the same object.</li>
+<li>Add arrows for each of the variables in the two matrices.</li>
+</ul></li>
+<li>The total co-inertia is the sum of the squared covariances and the eigenvalues partition this among ordination axes.</li>
+<li>Co-inertia analysis will preserve Euclidean or Mahalanois distances between objects depending on how projected matrices are scaled.</li>
+<li>Can use data transformations prior to analysis (recommended for species occurrence data).
+<ul>
+<li>If so, do a principal coordinate analysis on the two distance martices and use the axes corresponding to positive eigenvalues as the data tables input into co-inertia analysis.</li>
+</ul></li>
+<li><span class="math inline">\(RV\)</span> coefficient is a statistic that measures correlation of two data matrices whose significance is tested by permutation.</li>
+</ul>
+<p><strong>Procrustes analysis</strong></p>
+<ul>
+<li>Creates a “compromise” ordination of two matrices measured on the same objects in order to visualize differences between two martices.</li>
+<li>Algorithm rotates the matrices to minimize the sum of squared distances between corresponding objects.</li>
+<li>Very similar to co-inertia analysis, but uses different matrices for plotting.</li>
+<li>PROTEST method: compute symmetric orthogonal Procrustes statistic <span class="math inline">\(m^2\)</span> to measure similarity between two data matrices.</li>
+</ul>
+</div>
+<div id="r-packages-and-functions" class="section level4">
+<h4>R packages and functions</h4>
+<p><code>vegan</code>: functions for community composition analysis</p>
+<ul>
+<li><code>mantel()</code></li>
+<li><code>protest()</code></li>
+<li><code>anosim()</code></li>
+</ul>
+<p><code>ecodist</code>: functions for analysis of ecological dissimilarity</p>
+<ul>
+<li><code>mantel()</code></li>
+<li><code>MRM()</code></li>
+</ul>
+<p><code>ape</code>: functions fo phylogenetic analysis</p>
+<ul>
+<li><code>mantel.test()</code></li>
+</ul>
+<p><code>ade4</code>: functions for multivariate analysis for ecologists</p>
+<ul>
+<li><code>mantel.rtest()</code></li>
+<li><code>coinertia()</code> on two separate ordinations produced by <code>dudi.pca()</code> or <code>dudi.pco()</code></li>
+</ul>
+</div>
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
