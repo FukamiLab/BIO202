@@ -568,6 +568,88 @@ div.tocify {
 </blockquote>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<div id="unconstrained-vs.constrained-ordination" class="section level4">
+<h4>Unconstrained vs. constrained ordination</h4>
+<p>Fig 3 in Ramette 2007 - left and right: Borcard et al. Ch 5 and 6, respectively</p>
+</div>
+<div id="pca" class="section level4">
+<h4>PCA</h4>
+<ul>
+<li>Scaling 1 – use this if main interest is objects</li>
+</ul>
+<p>“distance biplot” (distance among objects is Euclidean distance, angle among descriptors meaningless) - Fig 5.2</p>
+<ul>
+<li>Scaling 2 – use this if main interest is descriptors</li>
+</ul>
+<p>“correlation biplot” (angles between descriptors reflect their correlations, distance among objects is not approxmate of Euclidean distance) - Fig 5.2</p>
+<ul>
+<li><p><code>vegan</code>’s default is scaling 2 (a bit strange?)</p></li>
+<li><p>Combining PCA with clustering can be powerful for confirmation (Fig 5.3)</p></li>
+</ul>
+</div>
+<div id="ca" class="section level4">
+<h4>CA</h4>
+<ul>
+<li><p>Chi-square distance not influenced by double zeros, unlike Euclidian distance in PCA; data have to be frequency or freq-like</p></li>
+<li><p>Scaling 1 vs. 2 – similar to PCA</p></li>
+<li><p>post-hoc <code>envfit()</code> (Is constrained ordination better? Useful with NMDS?)</p></li>
+</ul>
+</div>
+<div id="pcoa" class="section level4">
+<h4>PCoA</h4>
+<ul>
+<li><p>Distance measured by any similarity measure</p></li>
+<li><p>Q mode (objects, or sites) and R mode (variables, or species or env factors)</p></li>
+<li><p>Rarely used (Ramette’s Table 1) - used more now?</p></li>
+</ul>
+</div>
+<div id="nmds" class="section level4">
+<h4>NMDS</h4>
+<ul>
+<li><p>Any distance matrix (commonly, Bray-Curtis dissimilarity)</p></li>
+<li><p>May be sensitive to initial configuration (local optimum) - Could use PCoA ordination as a start. <code>metaMDS()</code> uses random starts</p></li>
+<li><p>Needs fast computer – now not much of a problem</p></li>
+<li><p>“A test winner, and a natural choice …” (Jari Oksanen)</p></li>
+<li><p>Bray-Curtis dissimilarity - Reasons why popular (Clarke and Warwick 2001):</p></li>
+</ul>
+<ol style="list-style-type: decimal">
+<li>0 when identical</li>
+<li>1 when no species shared</li>
+<li>Not affected by measurement unit</li>
+<li>Not affected by inclusion or exclusion of species jointly absent</li>
+<li>Not affected by inclusion of exclusion of a third sample</li>
+<li>Differences in both total and relative abundances considered</li>
+</ol>
+<ul>
+<li><p>Shepard diagram (Fig 5.11) and stress</p></li>
+<li><p>According to Clarke and Warwick 2001:</p></li>
+</ul>
+<ol style="list-style-type: decimal">
+<li>stress &lt; 0.05: excellent representation</li>
+<li>stress &lt; 0.1: good representation</li>
+<li>stress &lt; 0.2: acceptable representation</li>
+<li>stress &gt; 0.3: unsatisfactory representation</li>
+</ol>
+</div>
+<div id="which-method-to-use-criteria-by-ramette-2007" class="section level4">
+<h4>Which method to use? (Criteria by Ramette 2007)</h4>
+<ul>
+<li><p>Linear (PCA) vs. unimodal (CA) - Use plot of species abundances along ordination axes as diagnosis</p></li>
+<li><p>Gradient length short (PCA) vs. long (CA), as determined by DCA</p></li>
+<li><p>Absolute abundance (PCA) vs. relative abundance (CA)</p></li>
+<li><p>Many zeros (CA)</p></li>
+<li><p>Linear (PCA) vs. non linear (NMDS, PCoA)</p></li>
+<li><p>Shepard diagram to decide between NMDS and PCoA</p></li>
+<li><p>Discrete groups of objects expected (cluster) vs. not expected (ordination)</p></li>
+</ul>
+</div>
+<div id="further-reading" class="section level4">
+<h4>Further reading:</h4>
+<blockquote>
+<p>“Vegan: an introduction to ordination” by Jari Oksanen <a href="https://cran.r-project.org/web/packages/vegan/vignettes/intro-vegan.pdf">link</a></p>
+</blockquote>
+<hr />
+</div>
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
@@ -605,7 +687,7 @@ div.tocify {
 ##  $ logflow               : num  1.01 1.01 1.01 1.01 1.01 ...
 ##  $ logSPM                : num  -0.39 -0.157 0.662 0.885 1.424 ...</code></pre>
 </div>
-<div id="pca" class="section level4">
+<div id="pca-1" class="section level4">
 <h4>PCA</h4>
 <p>General steps:</p>
 <ul>
@@ -620,7 +702,7 @@ div.tocify {
 <span class="kw">library</span>(ape)
 
 env.pca &lt;-<span class="st"> </span><span class="kw">rda</span>(envdat.corr[,-<span class="kw">c</span>(<span class="dv">13</span>:<span class="dv">16</span>)], <span class="dt">scale=</span><span class="ot">TRUE</span>)    ### rda function makes PCAs
-                                                    ### scale means divide by species unit variance (we already did this)
+                                                    ### scale means divide by species unit variance
                                                     
 env.pca</code></pre></div>
 <pre><code>## Call: rda(X = envdat.corr[, -c(13:16)], scale = TRUE)
@@ -748,7 +830,7 @@ p5 &lt;-<span class="st"> </span><span class="kw">fviz_pca_ind</span>(prin.env2,
 <p><img src="images/06-A/unnamed-chunk-23-1.png" width="672" /></p>
 </div>
 </div>
-<div id="ca" class="section level4">
+<div id="ca-1" class="section level4">
 <h4>CA</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dud.env.coa&lt;-<span class="st"> </span><span class="kw">dudi.coa</span>(envdat.phy[,-<span class="kw">c</span>(<span class="dv">13</span>:<span class="dv">16</span>)], 
                        <span class="dt">nf=</span><span class="dv">2</span>,
@@ -761,7 +843,7 @@ p5 &lt;-<span class="st"> </span><span class="kw">fviz_pca_ind</span>(prin.env2,
                <span class="dt">label=</span><span class="st">&quot;col&quot;</span>)</code></pre></div>
 <p><img src="images/06-A/unnamed-chunk-26-1.png" width="672" /></p>
 </div>
-<div id="pcoa" class="section level4">
+<div id="pcoa-1" class="section level4">
 <h4>PCoA</h4>
 <p>PCoA is common in microbial ecology. Here are some examples of PCoA on OTU counts using the phyloseq package (based on vegan).</p>
 <p><em>bray-curtis dissimilarity</em></p>
@@ -802,7 +884,7 @@ ord.cca</code></pre></div>
 p.cca</code></pre></div>
 <p><img src="images/06-A/unnamed-chunk-35-1.png" width="672" /></p>
 </div>
-<div id="nmds" class="section level4">
+<div id="nmds-1" class="section level4">
 <h4>NMDS</h4>
 <p>While the original distance between samples is not preserved, NMDS is useful for understanding ranked distances in a 2D space.</p>
 <p>And choice of distance matters a lot!</p>
