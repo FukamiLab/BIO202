@@ -118,6 +118,93 @@ Fig 3 in Ramette 2007 - left and right sides: Borcard et al. Ch 5 and 6, respect
 
 ***
 
+#### Unconstrained vs. constrained ordination
+
+Fig 3 in Ramette 2007 - left and right: Borcard et al. Ch 5 and 6, respectively
+
+#### PCA
+
++ Scaling 1 -- use this if main interest is objects
+
+"distance biplot" (distance among objects is Euclidean distance, angle among descriptors meaningless) - Fig 5.2
+
++ Scaling 2 -- use this if main interest is descriptors
+
+"correlation biplot" (angles between descriptors reflect their correlations, distance among objects is not approxmate of Euclidean distance) - Fig 5.2
+
++ `vegan`'s default is scaling 2  (a bit strange?)
+
++ Combining PCA with clustering can be powerful for confirmation (Fig 5.3)
+
+#### CA
+
++ Chi-square distance not influenced by double zeros, unlike Euclidian distance in PCA; data have to be frequency or freq-like
+
++ Scaling 1 vs. 2 -- similar to PCA
+
++ post-hoc `envfit()` (Is constrained ordination better? Useful with NMDS?)
+
+#### PCoA
+
++ Distance measured by any similarity measure
+
++ Q mode (objects, or sites) and R mode (variables, or species or env factors)
+
++ Rarely used (Ramette's Table 1) - used more now?
+
+#### NMDS
+
++ Any distance matrix (commonly, Bray-Curtis dissimilarity)
+
++ May be sensitive to initial configuration (local optimum) - Could use PCoA ordination as a start. `metaMDS()` uses random starts
+
++ Needs fast computer -- now not much of a problem
+
++ "A test winner, and a natural choice ..." (Jari Oksanen)
+
++ Bray-Curtis dissimilarity - Reasons why popular (Clarke and Warwick 2001):
+
+1. 0 when identical
+2. 1 when no species shared
+3. Not affected by measurement unit
+4. Not affected by inclusion or exclusion of species jointly absent
+5. Not affected by inclusion of exclusion of a third sample
+6. Differences in both total and relative abundances considered
+
++ Shepard diagram (Fig 5.11) and stress
+
++ According to Clarke and Warwick 2001:
+
+1. stress < 0.05: excellent representation
+2. stress < 0.1: good representation
+3. stress < 0.2: acceptable representation
+4. stress > 0.3: unsatisfactory representation
+
+#### Which method to use? (Criteria by Ramette 2007)
+
++ Linear (PCA) vs. unimodal (CA) - Use plot of species abundances along ordination axes as diagnosis
+
++ Gradient length short (PCA) vs. long (CA), as determined by DCA
+
++ Absolute abundance (PCA) vs. relative abundance (CA)
+
++ Many zeros (CA)
+
++ Linear (PCA) vs. non linear (NMDS, PCoA)
+
++ Shepard diagram to decide between NMDS and PCoA
+
++ Discrete groups of objects expected (cluster) vs. not expected (ordination)
+
+#### Further reading: 
+
+> "Vegan: an introduction to ordination" by Jari Oksanen 
+> [link](https://cran.r-project.org/web/packages/vegan/vignettes/intro-vegan.pdf)
+
+
+
+***
+
 
 ### Analysis Example
 
@@ -205,7 +292,7 @@ library(gclus)
 library(ape)
 
 env.pca <- rda(envdat.corr[,-c(13:16)], scale=TRUE)    ### rda function makes PCAs
-                                                    ### scale means divide by species unit variance (we already did this)
+                                                    ### scale means divide by species unit variance
                                                     
 env.pca
 ```
