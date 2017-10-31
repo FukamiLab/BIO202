@@ -473,13 +473,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="08-A-spatial-regression.html">Spatial regression</a>
+      <a href="08-A-mapping.html">Visualizing spatial data</a>
     </li>
     <li>
-      <a href="08-B-spatial-ordination.html">Ordination approach to spatial analysis</a>
+      <a href="08-B-spatial-regression.html">Spatial regression</a>
     </li>
     <li>
-      <a href="08-C-mapping.html">Visualizing spatial data</a>
+      <a href="08-C-spatial-ordination.html">Ordination approach to spatial analysis</a>
     </li>
   </ul>
 </li>
@@ -685,8 +685,13 @@ aedes_dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span c
 ## 
 ## Number of Fisher Scoring iterations: 4</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#load car library for easy VIF function</span>
-<span class="kw">library</span>(car)
-<span class="kw">vif</span>(model1)</code></pre></div>
+<span class="kw">library</span>(car)</code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;car&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     recode</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vif</span>(model1)</code></pre></div>
 <pre><code>## Vegetation    TempMin 
 ##   1.404985   1.404985</code></pre>
 <p>Looks like minimum temperature is not significant when Vegetation is included. I have a p-value &lt; 0.05 for vegetation, so I’ll drop minimum temperature in the model.</p>

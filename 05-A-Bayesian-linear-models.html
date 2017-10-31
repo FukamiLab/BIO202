@@ -473,13 +473,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="08-A-spatial-regression.html">Spatial regression</a>
+      <a href="08-A-mapping.html">Visualizing spatial data</a>
     </li>
     <li>
-      <a href="08-B-spatial-ordination.html">Ordination approach to spatial analysis</a>
+      <a href="08-B-spatial-regression.html">Spatial regression</a>
     </li>
     <li>
-      <a href="08-C-mapping.html">Visualizing spatial data</a>
+      <a href="08-C-spatial-ordination.html">Ordination approach to spatial analysis</a>
     </li>
   </ul>
 </li>
@@ -725,7 +725,6 @@ M1 &lt;-<span class="st"> </span><span class="kw">lm</span>(ABUND ~<span class="
 <h5>Simulate values for theta and sigma</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#install.packages(&#39;arm&#39;)</span>
 <span class="kw">library</span>(arm)</code></pre></div>
-<pre><code>## Loading required package: MASS</code></pre>
 <pre><code>## Loading required package: Matrix</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;Matrix&#39;</code></pre>
@@ -734,8 +733,18 @@ M1 &lt;-<span class="st"> </span><span class="kw">lm</span>(ABUND ~<span class="
 ##     expand</code></pre>
 <pre><code>## Loading required package: lme4</code></pre>
 <pre><code>## 
+## Attaching package: &#39;lme4&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:nlme&#39;:
+## 
+##     lmList</code></pre>
+<pre><code>## 
 ## arm (Version 1.9-3, built: 2016-11-21)</code></pre>
 <pre><code>## Working directory is C:/Users/jrcoyle/Documents/Stanford/BIO202/GitHub</code></pre>
+<pre><code>## 
+## Attaching package: &#39;arm&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:car&#39;:
+## 
+##     logit</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nsim &lt;-<span class="dv">1000</span> <span class="co"># number of simulations can be changed to whatever you want</span>
 bsim &lt;-<span class="st"> </span><span class="kw">sim</span>(M1, <span class="dt">n.sim=</span>nsim)
 <span class="kw">str</span>(bsim)</code></pre></div>
