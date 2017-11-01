@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "Constrained ordination"
-author: Tad & Meghan
+author: Tad & Jamie
 output: html_document
 ---
 
@@ -30,6 +30,84 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
+#### Unconstrained vs. constrained ordination
+
++ Borcard et al. - Simple (unconstrained) ordination analyses a single data matrix. Canonical (constrained) ordination associates two or more data sets.
+
++ Ramette 2007 - "In constrained (canonical) ordination analyses, only the variation in the species table that can be explained by the environmental variables is displayed and analyzed, and not all the variation in the species table." (This refers to asymmetrical methods only?)
+
+![Ordination chart](images/ordination.jpg){width=50%}
+
+#### In Ch 6
+
++ RDA, CCA: asymmetrical matrices; combines multiple regression with PCA or CA (Extensions: partial RDA, variation partitioning, db-RDA)
+
++ LDA: combines quantitative variables to explain predefined grouping of objects
+
++ CCorA, CoIA, MFA: symmetrical matrices; computes eigenvectors to describe common structure of two data sets
+
+#### RDA
+
++ Regress each (Hellinger-transformed) y(i) on X, find y_hat(i), and do PCA on Y_hat
+
++ Scaling 1 vs. scaling 2 (default in R)	
+
++ For species and sites, interpretation same as in PCA
+
++ For explanatory variables and their relationships with response variables, subtle but important differences regarding angles, positions, centroids
+
+#### Partial RDA
+
++ e.g., `envtopo` vs. `envchem`
+
+`(spechem.physio2 <- rda(spe.hel ~ pH + dur + pho + nit + amm`
+`	+ oxy + dbo + Condition(alt + pen + deb), data=env))`
+`anova(spechem.physio2, step=1000)`
+`anova(spechem.physio2, step=1000, by="axis")`
+
+#### Forward selection of explanatory variables
+
++ Use VIFs to look for severe collinearity
+
++ `forward.sel()` in `packfor` - Blanchet et al (2008) corrections built in
+
++ `ordistep()` in `vegan` - allows use of factors
+
+#### Variation partioning
+
++ Steps to compute R2adj (Peres-Neto et al. 2006) - `varpart()` in `vegan`
+
+#### db-RDA (Legendre and Anderson 1999)
+
++ Allows use of various dissimilarity measures, as in PCoA
+
++ Run PCoA on Y and then RDA on principal coordinates
+
++ `capscale()` in `vegan`
+
+#### CCA
+
++ Canonical counterpart of CA; otherwise similar to RDA
+
++ Rare species overemphasized
+
+#### LDA
+
++ Identifies linear combinations of environmental variables that best discriminate groups obtained by cluster analysis
+
+#### Symmetric analysis
+
++ CCorA, CoIA (and RLQ), MFA
+
++ No “dependent” or “explanatory” matrix
+
++ Suitable for studying, e.g.,
+
+  + two groups of competing taxa
+	+ Soil-vegetation relationships
+
+
+***
 
 
 ### Analysis Example
@@ -389,7 +467,7 @@ Overall when you are evaluating multivariate data, Anderson and Willis (2003) su
 <br><br><br>
 
 
-#### Discussion Questions  
+### Discussion Questions  
 
 1) How would you determine which species are responsible for the patterns when you have so many species on your plots that its hard to interpret?  
 2) If you have used other constrained ordinations, how did you choose which one to use?   
