@@ -8,8 +8,9 @@ output: html_document
 
 **Assigned Reading:**
 
-> Sections 10.5 and 11.5 from: Legendre, P. and L. Legendre. 2012. *Numerical Ecology*. Elsevier. [link](http://www.sciencedirect.com/science/bookseries/01678892/24)
+> Sections 10.5 (p. 597) and 11.5 (p. 696) from: Legendre, P. and L. Legendre. 2012. *Numerical Ecology*. Elsevier. [link](http://www.sciencedirect.com/science/bookseries/01678892/24)
 
+*Skim the math to whatever degree you desire.*
 
 
 ```{r include = FALSE}
@@ -32,6 +33,90 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
+Use a symmetric methods when you don't have a hypothesis about the direction of effects between two matrices.
+
+*Examples? Counter-examples?*
+
+
+
+#### **Compare similarity/distance matrices**
+
+*"These methods should not be used to test hypotheses about relationships between the original data tables."*
+
++ Use Chapter 7 to choose an appropriate distance measure for your data.
+
+**Mantel test**
+
++ Box 10.2 on p. 600
++ Tests whether distances among objects are monotonically related to one another.
++ Steps:
+    + Compute a Mantel statistic that is the scalar product of the values product of (non-diagonal) values in (half of) the two distance matrices. (See Figure 10.19 on p. 599)
+        + $z_M$ : raw distances
+        + $r_M$ : use standardized distances and divide by $n(n-1)/2 - 1$ to get value between -1 and 1.
+    + Test whether $z_M$ is significantly larger than expected by permuting the objects in one of the original data matrices used to compute one of the distance matrices. The generates a distribution of potential $z_M$ values under the null hypothesis.
++ Use Spearman (rank-based) correlation coefficient is non-linearity expected.
++ Distance matrices must be derived independently from one another on the same set of objects.
++ Many applications of Mantel test probably should be done using canonical analysis(e.g. distribution of organisms with respect to environment controlling for distance among sites)
++ Do not use Mantel test to make conclusions about correlations in the original data.
++ R functions:
+
+**Analysis of Similarity (ANOSIM)**
+
++ Tests whether distances between groups are greater than within groups.
++ Steps:
+    + Rank distances within the distance matrix, then compute the statistic $R = \frac{mean(rank_{between}) - mean(rank_{within})}{n(n-1)/4}$.
+    + Test whether $R$ is larger than expected by permuting original objects.
++ Groups should be defined *a priori* and not derived from distances.
+
+#### **Compare two data tables**
+
++ Methods often used to jointly analyze variation two communities at the same set of sites.
++ Do not use to compare matrices that measure the same variables (e.g. before-after studies or control-impact experiments) because the analysis does not know that the variables are the same. (Use RDA or PCA instead.)
++ Both methods can handle more variables than observations (e.g. more species than sites) as well as collinearity among variables.
+
+**Co-inertia analysis**
+
++ Creates an ordination based on two covariance between two data matrices and plots both matrices in the same ordination space along with their variables.
++ Steps:
+    + Calculate cross-covariance matrix between variables in two matrices.
+    + Calculate eigenvalues and eigenvectors of covariance matrix. Eigenvectors give the axes of the ordination.
+    + Project the two matrices in the ordination space and use arrows to connect the two points measured on the same object.
+    + Add arrows for each of the variables in the two matrices.
++ The total co-inertia is the sum of the squared covariances and the eigenvalues partition this among ordination axes.
++ Co-inertia analysis will preserve Euclidean or Mahalanois distances between objects depending on how projected matrices are scaled.
++ Can use data transformations prior to analysis (recommended for species occurrence data).
+    + If so, do a principal coordinate analysis on the two distance martices and use the axes corresponding to positive eigenvalues as the data tables input into co-inertia analysis.
++ $RV$ coefficient is a statistic that measures correlation of two data matrices whose significance is tested by permutation.
+
+**Procrustes analysis**
+
++ Creates a "compromise" ordination of two matrices measured on the same objects in order to visualize differences between two martices.
++ Algorithm rotates the matrices to minimize the sum of squared distances between corresponding objects.
++ Very similar to co-inertia analysis, but uses different matrices for plotting.
++ PROTEST method: compute symmetric orthogonal Procrustes statistic $m^2$ to measure similarity between two data matrices. 
+
+
+#### R packages and functions
+
+`vegan`: functions for community composition analysis
+
++ `mantel()`
++ `protest()`
++ `anosim()`
+
+`ecodist`: functions for analysis of ecological dissimilarity
+
++ `mantel()`
++ `MRM()`
+
+`ape`: functions fo phylogenetic analysis
+
++ `mantel.test()`
+
+`ade4`: functions for multivariate analysis for ecologists
+
++ `mantel.rtest()`
++ `coinertia()` on two separate ordinations produced by `dudi.pca()` or `dudi.pco()`
 
 
 ### Analysis Example

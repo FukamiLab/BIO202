@@ -473,13 +473,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="08-A-spatial-regression.html">Spatial regression</a>
+      <a href="08-A-mapping.html">Visualizing spatial data</a>
     </li>
     <li>
-      <a href="08-B-spatial-ordination.html">Ordination approach to spatial analysis</a>
+      <a href="08-B-spatial-regression.html">Spatial regression</a>
     </li>
     <li>
-      <a href="08-C-mapping.html">Visualizing spatial data</a>
+      <a href="08-C-spatial-ordination.html">Ordination approach to spatial analysis</a>
     </li>
   </ul>
 </li>
@@ -617,6 +617,12 @@ div.tocify {
 <li>Marginal distribution: gives probabilty for a particular parameter summed over all values of other parameters. (This is what you get if you summarize parameter samples independently.)</li>
 <li>Conditional distribution: gives probabilty for a particular parameter holding other parameters at specific values.</li>
 </ul></li>
+</ul>
+<p>Joint posterior distribution of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>: <img src="images/05-A/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Marginal distribution of <span class="math inline">\(\beta_0\)</span>: <img src="images/05-A/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Conditional distribution of <span class="math inline">\(\beta_0\)</span> when <span class="math inline">\(\beta_1 = 4\)</span> (red line) or <span class="math inline">\(\beta_1 = 8\)</span> (blue line).</p>
+<p><img src="images/05-A/unnamed-chunk-4-1.png" width="672" /></p>
+<ul>
 <li><p>Inference is based on <strong>visualizing</strong> and summarizing the posterior distributions of parameters, predicted future observations, and quantities calculated from parameters.</p></li>
 <li>Make inferences (e.g. about effects of covariates) by summarizing samples of parameters from the posterior distribution:
 <ul>
@@ -648,7 +654,7 @@ div.tocify {
 log(\boldsymbol{\hat{\lambda}}) = \mathbf{X}\boldsymbol{\hat{\beta}}\]</span></p>
 <p><span class="math inline">\(\mathbf{y}\)</span> is a vector of observations (of counts) with length <span class="math inline">\(n\)</span>.</p>
 <p><span class="math inline">\(\boldsymbol{\hat{\lambda}}\)</span> is a vector of the estimated mean for each observation (has length <span class="math inline">\(n\)</span>).</p>
-<p><span class="math inline">\(\mathbf{X}\)</span> is a matrix with <span class="math inline">\(n\)</span> rows and <span class="math inline">\(p\)</span> with the observed values of the <span class="math inline">\(p - 1\)</span> covariates in each of the rows. (Note that we have an initial column of all <span class="math inline">\(1\)</span> to estimate the mean.)</p>
+<p><span class="math inline">\(\mathbf{X}\)</span> is a matrix with <span class="math inline">\(n\)</span> rows and <span class="math inline">\(p\)</span> columns with the observed values of the <span class="math inline">\(p - 1\)</span> covariates in each of the rows. (Note that we have an initial column of all <span class="math inline">\(1\)</span> to estimate the mean.)</p>
 <p><span class="math inline">\(\boldsymbol{\hat{\beta}}\)</span> is a vector of the parameters to be estimated with length <span class="math inline">\(p\)</span>.</p>
 <p><strong>Bayesian inference in R</strong></p>
 <ul>
@@ -670,7 +676,9 @@ log(\boldsymbol{\hat{\lambda}}) = \mathbf{X}\boldsymbol{\hat{\beta}}\]</span></p
 <span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">ls</span>()) 
 
 <span class="co"># read in the data</span>
-Loyn&lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;/Users/jamiemcdevitt-irwin/Dropbox/Jamie/Stanford/3_Courses/Biol202/Week3_linearmodels_intro/ZuurDataMixedModelling/Loyn.txt&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">dec =</span> <span class="st">&quot;.&quot;</span>)   
+<span class="co">#Loyn&lt;- read.table(file = &quot;/Users/jamiemcdevitt-irwin/Dropbox/Jamie/Stanford/3_Courses/Biol202/Week3_linearmodels_intro/ZuurDataMixedModelling/Loyn.txt&quot;, header = TRUE, dec = &quot;.&quot;)   </span>
+
+Loyn &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;data/Loyn.txt&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)
 
 <span class="co"># let&#39;s take a quick look at the data</span>
 <span class="kw">head</span>(Loyn)</code></pre></div>
@@ -717,53 +725,55 @@ M1 &lt;-<span class="st"> </span><span class="kw">lm</span>(ABUND ~<span class="
 <h5>Simulate values for theta and sigma</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#install.packages(&#39;arm&#39;)</span>
 <span class="kw">library</span>(arm)</code></pre></div>
-<pre><code>## Loading required package: MASS</code></pre>
 <pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     expand</code></pre>
 <pre><code>## Loading required package: lme4</code></pre>
-<pre><code>## Warning: package &#39;lme4&#39; was built under R version 3.4.2</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lme4&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:nlme&#39;:
+## 
+##     lmList</code></pre>
 <pre><code>## 
 ## arm (Version 1.9-3, built: 2016-11-21)</code></pre>
-<pre><code>## Working directory is /Users/jamiemcdevitt-irwin/Documents/Git_Repos/BIO202</code></pre>
+<pre><code>## Working directory is C:/Users/jrcoyle/Documents/Stanford/BIO202/GitHub</code></pre>
+<pre><code>## 
+## Attaching package: &#39;arm&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:car&#39;:
+## 
+##     logit</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nsim &lt;-<span class="dv">1000</span> <span class="co"># number of simulations can be changed to whatever you want</span>
 bsim &lt;-<span class="st"> </span><span class="kw">sim</span>(M1, <span class="dt">n.sim=</span>nsim)
-<span class="kw">str</span>(sim)</code></pre></div>
-<pre><code>## Formal class &#39;standardGeneric&#39; [package &quot;methods&quot;] with 8 slots
-##   ..@ .Data     :function (object, ...)  
-##   ..@ generic   : atomic [1:1] sim
-##   .. ..- attr(*, &quot;package&quot;)= chr &quot;arm&quot;
-##   ..@ package   : chr &quot;arm&quot;
-##   ..@ group     : list()
-##   ..@ valueClass: chr(0) 
-##   ..@ signature : chr &quot;object&quot;
-##   ..@ default   : NULL
-##   ..@ skeleton  : language (function (object, ...)  stop(&quot;invalid call in method dispatch to &#39;sim&#39; (no default method)&quot;,  ...</code></pre>
-<p>sim() produces an object of class sim that contains “coef” (1000 simulated values for theta, i.e. your parameters) and “sigma” containing the 1000 values for variance</p>
+<span class="kw">str</span>(bsim)</code></pre></div>
+<pre><code>## Formal class &#39;sim&#39; [package &quot;arm&quot;] with 2 slots
+##   ..@ coef : num [1:1000, 1:2] 4.22 6.67 8.6 2.58 6.29 ...
+##   .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. ..$ : NULL
+##   .. .. ..$ : chr [1:2] &quot;(Intercept)&quot; &quot;ALT&quot;
+##   ..@ sigma: num [1:1000] 11.18 10.82 10.12 10.28 8.67 ...</code></pre>
+<p>sim() produces an object of class sim that contains “coef” (1000 simulated values for theta, i.e. your parameters) and “sigma” containing the 1000 values for standard deviation.</p>
 </div>
 <div id="summary-statistics-to-describe-posterior-knowledge-about-the-parameters-theta-and-the-variance" class="section level5">
 <h5>Summary statistics to describe posterior knowledge about the parameters (theta) and the variance</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(<span class="kw">coef</span>(bsim), <span class="dv">2</span>, quantile, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="co"># parameters</span></code></pre></div>
 <pre><code>##       (Intercept)        ALT
-## 2.5%    -3.400895 0.02889819
-## 97.5%   15.494854 0.15523332</code></pre>
+## 2.5%    -4.289248 0.02918328
+## 97.5%   15.312500 0.15793703</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(bsim@sigma, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="co"># variance</span></code></pre></div>
 <pre><code>##      2.5%     97.5% 
-##  8.365319 12.468116</code></pre>
+##  8.372159 12.366565</code></pre>
 </div>
 <div id="what-if-we-want-to-test-hypotheses-about-our-data-using-the-posterior-distribution" class="section level5">
 <h5>What if we want to test hypotheses about our data using the posterior distribution?</h5>
-<p><strong>H1.</strong> How sure are we that the density is greater than 1? 10? 100?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(bsim@coef&gt;<span class="dv">1</span>) <span class="co"># 41% probability that the density is greater than 1</span></code></pre></div>
-<pre><code>## [1] 0.4165</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(bsim@coef&gt;<span class="dv">10</span>) <span class="co"># 9% probability that the density is greater than 10</span></code></pre></div>
-<pre><code>## [1] 0.09</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(bsim@coef&gt;<span class="dv">100</span>) <span class="co"># 0% probability that the density is greater than 100</span></code></pre></div>
-<pre><code>## [1] 0</code></pre>
-<p>Note: this is not the proportion of densities measured that are over 1/10/100, it just expresses what we can infer about the true population mean from the observations we measured</p>
+<p><strong>H1.</strong></p>
 <p><strong>H2.</strong> How sure are we that the slope parameter for ALT is larger than .05, .1, .2?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(<span class="kw">coef</span>(bsim)[,<span class="dv">2</span>]&gt;.<span class="dv">05</span>)/nsim <span class="co"># 93% confident that the slope is greater than .05</span></code></pre></div>
-<pre><code>## [1] 0.925</code></pre>
+<pre><code>## [1] 0.92</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(<span class="kw">coef</span>(bsim)[,<span class="dv">2</span>]&gt;.<span class="dv">1</span>)/nsim <span class="co"># 44% confident that the slope is greater than .1</span></code></pre></div>
-<pre><code>## [1] 0.446</code></pre>
+<pre><code>## [1] 0.449</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(<span class="kw">coef</span>(bsim)[,<span class="dv">2</span>]&gt;.<span class="dv">2</span>)/nsim <span class="co"># 0.1% confident that the slope is greater than .2</span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 </div>
@@ -772,7 +782,7 @@ bsim &lt;-<span class="st"> </span><span class="kw">sim</span>(M1, <span class="
 <p>We use simulated values from the posterior distribution of model parameters. The simulation of the posterior distribution gives 1000 pairs of intercepts and slopes that describe 1000 different regression lines. We then draw these lines to show the uncertainty in our regression line estimation</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(Loyn$ALT, Loyn$ABUND, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">las=</span><span class="dv">1</span>, <span class="dt">cex.lab=</span><span class="fl">1.2</span>) 
 for(i in <span class="dv">1</span>:nsim) <span class="kw">abline</span>(<span class="kw">coef</span>(bsim)[i,<span class="dv">1</span>], <span class="kw">coef</span>(bsim)[i,<span class="dv">2</span>], <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">0.05</span>)) <span class="co"># add semitransparent regression lines</span></code></pre></div>
-<p><img src="images/05-A/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="images/05-A/unnamed-chunk-9-1.png" width="672" /></p>
 <p>So the above plot shows you the 1000 possible regression lines that were simulated from the sim() function. The points on the plot are the original values of ABUND vs ALT</p>
 </div>
 <div id="plot-the-95-cris" class="section level5">
@@ -795,7 +805,7 @@ for(i in <span class="dv">1</span>:nsim) fitmat[,i] &lt;-<span class="st"> </spa
 <span class="kw">abline</span>(M1, <span class="dt">lw=</span><span class="dv">2</span>) <span class="co"># add line from our original model</span>
 <span class="kw">lines</span>(newdat$ALT, <span class="kw">apply</span>(fitmat, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.025</span>), <span class="dt">lty=</span><span class="dv">3</span>)
 <span class="kw">lines</span>(newdat$ALT, <span class="kw">apply</span>(fitmat, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.975</span>), <span class="dt">lty=</span><span class="dv">3</span>)  </code></pre></div>
-<p><img src="images/05-A/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="images/05-A/unnamed-chunk-10-1.png" width="672" /></p>
 <p>We are 95% sure the true regression line (black line) is within the credible interval (dotted lines)</p>
 </div>
 <div id="what-if-we-want-to-predict-future-observations" class="section level5">
@@ -815,7 +825,7 @@ for(i in <span class="dv">1</span>:nsim) newy[,i] &lt;-<span class="st"> </span>
 <span class="co"># 95% interval of simulated predictive distribution</span>
 <span class="kw">lines</span>(newdat$ALT, <span class="kw">apply</span>(newy, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.025</span>), <span class="dt">lty=</span><span class="dv">2</span>) 
 <span class="kw">lines</span>(newdat$ALT, <span class="kw">apply</span>(newy, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.975</span>), <span class="dt">lty=</span><span class="dv">2</span>)</code></pre></div>
-<p><img src="images/05-A/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="images/05-A/unnamed-chunk-11-1.png" width="672" /></p>
 <p>Thus, future observations are expected to be within the interval defined by the broken lines in the figure above with a probability of 0.95.</p>
 <p>Note: compared to a frequentist approach (predict()), this takes a lot more code. However, when you have a simulated the posterior predictive distribution, you have more information than is contained in the frequentist prediction interval. For example, you can test hypotheses about future observations (see code below)</p>
 </div>
@@ -823,11 +833,11 @@ for(i in <span class="dv">1</span>:nsim) newy[,i] &lt;-<span class="st"> </span>
 <h5>From these predicted future values, we can give an estimate for the proportion of observations (i.e. density of birds) greater than #, given the mean altitude =</h5>
 <p><strong>EX1.</strong> If ALT=60, what is the estimated proportion of observations greater than 20?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(newy[newdat$ALT==<span class="dv">60</span>,]&gt;<span class="dv">20</span>)/nsim</code></pre></div>
-<pre><code>## [1] 0.202</code></pre>
-<p>Thus we expect 22% of future observations with ALT=60 to have a density of birds greater than 20</p>
+<pre><code>## [1] 0.198</code></pre>
+<p>Thus we expect 20% of future observations with ALT=60 to have a density of birds greater than 20</p>
 <p><strong>EX2.</strong> IF ALT=120, what is the estimated proportion of observations greater than 20?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(newy[newdat$ALT==<span class="dv">120</span>,]&gt;<span class="dv">20</span>)/nsim</code></pre></div>
-<pre><code>## [1] 0.371</code></pre>
+<pre><code>## [1] 0.36</code></pre>
 <p>Thus we expect 39% of future observations with ALT=120 to have a density of birds greater than 20</p>
 <p>Another reason to learn this is because once you have a more complicated model (e.g. mixed models), the frequentist methods to obtain confidence intervals of fitted values are much more complicated than the Bayesian method presented here. The code we learned here can be used for mixed models and generalized linear mixed models with minor changes.</p>
 </div>

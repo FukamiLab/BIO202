@@ -63,7 +63,61 @@ $p(\theta|y)$ is the posterior distibution,  $p(\theta)$ is our prior informatio
     + Joint distribution: gives probability of a set of parameter values. (Plot parameter samples to see whether parameters are correlated!)
     + Marginal distribution: gives probabilty for a particular parameter summed over all values of other parameters. (This is what you get if you summarize parameter samples independently.)
     + Conditional distribution: gives probabilty for a particular parameter holding other parameters at specific values.
-   
+
+Joint posterior distribution of $\beta_0$ and $\beta_1$:
+```{r echo = FALSE, warning = FALSE}
+library(ggplot2)
+
+# Set random seed so figures aren't changed every time
+set.seed(13)
+
+# Make fake random sample of parameters:
+beta1 <- rnorm(5000, 6, 2)
+beta0 <- 6 - beta1 + rnorm(5000, 0, 2)
+beta <- data.frame(beta0, beta1)
+
+# Plot joint posterior
+ggplot(beta, aes(x = beta0, y = beta1)) + 
+  geom_point(alpha = 0.5) + 
+  geom_hline(yintercept = 4, color = 'red') +
+  geom_hline(yintercept = 8, color = 'blue') +
+  labs(x = expression(beta[0]), 
+       y = expression(beta[1])
+  )
+
+```
+
+Marginal distribution of $\beta_0$:
+```{r echo = FALSE, warning = FALSE}
+ggplot(beta, aes(x = beta0)) +
+  geom_freqpoly(binwidth = 1) + 
+  labs(x = expression(beta[0]),
+       y = "Num. samples")
+
+```
+
+Conditional distribution of $\beta_0$ when $\beta_1 = 4$ (red line) or $\beta_1 = 8$ (blue line).
+
+```{r echo = FALSE, warning = FALSE}
+library(tidyr)
+
+beta0_4 <- 6 - 4 + rnorm(1000, 0, 2)
+beta0_8 <- 6 - 8 + rnorm(1000, 0, 2)
+beta_cond <- data.frame(beta0_4, beta0_8)
+
+beta_long <- beta_cond %>%
+  gather(key = "parm_cond", value = "value")
+
+ggplot(beta_long, aes(x = value, color = parm_cond)) +
+  geom_freqpoly(binwidth = 1) + 
+  scale_color_manual(values = c("red", "blue"), labels = expression(beta[1]==4, beta[1]==8)) + 
+  labs(x = expression(beta[0]),
+       y = "Num. samples",
+       color = NULL)
+
+```
+
+
 + Inference is based on **visualizing** and summarizing the posterior distributions of parameters, predicted future observations, and quantities calculated from parameters.
     
 + Make inferences (e.g. about effects of covariates) by summarizing samples of parameters from the posterior distribution:
@@ -96,7 +150,7 @@ $\mathbf{y}$ is a vector of observations (of counts) with length $n$.
 
 $\boldsymbol{\hat{\lambda}}$ is a vector of the estimated mean for each observation (has length $n$).
 
-$\mathbf{X}$ is a matrix with $n$ rows and $p$ with the observed values of the $p - 1$ covariates in each of the rows. (Note that we have an initial column of all $1$ to estimate the mean.)
+$\mathbf{X}$ is a matrix with $n$ rows and $p$ columns with the observed values of the $p - 1$ covariates in each of the rows. (Note that we have an initial column of all $1$ to estimate the mean.)
 
 $\boldsymbol{\hat{\beta}}$ is a vector of the parameters to be estimated with length $p$.
 
@@ -124,7 +178,9 @@ Remember you could use any linear model from lm() glm() or glmer() but we are go
 rm(list=ls()) 
 
 # read in the data
-Loyn<- read.table(file = "/Users/jamiemcdevitt-irwin/Dropbox/Jamie/Stanford/3_Courses/Biol202/Week3_linearmodels_intro/ZuurDataMixedModelling/Loyn.txt", header = TRUE, dec = ".")   
+#Loyn<- read.table(file = "/Users/jamiemcdevitt-irwin/Dropbox/Jamie/Stanford/3_Courses/Biol202/Week3_linearmodels_intro/ZuurDataMixedModelling/Loyn.txt", header = TRUE, dec = ".")   
+
+Loyn <- read.table("data/Loyn.txt", header = TRUE)
 
 # let's take a quick look at the data
 head(Loyn)
@@ -147,14 +203,16 @@ Now lets use sim() in the package 'arm' on the model we produced 'M1'. Sim() dra
 
 
 ##### Simulate values for theta and sigma 
-```{r include = TRUE}
+```{r include = TRUE, warning = FALSE}
 #install.packages('arm')
 library(arm)
 nsim <-1000 # number of simulations can be changed to whatever you want
 bsim <- sim(M1, n.sim=nsim)
 str(bsim)
 ```
+
 sim() produces an object of class sim that contains "coef" (1000 simulated values for theta, i.e. your parameters) and "sigma" containing the 1000 values for SD
+
 
 ##### Summary statistics to describe posterior knowledge about the parameters (theta) and the variance
 ```{r include = TRUE}
@@ -165,14 +223,9 @@ quantile(bsim@sigma, prob=c(0.025, 0.975)) # sigma
 
 
 ##### What if we want to test hypotheses about our data using the posterior distribution?    
-**H1.** How sure are we that the density is greater than 1? 10? 100?
-```{r include = TRUE}
+**H1.** 
 
-mean(bsim@coef>1) # 41% probability that the density is greater than 1
-mean(bsim@coef>10) # 9% probability that the density is greater than 10
-mean(bsim@coef>100) # 0% probability that the density is greater than 100
-```
-Note: this is not the proportion of densities measured that are over 1/10/100, it just expresses what we can infer about the true population mean from the observations we measured
+
 
 **H2.** How sure are we that the slope parameter for ALT is larger than .05, .1, .2?
 ```{r include = TRUE}
@@ -259,7 +312,7 @@ Note: compared to a frequentist approach (predict()), this takes a lot more code
 ```{r include = TRUE}
 sum(newy[newdat$ALT==60,]>20)/nsim
 ```
-Thus we expect 22% of future observations with ALT=60 to have a density of birds greater than 20
+Thus we expect 20% of future observations with ALT=60 to have a density of birds greater than 20
 
 
 **EX2.** IF ALT=120, what is the estimated proportion of observations greater than 20?
