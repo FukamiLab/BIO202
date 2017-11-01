@@ -36,7 +36,7 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 + Ramette 2007 - "In constrained (canonical) ordination analyses, only the variation in the species table that can be explained by the environmental variables is displayed and analyzed, and not all the variation in the species table." (This refers to asymmetrical methods only?)
 
-![Ordination chart](images/ordination.jpg){width=50%}
+![Ordination chart](images/ordination.jpg){width=80%}
 
 #### In Ch 6
 
