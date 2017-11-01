@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "Constrained ordination"
-author: Tad & Meghan
+author: Tad & Jamie
 output: html_document
 ---
 
@@ -30,6 +30,84 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
+#### Unconstrained vs. constrained ordination
+
++ Borcard et al. - Simple (unconstrained) ordination analyses a single data matrix. Canonical (constrained) ordination associates two or more data sets.
+
++ Ramette 2007 - "In constrained (canonical) ordination analyses, only the variation in the species table that can be explained by the environmental variables is displayed and analyzed, and not all the variation in the species table." (This refers to asymmetrical methods only?)
+
+![Ordination chart](images/ordination.jpg){width=80%}
+
+#### In Ch 6
+
++ RDA, CCA: asymmetrical matrices; combines multiple regression with PCA or CA (Extensions: partial RDA, variation partitioning, db-RDA)
+
++ LDA: combines quantitative variables to explain predefined grouping of objects
+
++ CCorA, CoIA, MFA: symmetrical matrices; computes eigenvectors to describe common structure of two data sets
+
+#### RDA
+
++ Regress each (Hellinger-transformed) y(i) on X, find y_hat(i), and do PCA on Y_hat
+
++ Scaling 1 vs. scaling 2 (default in R)	
+
++ For species and sites, interpretation same as in PCA
+
++ For explanatory variables and their relationships with response variables, subtle but important differences regarding angles, positions, centroids
+
+#### Partial RDA
+
++ e.g., `envtopo` vs. `envchem`
+
+`(spechem.physio2 <- rda(spe.hel ~ pH + dur + pho + nit + amm`
+`	+ oxy + dbo + Condition(alt + pen + deb), data=env))`
+`anova(spechem.physio2, step=1000)`
+`anova(spechem.physio2, step=1000, by="axis")`
+
+#### Forward selection of explanatory variables
+
++ Use VIFs to look for severe collinearity
+
++ `forward.sel()` in `packfor` - Blanchet et al (2008) corrections built in
+
++ `ordistep()` in `vegan` - allows use of factors
+
+#### Variation partioning
+
++ Steps to compute R2adj (Peres-Neto et al. 2006) - `varpart()` in `vegan`
+
+#### db-RDA (Legendre and Anderson 1999)
+
++ Allows use of various dissimilarity measures, as in PCoA
+
++ Run PCoA on Y and then RDA on principal coordinates
+
++ `capscale()` in `vegan`
+
+#### CCA
+
++ Canonical counterpart of CA; otherwise similar to RDA
+
++ Rare species overemphasized
+
+#### LDA
+
++ Identifies linear combinations of environmental variables that best discriminate groups obtained by cluster analysis
+
+#### Symmetric analysis
+
++ CCorA, CoIA (and RLQ), MFA
+
++ No “dependent” or “explanatory” matrix
+
++ Suitable for studying, e.g.,
+
+  + two groups of competing taxa
+	+ Soil-vegetation relationships
+
+
+***
 
 
 ### Analysis Example
@@ -52,26 +130,22 @@ Outline
 RDA and CCA are the two most common methods in ecology. db-RDA is very useful for using any dissimilarity/simmilarity measure. I'll also mention CAP, which is not included in the reading, but seems like a robust constrained ordination.  
 
 
-<br><br>  
 
 *Data*: I am using my own community data for this example. The data is a species by site matrix (264 species by 27 sites) of coral reef benthic organisms. After looking at correlations between my explanatory variables, the environmental data I will use in this analysis is net primary productivity, coral cover, relief, exposure, mangrove connectivity, seagrass connectivity and depth. 
 
 I try to show different ways of plotting the data other than base plot (i.e. using ggplot), but I wasn't able to find packages that were able to plot all of the different constrained ordinations.  
 
-<br><br>
+
 
 #### RDA 
+
 *RDA*: combines regression and PCA, it is an extension of regression analysis to model multivariate response data. RDA computes axes that are linear combinations of the explanatory variables (in order of which explain the most variation of the species matrix). The axes are orthogonal to eachother (i.e. right angles). It is constrained because you are directly testing the influence of explanatory variables. 
 
 In terms of thinking of transforming your data for ordinations, this paper is helpful: http://adn.biol.umontreal.ca/~numericalecology/Reprints/Legendre_&_Gallagher.pdf  
 
-<br><br>
 
-```{r, results="hide"}
+```{r, results="hide", warning = FALSE}
 # Data import, transformation, distance matrix 
-
-setwd("/Users/jamiemcdevitt-irwin/Documents/Git_Repos/Stanford_BBP")
-getwd()
 
 # clear my environment
 rm(list=ls()) 
@@ -83,8 +157,8 @@ library(ggplot2)
 
 # Purpose: initial ordination on montastraea data
 
-load("data/reshaped/montastraea_species_matrix_vegan_harbornesites.Rdata") # mont.spec.matrix
-load("data/reshaped/montast_harbmeta_fullsite_shannon.Rdata") # shannon.montast.env.site
+load("data/montastraea_species_matrix_vegan_harbornesites.Rdata") # mont.spec.matrix
+load("data/montast_harbmeta_fullsite_shannon.Rdata") # shannon.montast.env.site
 ls()
 
 head(shannon.montast.env.site)
@@ -109,7 +183,6 @@ ggplot(MDS_xy, aes(MDS1, MDS2, col=shannon.montast.env.site$Island)) + geom_poin
 
 ```
 
-<br><br><br>
 
 ```{r, results="hide"}
 
@@ -148,10 +221,9 @@ coef(simpleRDA)
 
 ```
 
-<br><br><br>
-
 
 ##### Retrive, interpret and plot results from the vegan RDA output  
+
 We can get the R2 for model fit for the constrained ordinations.  
 ```{r}
 # unadjusted R^2 retreived from the rda result
@@ -168,7 +240,9 @@ As you can see, the adjustment has reduced the value of R2. The adjusted R2 meas
 
 Now lets plot the results of the RDA. There are two ways to plot the RDA, using "wa" and "lc".   
 
-The first plots we will show will be using 'wa' plotting (weighted sums of species).  
+The first plots we will show will be using 'wa' plotting (weighted sums of species). 
+
+Note: the code below uses a package called `ggord`. You can find instructions for installing this package [here](https://github.com/fawda123/ggord).
 
 ```{r}
 # Triplot: three different entities in the plot: sites, response variables and explanatory variables (arrowheads are on the explanatory variables)
@@ -193,24 +267,24 @@ ggord(simpleRDA, shannon.montast.env.site$Island) + theme(panel.grid.major = ele
 So these results are showing us that Mangrove connectivity, Relief, Coral, Dense seagrass connectivity, and Depth are contributing to RDA2 while Exposure and Net primary productivity are contributing to RDA1. It seems that sites with increasing depth have decreasing exposure (from scaling 2). The vectors indicate species that are driving different axes.  
 
 
-*Wa or lc?*    
+*Wa or lc?* 
+
 The two RDA plots above use the site scores that are weighted sums of species (wa), but you can choose the fitted site scores (lc). Choosing between these site scores is still controversial.  
 
 'lc': orthogonal linear combinations of the explanatory variable  
 'wa': more robust to noise in the environmental variables but are a step between constrained towards unconstrained.  
 
 *How do we know whether to use lc or wa?*   
+
 Most of the time, the default is "wa". Because these are the most robust to noise in the data. 
 
-<br><br>
+
 
 
 Remember Scaling 1 vs Scaling 2: 
 
 * *Scaling 1*- distance biplot (object focused): distance between objects are eudlidean distances (objects closer together have similar variable values), angles between vectors of response variables are meaningless. Angles between vectors of response variables and explanatory variables reflect linear correlation.  
 * *Scaling 2*- correlation biplot (response variable focused): distances between objects are not approximate Euclidean distances. Angles between **all** vectors reflect linear correlation.  
-
- 
 
 
 Now lets plot the results of the RDA using 'lc'
@@ -234,10 +308,8 @@ arrows(0,0,spe2.sc[,1],spe2.sc[,2], length=0, lty=1,col='red')
 The results look very similar. We will stick with 'wa' because they are the suggested scores.  
 
 
-<br><br><br>
-
-
 ##### Forward Selection of Variables  
+
 When you want to reduce the number of explanatory variables.
 
 ```{r}
@@ -264,9 +336,6 @@ ordistep(rda(spe.hel ~Net_primary_productivity + Relief + Exposure + Mangrove_co
 So it says the best model for this data includes all of the explanatory variables.  
 
 
-<br><br>  
-
-
 ##### Permutation Tests of RDA Results  
 
 Permutation tests are common in ecology because alot of our data is non-normal. Permutation tests generates a reference distribution of a chosen test statistic by randomly permuting elements of the data a large number of times and recomputing the statistic each time. Then you compare the true value of the statistic to the reference distribution.  
@@ -284,11 +353,9 @@ RDA Result: The model refers to the constrained component and the residual is th
 
 All canonical axes: Note only the top 4 axes are significant. I think this is ok, because we are mainly interested in the top 2.  
 
-<br><br>
 
+#### CCA: Canonical correspondence analysis
 
-
-#### CCA: Canonical correspondence analysis  
 It is a weighted form of RDA applied to the same species matrix. It preserves the chi-squared distance among sites, and species are represented as points in triplots. In the CCA triplot species are ordered along canonical axes following their ecological optima, which allows relatively easy ecological interpretation. The drawbacks, are the chi-squared distance is not always accepted by ecologists and it was "one of the worst distances for community composition data". It should only be used where rare species are sampled well and are seen as potential indicators of paricular characteristics of the ecosystem. Or else you could get rid of rare species prior to CCA. Additional, you can not compute an adjusted R2 (i.e. you have a biased measure of explained variation).  
 
 This probably is not the best bet for my data, but since it is so common, let's run a quick example and talk about how to interpret it.   
@@ -310,9 +377,6 @@ screeplot(simpleCCA) # the first two axes are not as clear
 The model explains 59% of the variation with 41% left unconstrained. The top axes are not as clear with the first two CCA1- 0.1736, CCA2- 0.11564, not that much higher than CCA3 0.09216.   
 
 
-
-
-
 But let's plot it just with the two axes.  
 ```{r}
 # CCA Triplots
@@ -329,12 +393,10 @@ ggord(simpleCCA, shannon.montast.env.site$Island) + theme(panel.grid.major = ele
 ```
 So this is telling us similar results to the RDA.  
 
-<br><br><br>
 
 
+##### Distance Based RDA 
 
-
-##### Distance Based RDA  
 db-RDA is an important constrained ordination because it allows you to use other dissimilarity matrices (e.g. bray) that are non-euclidean in RDA (i.e. you don't have the double zero problem). It makes a dissimilarity matrix, creates a PCoA, then runs an RDA of the principal coordinates created in the PCoA constrained by the explanatory variables.  
 
 ```{r}
@@ -353,7 +415,8 @@ Once again the first two axes explain the most variation (CAP1-0.5336, CAP2-0.45
 
 
 
-#### CAP: Canonical Analysis of Principal Coordinates  
+#### CAP: Canonical Analysis of Principal Coordinates
+
 Anderson and Willis (2003) explains the idea of CAP and why you should use it. It is also a very good paper for explaining the differences between unconstrained and constrained ordinations and outlining important rules for multivariate analysis.   
 http://onlinelibrary.wiley.com/doi/10.1890/0012-9658(2003)084%5B0511:CAOPCA%5D2.0.CO;2/full  
 
@@ -377,19 +440,15 @@ https://www.rdocumentation.org/packages/BiodiversityR/versions/2.8-4/topics/CAPd
 I couldn't get this to work on my data, but wanted to have the code in case anyone else wanted to try it! It first became available in PRIMER but this is a tool you have to pay for.  
 
 
-<br><br><br>
+Overall when you are evaluating multivariate data, Anderson and Willis (2003) suggest your analysis includes four steps:
 
-Overall when you are evaluating multivariate data, Anderson and Willis (2003) suggest your analysis includes four steps:  
-1) robust unconstrained ordination (NMDS)  
-2) appropriate constrained ordination  
-3) statistical test of a hypothesis  
-4) characterize species responsible for the patterns  
-
-
-<br><br><br>
+1. robust unconstrained ordination (NMDS)  
+2. appropriate constrained ordination  
+3. statistical test of a hypothesis  
+4. characterize species responsible for the patterns  
 
 
-#### Discussion Questions  
+### Discussion Questions  
 
 1) How would you determine which species are responsible for the patterns when you have so many species on your plots that its hard to interpret?  
 2) If you have used other constrained ordinations, how did you choose which one to use?   
