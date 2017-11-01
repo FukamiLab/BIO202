@@ -210,13 +210,15 @@ nsim <-1000 # number of simulations can be changed to whatever you want
 bsim <- sim(M1, n.sim=nsim)
 str(bsim)
 ```
-sim() produces an object of class sim that contains "coef" (1000 simulated values for theta, i.e. your parameters) and "sigma" containing the 1000 values for standard deviation.
+
+sim() produces an object of class sim that contains "coef" (1000 simulated values for theta, i.e. your parameters) and "sigma" containing the 1000 values for SD
+
 
 ##### Summary statistics to describe posterior knowledge about the parameters (theta) and the variance
 ```{r include = TRUE}
 apply(coef(bsim), 2, quantile, prob=c(0.025, 0.975)) # parameters
 
-quantile(bsim@sigma, prob=c(0.025, 0.975)) # variance
+quantile(bsim@sigma, prob=c(0.025, 0.975)) # sigma
 ```
 
 
@@ -227,6 +229,7 @@ quantile(bsim@sigma, prob=c(0.025, 0.975)) # variance
 
 **H2.** How sure are we that the slope parameter for ALT is larger than .05, .1, .2?
 ```{r include = TRUE}
+set.seed(100) # before you run the sim function
 sum(coef(bsim)[,2]>.05)/nsim # 93% confident that the slope is greater than .05
 sum(coef(bsim)[,2]>.1)/nsim # 44% confident that the slope is greater than .1
 sum(coef(bsim)[,2]>.2)/nsim # 0.1% confident that the slope is greater than .2
@@ -256,10 +259,16 @@ min(Loyn$ALT) # 60
 max(Loyn$ALT) # 260
 # now save these x-values because we want to then predict values past these 
 newdat <- data.frame(ALT=seq(60, 260, by=0.1))
-
+head(newdat)
 newmodmat <- model.matrix(~ALT, data=newdat) # create a matrix that contains these new x-values
+head(newmodmat)
+dim(newmodmat)
 fitmat <- matrix(ncol=nsim, nrow=nrow(newdat)) # then calculate the 1000 fitted values for each new x value using matrix multiplication
+head(fitmat)
+dim(fitmat)
+
 for(i in 1:nsim) fitmat[,i] <- newmodmat %*% coef(bsim)[i,] # %*% is for matrix multiplication, recall that bsim is the object sim() produced for our model M1
+
 # so you are multiplying the new x values created from the min and max of x by the bsim values  
 plot(Loyn$ALT,Loyn$ABUND, pch=16, las=1, cex.lab=1.2)
 abline(M1, lw=2) # add line from our original model
