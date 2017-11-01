@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Tad &amp; Meghan" />
+<meta name="author" content="Tad &amp; Jamie" />
 
 
 <title>Constrained ordination</title>
@@ -556,7 +556,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Constrained ordination</h1>
-<h4 class="author"><em>Tad &amp; Meghan</em></h4>
+<h4 class="author"><em>Tad &amp; Jamie</em></h4>
 
 </div>
 
@@ -567,6 +567,89 @@ div.tocify {
 </blockquote>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<div id="unconstrained-vs.constrained-ordination" class="section level4">
+<h4>Unconstrained vs. constrained ordination</h4>
+<ul>
+<li><p>Borcard et al. - Simple (unconstrained) ordination analyses a single data matrix. Canonical (constrained) ordination associates two or more data sets.</p></li>
+<li><p>Ramette 2007 - “In constrained (canonical) ordination analyses, only the variation in the species table that can be explained by the environmental variables is displayed and analyzed, and not all the variation in the species table.” (This refers to asymmetrical methods only?)</p></li>
+</ul>
+<div class="figure">
+<img src="images/ordination.jpg" alt="Ordination chart" style="width:50.0%" />
+<p class="caption">Ordination chart</p>
+</div>
+</div>
+<div id="in-ch-6" class="section level4">
+<h4>In Ch 6</h4>
+<ul>
+<li><p>RDA, CCA: asymmetrical matrices; combines multiple regression with PCA or CA (Extensions: partial RDA, variation partitioning, db-RDA)</p></li>
+<li><p>LDA: combines quantitative variables to explain predefined grouping of objects</p></li>
+<li><p>CCorA, CoIA, MFA: symmetrical matrices; computes eigenvectors to describe common structure of two data sets</p></li>
+</ul>
+</div>
+<div id="rda" class="section level4">
+<h4>RDA</h4>
+<ul>
+<li><p>Regress each (Hellinger-transformed) y(i) on X, find y_hat(i), and do PCA on Y_hat</p></li>
+<li><p>Scaling 1 vs. scaling 2 (default in R)</p></li>
+<li><p>For species and sites, interpretation same as in PCA</p></li>
+<li><p>For explanatory variables and their relationships with response variables, subtle but important differences regarding angles, positions, centroids</p></li>
+</ul>
+</div>
+<div id="partial-rda" class="section level4">
+<h4>Partial RDA</h4>
+<ul>
+<li>e.g., <code>envtopo</code> vs. <code>envchem</code></li>
+</ul>
+<p><code>(spechem.physio2 &lt;- rda(spe.hel ~ pH + dur + pho + nit + amm</code> <code>+ oxy + dbo + Condition(alt + pen + deb), data=env))</code> <code>anova(spechem.physio2, step=1000)</code> <code>anova(spechem.physio2, step=1000, by=&quot;axis&quot;)</code></p>
+</div>
+<div id="forward-selection-of-explanatory-variables" class="section level4">
+<h4>Forward selection of explanatory variables</h4>
+<ul>
+<li><p>Use VIFs to look for severe collinearity</p></li>
+<li><p><code>forward.sel()</code> in <code>packfor</code> - Blanchet et al (2008) corrections built in</p></li>
+<li><p><code>ordistep()</code> in <code>vegan</code> - allows use of factors</p></li>
+</ul>
+</div>
+<div id="variation-partioning" class="section level4">
+<h4>Variation partioning</h4>
+<ul>
+<li>Steps to compute R2adj (Peres-Neto et al. 2006) - <code>varpart()</code> in <code>vegan</code></li>
+</ul>
+</div>
+<div id="db-rda-legendre-and-anderson-1999" class="section level4">
+<h4>db-RDA (Legendre and Anderson 1999)</h4>
+<ul>
+<li><p>Allows use of various dissimilarity measures, as in PCoA</p></li>
+<li><p>Run PCoA on Y and then RDA on principal coordinates</p></li>
+<li><p><code>capscale()</code> in <code>vegan</code></p></li>
+</ul>
+</div>
+<div id="cca" class="section level4">
+<h4>CCA</h4>
+<ul>
+<li><p>Canonical counterpart of CA; otherwise similar to RDA</p></li>
+<li><p>Rare species overemphasized</p></li>
+</ul>
+</div>
+<div id="lda" class="section level4">
+<h4>LDA</h4>
+<ul>
+<li>Identifies linear combinations of environmental variables that best discriminate groups obtained by cluster analysis</li>
+</ul>
+</div>
+<div id="symmetric-analysis" class="section level4">
+<h4>Symmetric analysis</h4>
+<ul>
+<li><p>CCorA, CoIA (and RLQ), MFA</p></li>
+<li><p>No “dependent” or “explanatory” matrix</p></li>
+<li><p>Suitable for studying, e.g.,</p></li>
+<li>two groups of competing taxa
+<ul>
+<li>Soil-vegetation relationships</li>
+</ul></li>
+</ul>
+<hr />
+</div>
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
@@ -597,25 +680,18 @@ div.tocify {
 <li>CAP</li>
 </ol>
 <p>RDA and CCA are the two most common methods in ecology. db-RDA is very useful for using any dissimilarity/simmilarity measure. I’ll also mention CAP, which is not included in the reading, but seems like a robust constrained ordination.</p>
-<p><br><br></p>
 <p><em>Data</em>: I am using my own community data for this example. The data is a species by site matrix (264 species by 27 sites) of coral reef benthic organisms. After looking at correlations between my explanatory variables, the environmental data I will use in this analysis is net primary productivity, coral cover, relief, exposure, mangrove connectivity, seagrass connectivity and depth.</p>
 <p>I try to show different ways of plotting the data other than base plot (i.e. using ggplot), but I wasn’t able to find packages that were able to plot all of the different constrained ordinations.</p>
-<p><br><br></p>
-<div id="rda" class="section level4">
+<div id="rda-1" class="section level4">
 <h4>RDA</h4>
 <p><em>RDA</em>: combines regression and PCA, it is an extension of regression analysis to model multivariate response data. RDA computes axes that are linear combinations of the explanatory variables (in order of which explain the most variation of the species matrix). The axes are orthogonal to eachother (i.e. right angles). It is constrained because you are directly testing the influence of explanatory variables.</p>
 <p>In terms of thinking of transforming your data for ordinations, this paper is helpful: <a href="http://adn.biol.umontreal.ca/~numericalecology/Reprints/Legendre_&amp;_Gallagher.pdf" class="uri">http://adn.biol.umontreal.ca/~numericalecology/Reprints/Legendre_&amp;_Gallagher.pdf</a></p>
-<p><br><br></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Data import, transformation, distance matrix </span>
-
-<span class="kw">setwd</span>(<span class="st">&quot;/Users/jamiemcdevitt-irwin/Documents/Git_Repos/Stanford_BBP&quot;</span>)
-<span class="kw">getwd</span>()
 
 <span class="co"># clear my environment</span>
 <span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">ls</span>()) 
 <span class="kw">library</span>(stringr)
 <span class="kw">library</span>(dplyr)</code></pre></div>
-<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 3.4.2</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;dplyr&#39;</code></pre>
 <pre><code>## The following objects are masked from &#39;package:stats&#39;:
@@ -633,8 +709,8 @@ div.tocify {
 
 <span class="co"># Purpose: initial ordination on montastraea data</span>
 
-<span class="kw">load</span>(<span class="st">&quot;data/reshaped/montastraea_species_matrix_vegan_harbornesites.Rdata&quot;</span>) <span class="co"># mont.spec.matrix</span>
-<span class="kw">load</span>(<span class="st">&quot;data/reshaped/montast_harbmeta_fullsite_shannon.Rdata&quot;</span>) <span class="co"># shannon.montast.env.site</span>
+<span class="kw">load</span>(<span class="st">&quot;data/montastraea_species_matrix_vegan_harbornesites.Rdata&quot;</span>) <span class="co"># mont.spec.matrix</span>
+<span class="kw">load</span>(<span class="st">&quot;data/montast_harbmeta_fullsite_shannon.Rdata&quot;</span>) <span class="co"># shannon.montast.env.site</span>
 <span class="kw">ls</span>()
 
 <span class="kw">head</span>(shannon.montast.env.site)
@@ -657,7 +733,6 @@ bci.mds$stress <span class="co"># 0.1241412</span>
 <span class="co"># colour by island</span>
 <span class="kw">ggplot</span>(MDS_xy, <span class="kw">aes</span>(MDS1, MDS2, <span class="dt">col=</span>shannon.montast.env.site$Island)) +<span class="st"> </span><span class="kw">geom_point</span>() +<span class="st"> </span><span class="kw">theme_bw</span>() +<span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&#39;stress:0.12&#39;</span>)</code></pre></div>
 <p><img src="images/06-B/unnamed-chunk-2-1.png" width="672" /></p>
-<p><br><br><br></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># RDA</span>
 
 simpleRDA &lt;-<span class="st"> </span><span class="kw">rda</span>(spe.hel ~<span class="st"> </span>Net_primary_productivity +<span class="st"> </span>Relief +<span class="st"> </span>Exposure +<span class="st"> </span>Mangrove_connectivity +<span class="st"> </span>Denseseagrass_connectivity +<span class="st"> </span>Coral +<span class="st"> </span>Depth +<span class="st"> </span>Protected_status_text, <span class="dt">data=</span>shannon.montast.env.site )
@@ -692,7 +767,6 @@ simpleRDA &lt;-<span class="st"> </span><span class="kw">rda</span>(spe.hel ~<sp
 <p>What if we want the canonical coefficient (i.e. the equivalent of regression coefficients for each explanatory variable on each canonical axis)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># canonical coefficients</span>
 <span class="kw">coef</span>(simpleRDA)</code></pre></div>
-<p><br><br><br></p>
 <div id="retrive-interpret-and-plot-results-from-the-vegan-rda-output" class="section level5">
 <h5>Retrive, interpret and plot results from the vegan RDA output</h5>
 <p>We can get the R2 for model fit for the constrained ordinations.</p>
@@ -707,6 +781,7 @@ R2adj </code></pre></div>
 <p>As you can see, the adjustment has reduced the value of R2. The adjusted R2 measures the unbiased amount of explained variation. So this model explains 45.6% of the variation in the data. If you used the biased R2, any variable included in the explanatory responses would increase the R2, so the R2 needs to be adjusted for the number of explanatory variables (especially since we have eight included here).</p>
 <p>Now lets plot the results of the RDA. There are two ways to plot the RDA, using “wa” and “lc”.</p>
 <p>The first plots we will show will be using ‘wa’ plotting (weighted sums of species).</p>
+<p>Note: the code below uses a package called <code>ggord</code>. You can find instructions for installing this package <a href="https://github.com/fawda123/ggord">here</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Triplot: three different entities in the plot: sites, response variables and explanatory variables (arrowheads are on the explanatory variables)</span>
 <span class="co"># Scaling 1</span>
 <span class="kw">plot</span>(simpleRDA, <span class="dt">scaling=</span><span class="dv">1</span>, <span class="dt">main=</span><span class="st">&quot;Triplot RDA matrix ~ env - scaling 1 - wa scores&quot;</span>)
@@ -724,13 +799,12 @@ spe2.sc &lt;-<span class="st"> </span><span class="kw">scores</span>(simpleRDA, 
 <span class="kw">library</span>(ggord)
 <span class="kw">ggord</span>(simpleRDA, shannon.montast.env.site$Island) +<span class="st"> </span><span class="kw">theme</span>(<span class="dt">panel.grid.major =</span> <span class="kw">element_blank</span>(), <span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>()) <span class="co"># looking at the raw code, this is plotting the &#39;wa scores&#39;, the blue dots are different species  </span></code></pre></div>
 <p><img src="images/06-B/unnamed-chunk-6-3.png" width="672" /> So these results are showing us that Mangrove connectivity, Relief, Coral, Dense seagrass connectivity, and Depth are contributing to RDA2 while Exposure and Net primary productivity are contributing to RDA1. It seems that sites with increasing depth have decreasing exposure (from scaling 2). The vectors indicate species that are driving different axes.</p>
-<p><em>Wa or lc?</em><br />
-The two RDA plots above use the site scores that are weighted sums of species (wa), but you can choose the fitted site scores (lc). Choosing between these site scores is still controversial.</p>
+<p><em>Wa or lc?</em></p>
+<p>The two RDA plots above use the site scores that are weighted sums of species (wa), but you can choose the fitted site scores (lc). Choosing between these site scores is still controversial.</p>
 <p>‘lc’: orthogonal linear combinations of the explanatory variable<br />
 ‘wa’: more robust to noise in the environmental variables but are a step between constrained towards unconstrained.</p>
-<p><em>How do we know whether to use lc or wa?</em><br />
-Most of the time, the default is “wa”. Because these are the most robust to noise in the data.</p>
-<p><br><br></p>
+<p><em>How do we know whether to use lc or wa?</em></p>
+<p>Most of the time, the default is “wa”. Because these are the most robust to noise in the data.</p>
 <p>Remember Scaling 1 vs Scaling 2:</p>
 <ul>
 <li><em>Scaling 1</em>- distance biplot (object focused): distance between objects are eudlidean distances (objects closer together have similar variable values), angles between vectors of response variables are meaningless. Angles between vectors of response variables and explanatory variables reflect linear correlation.<br />
@@ -751,7 +825,6 @@ Most of the time, the default is “wa”. Because these are the most robust to 
 <p><img src="images/06-B/unnamed-chunk-7-2.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># To choose the elements that are plotted, use the argument display=c(), sp=species, wa= site scores in the species space (weighted averages), lc= fitted site scores (linear combinations of explanatory variables) and cn= constraints (the explanatory variables)</span></code></pre></div>
 <p>The results look very similar. We will stick with ‘wa’ because they are the suggested scores.</p>
-<p><br><br><br></p>
 </div>
 <div id="forward-selection-of-variables" class="section level5">
 <h5>Forward Selection of Variables</h5>
@@ -799,7 +872,6 @@ spe.rda.all &lt;-<span class="st"> </span><span class="kw">rda</span>(spe.hel ~<
 ## 0.010759 0.008512 0.006477 0.005134 0.004891 0.004096 0.003939 0.003584 
 ## (Showed only 8 of all 17 unconstrained eigenvalues)</code></pre>
 <p>So it says the best model for this data includes all of the explanatory variables.</p>
-<p><br><br></p>
 </div>
 <div id="permutation-tests-of-rda-results" class="section level5">
 <h5>Permutation Tests of RDA Results</h5>
@@ -839,7 +911,6 @@ spe.rda.all &lt;-<span class="st"> </span><span class="kw">rda</span>(spe.hel ~<
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>RDA Result: The model refers to the constrained component and the residual is the uncontrained ordination. From this, we can see the model is significant.</p>
 <p>All canonical axes: Note only the top 4 axes are significant. I think this is ok, because we are mainly interested in the top 2.</p>
-<p><br><br></p>
 </div>
 </div>
 <div id="cca-canonical-correspondence-analysis" class="section level4">
@@ -868,7 +939,6 @@ simpleCCA &lt;-<span class="st"> </span><span class="kw">cca</span>(mont.spec.ma
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># plot the CCA using ggplot (ggord package)</span>
 <span class="kw">ggord</span>(simpleCCA, shannon.montast.env.site$Island) +<span class="st"> </span><span class="kw">theme</span>(<span class="dt">panel.grid.major =</span> <span class="kw">element_blank</span>(), <span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>()) <span class="co"># looking at the raw code, this is plotting the &#39;wa scores&#39;</span></code></pre></div>
 <p><img src="images/06-B/unnamed-chunk-12-3.png" width="672" /> So this is telling us similar results to the RDA.</p>
-<p><br><br><br></p>
 <div id="distance-based-rda" class="section level5">
 <h5>Distance Based RDA</h5>
 <p>db-RDA is an important constrained ordination because it allows you to use other dissimilarity matrices (e.g. bray) that are non-euclidean in RDA (i.e. you don’t have the double zero problem). It makes a dissimilarity matrix, creates a PCoA, then runs an RDA of the principal coordinates created in the PCoA constrained by the explanatory variables.</p>
@@ -1881,16 +1951,20 @@ dbRDA</code></pre></div>
 
 <span class="co">#cap &lt;- CAPdiscrim(mont.spec.matrix.27 ~ Net_primary_productivity+ Relief + Exposure + Mangrove_connectivity + Denseseagrass_connectivity + Coral+ Depth + Protected_status_text , data=shannon.montast.env.site, dist=&quot;bray&quot;, axes=2, m=0, mmax=10, add=FALSE, permutations=0)</span></code></pre></div>
 <p>I couldn’t get this to work on my data, but wanted to have the code in case anyone else wanted to try it! It first became available in PRIMER but this is a tool you have to pay for.</p>
-<p><br><br><br></p>
-<p>Overall when you are evaluating multivariate data, Anderson and Willis (2003) suggest your analysis includes four steps:<br />
-1) robust unconstrained ordination (NMDS)<br />
-2) appropriate constrained ordination<br />
-3) statistical test of a hypothesis<br />
-4) characterize species responsible for the patterns</p>
-<p><br><br><br></p>
+<p>Overall when you are evaluating multivariate data, Anderson and Willis (2003) suggest your analysis includes four steps:</p>
+<ol style="list-style-type: decimal">
+<li>robust unconstrained ordination (NMDS)<br />
+</li>
+<li>appropriate constrained ordination<br />
+</li>
+<li>statistical test of a hypothesis<br />
+</li>
+<li>characterize species responsible for the patterns</li>
+</ol>
 </div>
-<div id="discussion-questions" class="section level4">
-<h4>Discussion Questions</h4>
+</div>
+<div id="discussion-questions" class="section level3">
+<h3>Discussion Questions</h3>
 <ol style="list-style-type: decimal">
 <li>How would you determine which species are responsible for the patterns when you have so many species on your plots that its hard to interpret?<br />
 </li>
@@ -1898,7 +1972,6 @@ dbRDA</code></pre></div>
 </li>
 <li>Have you used any packages to plot constrained ordinations?</li>
 </ol>
-</div>
 </div>
 
 
