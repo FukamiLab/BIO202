@@ -121,6 +121,12 @@ Use a symmetric methods when you don't have a hypothesis about the direction of 
 
 ### Analysis Example
 
+### Mantel test
+
+```{r}
+
+
+```
 
 
 ### Discussion Questions
