@@ -540,7 +540,7 @@ div.tocify {
 <li>Tests whether distances among objects are monotonically related to one another.</li>
 <li>Steps:
 <ul>
-<li>Compute a Mantel statistic that is the scalar product of the values product of (non-diagonal) values in (half of) the two distance matrices. (See Figure 10.19 on p. 599)
+<li>Compute a Mantel statistic that is the scalar product of the (non-diagonal) values in (half of) the two distance matrices. (See Figure 10.19 on p. 599)
 <ul>
 <li><span class="math inline">\(z_M\)</span> : raw distances</li>
 <li><span class="math inline">\(r_M\)</span> : use standardized distances and divide by <span class="math inline">\(n(n-1)/2 - 1\)</span> to get value between -1 and 1.</li>
@@ -551,7 +551,6 @@ div.tocify {
 <li>Distance matrices must be derived independently from one another on the same set of objects.</li>
 <li>Many applications of Mantel test probably should be done using canonical analysis(e.g. distribution of organisms with respect to environment controlling for distance among sites)</li>
 <li>Do not use Mantel test to make conclusions about correlations in the original data.</li>
-<li>R functions:</li>
 </ul>
 <p><strong>Analysis of Similarity (ANOSIM)</strong></p>
 <ul>
@@ -569,7 +568,8 @@ div.tocify {
 <ul>
 <li>Methods often used to jointly analyze variation two communities at the same set of sites.</li>
 <li>Do not use to compare matrices that measure the same variables (e.g. before-after studies or control-impact experiments) because the analysis does not know that the variables are the same. (Use RDA or PCA instead.)</li>
-<li>Both methods can handle more variables than observations (e.g. more species than sites) as well as collinearity among variables.</li>
+<li>Both co-inertia and procrustes analyses can handle more variables than observations (e.g. more species than sites) as well as collinearity among variables.</li>
+<li>Canonical correlation analysis (CCorA) is generally not recommended because it assumes multivariate normality of quantitative variables.</li>
 </ul>
 <p><strong>Co-inertia analysis</strong></p>
 <ul>
@@ -596,6 +596,12 @@ div.tocify {
 <li>Very similar to co-inertia analysis, but uses different matrices for plotting.</li>
 <li>PROTEST method: compute symmetric orthogonal Procrustes statistic <span class="math inline">\(m^2\)</span> to measure similarity between two data matrices.</li>
 </ul>
+<p><strong>Multiple factor analysis</strong></p>
+<ul>
+<li>Used to compare sets of variables- all variables within a set must be the same type.</li>
+<li>Compute PCA on each variable set separately, then compute PCA of concatenated PC axes from all sets (that are first multiplied by a number to give equal weight to each set).</li>
+<li>Project variable sets onto ordination plot to compare their correlation.</li>
+</ul>
 </div>
 <div id="r-packages-and-functions" class="section level4">
 <h4>R packages and functions</h4>
@@ -618,6 +624,7 @@ div.tocify {
 <ul>
 <li><code>mantel.rtest()</code></li>
 <li><code>coinertia()</code> on two separate ordinations produced by <code>dudi.pca()</code> or <code>dudi.pco()</code></li>
+<li><code>mfa()</code> on a <code>ktab</code> dataframe that divides variables into “blocks” produced by <code>ktab.data.frame()</code></li>
 </ul>
 </div>
 </div>
