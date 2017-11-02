@@ -50,7 +50,7 @@ Use a symmetric methods when you don't have a hypothesis about the direction of 
 + Box 10.2 on p. 600
 + Tests whether distances among objects are monotonically related to one another.
 + Steps:
-    + Compute a Mantel statistic that is the scalar product of the values product of (non-diagonal) values in (half of) the two distance matrices. (See Figure 10.19 on p. 599)
+    + Compute a Mantel statistic that is the scalar product of the (non-diagonal) values in (half of) the two distance matrices. (See Figure 10.19 on p. 599)
         + $z_M$ : raw distances
         + $r_M$ : use standardized distances and divide by $n(n-1)/2 - 1$ to get value between -1 and 1.
     + Test whether $z_M$ is significantly larger than expected by permuting the objects in one of the original data matrices used to compute one of the distance matrices. The generates a distribution of potential $z_M$ values under the null hypothesis.
@@ -58,7 +58,6 @@ Use a symmetric methods when you don't have a hypothesis about the direction of 
 + Distance matrices must be derived independently from one another on the same set of objects.
 + Many applications of Mantel test probably should be done using canonical analysis(e.g. distribution of organisms with respect to environment controlling for distance among sites)
 + Do not use Mantel test to make conclusions about correlations in the original data.
-+ R functions:
 
 **Analysis of Similarity (ANOSIM)**
 
@@ -72,7 +71,8 @@ Use a symmetric methods when you don't have a hypothesis about the direction of 
 
 + Methods often used to jointly analyze variation two communities at the same set of sites.
 + Do not use to compare matrices that measure the same variables (e.g. before-after studies or control-impact experiments) because the analysis does not know that the variables are the same. (Use RDA or PCA instead.)
-+ Both methods can handle more variables than observations (e.g. more species than sites) as well as collinearity among variables.
++ Both co-inertia and procrustes analyses can handle more variables than observations (e.g. more species than sites) as well as collinearity among variables.
++ Canonical correlation analysis (CCorA) is generally not recommended because it assumes multivariate normality of quantitative variables.
 
 **Co-inertia analysis**
 
@@ -94,6 +94,13 @@ Use a symmetric methods when you don't have a hypothesis about the direction of 
 + Algorithm rotates the matrices to minimize the sum of squared distances between corresponding objects.
 + Very similar to co-inertia analysis, but uses different matrices for plotting.
 + PROTEST method: compute symmetric orthogonal Procrustes statistic $m^2$ to measure similarity between two data matrices. 
+
+**Multiple factor analysis**
+
++ Used to compare sets of variables- all variables within a set must be the same type.
++ Compute PCA on each variable set separately, then compute PCA of concatenated PC axes from all sets (that are first multiplied by a number to give equal weight to each set).
++ Project variable sets onto ordination plot to compare their correlation.
+
 
 
 #### R packages and functions
@@ -117,6 +124,8 @@ Use a symmetric methods when you don't have a hypothesis about the direction of 
 
 + `mantel.rtest()`
 + `coinertia()` on two separate ordinations produced by `dudi.pca()` or `dudi.pco()`
++ `mfa()` on a `ktab` dataframe that divides variables into "blocks" produced by `ktab.data.frame()`
+
 
 
 ### Analysis Example
