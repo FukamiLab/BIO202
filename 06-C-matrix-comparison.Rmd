@@ -130,10 +130,215 @@ Use a symmetric methods when you don't have a hypothesis about the direction of 
 
 ### Analysis Example
 
+### Matrix comparisons
+
+The following tests are used to test relationships between association matrices (i.e. distance or similarity matrices) not raw data!
++ Mantel test
++ Partial Mantel test
++ Multiple regression on distance matrices
+
+``` {r, message = FALSE, warning = FALSE}
+# Load packages
+library(readr)
+library(dplyr)
+library(phyloseq)
+library(vegan)
+library(ade4)
+library(ggplot2)
+```
+
+
+``` {r, message = FALSE, echo = FALSE, results = "hide"}
+###########################################################################################
+# Load data   
+
+#####   CO1   #####
+# Read CO1 otu table (except first column), read CO1 tax table 
+otu.co <- as.matrix((read_csv("~/Documents/R/eco_stats/eco-stats-pro/data/psanjuan/otu_mat.csv", col_names = TRUE)[,-1]))
+tax.co <- as.matrix((read_csv("~/Documents/R/eco_stats/eco-stats-pro/data/psanjuan/taxonomy.csv", col_names = TRUE)[,]))
+
+# Add in rownames
+otu.name <- as.matrix((read_csv("~/Documents/R/eco_stats/eco-stats-pro/data/psanjuan/otu_mat.csv", col_names = TRUE)[,1]))
+otu.co1  <- otu.co[,1]
+rownames(otu.co) <- otu.name[,1]
+  
+# rownames(otu.co1) <- paste0("otu_", 1:nrow(otu.co1))        # paste "otu" followed by a number
+tax.co1 <- tax.co[,-1]                                        # subset the "tax.co" matrix (basically all the data)
+rownames(tax.co1) <- tax.co[,1]                               # name rows for "tax.co1" using "tax.co" first column as names
+
+# Read file into phyloseq
+OTU_co1 <- otu_table(otu.co, taxa_are_rows = TRUE)
+TAX_co1 <- tax_table(tax.co1)
+
+# Combining otu and tax tables
+co1.data <- phyloseq(OTU_co1, TAX_co1)
+
+# Read sample data file (contains all other metadata)
+sample.co1 <- sample_data(data.frame(read_csv("~/Documents/R/eco_stats/eco-stats-pro/data/psanjuan/sample_id.csv")))
+
+# Naming the the first rows using the first column
+row.names(sample.co1) = sample.co1$sample
+
+# Merging otu/tax with sampledata (may include master mix and negative controls)
+merged_co1 <- merge_phyloseq(co1.data, sample.co1)
+
+# Remove master mix and negative controls from phyloseq object
+rm.305 <- as.vector(data.frame(sample_data(merged_co1))$sample)
+rm.305 <- (!(rm.305%in%c("1_305")))
+rm.305[is.na(rm.305)] = FALSE
+merged_co1 = prune_samples(rm.305, merged_co1)
+
+#####   16S   #####
+# Read 16S otu and tax tables, except first column because it is not numeric
+otu.tab <- as.matrix((read_csv("~/Documents/R/eco_stats/eco-stats-pro/data/psanjuan/OTU_tab_renamed.csv", col_names = TRUE)[,-1]))
+tax.tab <- as.matrix((read_csv("~/Documents/R/eco_stats/eco-stats-pro/data/psanjuan/TAX_reorder_otu_name.csv", col_names = TRUE)[,-1]))
+
+# Add in rownames
+rownames(otu.tab) <- paste0("OTU", 1:nrow(otu.tab))         # paste "otu" followed by a number
+rownames(tax.tab) <- paste0("OTU", 1:nrow(tax.tab))         # paste "otu" followed by a number
+
+# Read file into phyloseq
+OTU <- otu_table(otu.tab, taxa_are_rows = TRUE)
+TAX <- tax_table(tax.tab)
+
+# Combining otu and tax tables
+Bac.data <- phyloseq(OTU, TAX)
+
+# Read sample data
+sampledata  <- sample_data(data.frame(read_csv("~/Documents/R/eco_stats/eco-stats-pro/data/psanjuan/samplesinfo.csv")))
+
+# Name the first rows using the first column
+row.names(sampledata) = sampledata$ID
+
+# Merge otu/tax with sample data (includes master mix and negative controls)
+merged_dataset <- merge_phyloseq(Bac.data, sampledata)
+
+# Remove master mix and negative controls from phyloseq object
+Real <- as.vector(data.frame(sample_data(merged_dataset))$Bird_species)
+Real <- (!(Real%in%c("MM", "NEG", "RCRW")))
+Real[is.na(Real)] = FALSE
+merged_dataset_Real = prune_samples(Real, merged_dataset)
+
+# Remove OTUs with bad BLAST matches
+kingdom  <- as.vector(data.frame(tax_table(merged_dataset_Real))$kingdom)
+tax.keep <- kingdom=="Bacteria"
+tax.keep[is.na(tax.keep)] = FALSE
+merged_dataset_Real <- prune_taxa(tax.keep,merged_dataset_Real)
+
+# Remove class chloroplast (likely plant DNA not bacteria)
+class <- as.vector(data.frame(tax_table(merged_dataset_Real))$class)
+class <- (!(class%in%c("Chloroplast")))
+class[is.na(class)] = FALSE
+merged_dataset_Real = prune_taxa(class, merged_dataset_Real)
+
+# Rarefaction of phyloseq object 
+data.bird.rarefaction <- rarefy_even_depth(physeq = merged_dataset_Real, sample.size = 2000, rngseed = 7, replace = FALSE, trimOTUs = TRUE, verbose = TRUE)
+
+###########################################################################################
+# FIX DIMENSIONS   
+
+# Using rarified data from microbial study
+otu_16s <- otu_table(data.bird.rarefaction)
+tax_16s <- tax_table(data.bird.rarefaction)       
+sam_16s <- sample_data(data.bird.rarefaction)
+
+# Nick's CO1 data - not rarified 
+otu_co1 <- otu_table(merged_co1)
+tax_co1 <- tax_table(merged_co1)                
+sam_co1 <- sample_data(merged_co1)
+
+# Subset microbial to CO1 data and CO1 to microbial data
+sub_16s <- sam_16s[sam_16s$ID %in% sam_co1$sample]
+sub_co1 <- sam_co1[sam_co1$sample %in% sam_16s$ID]
+
+# Re-merged phyloseq objects with subsetted sample data
+merged_16s <- merge_phyloseq(otu_16s, tax_16s, sub_16s)
+merged_CO1 <- merge_phyloseq(otu_co1, tax_co1, sub_co1)
+
+# Check dimensions to make sure samples match
+dim(otu_table(merged_CO1))
+dim(otu_table(merged_16s))
+```
+
+#### Mantel test
+
+Compare two distance/similarity matrices that were obtained independently of each other
+
+```{r}
+# Transpose otu tables from both phyloseqs and convert to data frame
+data_16s <- as.data.frame(t(otu_table(merged_16s)))
+data_CO1 <- as.data.frame(t(otu_table(merged_CO1)))
+
+# Calculate distance using Bray-Curtis
+DM16s <- distance(merged_16s,"bray")
+DMco1 <- distance(merged_CO1, "bray")
+
+# Mantel test (using three different methods)
+mantel(DMco1, DM16s, method = "pearson", permutations = 999)    
+mantel(DMco1, DM16s, method = "spearman", permutations = 999)    
+mantel(DMco1, DM16s, method = "kendall", permutations = 999)
+
+# Plot the distances against each other (just to see)
+plot(DMco1, DM16s, type = "p")
+
+
+```
+
+### Canonical Analysis
+
+- Used to analyze relationships between two rectangular data tables
+ 
+ The following tests can use raw data, not distance matrices (e.g. two community composition matrices)
+ 
+ * Co-interia analysis
+ * RV coefficient
+ * Procrustes 
+
+
+#### Co-inertia analysis
+
+* Search for common structures between two data sets describing the same objects by projecting them onto a common multivariate space
+* Uses two responses containing different variables
+
+```{r}
+dudi.16s <- dudi.pca(data_16s, scale=T, scan=F, nf=2)
+dudi.c01 <- dudi.pca(data_CO1, scale=T, scan=F, nf=2)
+co.in.data <- coinertia(dudi.16s, dudi.c01, scan=F, nf=2)
+summary(co.in.data)
+randtest(co.in.data, nrepet = 999)
+plot(co.in.data)
+```
+
+
+#### RV coefficient
+
+* multivariate generalization of Pearson correlation coefficient 
+* tests whether two matrices are linked
+* value is given through co-inertia analysis but can also try 
+
+`RV.rtest(data_16s, data_CO1)`
+
+
+#### Procrustes
+
+* measure of concordance, similarity, between two data matrices 
+* more powerful than Mantel test
+
+``` {r, warning = FALSE, results = "hide"}
+procrust.data <- protest(data_CO1, data_16s)
+summary(procrust.data)
+```
+
+``` {r, warning = FALSE}
+plot(procrust.data)
+```
 
 
 ### Discussion Questions
 
+* What are some examples of datasets that are compatible for these tests? Any rule of thumb to easily identify an appropriate test (beside trying all of them)?
+* Any experience with this type of analyses?
+* "Which method should be used for symmetric analysis of two data sets?"
 
 
 
