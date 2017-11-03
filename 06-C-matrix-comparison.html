@@ -595,13 +595,20 @@ div.tocify {
 <li>Many applications of Mantel test probably should be done using canonical analysis(e.g. distribution of organisms with respect to environment controlling for distance among sites)</li>
 <li>Do not use Mantel test to make conclusions about correlations in the original data.</li>
 </ul>
-<p><strong>Analysis of Similarity (ANOSIM)</strong></p>
+<p><strong>Analysis of Similarity (ANOSIM)</strong> and <strong>PERMANOVA</strong></p>
 <ul>
-<li>Tests whether distances between groups are greater than within groups.</li>
-<li>Steps:
+<li>ANOSIM tests whether distances between groups are greater than within groups.</li>
+<li>PERMANOVA tests whether distance differ between groups. This wasn’t in the original reading for class, but you can find the method in <a href="http://dx.doi.org/10.1111/j.1442-9993.2001.01070.pp.x">Anderson (2001)</a>.</li>
+<li>Both tests are sensitive to unbalanced designs and differences in dispersion (variance) within groups (e.g. not good when your groups have different variability). <a href="http://dx.doi.org/10.1890/12-2010.1">Anderson and Walsh (2013)</a> conducted a simulation-based comparison of PERMANOVA and ANOSIM and found that PERMANOVA is more robust in general for ecological data, but still sensitive to heterogeneity of variance among groups. You should evaluate this assumption before using either test.</li>
+<li>ANOSIM Steps:
 <ul>
 <li>Rank distances within the distance matrix, then compute the statistic <span class="math inline">\(R = \frac{mean(rank_{between}) - mean(rank_{within})}{n(n-1)/4}\)</span>.</li>
 <li>Test whether <span class="math inline">\(R\)</span> is larger than expected by permuting original objects.</li>
+</ul></li>
+<li>PERMANOVA Steps:
+<ul>
+<li>Calculate an F ratio comparing <span class="math inline">\(F \sim \frac{SS_{within groups}}{SS_across groups}\)</span>, where <span class="math inline">\(SS\)</span> means adding up the sum of the squares of the distances.</li>
+<li>Test whether <span class="math inline">\(F\)</span> is smaller than expected by chance by permuting the original objects.</li>
 </ul></li>
 <li>Groups should be defined <em>a priori</em> and not derived from distances.</li>
 </ul>
@@ -653,6 +660,8 @@ div.tocify {
 <li><code>mantel()</code></li>
 <li><code>protest()</code></li>
 <li><code>anosim()</code></li>
+<li><code>adonis()</code> for PERMANOVA</li>
+<li><code>betadisper()</code> for testing homogeneity of within-group variances</li>
 </ul>
 <p><code>ecodist</code>: functions for analysis of ecological dissimilarity</p>
 <ul>
