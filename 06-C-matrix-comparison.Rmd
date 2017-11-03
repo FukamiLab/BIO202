@@ -154,11 +154,11 @@ library(ggplot2)
 
 #####   CO1   #####
 # Read CO1 otu table (except first column), read CO1 tax table 
-otu.co <- as.matrix((read_csv("~/Documents/R/eco_stats/eco-stats-pro/data/psanjuan/otu_mat.csv", col_names = TRUE)[,-1]))
-tax.co <- as.matrix((read_csv("~/Documents/R/eco_stats/eco-stats-pro/data/psanjuan/taxonomy.csv", col_names = TRUE)[,]))
+otu.co <- as.matrix((read_csv("data/psanjuan/otu_mat.csv", col_names = TRUE)[,-1]))
+tax.co <- as.matrix((read_csv("data/psanjuan/taxonomy.csv", col_names = TRUE)[,]))
 
 # Add in rownames
-otu.name <- as.matrix((read_csv("~/Documents/R/eco_stats/eco-stats-pro/data/psanjuan/otu_mat.csv", col_names = TRUE)[,1]))
+otu.name <- as.matrix((read_csv("data/psanjuan/otu_mat.csv", col_names = TRUE)[,1]))
 otu.co1  <- otu.co[,1]
 rownames(otu.co) <- otu.name[,1]
   
@@ -174,7 +174,7 @@ TAX_co1 <- tax_table(tax.co1)
 co1.data <- phyloseq(OTU_co1, TAX_co1)
 
 # Read sample data file (contains all other metadata)
-sample.co1 <- sample_data(data.frame(read_csv("~/Documents/R/eco_stats/eco-stats-pro/data/psanjuan/sample_id.csv")))
+sample.co1 <- sample_data(data.frame(read_csv("data/psanjuan/sample_id.csv")))
 
 # Naming the the first rows using the first column
 row.names(sample.co1) = sample.co1$sample
@@ -190,8 +190,8 @@ merged_co1 = prune_samples(rm.305, merged_co1)
 
 #####   16S   #####
 # Read 16S otu and tax tables, except first column because it is not numeric
-otu.tab <- as.matrix((read_csv("~/Documents/R/eco_stats/eco-stats-pro/data/psanjuan/OTU_tab_renamed.csv", col_names = TRUE)[,-1]))
-tax.tab <- as.matrix((read_csv("~/Documents/R/eco_stats/eco-stats-pro/data/psanjuan/TAX_reorder_otu_name.csv", col_names = TRUE)[,-1]))
+otu.tab <- as.matrix((read_csv("data/psanjuan/OTU_tab_renamed.csv", col_names = TRUE)[,-1]))
+tax.tab <- as.matrix((read_csv("data/psanjuan/TAX_reorder_otu_name.csv", col_names = TRUE)[,-1]))
 
 # Add in rownames
 rownames(otu.tab) <- paste0("OTU", 1:nrow(otu.tab))         # paste "otu" followed by a number
@@ -205,7 +205,7 @@ TAX <- tax_table(tax.tab)
 Bac.data <- phyloseq(OTU, TAX)
 
 # Read sample data
-sampledata  <- sample_data(data.frame(read_csv("~/Documents/R/eco_stats/eco-stats-pro/data/psanjuan/samplesinfo.csv")))
+sampledata  <- sample_data(data.frame(read_csv("data/psanjuan/samplesinfo.csv")))
 
 # Name the first rows using the first column
 row.names(sampledata) = sampledata$ID
@@ -301,9 +301,9 @@ plot(DMco1, DM16s, type = "p")
 * Uses two responses containing different variables
 
 ```{r}
-dudi.16s <- dudi.pca(data_16s, scale=T, scan=F, nf=2)
-dudi.c01 <- dudi.pca(data_CO1, scale=T, scan=F, nf=2)
-co.in.data <- coinertia(dudi.16s, dudi.c01, scan=F, nf=2)
+dudi.16s <- dudi.pca(data_16s, scale=T, scan=F, nf=5)
+dudi.c01 <- dudi.pca(data_CO1, scale=T, scan=F, nf=5)
+co.in.data <- coinertia(dudi.16s, dudi.c01, scan=F, nf=5)
 summary(co.in.data)
 randtest(co.in.data, nrepet = 999)
 plot(co.in.data)
@@ -325,7 +325,13 @@ plot(co.in.data)
 * more powerful than Mantel test
 
 ``` {r, warning = FALSE, results = "hide"}
-procrust.data <- protest(data_CO1, data_16s)
+# Only run this once and then re-load
+#procrust.data <- protest(data_CO1, data_16s)
+
+# Save and reload the Procrustes analysis results
+#save(procrust.data, file = "data/psanjuan/procrust_data.RData")
+load("data/psanjuan/procrust_data.RData")
+
 summary(procrust.data)
 ```
 
