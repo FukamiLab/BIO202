@@ -59,13 +59,19 @@ Use a symmetric methods when you don't have a hypothesis about the direction of 
 + Many applications of Mantel test probably should be done using canonical analysis(e.g. distribution of organisms with respect to environment controlling for distance among sites)
 + Do not use Mantel test to make conclusions about correlations in the original data.
 
-**Analysis of Similarity (ANOSIM)**
+**Analysis of Similarity (ANOSIM)** and **PERMANOVA**
 
-+ Tests whether distances between groups are greater than within groups.
-+ Steps:
++ ANOSIM tests whether distances between groups are greater than within groups.
++ PERMANOVA tests whether distance differ between groups. This wasn't in the original reading for class, but you can find the method in [Anderson (2001)](http://dx.doi.org/10.1111/j.1442-9993.2001.01070.pp.x).
++ Both tests are sensitive to unbalanced designs and differences in dispersion (variance) within groups (e.g. not good when your groups have different variability). [Anderson and Walsh (2013)](http://dx.doi.org/10.1890/12-2010.1) conducted a simulation-based comparison of PERMANOVA and ANOSIM and found that PERMANOVA is more robust in general for ecological data, but still sensitive to heterogeneity of variance among groups. You should evaluate this assumption before using either test.
++ ANOSIM Steps:
     + Rank distances within the distance matrix, then compute the statistic $R = \frac{mean(rank_{between}) - mean(rank_{within})}{n(n-1)/4}$.
     + Test whether $R$ is larger than expected by permuting original objects.
++ PERMANOVA Steps:
+    + Calculate an F ratio comparing $F \sim \frac{SS_{within groups}}{SS_across groups}$, where $SS$ means adding up the sum of the squares of the distances.
+    + Test whether $F$ is smaller than expected by chance by permuting the original objects.
 + Groups should be defined *a priori* and not derived from distances.
+
 
 #### **Compare two data tables**
 
@@ -110,6 +116,8 @@ Use a symmetric methods when you don't have a hypothesis about the direction of 
 + `mantel()`
 + `protest()`
 + `anosim()`
++ `adonis()` for PERMANOVA
++ `betadisper()` for testing homogeneity of within-group variances
 
 `ecodist`: functions for analysis of ecological dissimilarity
 
