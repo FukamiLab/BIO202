@@ -1,0 +1,99 @@
+sample,bird,date,site,habitat,type
+1_01,RCWA,2/26/16,CHIN,Secondary Forest,Forest
+1_02,RCWA,3/12/16,FELO,High Cover Coffee,Coffee
+1_03,BTSA,2/24/16,COKI,High Cover Coffee,Coffee
+1_04,BTSA,2/_/16,SATE,High Cover Coffee,Coffee
+1_05,CCRO,2/24/16,COKI,High Cover Coffee,Coffee
+1_06,CCRO,2/12/16,PANA,Riparian Corridor,Forest
+1_07,YWAR,2/18/16,SABO,High Cover Coffee,Coffee
+1_08,YWAR,4/15/16,ISLA,High Cover Coffee,Coffee
+1_10,OBNT,1/20/16,CAGO,Secondary Forest,Forest
+1_11,SWTH,4/16/16,SAGA,Low Cover Coffee,Coffee
+1_12,SWTH,4/19/16,CAGO,Secondary Forest,Forest
+1_204,YWAR,2/3/16,SABO,High Cover Coffee,Coffee
+1_207,RCWA,4/25/16,PANA,Riparian Corridor,Forest
+1_208,RCWA,3/18/16,CHIN,Secondary Forest,Forest
+1_209,RCWA,1/18/16,CAGO,Secondary Forest,Forest
+1_210,RCWA,3/2/16,CHIN,Secondary Forest,Forest
+1_211,RCWA,2/3/16,PANA,Riparian Corridor,Forest
+1_212,RCWA,2/8/16,CAGO,Secondary Forest,Forest
+1_216,BTSA,3/1/16,SATE,High Cover Coffee,Coffee
+1_222,YWAR,4/15/16,ISLA,High Cover Coffee,Coffee
+1_223,YWAR,2/24/16,COKI,High Cover Coffee,Coffee
+1_224,SWTH,4/16/16,CAGO,Secondary Forest,Forest
+1_225,SWTH,4/16/16,CAGO,Secondary Forest,Forest
+1_227,SWTH,4/19/16,CAGO,Secondary Forest,Forest
+1_229,RCWA,4/27/16,QUST,Riparian Corridor,Forest
+1_230,RCWA,4/19/16,CAGO,Secondary Forest,Forest
+1_231,RCWA,3/3/16,PANA,Riparian Corridor,Forest
+1_232,RCWA,2/23/16,CHIN,Secondary Forest,Forest
+1_234,RCWA,2/18/16,SABO,High Cover Coffee,Coffee
+1_240,CCRO,2/11/16,FELO,High Cover Coffee,Coffee
+1_243,BTSA,19-Jan,MELI,Secondary Forest,Forest
+1_244,BTSA,23-Jan,MELI,Secondary Forest,Forest
+1_245,BTSA,4-Feb,COPA,Forest Fragment,Forest
+1_248,OBNT,25-Jan,PINO,Secondary Forest,Forest
+1_250,OBNT,14-Mar,FILA,Las Cruces Forest,Forest
+1_251,OBNT,14-Mar,FILA,Las Cruces Forest,Forest
+1_252,OBNT,3-Feb,PANA,Riparian Corridor,Forest
+1_253,OBNT,8-Feb,CAGO,Secondary Forest,Forest
+1_256,CCRO,16-Mar,FELO,High Cover Coffee,Coffee
+1_259,CCRO,16-Apr,SAGA,Low Cover Coffee,Coffee
+1_260,SWTH,25-Apr,COPA,Forest Fragment,Forest
+1_262,SWTH,19-Apr,LOAN,Forest Fragment,Forest
+1_263,SWTH,14-Apr,CHIN,Secondary Forest,Forest
+1_264,SWTH,16-Apr,CAGO,Secondary Forest,Forest
+1_267,CCRO,24-Feb,COKI,High Cover Coffee,Coffee
+1_269,CCRO,20-Apr,SAFR,Low Cover Coffee,Coffee
+1_272,BTSA,14-Apr,CHIN,Secondary Forest,Forest
+1_278,SWTH,16-Apr,CAGO,Secondary Forest,Forest
+1_279,SWTH,14-Apr,VALE,High Cover Coffee,Coffee
+1_280,SWTH,13-Apr,MELI,Secondary Forest,Forest
+1_282,SWTH,18-Apr,SARI,Riparian Corridor,Forest
+1_284,RCWA,14-Apr,VALE,High Cover Coffee,Coffee
+1_287,RCWA,21-Apr,QUST,Riparian Corridor,Forest
+1_291,SWTH,1/22/16,CAGO,Secondary Forest,Forest
+1_299,SWTH,4/16/16,CAGO,Secondary Forest,Forest
+1_300,SWTH,4/25/16,COPA,Forest Fragment,Forest
+1_303,BTSA,3/16/16,FELO,High Cover Coffee,Coffee
+1_305,SWTH,2/29/16,FILA,Las Cruces Forest,Forest
+1_311,BTSA,4/19/16,VALE,High Cover Coffee,Coffee
+1_324,OBNT,4/25/16,LOAN,Forest Fragment,Forest
+1_34,RCWA,3/16/16,VALE,High Cover Coffee,Coffee
+1_35,RCWA,2/16/16,GAPA,Las Cruces Forest,Forest
+1_36,RCWA,3/10/16,SATE,High Cover Coffee,Coffee
+1_37,RCWA,3/8/16,COKI,High Cover Coffee,Coffee
+1_38,RCWA,2/10/16,COKI,High Cover Coffee,Coffee
+1_40,RCWA,3/5/16,SARI,Riparian Corridor,Forest
+1_41,RCWA,2/22/16,MANC,Riparian Corridor,Forest
+1_42,RCWA,2/16/16,GAPA,Las Cruces Forest,Forest
+1_43,RCWA,3/16/16,VALE,High Cover Coffee,Coffee
+1_44,CCRO,4/23/16,ISLA,High Cover Coffee,Coffee
+1_47,YWAR,1/20/16,SAGA,Low Cover Coffee,Coffee
+1_48,YWAR,4/18/16,COKI,High Cover Coffee,Coffee
+1_49,YWAR,2/3/16,SABO,High Cover Coffee,Coffee
+1_50,RCWA,2/16/16,CHIN,Secondary Forest,Forest
+1_52,SWTH,4/16/16,CAGO,Secondary Forest,Forest
+1_53,SWTH,4/16/16,CAGO,Secondary Forest,Forest
+1_56,YWAR,4/20/16,SAFR,Low Cover Coffee,Coffee
+1_57,YWAR,2/3/16,SABO,High Cover Coffee,Coffee
+1_58,YWAR,3/9/16,SAFR,Low Cover Coffee,Coffee
+1_59,YWAR,4/15/16,ISLA,High Cover Coffee,Coffee
+1_60,YWAR,2/25/16,SABO,High Cover Coffee,Coffee
+1_61,YWAR,2/24/16,COKI,High Cover Coffee,Coffee
+1_62,YWAR,4/15/16,ISLA,High Cover Coffee,Coffee
+1_63,YWAR,4/18/16,COKI,High Cover Coffee,Coffee
+1_64,YWAR,3/16/16,FELO,High Cover Coffee,Coffee
+1_65,YWAR,2/25/16,SABO,High Cover Coffee,Coffee
+1_67,OBNT,4/14/16,CHIN,Secondary Forest,Forest
+1_68,RCWA,4/23/16,ISLA,High Cover Coffee,Coffee
+1_69,RCWA,3/15/16,GAPA,Las Cruces Forest,Forest
+1_70,YWAR,2/1/16,ELPU,Low Cover Coffee,Coffee
+1_71,YWAR,3/2/16,FELO,High Cover Coffee,Coffee
+1_72,YWAR,3/16/16,FELO,High Cover Coffee,Coffee
+1_75,OBNT,2/25/16,PANA,Riparian Corridor,Forest
+1_76,YWAR,2/26/16,VALE,High Cover Coffee,Coffee
+1_78,RCWA,2/18/16,VALE,High Cover Coffee,Coffee
+1_80,SWTH,3/14/16,FILA,Las Cruces Forest,Forest
+1_82,OBNT,2/3/16,PANA,Riparian Corridor,Forest
+1_89,BTSA,1/20/16,CAGO,Secondary Forest,Forest
