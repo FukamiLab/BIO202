@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Jes &amp; Priscilla" />
+
+
+<title>Comparing multivariate data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="00-computer-setup.html">Computer Setup</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W1
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01-A-R-intro.html">Intro to R</a>
+    </li>
+    <li>
+      <a href="01-B-Rmarkdown-intro.html">R markdown</a>
+    </li>
+    <li>
+      <a href="01-C-R-workshop.html">R workshop</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W2
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="02-A-tidyr.html">ggplot2 and tidyr</a>
+    </li>
+    <li>
+      <a href="02-B-git-intro.html">Intro to git</a>
+    </li>
+    <li>
+      <a href="02-C-student-projects.html">Project introductions</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W3
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="03-A-data-exploration.html">Data exploration</a>
+    </li>
+    <li>
+      <a href="03-B-linear-models.html">Linear models</a>
+    </li>
+    <li>
+      <a href="03-C-heterogeneity.html">Heterogeneity</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W4
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="04-A-mixed-models.html">Mixed effects models</a>
+    </li>
+    <li>
+      <a href="04-B-binary-data.html">Binary &amp; proportional data</a>
+    </li>
+    <li>
+      <a href="04-C-zero-data.html">Zero-inflated data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W5
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="05-A-Bayesian-linear-models.html">Bayesian linear models</a>
+    </li>
+    <li>
+      <a href="05-B-Bayesian-priors.html">Bayesian inference with prior information</a>
+    </li>
+    <li>
+      <a href="05-C-Advanced-bayesian-example.html">Advanced Bayesian model example</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W6
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="06-A-unconstrained-ordination.html">Unconstrained ordination</a>
+    </li>
+    <li>
+      <a href="06-B-constrained-ordination.html">Constrained ordination</a>
+    </li>
+    <li>
+      <a href="06-C-matrix-comparison.html">Comparing multivariate data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W7
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="07-midquarter-anna.html">Anna</a>
+    </li>
+    <li>
+      <a href="07-midquarter-beth.html">Beth</a>
+    </li>
+    <li>
+      <a href="07-midquarter-jamie.html">Jamie</a>
+    </li>
+    <li>
+      <a href="07-midquarter-lizzie.html">Lizzie</a>
+    </li>
+    <li>
+      <a href="07-midquarter-marissa.html">Marissa</a>
+    </li>
+    <li>
+      <a href="07-midquarter-meghan.html">Meghan</a>
+    </li>
+    <li>
+      <a href="07-midquarter-nick.html">Nick</a>
+    </li>
+    <li>
+      <a href="07-midquarter-nicole.html">Nicole</a>
+    </li>
+    <li>
+      <a href="07-midquarter-priscilla.html">Priscilla</a>
+    </li>
+    <li>
+      <a href="07-midquarter-sandra.html">Sandra</a>
+    </li>
+    <li>
+      <a href="07-midquarter-tyler.html">Tyler</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W8
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="08-A-mapping.html">Visualizing spatial data</a>
+    </li>
+    <li>
+      <a href="08-B-spatial-regression.html">Spatial regression</a>
+    </li>
+    <li>
+      <a href="08-C-spatial-ordination.html">Ordination approach to spatial analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W9
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="09-A-topic-name.html">Topic 19</a>
+    </li>
+    <li>
+      <a href="09-B-topic-name.html">Topic 20</a>
+    </li>
+    <li>
+      <a href="09-C-topic-name.html">Topic 21</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W10
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="10-final-anna.html">Anna</a>
+    </li>
+    <li>
+      <a href="10-final-beth.html">Beth</a>
+    </li>
+    <li>
+      <a href="10-final-jamie.html">Jamie</a>
+    </li>
+    <li>
+      <a href="10-final-lizzie.html">Lizzie</a>
+    </li>
+    <li>
+      <a href="10-final-marissa.html">Marissa</a>
+    </li>
+    <li>
+      <a href="10-final-meghan.html">Meghan</a>
+    </li>
+    <li>
+      <a href="10-final-nick.html">Nick</a>
+    </li>
+    <li>
+      <a href="10-final-nicole.html">Nicole</a>
+    </li>
+    <li>
+      <a href="10-final-priscilla.html">Priscilla</a>
+    </li>
+    <li>
+      <a href="07-midquarter-sandra.html">Sandra</a>
+    </li>
+    <li>
+      <a href="10-final-tyler.html">Tyler</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Comparing multivariate data</h1>
+<h3 class="subtitle"><em>Symmetric methods for comparing two matrices</em></h3>
+<h4 class="author"><em>Jes &amp; Priscilla</em></h4>
+
+</div>
+
+
+<p><strong>Assigned Reading:</strong></p>
+<blockquote>
+<p>Sections 10.5 (p. 597) and 11.5 (p. 696) from: Legendre, P. and L. Legendre. 2012. <em>Numerical Ecology</em>. Elsevier. <a href="http://www.sciencedirect.com/science/bookseries/01678892/24">link</a></p>
+</blockquote>
+<p><em>Skim the math to whatever degree you desire.</em></p>
+<div id="key-points" class="section level3">
+<h3>Key Points</h3>
+<p>Use a symmetric methods when you don’t have a hypothesis about the direction of effects between two matrices.</p>
+<p><em>Examples? Counter-examples?</em></p>
+<div id="compare-similaritydistance-matrices" class="section level4">
+<h4><strong>Compare similarity/distance matrices</strong></h4>
+<p><em>“These methods should not be used to test hypotheses about relationships between the original data tables.”</em></p>
+<ul>
+<li>Use Chapter 7 to choose an appropriate distance measure for your data.</li>
+</ul>
+<p><strong>Mantel test</strong></p>
+<ul>
+<li>Box 10.2 on p. 600</li>
+<li>Tests whether distances among objects are monotonically related to one another.</li>
+<li>Steps:
+<ul>
+<li>Compute a Mantel statistic that is the scalar product of the (non-diagonal) values in (half of) the two distance matrices. (See Figure 10.19 on p. 599)
+<ul>
+<li><span class="math inline">\(z_M\)</span> : raw distances</li>
+<li><span class="math inline">\(r_M\)</span> : use standardized distances and divide by <span class="math inline">\(n(n-1)/2 - 1\)</span> to get value between -1 and 1.</li>
+</ul></li>
+<li>Test whether <span class="math inline">\(z_M\)</span> is significantly larger than expected by permuting the objects in one of the original data matrices used to compute one of the distance matrices. The generates a distribution of potential <span class="math inline">\(z_M\)</span> values under the null hypothesis.</li>
+</ul></li>
+<li>Use Spearman (rank-based) correlation coefficient is non-linearity expected.</li>
+<li>Distance matrices must be derived independently from one another on the same set of objects.</li>
+<li>Many applications of Mantel test probably should be done using canonical analysis(e.g. distribution of organisms with respect to environment controlling for distance among sites)</li>
+<li>Do not use Mantel test to make conclusions about correlations in the original data.</li>
+</ul>
+<p><strong>Analysis of Similarity (ANOSIM)</strong></p>
+<ul>
+<li>Tests whether distances between groups are greater than within groups.</li>
+<li>Steps:
+<ul>
+<li>Rank distances within the distance matrix, then compute the statistic <span class="math inline">\(R = \frac{mean(rank_{between}) - mean(rank_{within})}{n(n-1)/4}\)</span>.</li>
+<li>Test whether <span class="math inline">\(R\)</span> is larger than expected by permuting original objects.</li>
+</ul></li>
+<li>Groups should be defined <em>a priori</em> and not derived from distances.</li>
+</ul>
+</div>
+<div id="compare-two-data-tables" class="section level4">
+<h4><strong>Compare two data tables</strong></h4>
+<ul>
+<li>Methods often used to jointly analyze variation two communities at the same set of sites.</li>
+<li>Do not use to compare matrices that measure the same variables (e.g. before-after studies or control-impact experiments) because the analysis does not know that the variables are the same. (Use RDA or PCA instead.)</li>
+<li>Both co-inertia and procrustes analyses can handle more variables than observations (e.g. more species than sites) as well as collinearity among variables.</li>
+<li>Canonical correlation analysis (CCorA) is generally not recommended because it assumes multivariate normality of quantitative variables.</li>
+</ul>
+<p><strong>Co-inertia analysis</strong></p>
+<ul>
+<li>Creates an ordination based on two covariance between two data matrices and plots both matrices in the same ordination space along with their variables.</li>
+<li>Steps:
+<ul>
+<li>Calculate cross-covariance matrix between variables in two matrices.</li>
+<li>Calculate eigenvalues and eigenvectors of covariance matrix. Eigenvectors give the axes of the ordination.</li>
+<li>Project the two matrices in the ordination space and use arrows to connect the two points measured on the same object.</li>
+<li>Add arrows for each of the variables in the two matrices.</li>
+</ul></li>
+<li>The total co-inertia is the sum of the squared covariances and the eigenvalues partition this among ordination axes.</li>
+<li>Co-inertia analysis will preserve Euclidean or Mahalanois distances between objects depending on how projected matrices are scaled.</li>
+<li>Can use data transformations prior to analysis (recommended for species occurrence data).
+<ul>
+<li>If so, do a principal coordinate analysis on the two distance martices and use the axes corresponding to positive eigenvalues as the data tables input into co-inertia analysis.</li>
+</ul></li>
+<li><span class="math inline">\(RV\)</span> coefficient is a statistic that measures correlation of two data matrices whose significance is tested by permutation.</li>
+</ul>
+<p><strong>Procrustes analysis</strong></p>
+<ul>
+<li>Creates a “compromise” ordination of two matrices measured on the same objects in order to visualize differences between two martices.</li>
+<li>Algorithm rotates the matrices to minimize the sum of squared distances between corresponding objects.</li>
+<li>Very similar to co-inertia analysis, but uses different matrices for plotting.</li>
+<li>PROTEST method: compute symmetric orthogonal Procrustes statistic <span class="math inline">\(m^2\)</span> to measure similarity between two data matrices.</li>
+</ul>
+<p><strong>Multiple factor analysis</strong></p>
+<ul>
+<li>Used to compare sets of variables- all variables within a set must be the same type.</li>
+<li>Compute PCA on each variable set separately, then compute PCA of concatenated PC axes from all sets (that are first multiplied by a number to give equal weight to each set).</li>
+<li>Project variable sets onto ordination plot to compare their correlation.</li>
+</ul>
+</div>
+<div id="r-packages-and-functions" class="section level4">
+<h4>R packages and functions</h4>
+<p><code>vegan</code>: functions for community composition analysis</p>
+<ul>
+<li><code>mantel()</code></li>
+<li><code>protest()</code></li>
+<li><code>anosim()</code></li>
+</ul>
+<p><code>ecodist</code>: functions for analysis of ecological dissimilarity</p>
+<ul>
+<li><code>mantel()</code></li>
+<li><code>MRM()</code></li>
+</ul>
+<p><code>ape</code>: functions fo phylogenetic analysis</p>
+<ul>
+<li><code>mantel.test()</code></li>
+</ul>
+<p><code>ade4</code>: functions for multivariate analysis for ecologists</p>
+<ul>
+<li><code>mantel.rtest()</code></li>
+<li><code>coinertia()</code> on two separate ordinations produced by <code>dudi.pca()</code> or <code>dudi.pco()</code></li>
+<li><code>mfa()</code> on a <code>ktab</code> dataframe that divides variables into “blocks” produced by <code>ktab.data.frame()</code></li>
+</ul>
+</div>
+</div>
+<div id="analysis-example" class="section level3">
+<h3>Analysis Example</h3>
+</div>
+<div id="matrix-comparisons" class="section level3">
+<h3>Matrix comparisons</h3>
+<p>The following tests are used to test relationships between association matrices (i.e. distance or similarity matrices) not raw data! + Mantel test + Partial Mantel test + Multiple regression on distance matrices</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load packages</span>
+<span class="kw">library</span>(readr)
+<span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(phyloseq)
+<span class="kw">library</span>(vegan)
+<span class="kw">library</span>(ade4)
+<span class="kw">library</span>(ggplot2)</code></pre></div>
+<div id="mantel-test" class="section level4">
+<h4>Mantel test</h4>
+<p>Compare two distance/similarity matrices that were obtained independently of each other</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Transpose otu tables from both phyloseqs and convert to data frame</span>
+data_16s &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(<span class="kw">otu_table</span>(merged_16s)))
+data_CO1 &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(<span class="kw">otu_table</span>(merged_CO1)))
+
+<span class="co"># Calculate distance using Bray-Curtis</span>
+DM16s &lt;-<span class="st"> </span><span class="kw">distance</span>(merged_16s,<span class="st">&quot;bray&quot;</span>)
+DMco1 &lt;-<span class="st"> </span><span class="kw">distance</span>(merged_CO1, <span class="st">&quot;bray&quot;</span>)
+
+<span class="co"># Mantel test (using three different methods)</span>
+<span class="kw">mantel</span>(DMco1, DM16s, <span class="dt">method =</span> <span class="st">&quot;pearson&quot;</span>, <span class="dt">permutations =</span> <span class="dv">999</span>)    </code></pre></div>
+<pre><code>## 
+## Mantel statistic based on Pearson&#39;s product-moment correlation 
+## 
+## Call:
+## mantel(xdis = DMco1, ydis = DM16s, method = &quot;pearson&quot;, permutations = 999) 
+## 
+## Mantel statistic r: 0.1919 
+##       Significance: 0.004 
+## 
+## Upper quantiles of permutations (null model):
+##    90%    95%  97.5%    99% 
+## 0.0508 0.0797 0.0999 0.1480 
+## Permutation: free
+## Number of permutations: 999</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mantel</span>(DMco1, DM16s, <span class="dt">method =</span> <span class="st">&quot;spearman&quot;</span>, <span class="dt">permutations =</span> <span class="dv">999</span>)    </code></pre></div>
+<pre><code>## 
+## Mantel statistic based on Spearman&#39;s rank correlation rho 
+## 
+## Call:
+## mantel(xdis = DMco1, ydis = DM16s, method = &quot;spearman&quot;, permutations = 999) 
+## 
+## Mantel statistic r: 0.1369 
+##       Significance: 0.003 
+## 
+## Upper quantiles of permutations (null model):
+##    90%    95%  97.5%    99% 
+## 0.0700 0.0897 0.1065 0.1190 
+## Permutation: free
+## Number of permutations: 999</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mantel</span>(DMco1, DM16s, <span class="dt">method =</span> <span class="st">&quot;kendall&quot;</span>, <span class="dt">permutations =</span> <span class="dv">999</span>)</code></pre></div>
+<pre><code>## 
+## Mantel statistic based on Kendall&#39;s rank correlation tau 
+## 
+## Call:
+## mantel(xdis = DMco1, ydis = DM16s, method = &quot;kendall&quot;, permutations = 999) 
+## 
+## Mantel statistic r: 0.1113 
+##       Significance: 0.012 
+## 
+## Upper quantiles of permutations (null model):
+##    90%    95%  97.5%    99% 
+## 0.0642 0.0813 0.0915 0.1148 
+## Permutation: free
+## Number of permutations: 999</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot the distances against each other (just to see)</span>
+<span class="kw">plot</span>(DMco1, DM16s, <span class="dt">type =</span> <span class="st">&quot;p&quot;</span>)</code></pre></div>
+<p><img src="images/06-C/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+</div>
+<div id="canonical-analysis" class="section level3">
+<h3>Canonical Analysis</h3>
+<ul>
+<li>Used to analyze relationships between two rectangular data tables</li>
+</ul>
+<p>The following tests can use raw data, not distance matrices (e.g. two community composition matrices)</p>
+<ul>
+<li>Co-interia analysis</li>
+<li>RV coefficient</li>
+<li>Procrustes</li>
+</ul>
+<div id="co-inertia-analysis" class="section level4">
+<h4>Co-inertia analysis</h4>
+<ul>
+<li>Search for common structures between two data sets describing the same objects by projecting them onto a common multivariate space</li>
+<li>Uses two responses containing different variables</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dudi.16s &lt;-<span class="st"> </span><span class="kw">dudi.pca</span>(data_16s, <span class="dt">scale=</span>T, <span class="dt">scan=</span>F, <span class="dt">nf=</span><span class="dv">5</span>)
+dudi.c01 &lt;-<span class="st"> </span><span class="kw">dudi.pca</span>(data_CO1, <span class="dt">scale=</span>T, <span class="dt">scan=</span>F, <span class="dt">nf=</span><span class="dv">5</span>)
+co.in.data &lt;-<span class="st"> </span><span class="kw">coinertia</span>(dudi.16s, dudi.c01, <span class="dt">scan=</span>F, <span class="dt">nf=</span><span class="dv">5</span>)
+<span class="kw">summary</span>(co.in.data)</code></pre></div>
+<pre><code>## Coinertia analysis
+## 
+## Class: coinertia dudi
+## Call: coinertia(dudiX = dudi.16s, dudiY = dudi.c01, scannf = F, nf = 5)
+## 
+## Total inertia: 5763
+## 
+## Eigenvalues:
+##     Ax1     Ax2     Ax3     Ax4     Ax5 
+##   665.7   547.4   513.0   420.8   379.7 
+## 
+## Projected inertia (%):
+##     Ax1     Ax2     Ax3     Ax4     Ax5 
+##  11.550   9.498   8.901   7.301   6.588 
+## 
+## Cumulative projected inertia (%):
+##     Ax1   Ax1:2   Ax1:3   Ax1:4   Ax1:5 
+##   11.55   21.05   29.95   37.25   43.84 
+## 
+## (Only 5 dimensions (out of 36) are shown)
+## 
+## Eigenvalues decomposition:
+##        eig    covar      sdX      sdY      corr
+## 1 665.6710 25.80060 6.254968 4.257402 0.9688579
+## 2 547.4037 23.39666 9.136070 2.684524 0.9539535
+## 3 512.9977 22.64945 8.737747 2.794415 0.9276142
+## 4 420.8116 20.51369 7.022618 4.022149 0.7262508
+## 5 379.6807 19.48540 7.333985 3.131459 0.8484427
+## 
+## Inertia &amp; coinertia X (dudi.16s):
+##         inertia      max     ratio
+## 1      39.12463 118.1844 0.3310474
+## 12    122.59240 222.3012 0.5514699
+## 123   198.94062 311.9950 0.6376404
+## 1234  248.25778 387.0472 0.6414147
+## 12345 302.04511 455.8617 0.6625805
+## 
+## Inertia &amp; coinertia Y (dudi.c01):
+##        inertia      max     ratio
+## 1     18.12547 21.19416 0.8552106
+## 12    25.33214 39.64262 0.6390127
+## 123   33.14089 48.89262 0.6778301
+## 1234  49.31858 58.03207 0.8498505
+## 12345 59.12461 66.77656 0.8854097
+## 
+## RV:
+##  0.518941</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">randtest</span>(co.in.data, <span class="dt">nrepet =</span> <span class="dv">999</span>)</code></pre></div>
+<pre><code>## Monte-Carlo test
+## Call: randtest.coinertia(xtest = co.in.data, nrepet = 999)
+## 
+## Observation: 0.518941 
+## 
+## Based on 999 replicates
+## Simulated p-value: 0.927 
+## Alternative hypothesis: greater 
+## 
+##      Std.Obs  Expectation     Variance 
+## -1.342338615  0.601967484  0.003825686</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(co.in.data)</code></pre></div>
+<p><img src="images/06-C/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="rv-coefficient" class="section level4">
+<h4>RV coefficient</h4>
+<ul>
+<li>multivariate generalization of Pearson correlation coefficient</li>
+<li>tests whether two matrices are linked</li>
+<li>value is given through co-inertia analysis but can also try</li>
+</ul>
+<p><code>RV.rtest(data_16s, data_CO1)</code></p>
+</div>
+<div id="procrustes" class="section level4">
+<h4>Procrustes</h4>
+<ul>
+<li>measure of concordance, similarity, between two data matrices</li>
+<li>more powerful than Mantel test</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Only run this once and then re-load</span>
+<span class="co">#procrust.data &lt;- protest(data_CO1, data_16s)</span>
+
+<span class="co"># Save and reload the Procrustes analysis results</span>
+<span class="co">#save(procrust.data, file = &quot;data/psanjuan/procrust_data.RData&quot;)</span>
+<span class="kw">load</span>(<span class="st">&quot;data/psanjuan/procrust_data.RData&quot;</span>)
+
+<span class="kw">summary</span>(procrust.data)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(procrust.data)</code></pre></div>
+<p><img src="images/06-C/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+</div>
+<div id="discussion-questions" class="section level3">
+<h3>Discussion Questions</h3>
+<ul>
+<li>What are some examples of datasets that are compatible for these tests? Any rule of thumb to easily identify an appropriate test (beside trying all of them)?</li>
+<li>Any experience with this type of analyses?</li>
+<li>“Which method should be used for symmetric analysis of two data sets?”</li>
+</ul>
+</div>
+<div id="further-readings" class="section level3">
+<h3>Further Readings</h3>
+<p>For information on three-table methods see:</p>
+<ul>
+<li>Dray, S. P. et al. 2014. Combining the fourth-corner and RLQ methods for assessing trait responses to environmental variation. <em>Ecology</em> <strong>95</strong>: 14-21. <a href="http://dx.doi.org/10.1890/13-0196.1">DOI: 10.1890/13-0196.1</a>. and Supplement 1: A tutorial to perform fourth-corner and RLQ analyses in R. <a href="http://esapubs.org/archive/ecol/E095/002/suppl-1.php">Ecological Archives E095-002-S1</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
