@@ -37,6 +37,94 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
+#### Types of spatial data
+
+There are two main ways to represent spatial data:
+
++ **raster**: a grid of values with a grain size and spatial extent
++ **vector**: a set of points, lines and polygons defined by their coordinates
+
+The way spatial data are displayed depends on their projection or coordinate reference system (CRS). Some projections preserve distances between points whereas others presernce area or angles. *Know what the projection you are using does to distances before measuring distances between points using their coordinates.*
+
+#### How R handles spatial data
+
+The package `sp` has many of the base methods for handling spatial data in R. The package `rgdal` is needed to support different projections.
+
+Objects in R that contain spatial information have a special class "Spatial". This means that they have information on the projection (stored as `proj4string`) and the broadest extent of the data (stored as a bounding rectangle/box `bbox`).
+
+There are special classes for each type of spatial data:
+
++ `SpatialPoints` and `SpatialPointsDataFrame`
++ `SpatialLines` and `SpatialLinesDataFrame`
++ `SpatialPolygons` and `SpatialPolygonsDataFrame` (definitely read Chp 2 if you need to work with polygon data)
++ `SpatialGrid` and `SpatialGridDataFrame` or `SpatialPixels` and `SpatialPixelsDataFrame` (use the `raster` package if you are mostly working with gridded data- it stores information much more efficiently and is easier to use).
+
+Use the `CRS()` function to add a projection to data to turn it into spatial data. `CRS` accepts text formatted according to the proj.4 framework, which looks like:
+
+`CRS("+proj=longlat +ellps=WGS84")`
+
+This tells R that the coordinates in the associated data are in longitude and latitude and that the model of the shape of the earth that should be used (WGS84). [This tutorial](http://rspatial.org/spatial/rst/6-crs.html) gives an explanation of coordinate reference systems in R and its parent website is a great resources for spatial analysis in R.
+
+Other links:
+
++ [Here](http://proj4.org/projections/index.html) is a list of how to specify the different projections in the proj.4 framework.
++ [Here](http://proj4.org/parameters.html#parameter-list) is a list of how to specify other parameters, like the center of the projection and the units.
+
+#### Visualizing spatial data in R
+
+**Base graphics** 
+
+Use: `plot()` and `image()`
+
+Pros:
+
+  + build layer by layer with separate function calls
+  + same basic functions used to plot regular data
+
+Cons:
+
+  + duplicated code when plotting the same map for multiple variables
+  + manually map variables to visual attributes (must create your own scales)
+  + manually make legends
+
+
+**Grid graphics (e.g. `lattice`)**
+
+`spplot()` is based on `xyplot()` for point data and `levelplot()` for grid data.
+
+Pros:
+
+  + conditional plots (same code makes multiple maps with different variables)
+  + automatic scaling of variables mapped to visual attributes
+  + automatic legends
+
+Cons:
+
+  + dense and cryptic documentation makes it hard to learn how to customize
+  
+**ggplot2**
+
+Use: `ggplot()`
+
+Pros:
+
+  + no special handling of spatial data once spatial data is converted to a dataframe
+  + conditional plots (same code makes multiple maps with different variables)
+  + automatic scaling of variables mapped to visual attributes
+  + automatic legends
+
+Cons:
+
+  + `ggplot` doesn't work automatically on SpatialPointsDataFrames or gridded data.
+  + `geom_grid` and `geom_tile` are for gridded data but may be inefficient for very large grids because data must be supplied in long form rather than a matrix of values.
+
+
+#### Colors
+
+Useful functions:
+
++ `colorRampPalette()` makes a color ramp between the indicated colors with a given number of colors
++ `classIntervals()` creates set of intervals between two numbers with breaks between intervals defined in different ways.
 
 
 ### Analysis Example
