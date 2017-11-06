@@ -425,48 +425,6 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    W7
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="07-midquarter-anna.html">Anna</a>
-    </li>
-    <li>
-      <a href="07-midquarter-beth.html">Beth</a>
-    </li>
-    <li>
-      <a href="07-midquarter-jamie.html">Jamie</a>
-    </li>
-    <li>
-      <a href="07-midquarter-lizzie.html">Lizzie</a>
-    </li>
-    <li>
-      <a href="07-midquarter-marissa.html">Marissa</a>
-    </li>
-    <li>
-      <a href="07-midquarter-meghan.html">Meghan</a>
-    </li>
-    <li>
-      <a href="07-midquarter-nick.html">Nick</a>
-    </li>
-    <li>
-      <a href="07-midquarter-nicole.html">Nicole</a>
-    </li>
-    <li>
-      <a href="07-midquarter-priscilla.html">Priscilla</a>
-    </li>
-    <li>
-      <a href="07-midquarter-sandra.html">Sandra</a>
-    </li>
-    <li>
-      <a href="07-midquarter-tyler.html">Tyler</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     W8
      
     <span class="caret"></span>
@@ -491,55 +449,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="09-A-topic-name.html">Topic 19</a>
+      <a href="09-A-time-series.html">Time series</a>
     </li>
     <li>
-      <a href="09-B-topic-name.html">Topic 20</a>
+      <a href="09-B-networks.html">Network analysis</a>
     </li>
     <li>
-      <a href="09-C-topic-name.html">Topic 21</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    W10
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="10-final-anna.html">Anna</a>
-    </li>
-    <li>
-      <a href="10-final-beth.html">Beth</a>
-    </li>
-    <li>
-      <a href="10-final-jamie.html">Jamie</a>
-    </li>
-    <li>
-      <a href="10-final-lizzie.html">Lizzie</a>
-    </li>
-    <li>
-      <a href="10-final-marissa.html">Marissa</a>
-    </li>
-    <li>
-      <a href="10-final-meghan.html">Meghan</a>
-    </li>
-    <li>
-      <a href="10-final-nick.html">Nick</a>
-    </li>
-    <li>
-      <a href="10-final-nicole.html">Nicole</a>
-    </li>
-    <li>
-      <a href="10-final-priscilla.html">Priscilla</a>
-    </li>
-    <li>
-      <a href="07-midquarter-sandra.html">Sandra</a>
-    </li>
-    <li>
-      <a href="10-final-tyler.html">Tyler</a>
+      <a href="09-C-occupancy-models.html">Occupancy models</a>
     </li>
   </ul>
 </li>
@@ -738,7 +654,7 @@ Loyn &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span clas
 <h5>Parameter: Intercept and slope (<span class="math inline">\(\hat{\beta_k}\)</span>)</h5>
 <p>Unfortunately, I’m not that familiar with the “bird density and altitude” literature, so I don’t know what an optimal prior should look like. However, it is reasonable to assume that the intercept and the slope parameters can range from negative to positive values and that values near the endpoints (moving towards <span class="math inline">\(-\infty\)</span> and <span class="math inline">\(\infty\)</span>) are less common. As mentioned in the book, a standard weakly informative prior for a <span class="math inline">\(\beta_k\)</span> parameter is a normal distribution with a mean at about 0 and a standard deviation of about 5, so <span class="math inline">\(Norm(\mu = 10, \sigma = 5)\)</span>. (Note: this depends on the units of our data, so we should probably do a thought experiment to decide whether the distributions shown below are reasonable for the actual values of bird density and altitude in our data.)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Probability density function of the intercept and slope prior</span>
-xseq &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">15</span>, <span class="fl">0.001</span>)
+xseq &lt;-<span class="st"> </span><span class="kw">seq</span>(-<span class="dv">15</span>, <span class="dv">15</span>, <span class="fl">0.001</span>)
 <span class="kw">plot</span>(xseq, <span class="kw">dnorm</span>(xseq, <span class="dv">0</span>, <span class="dv">5</span>), <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;&quot;</span>, <span class="dt">yaxt=</span><span class="st">&quot;n&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Intercept and slope parameter prior&quot;</span>)</code></pre></div>
 <p><img src="images/05-B/unnamed-chunk-3-1.png" width="672" /></p>
 </div>
@@ -746,7 +662,7 @@ xseq &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">
 <h5>Parameter: Sigma (<span class="math inline">\(\hat{\sigma}\)</span> )</h5>
 <p>Choosing a prior for variance is tricky, especially without any previous knowledge about this particular bird-altitude system. We will thus use a standard weakly informative prior using a truncated Cauchy distribution with non-negative values (as described in the book).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Probability density function of the variance (or rather standard deviation, sigma)</span>
-xseq &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">15</span>, <span class="fl">0.001</span>)
+xseq &lt;-<span class="st"> </span><span class="kw">seq</span>(-<span class="dv">15</span>, <span class="dv">15</span>, <span class="fl">0.001</span>)
 <span class="kw">plot</span>(xseq, <span class="kw">dcauchy</span>(xseq, <span class="dt">location =</span> <span class="dv">0</span>, <span class="dt">scale =</span> <span class="dv">5</span>), <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;&quot;</span>, <span class="dt">yaxt=</span><span class="st">&quot;n&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Sigma parameter prior&quot;</span>, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="fl">0.55</span>,<span class="dv">15</span>))</code></pre></div>
 <p><img src="images/05-B/unnamed-chunk-4-1.png" width="672" /></p>
 <p><br></p>
@@ -784,8 +700,8 @@ model {
 <span class="kw">library</span>(rstan)
 
 <span class="co"># Declare data for Stan</span>
-y &lt;-<span class="st"> </span>Loyn<span class="op">$</span>ABUND
-x &lt;-<span class="st"> </span>Loyn<span class="op">$</span>ALT
+y &lt;-<span class="st"> </span>Loyn$ABUND
+x &lt;-<span class="st"> </span>Loyn$ALT
 N &lt;-<span class="st"> </span><span class="kw">nrow</span>(Loyn)
 datax &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;N&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>)
 
@@ -808,12 +724,12 @@ mod &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">
 ## 5 chains, each with iter=1000; warmup=500; thin=1; 
 ## post-warmup draws per chain=500, total post-warmup draws=2500.
 ## 
-##          mean se_mean   sd  2.5%  25%   50%   75% 97.5% n_eff Rhat
-## beta[1]  2.95    0.10 3.45 -3.65 0.62  2.87  5.34  9.72  1085    1
-## beta[2]  0.11    0.00 0.02  0.07 0.10  0.11  0.13  0.16  1080    1
-## sigma   10.09    0.03 0.98  8.38 9.40 10.02 10.71 12.15  1143    1
+##          mean se_mean   sd  2.5%  25%  50%   75% 97.5% n_eff Rhat
+## beta[1]  2.96    0.11 3.48 -3.89 0.66 2.94  5.35  9.79   980    1
+## beta[2]  0.11    0.00 0.02  0.07 0.10 0.11  0.13  0.16   979    1
+## sigma   10.06    0.03 0.99  8.35 9.33 9.99 10.69 12.20  1391    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Thu Oct 26 00:38:21 2017.
+## Samples were drawn using NUTS(diag_e) at Mon Nov 06 08:08:10 2017.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -839,7 +755,7 @@ mcmcData &lt;-<span class="st"> </span><span class="kw">ggs</span>(mod)
 ##  $ Iteration: num  1 2 3 4 5 6 7 8 9 10 ...
 ##  $ Chain    : int  1 1 1 1 1 1 1 1 1 1 ...
 ##  $ Parameter: Factor w/ 3 levels &quot;beta[1]&quot;,&quot;beta[2]&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
-##  $ value    : num  2.38 2.18 2.99 2.71 2.01 ...
+##  $ value    : num  2.048 5.187 -0.871 -0.433 0.992 ...
 ##  - attr(*, &quot;nChains&quot;)= int 5
 ##  - attr(*, &quot;nParameters&quot;)= int 3
 ##  - attr(*, &quot;nIterations&quot;)= num 500
@@ -863,26 +779,26 @@ mcmcData &lt;-<span class="st"> </span><span class="kw">ggs</span>(mod)
 <h4>Step 7: Extracting MCMC results and testing for parameter correlations</h4>
 <p>If parameters are correlated then MCMC can fail as explained in the Key Points section.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Extracting our parameters from the MCMC output and save it as a new data frame</span>
-modSims &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(mod) 
+modSims &lt;-<span class="st"> </span>rstan::<span class="kw">extract</span>(mod) 
 
 <span class="kw">str</span>(modSims)</code></pre></div>
 <pre><code>## List of 3
-##  $ beta : num [1:2500, 1:2] 6.8 7.77 2.3 4.29 5.6 ...
+##  $ beta : num [1:2500, 1:2] 1.82 1.32 -2.05 4.97 1.93 ...
 ##   ..- attr(*, &quot;dimnames&quot;)=List of 2
 ##   .. ..$ iterations: NULL
 ##   .. ..$           : NULL
-##  $ sigma: num [1:2500(1d)] 10.85 13.02 10.23 8.8 8.95 ...
+##  $ sigma: num [1:2500(1d)] 8.47 11.16 9.81 10.65 10.05 ...
 ##   ..- attr(*, &quot;dimnames&quot;)=List of 1
 ##   .. ..$ iterations: NULL
-##  $ lp__ : num [1:2500(1d)] -157 -161 -157 -156 -157 ...
+##  $ lp__ : num [1:2500(1d)] -157 -157 -157 -156 -156 ...
 ##   ..- attr(*, &quot;dimnames&quot;)=List of 1
 ##   .. ..$ iterations: NULL</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Scatter plots of parameters to look for correlations</span>
-<span class="kw">plot</span>(modSims<span class="op">$</span>beta[,<span class="dv">1</span>], modSims<span class="op">$</span>beta[,<span class="dv">2</span>], <span class="dt">xlab=</span><span class="st">&quot;beta_0&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;beta_1&quot;</span>)</code></pre></div>
+<span class="kw">plot</span>(modSims$beta[,<span class="dv">1</span>], modSims$beta[,<span class="dv">2</span>], <span class="dt">xlab=</span><span class="st">&quot;beta_0&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;beta_1&quot;</span>)</code></pre></div>
 <p><img src="images/05-B/unnamed-chunk-15-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(modSims<span class="op">$</span>beta[,<span class="dv">1</span>], modSims<span class="op">$</span>sigma, <span class="dt">xlab=</span><span class="st">&quot;beta_0&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;sigma&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(modSims$beta[,<span class="dv">1</span>], modSims$sigma, <span class="dt">xlab=</span><span class="st">&quot;beta_0&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;sigma&quot;</span>)</code></pre></div>
 <p><img src="images/05-B/unnamed-chunk-15-2.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(modSims<span class="op">$</span>beta[,<span class="dv">2</span>], modSims<span class="op">$</span>sigma, <span class="dt">xlab=</span><span class="st">&quot;beta_1&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;sigma&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(modSims$beta[,<span class="dv">2</span>], modSims$sigma, <span class="dt">xlab=</span><span class="st">&quot;beta_1&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;sigma&quot;</span>)</code></pre></div>
 <p><img src="images/05-B/unnamed-chunk-15-3.png" width="672" /></p>
 <p>There seems to be a correlation between the intercept parameter <span class="math inline">\(\beta_0\)</span> and the slope parameter <span class="math inline">\(\beta_1\)</span>. This is not ideal, and there are ways to deal with this issue (this will be discussed in <a href="https://fukamilab.github.io/BIO202/05-C-Advanced-bayesian-example.html">Advanced Bayesian model example</a>). Thankfully, the <span class="math inline">\(\sigma\)</span> parameter does not correlate with any of the other parameters.</p>
 <p>Normally, we would perform a prior sensitity analysis to see whether the posterior distributions are influenced by the defined prior distributions and maybe modify our priors accordingly until we are fully satisfied with our model (and repeating steps 1-7).</p>
@@ -891,30 +807,30 @@ modSims &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class
 <div id="step-8-inference" class="section level4">
 <h4>Step 8: Inference</h4>
 <p>Now that we have our joint posterior distribution <span class="math inline">\(p(\theta | y)\)</span> we can perform Bayesian inference much like in the previous seminar session (based on similar code).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newData &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="kw">seq</span>(<span class="kw">min</span>(Loyn<span class="op">$</span>ALT), <span class="kw">max</span>(Loyn<span class="op">$</span>ALT), <span class="dt">by=</span><span class="fl">0.1</span>)) 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newData &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="kw">seq</span>(<span class="kw">min</span>(Loyn$ALT), <span class="kw">max</span>(Loyn$ALT), <span class="dt">by=</span><span class="fl">0.1</span>)) 
 
-newMatrix &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span>x, newData)
+newMatrix &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(~x, newData)
 
-b &lt;-<span class="st"> </span><span class="kw">apply</span>(modSims<span class="op">$</span>beta, <span class="dv">2</span>, mean)
-newData<span class="op">$</span>mod &lt;-<span class="st"> </span>newMatrix <span class="op">%*%</span><span class="st"> </span>b
-nsim &lt;-<span class="st"> </span><span class="kw">nrow</span>(modSims<span class="op">$</span>beta)
+b &lt;-<span class="st"> </span><span class="kw">apply</span>(modSims$beta, <span class="dv">2</span>, mean)
+newData$mod &lt;-<span class="st"> </span>newMatrix %*%<span class="st"> </span>b
+nsim &lt;-<span class="st"> </span><span class="kw">nrow</span>(modSims$beta)
 
 fitmat &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">ncol=</span>nsim, <span class="dt">nrow=</span><span class="kw">nrow</span>(newData)) 
-<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nsim){
-  fitmat[,i] &lt;-<span class="st"> </span>newMatrix <span class="op">%*%</span><span class="st"> </span>modSims<span class="op">$</span>beta[i,] 
+for(i in <span class="dv">1</span>:nsim){
+  fitmat[,i] &lt;-<span class="st"> </span>newMatrix %*%<span class="st"> </span>modSims$beta[i,] 
 }
 
 <span class="co"># 95% CrI lines</span>
-newData<span class="op">$</span>fitupper &lt;-<span class="st"> </span><span class="kw">apply</span>(fitmat, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.975</span>)
-newData<span class="op">$</span>fitlower &lt;-<span class="st"> </span><span class="kw">apply</span>(fitmat, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.025</span>) 
+newData$fitupper &lt;-<span class="st"> </span><span class="kw">apply</span>(fitmat, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.975</span>)
+newData$fitlower &lt;-<span class="st"> </span><span class="kw">apply</span>(fitmat, <span class="dv">1</span>, quantile, <span class="dt">prob=</span><span class="fl">0.025</span>) 
 
 <span class="co"># Linear regression</span>
-linearModel &lt;-<span class="st"> </span><span class="kw">lm</span>(ABUND <span class="op">~</span><span class="st"> </span>ALT, Loyn) 
+linearModel &lt;-<span class="st"> </span><span class="kw">lm</span>(ABUND ~<span class="st"> </span>ALT, Loyn) 
 
-<span class="kw">plot</span>(Loyn<span class="op">$</span>ALT,Loyn<span class="op">$</span>ABUND, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">las=</span><span class="dv">1</span>, <span class="dt">cex.lab=</span><span class="fl">1.2</span>, <span class="dt">xlab=</span><span class="st">&quot;Mean altitude of a patch&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Density of birds in a patch&quot;</span>)
+<span class="kw">plot</span>(Loyn$ALT,Loyn$ABUND, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">las=</span><span class="dv">1</span>, <span class="dt">cex.lab=</span><span class="fl">1.2</span>, <span class="dt">xlab=</span><span class="st">&quot;Mean altitude of a patch&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Density of birds in a patch&quot;</span>)
 <span class="kw">abline</span>(linearModel, <span class="dt">lw=</span><span class="dv">2</span>) <span class="co"># Linear regression line</span>
-<span class="kw">lines</span>(newData<span class="op">$</span>x, newData<span class="op">$</span>fitupper, <span class="dt">lty=</span><span class="dv">3</span>)
-<span class="kw">lines</span>(newData<span class="op">$</span>x, newData<span class="op">$</span>fitlower, <span class="dt">lty=</span><span class="dv">3</span>) </code></pre></div>
+<span class="kw">lines</span>(newData$x, newData$fitupper, <span class="dt">lty=</span><span class="dv">3</span>)
+<span class="kw">lines</span>(newData$x, newData$fitlower, <span class="dt">lty=</span><span class="dv">3</span>) </code></pre></div>
 <p><img src="images/05-B/unnamed-chunk-16-1.png" width="672" /></p>
 <p>The regression line (solid) is supposed to act as a reference for the 95% CrI (dashed lines) obtained with prior information when comparing it with the CrI obtained with uniform priors in the previous seminar. The results using non-uniform priors differ only slightly, as expected.</p>
 </div>
