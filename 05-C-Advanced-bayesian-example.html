@@ -425,48 +425,6 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    W7
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="07-midquarter-anna.html">Anna</a>
-    </li>
-    <li>
-      <a href="07-midquarter-beth.html">Beth</a>
-    </li>
-    <li>
-      <a href="07-midquarter-jamie.html">Jamie</a>
-    </li>
-    <li>
-      <a href="07-midquarter-lizzie.html">Lizzie</a>
-    </li>
-    <li>
-      <a href="07-midquarter-marissa.html">Marissa</a>
-    </li>
-    <li>
-      <a href="07-midquarter-meghan.html">Meghan</a>
-    </li>
-    <li>
-      <a href="07-midquarter-nick.html">Nick</a>
-    </li>
-    <li>
-      <a href="07-midquarter-nicole.html">Nicole</a>
-    </li>
-    <li>
-      <a href="07-midquarter-priscilla.html">Priscilla</a>
-    </li>
-    <li>
-      <a href="07-midquarter-sandra.html">Sandra</a>
-    </li>
-    <li>
-      <a href="07-midquarter-tyler.html">Tyler</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     W8
      
     <span class="caret"></span>
@@ -491,55 +449,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="09-A-topic-name.html">Topic 19</a>
+      <a href="09-A-time-series.html">Time series</a>
     </li>
     <li>
-      <a href="09-B-topic-name.html">Topic 20</a>
+      <a href="09-B-networks.html">Network analysis</a>
     </li>
     <li>
-      <a href="09-C-topic-name.html">Topic 21</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    W10
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="10-final-anna.html">Anna</a>
-    </li>
-    <li>
-      <a href="10-final-beth.html">Beth</a>
-    </li>
-    <li>
-      <a href="10-final-jamie.html">Jamie</a>
-    </li>
-    <li>
-      <a href="10-final-lizzie.html">Lizzie</a>
-    </li>
-    <li>
-      <a href="10-final-marissa.html">Marissa</a>
-    </li>
-    <li>
-      <a href="10-final-meghan.html">Meghan</a>
-    </li>
-    <li>
-      <a href="10-final-nick.html">Nick</a>
-    </li>
-    <li>
-      <a href="10-final-nicole.html">Nicole</a>
-    </li>
-    <li>
-      <a href="10-final-priscilla.html">Priscilla</a>
-    </li>
-    <li>
-      <a href="07-midquarter-sandra.html">Sandra</a>
-    </li>
-    <li>
-      <a href="10-final-tyler.html">Tyler</a>
+      <a href="09-C-occupancy-models.html">Occupancy models</a>
     </li>
   </ul>
 </li>
@@ -595,9 +511,8 @@ div.tocify {
 <p><br></p>
 <p><strong>First steps: Read and prepare data for STAN</strong> Example data: Breeding success of Black-stork in Latvia. The data were collected and provided by Maris Stradz. They contain the number of nestlings of more than 300 black-stork nests in different years.</p>
 <p><em>Read data</em></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(blmeco)</code></pre></div>
-<pre><code>## Loading required package: MASS</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(blackstork)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(blmeco)
+<span class="kw">data</span>(blackstork)
 dat &lt;-<span class="st"> </span>blackstork
 
 <span class="co"># define nest as a factor </span>
@@ -616,14 +531,8 @@ datax &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&
 <p>Next, we load the Stan code from the text file. In the book, the authors use the function <code>log_sum_exp</code> to calculate the density function of the zero count. The function <code>increment_log_prob</code> defines likelihood in Stan; however, the updated Stan language uses <code>target += u;</code> instead. Functions <code>bernoulli_log</code> and <code>poisson_log</code> define the density functions’ logarithms; they’ve also been updated to <code>bernoulli_lpdf</code> and <code>poisson_lpdf</code>.</p>
 <p>There appeared to be an issue with the original code in the book, namely with “sigmanest.” I changed it to “sigma” to solve the issue.</p>
 <p>Once you run the stan() function, save the model object to an RData file. Then you can load the fitted model and samples without having to run the stan() function every time you re-open the R script: load(“code/05-C-stanmod.RData”).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rstan)</code></pre></div>
-<pre><code>## Loading required package: ggplot2</code></pre>
-<pre><code>## Loading required package: StanHeaders</code></pre>
-<pre><code>## rstan (Version 2.16.2, packaged: 2017-07-03 09:24:58 UTC, GitRev: 2e1f913d3ca3)</code></pre>
-<pre><code>## For execution on a local, multicore CPU with excess RAM we recommend calling
-## rstan_options(auto_write = TRUE)
-## options(mc.cores = parallel::detectCores())</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fit the model</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rstan)
+<span class="co"># Fit the model</span>
 <span class="co"># mod &lt;- stan(file = &quot;code/05-C.stan&quot;, data=datax, chains=3, iter=1000)</span>
 
 <span class="co"># Save the model output</span>
@@ -703,7 +612,7 @@ for(r in <span class="dv">1</span>:<span class="dv">4</span>){
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">propzeros &lt;-<span class="st"> </span><span class="kw">apply</span>(yrep, <span class="dv">2</span>, function(x) <span class="kw">mean</span>(x==<span class="dv">0</span>)) <span class="co"># </span>
 <span class="kw">quantile</span>(propzeros, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))</code></pre></div>
 <pre><code>##      2.5%       50%     97.5% 
-## 0.3238938 0.3601770 0.3978097</code></pre>
+## 0.3221239 0.3601770 0.3995796</code></pre>
 <p><em>Examine results</em></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(modsims$a, <span class="dv">2</span>, quantile, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.957</span>))</code></pre></div>
 <pre><code>##        
@@ -803,7 +712,7 @@ mod &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">
 ##                  from C:/Program Files/R/R-3.3.1/library/StanHeaders/include/stan/math/rev/mat.hpp:4,
 ##                  from C:/Program Files/R/R-3.3.1/library/StanHeaders/include/stan/math.hpp:4,
 ##                  from C:/Program Files/R/R-3.3.1/library/StanHeaders/include/src/stan/model/model_header.hpp:4,
-##                  from file325c27dc3c35.cpp:8:
+##                  from file209461be27ba.cpp:8:
 ## C:/Program Files/R/R-3.3.1/library/BH/include/boost/config/compiler/gcc.hpp:186:0: warning: &quot;BOOST_NO_CXX11_RVALUE_REFERENCES&quot; redefined
 ##  #  define BOOST_NO_CXX11_RVALUE_REFERENCES
 ##  ^
@@ -831,9 +740,9 @@ mod &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">
 ## Iteration: 9 / 10 [ 90%]  (Sampling)
 ## Iteration: 10 / 10 [100%]  (Sampling)
 ## 
-##  Elapsed Time: 0.08 seconds (Warm-up)
-##                0.004 seconds (Sampling)
-##                0.084 seconds (Total)
+##  Elapsed Time: 0.016 seconds (Warm-up)
+##                0 seconds (Sampling)
+##                0.016 seconds (Total)
 ## 
 ## 
 ## SAMPLING FOR MODEL &#39;05-C-updated&#39; NOW (CHAIN 2).
@@ -857,9 +766,9 @@ mod &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">
 ## Iteration: 9 / 10 [ 90%]  (Sampling)
 ## Iteration: 10 / 10 [100%]  (Sampling)
 ## 
-##  Elapsed Time: 0.131 seconds (Warm-up)
+##  Elapsed Time: 0.022 seconds (Warm-up)
 ##                0 seconds (Sampling)
-##                0.131 seconds (Total)
+##                0.022 seconds (Total)
 ## 
 ## 
 ## SAMPLING FOR MODEL &#39;05-C-updated&#39; NOW (CHAIN 3).
@@ -883,9 +792,9 @@ mod &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">
 ## Iteration: 9 / 10 [ 90%]  (Sampling)
 ## Iteration: 10 / 10 [100%]  (Sampling)
 ## 
-##  Elapsed Time: 0.299 seconds (Warm-up)
-##                0.005 seconds (Sampling)
-##                0.304 seconds (Total)</code></pre>
+##  Elapsed Time: 0.633 seconds (Warm-up)
+##                0.402 seconds (Sampling)
+##                1.035 seconds (Total)</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Then run the same model for more iterations.</span>
 <span class="co">#modfit &lt;- stan(fit = mod, iter = 1000, chains = 3)</span></code></pre></div>
 </div>
