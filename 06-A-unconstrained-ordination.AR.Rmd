@@ -33,93 +33,6 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 ### Key Points
 
 
-#### Unconstrained vs. constrained ordination
-
-Fig 3 in Ramette 2007 - left and right: Borcard et al. Ch 5 and 6, respectively
-
-#### PCA
-
-+ Scaling 1 -- use this if main interest is objects
-
-"distance biplot" (distance among objects is Euclidean distance, angle among descriptors meaningless) - Fig 5.2
-
-+ Scaling 2 -- use this if main interest is descriptors
-
-"correlation biplot" (angles between descriptors reflect their correlations, distance among objects is not approxmate of Euclidean distance) - Fig 5.2
-
-+ `vegan`'s default is scaling 2  (a bit strange?)
-
-+ Combining PCA with clustering can be powerful for confirmation (Fig 5.3)
-
-#### CA
-
-+ Chi-square distance not influenced by double zeros, unlike Euclidian distance in PCA; data have to be frequency or freq-like
-
-+ Scaling 1 vs. 2 -- similar to PCA
-
-+ post-hoc `envfit()` (Is constrained ordination better? Useful with NMDS?)
-
-#### PCoA
-
-+ Distance measured by any similarity measure
-
-+ Q mode (objects, or sites) and R mode (variables, or species or env factors)
-
-+ Rarely used (Ramette's Table 1) - used more now?
-
-#### NMDS
-
-+ Any distance matrix (commonly, Bray-Curtis dissimilarity)
-
-+ May be sensitive to initial configuration (local optimum) - Could use PCoA ordination as a start. `metaMDS()` uses random starts
-
-+ Needs fast computer -- now not much of a problem
-
-+ "A test winner, and a natural choice ..." (Jari Oksanen)
-
-+ Bray-Curtis dissimilarity - Reasons why popular (Clarke and Warwick 2001):
-
-1. 0 when identical
-2. 1 when no species shared
-3. Not affected by measurement unit
-4. Not affected by inclusion or exclusion of species jointly absent
-5. Not affected by inclusion of exclusion of a third sample
-6. Differences in both total and relative abundances considered
-
-+ Shepard diagram (Fig 5.11) and stress
-
-+ According to Clarke and Warwick 2001:
-
-1. stress < 0.05: excellent representation
-2. stress < 0.1: good representation
-3. stress < 0.2: acceptable representation
-4. stress > 0.3: unsatisfactory representation
-
-#### Which method to use? (Criteria by Ramette 2007)
-
-+ Linear (PCA) vs. unimodal (CA) - Use plot of species abundances along ordination axes as diagnosis
-
-+ Gradient length short (PCA) vs. long (CA), as determined by DCA
-
-+ Absolute abundance (PCA) vs. relative abundance (CA)
-
-+ Many zeros (CA)
-
-+ Linear (PCA) vs. non linear (NMDS, PCoA)
-
-+ Shepard diagram to decide between NMDS and PCoA
-
-+ Discrete groups of objects expected (cluster) vs. not expected (ordination)
-
-#### Further reading: 
-
-> "Vegan: an introduction to ordination" by Jari Oksanen 
-> [link](https://cran.r-project.org/web/packages/vegan/vignettes/intro-vegan.pdf)
-
-
-
-***
-
 
 ### Analysis Example
 
@@ -142,27 +55,35 @@ library(tidyr)
 ```
 
 
-```{r, message=FALSE, warning=FALSE, include=FALSE}
-# Make a new phyloseq object
-library(phyloseq)
-otumat2 <- read.csv("~/Documents/Stanford/Eco_stats_202/data/OTUsnormalized.csv", sep= ",") #update with proper path
-rownames(otumat2) <- paste(otumat2$X) #make OTU numbers the row names
-otumat2 <- otumat2%>% 
-  select(-X) #remove OTU column
-OTU <- otu_table(otumat2, taxa_are_rows = TRUE)
-
-
+```{r defining terms, echo=FALSE, message=FALSE, warning=FALSE}
+## Defining terms, samples, month names, etc
+salinities <- c("0 - <.5", ".5 - <5", "5 - <18", "18 -  <30", "30 - <40" )
 system.order<-c("Fresh", "Oligohaline", "Mesohaline", "Polyhaline", "Euhaline")
 stat.order<-as.character(c(657, 649, 3, 6, 9, 13, 15, 18, 21, 24, 27, 30, 34, 36))
-envmat <- read.csv("~/Documents/Stanford/Eco_stats_202/data/envdat_phy.csv", header=T, row.names = 1) #update with proper path
-envmat$Station.Number<-as.factor(envmat$Station.Number)
-envmat$system<-factor(envmat$system, levels=system.order)
-ENV <- sample_data(envmat)
+seas.order <- c("Spring", "Summer", "Fall", "Winter")
+surf.samp<- c("C29_657S", "C29_3S", "C29_6S", "C29_9S")
+months <- c("Apr", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar")
+cruise.dates <- c("4/23/2013", "7/23/2013", "8/28/2013","9/26/2013","10/24/2013","11/19/2013", "12/3/2013", "1/14/2014","2/11/2014","3/11/2014")
+cruise.names <- c("C29", "C30","C31","C32","C33","C34","C35","C36","C37","C38")
+```
 
-TREE<-read_tree("~/Documents/Stanford/Eco_stats_202/data/otu.tre") #update with proper path
 
-physeq2 <- phyloseq(OTU, ENV, TREE)
-physeq2
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+## make dataframe of environmental variables
+envmat.all <-read.csv("~/Documents/SFB_JGI_first_plate/timeseries_all_data.csv", header=T, row.names = 1)
+
+envmat.all$Station.Number<-as.factor(envmat.all$Station.Number)
+envmat.all$system<-factor(envmat.all$system, levels=system.order)
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+variables.cols <- c(31, 7,9, 11, 14,15, 21, 22, 34:36, 72, 74, 29, 73, 5, 32)
+
+envdat.corr <- na.omit(envmat.all %>% 
+  select (., variables.cols))
+rownames(envdat.corr) = envdat.corr$sample
+
+envdat.corr <- envdat.corr[,-c(1)]
 ```
 
 #### Prepare the data
@@ -173,16 +94,15 @@ Important notes for `scale` function:
 
  + center = TRUE means column means are subtracted
  + scale = TRUE means centered columns are divided by standard deviations
- 
+
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-envdat.phy <- as.data.frame(sample_data(physeq2))
-envdat.phy.scaled <- scale(envdat.phy[,-c(13:16)], # cols 13:16 are factors
-                           center=TRUE, # center data by subtracting column means 
-                           scale=TRUE) # divide centered data by standard deviation
+envdat.corr.scaled <- as.data.frame(scale(envdat.corr[,-c(13:16)]), ## cols 13:16 are factors
+                                    center=TRUE, ## center data by subtracting column means
+                                    scale=TRUE)  ## divide centered data by standard deviation
 ```
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-str(envdat.phy.scaled)
+str(envdat.corr.scaled)
 ```
 
 #### PCA
@@ -199,14 +119,14 @@ library(vegan)
 library(gclus)
 library(ape)
 
-env.pca <- rda(envdat.phy[,-c(13:16)], scale=TRUE)    # rda function makes PCAs
-                                                    # scale means divide by species unit variance
+env.pca <- rda(envdat.corr[,-c(13:16)], scale=TRUE)    ### rda function makes PCAs
+                                                    ### scale means divide by species unit variance (we already did this)
                                                     
 env.pca
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-summary(env.pca, scaling=1)
+#summary(env.pca, scaling=1)
 ```
 
 Look at the eigenvalues. Numerical Ecology in R recommends keeping all axes that are above the mean. One can also use the "elbow" method, look for a strong decrease in eigenvalues followed by slower decreases like a bend in the elbow. If several PCs have similar variances they are ill defined. If you include one you should include all of them as arbitrarily choosing the first one may not be the correct interpretation.
@@ -217,7 +137,7 @@ ev <- env.pca$CA$eig
 ev>mean(ev)
 ```
 
-Divide eigenvalues by total inertia to explain the proportion of variance explained. Inertia should be the sum of all the eigenvalues (total variance of data). The below plots show eigenvalues with the mean plotted as a horizonatl line(top) and the broken stick model (bottom) which caluclates the eigenvalues you would expect to get if you picked PCs randomly.
+Divide eigenvalues by total inertia to explain the proportion of variance explained
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 n<- length(ev)
@@ -242,10 +162,75 @@ You can look at projected points in two scalings. Scaling 1  is good for euclide
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 par(mfrow=c(1,2))
-biplot(env.pca, scaling=1, main="PCA scaling 1") # scaling 1 for distances between objects
-biplot(env.pca, main="PCA scaling 2") # correlation biplot, for seeing correlation between response variables (species) see angles. 
+biplot(env.pca, scaling=1, main="PCA scaling 1") ## scaling 1 for distances between objects
+biplot(env.pca, main="PCA scaling 2") ## correlation biplot, for seeing correlation between response variables (species) see angles. 
 ```
 
+
+```{r V4, echo=F, message=FALSE, warning=FALSE}
+### Making a V4 phyloseq object
+#Phyloseq object and environmental variables for sequenced samples
+library(phyloseq)
+library(ggplot2)
+
+otumat.V4 <- read.csv("~/Documents/SFB_JGI_first_plate/SFBayDeltaitags/itags/16S-V4-ver2/2-1992333/otu.tsv", sep= "") %>% 
+  select(-taxonomy) ## remove non-numeric data
+rownames(otumat.V4) <- paste(otumat.V4$OTU) ##make OTU numbers the row names
+otumat.V4 <- otumat.V4 %>% 
+  select(-OTU) ##remove OTU column
+
+taxmat.V4 <- read.table("~/Documents/SFB_JGI_first_plate/SFBayDeltaitags/itags/16S-V4-ver2/2-1992333/tax.tsv", sep= "") %>%
+  select(c(1,3))
+colnames(taxmat.V4) <- c("OTU", "tax") ## Define columns
+taxmat.V4<-taxmat.V4 %>% 
+  separate(tax, into=c("Domain", "Phylum", "Class", "Order", "Family", "Genus"), sep= ",") ## separate taxa names
+rownames(taxmat.V4) <- paste0(taxmat.V4$OTU) ### Make rownames from the column "OTU"
+taxmat.V4 <- taxmat.V4 %>% 
+  select(-OTU) %>% ## remove column with OTU names
+  as.matrix(.)
+
+JGItre.V4<-read_tree("~/Documents/SFB_JGI_first_plate/SFBayDeltaitags/itags/16S-V4-ver2/2-1992333/otu.tre")
+
+OTU.V4 = otu_table(otumat.V4, taxa_are_rows = TRUE)
+TAX.V4 = tax_table(taxmat.V4)
+ENV.V4= sample_data(envdat.corr)
+
+physeq.V4 <- phyloseq(OTU.V4, TAX.V4, ENV.V4, JGItre.V4)
+physeq.nd<- physeq.V4 %>% 
+  filter_taxa(., function(x) sum(x > 2) > 1, TRUE) ### remove doubltons
+```
+
+
+```{r , echo=FALSE, message=FALSE, warning=FALSE}
+#### DESeq 2 variance stabilization and geometric mean
+#### stabilize variance from different read counts and trnasform counts by geometric mean
+library(DESeq2)
+
+gm_mean = function(x, na.rm=TRUE){
+  exp(sum(log(x[x > 0]), na.rm=na.rm) / length(x))
+}
+
+ps_dds1 = phyloseq_to_deseq2(physeq.nd, ~system)
+geoMeans = apply(counts(ps_dds1), 1, gm_mean)
+ps_dds1 = estimateSizeFactors(ps_dds1, geoMeans = geoMeans)
+ps_dds1 = estimateDispersions(ps_dds1)
+abund=getVarianceStabilizedData(ps_dds1)
+rownames(abund)=substr(rownames(abund),1,5) %>% make.names(unique=T)
+
+otusf1 <- as.numeric(row.names(otu_table(physeq.nd)))
+abund2 <- abund
+rownames(abund2) <- otusf1
+physeq.VST <- physeq.nd
+otu_table(physeq.VST) <- otu_table(abund2, taxa_are_rows=T)
+
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+### Scaling and centering environmental data
+envdat.phy <- as.data.frame(sample_data(physeq.V4))
+envdat.phy.scaled <- scale(envdat.phy[,-c(13:16)], center=TRUE, scale=TRUE)
+```
 
 ##### Alternative PCA functions
 
@@ -256,62 +241,57 @@ Notes:
 + Eigenvalue = measures the importance of variance of an axis. 
 + Inertia = "variation"; sum of variance of variables (covariance matrix) or sum of diagonal values (correlation matrix) 
 
-```{r, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+```{r, message=FALSE, warning=FALSE, include=FALSE}
 
-# Just to prove that most should be doing the same things, look at single values for different methods (coefficients in front of variables to make new variables contain more information).
+## Just to prove that most should be doing the same things, look at single values for different methods 
+### (coefficients in front of variables to make new variables contain more information).
 
 library(ade4)
 
-svd(scale(envdat.phy[,-c(13:16)]))$v[,1] #single value decomposition matrix
+svd(scale(envdat.corr[,-c(13:16)]))$v[,1] ## single value decomposition matrix
 
-prcomp(scale(envdat.phy[,-c(13:16)]))$rotation[,1] # principle components analysis 
-#rotation is matrix of variable loadings (columns contain eigenvectors), uses svd on x to get singlular values
+prcomp(scale(envdat.corr[,-c(13:16)]))$rotation[,1] ## principle components analysis 
+##rotation is matrix of variable loadings (columns contain eigenvectors), uses svd on x to get singlular values
 
-princomp(scale(envdat.phy[,-c(13:16)]))$loadings[,1] # uses eigen on correlation/covariance matrix and determined by cor
+princomp(scale(envdat.corr[,-c(13:16)]))$loadings[,1] ## uses eigen on correlation/covariance matrix and determined by cor
 
-dudi.pca(envdat.phy[,-c(13:16)], nf=2, scannf=F)$c1[,1] # center is centering by mean, scale uniform row weights, scannf is to display screeplot, nf is the number of kept axes c1 is the column normed scores
+dudi.pca(envdat.corr[,-c(13:16)], nf=2, scannf=F)$c1[,1] ## center is centering by mean, scale uniform row weights, scannf is to display screeplot, nf is the number of kept axes c1 is the column normed scores
 
-# the signs of the columns of loadings and scores are arbitrary
+## the signs of the columns of loadings and scores are arbitrary
 ```
 
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-library(ade4)
-pr.env2 <- prcomp(envdat.phy.scaled)
 prin.env2 <- princomp(envdat.phy.scaled)
-dudi.env2 <-dudi.pca(envdat.phy.scaled, center=F, scale=F, scannf=FALSE, nf=4) # ade4 library
+dudi.env2 <-dudi.pca(envdat.phy.scaled, center=F, scale=F, scannf=FALSE, nf=4)
 ```
-
-```{r}
-pr.env2
-```
-
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-prin.env2 # sv is the standard deviations of PCs
-          # loadings is matrix of variable loadings, columns contain eigenvectors
-          # Only for looking at scaling 2??
+prin.env2 ## sv is the standard deviations of PCs
+          ## loadings is matrix of variable loadings, columns contain eigenvectors
 ```
 
 ```{r, echo=TRUE}
 dudi.env2
 ```
 
-These should all be doing the same thing, so when we look at the eigenvalues they should be the same. And it looks like the first 4 axes are important.
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-meaneig <-mean(dudi.env2$eig) # .98
-
 library(factoextra)
-eig0 <- fviz_eig(pr.env2, geom="bar", width=.4, title="prcomp")+theme(panel.grid=element_blank())
-eig1 <- fviz_eig(prin.env2, geom="bar", width=.4, title="princomp")+theme(panel.grid=element_blank())
-eig2 <- fviz_eig(dudi.env2, geom="bar", width=.4, title="dudi.pca")+theme(panel.grid=element_blank())
+eig1 <- fviz_eig(prin.env2, geom="bar", width=.4)+theme(panel.grid=element_blank())
+eig2 <- fviz_eig(dudi.env2, geom="bar", width=.4)+theme(panel.grid=element_blank())
 
 library(gridExtra)
-grid.arrange(eig0,eig1, eig2, nrow=1)
+grid.arrange(eig1, eig2, nrow=1)
 ```
 
+```{r}
+dudi.env2$eig
+mean(dudi.env2$eig)
+```
+
+
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-p0<-fviz_pca_ind(pr.env2, geom="point",
+p0<-fviz_pca_ind(prin.env2, geom="point",
              habillage= envdat.phy$system)
 
 p0
@@ -319,14 +299,14 @@ p0
 
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-fviz_pca_ind(pr.env2, geom="point",
+fviz_pca_ind(prin.env2, geom="point",
              habillage= envdat.phy$system,
              addEllipses = TRUE, 
              ellipse.level=.69)
 ```
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-prin.p <- fviz_pca_biplot(pr.env2, 
+prin.p <- fviz_pca_biplot(prin.env2, 
                 label="var", 
                 habillage=envdat.phy$system, 
                 axes = 1:2)
@@ -335,29 +315,29 @@ prin.p
 ```
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-fviz_pca_var(pr.env2, col.circle="black")+
+fviz_pca_var(dudi.env2, col.circle="black")+
   xlim(c(-1.2,1.2)) +
   ylim(c(-1.2,1.2))
 ```
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-p1 <- fviz_pca_ind(pr.env2, geom="point",
+p1 <- fviz_pca_ind(prin.env2, geom="point",
              habillage= envdat.phy$system,
              axes= 2:3)
 
-p2 <- fviz_pca_ind(pr.env2, geom="point",
+p2 <- fviz_pca_ind(prin.env2, geom="point",
              habillage= envdat.phy$system,
              axes= 3:4)
 
-p3 <- fviz_pca_ind(pr.env2, geom="point",
+p3 <- fviz_pca_ind(prin.env2, geom="point",
              habillage= envdat.phy$system,
              axes= c(1,3))
 
-p4 <- fviz_pca_ind(pr.env2, geom="point",
+p4 <- fviz_pca_ind(prin.env2, geom="point",
              habillage= envdat.phy$system,
              axes= c(1,4))
 
-p5 <- fviz_pca_ind(pr.env2, geom="point",
+p5 <- fviz_pca_ind(prin.env2, geom="point",
              habillage= envdat.phy$system,
              axes= c(2,4))
 
@@ -365,12 +345,11 @@ grid.arrange(p0,p1,p2,p3,p4,p5)
 ```
 
 #### CA
-
-Should only be done on frequency data but just to show that you can use the wrong ordination if you want. The output doesn't make a whole lot of sense.
 ```{r}
 dud.env.coa<- dudi.coa(envdat.phy[,-c(13:16)], 
                        nf=2,
                        scannf=FALSE)
+
 
 ```
 
@@ -379,12 +358,12 @@ fviz_eig(dud.env.coa)
 ```
 
 Joint plot shows samples/sites and variables/species. Species are near center of inertia of samples where they are most likely to occur
-
 ```{r}
 fviz_ca_biplot(dud.env.coa, 
                geom=c("point", "text"),
                label="col")
 ```
+
 
 
 #### PCoA
@@ -394,9 +373,8 @@ PCoA is common in microbial ecology. Here are some examples of PCoA on OTU count
 *bray-curtis dissimilarity*
 
 ```{r, echo=FALSE}
-library(phyloseq)
-ord.pco3 <- ordinate(physeq2, method="PCoA", distance="bray")
-p.b <- plot_ordination(physeq2, 
+ord.pco3 <- ordinate(physeq.VST, method="PCoA", distance="bray")
+p.b <- plot_ordination(physeq.V4, 
                 ord.pco3, 
                 color="Salinity", 
                 shape="season")+
@@ -405,10 +383,6 @@ p.b <- plot_ordination(physeq2,
   labs(main="PCoA Bray")+
   theme(panel.grid=element_blank())
 
-#ord.pco3
-```
-
-```{r}
 plot_scree(ord.pco3)
 ```
 
@@ -419,8 +393,8 @@ p.b
 *jaccard distance*
 
 ```{r, message=FALSE, include=FALSE}
-ord.pco1 <- ordinate(physeq2, method="PCoA", distance="jaccard")
-p.j <-plot_ordination(physeq2, 
+ord.pco1 <- ordinate(physeq.VST, method="PCoA", distance="jaccard")
+p.j <-plot_ordination(physeq.V4, 
                 ord.pco1, 
                 color="Salinity", 
                 shape="season")+
@@ -439,14 +413,9 @@ p.j
 
 *wunifrac*
 
-If you update to ape version 5.0, download the newest phyloseq version. Should be available on joey711 github if the newest bioconductor version still does not have the fix.
-
-Unifrac is based on shared branch lengths between samples and calculated as (sum of unshared branch lengths)/(sum of all tree branch lengths (shared+unshared)). Weighted unifrac (wunifrac in phyloseq) incorporates the abundance of taxa as well.
-
-```{r, eval=TRUE, message=FALSE, warning=FALSE, include=FALSE}
-
-ord.pco2 <- ordinate(physeq2, method="PCoA", distance="wunifrac")
-p.w <- plot_ordination(physeq2, 
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+ord.pco2 <- ordinate(physeq.VST, method="PCoA", distance="wunifrac")
+p.w <- plot_ordination(physeq.V4, 
                 ord.pco2, 
                 color="Salinity", 
                 shape="season")+
@@ -458,8 +427,7 @@ p.w <- plot_ordination(physeq2,
 plot_scree(ord.pco2)
 ```
 
-```{r, eval=TRUE, include=FALSE}
-
+```{r, echo=FALSE}
 p.w
 ```
 
@@ -468,7 +436,7 @@ A note on horseshoes and arch effects: if there is a lot of species turnover and
 #### CA on taxa data
 
 ```{r}
-ord.cca <- ordinate(physeq2, method="CCA")
+ord.cca <- ordinate(physeq.VST, method="CCA")
 ord.cca
 ```
 
@@ -478,7 +446,7 @@ plot_scree(ord.cca)
 ```
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-p.cca <-plot_ordination(physeq2, 
+p.cca <-plot_ordination(physeq.V4, 
                 ord.cca, 
                 color="Salinity", 
                 shape="season")+
@@ -499,40 +467,31 @@ And choice of distance matters a lot!
 *jaccard*
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-ord.nmds1 <- ordinate(physeq2, method="NMDS", distance="jaccard")
-ord.nmds1
-```
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
-plot_ordination(physeq2, 
+ord.nmds1 <- ordinate(physeq.VST, method="NMDS", distance="jaccard")
+plot_ordination(physeq.V4, 
                 ord.nmds1, 
                 color="Salinity", 
                 shape="season")+
   geom_point(size=3)+
   scale_color_continuous(low="blue", high="goldenrod2")+
   scale_shape_manual(values=c(7,6,16,8))+
-  labs(main="stress .10")+
   theme(panel.grid=element_blank())
 ```
 
 *weighted unifrac*
 
-```{r, eval=TRUE, message=FALSE, warning=FALSE, include=FALSE}
-
-ord.nmds2 <- ordinate(physeq2, method="NMDS", distance="wunifrac")
-ord.nmds2
-```
-
-```{r, eval=TRUE, message=FALSE, warning=FALSE, include=FALSE}
-plot_ordination(physeq2, 
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ord.nmds2 <- ordinate(physeq.VST, method="NMDS", distance="wunifrac")
+plot_ordination(physeq.V4, 
                 ord.nmds2, 
                 color="Salinity", 
                 shape="season")+
   geom_point(size=3)+
   scale_color_continuous(low="blue", high="goldenrod2")+
   scale_shape_manual(values=c(7,6,16,8))+
-  labs(main="stress= .07")+
   theme(panel.grid=element_blank())
 ```
+
 
 #### Indirect Gradient Analysis
 
