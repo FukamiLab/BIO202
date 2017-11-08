@@ -669,23 +669,19 @@ div.tocify {
 <li>center = TRUE means column means are subtracted</li>
 <li>scale = TRUE means centered columns are divided by standard deviations</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">envdat.corr.scaled &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">scale</span>(envdat.corr[,-<span class="kw">c</span>(<span class="dv">13</span>:<span class="dv">16</span>)]), ## cols 13:16 are factors
-                                    <span class="dt">center=</span><span class="ot">TRUE</span>, ## center data by subtracting column means
-                                    <span class="dt">scale=</span><span class="ot">TRUE</span>)  ## divide centered data by standard deviation</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(envdat.corr.scaled)</code></pre></div>
-<pre><code>## &#39;data.frame&#39;:    461 obs. of  12 variables:
-##  $ Depth                 : num  -0.718 0.218 -0.718 0.334 -0.718 ...
-##  $ Chlorophyll.a.a.PHA   : num  -0.745 -0.878 -0.745 -1.077 -1.144 ...
-##  $ Calculated.Chlorophyll: num  -0.611 -0.588 -0.47 -0.446 -0.328 ...
-##  $ Oxygen.Saturation..   : num  -0.722 -0.722 -0.722 -0.722 -0.322 ...
-##  $ Calculated.Oxygen     : num  0.851 0.851 0.851 0.851 1.062 ...
-##  $ Salinity              : num  -1.61 -1.61 -1.61 -1.61 -1.6 ...
-##  $ Temperature           : num  -0.333 -0.33 -0.4 -0.397 -0.408 ...
-##  $ JD.Ammonium           : num  1.314 1.722 0.147 0.671 -0.143 ...
-##  $ JD.Nitrate            : num  -0.583 -0.592 -0.336 -0.244 0.245 ...
-##  $ JD.Nitrite            : num  -0.678 -0.664 -0.598 -0.578 -0.234 ...
-##  $ logflow               : num  1.01 1.01 1.01 1.01 1.01 ...
-##  $ logSPM                : num  -0.39 -0.157 0.662 0.885 1.424 ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">envdat.phy &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">sample_data</span>(physeq2))
+envdat.phy.scaled &lt;-<span class="st"> </span><span class="kw">scale</span>(envdat.phy[,-<span class="kw">c</span>(<span class="dv">13</span>:<span class="dv">16</span>)], <span class="co"># cols 13:16 are factors</span>
+                           <span class="dt">center=</span><span class="ot">TRUE</span>, <span class="co"># center data by subtracting column means </span>
+                           <span class="dt">scale=</span><span class="ot">TRUE</span>) <span class="co"># divide centered data by standard deviation</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(envdat.phy.scaled)</code></pre></div>
+<pre><code>##  num [1:77, 1:12] 3.734 -0.286 -0.995 0.187 -1.35 ...
+##  - attr(*, &quot;dimnames&quot;)=List of 2
+##   ..$ : chr [1:77] &quot;C29_18D&quot; &quot;C29_27D&quot; &quot;C29_34D&quot; &quot;C29_3D&quot; ...
+##   ..$ : chr [1:12] &quot;Depth&quot; &quot;Chlorophyll.a.a.PHA&quot; &quot;Calculated.Chlorophyll&quot; &quot;Oxygen.Saturation..&quot; ...
+##  - attr(*, &quot;scaled:center&quot;)= Named num [1:12] 13.416 0.596 3.355 89.584 8.125 ...
+##   ..- attr(*, &quot;names&quot;)= chr [1:12] &quot;Depth&quot; &quot;Chlorophyll.a.a.PHA&quot; &quot;Calculated.Chlorophyll&quot; &quot;Oxygen.Saturation..&quot; ...
+##  - attr(*, &quot;scaled:scale&quot;)= Named num [1:12] 8.458 0.132 1.859 5.706 0.947 ...
+##   ..- attr(*, &quot;names&quot;)= chr [1:12] &quot;Depth&quot; &quot;Chlorophyll.a.a.PHA&quot; &quot;Calculated.Chlorophyll&quot; &quot;Oxygen.Saturation..&quot; ...</code></pre>
 </div>
 <div id="pca-1" class="section level4">
 <h4>PCA</h4>
@@ -701,11 +697,11 @@ div.tocify {
 <span class="kw">library</span>(gclus)
 <span class="kw">library</span>(ape)
 
-env.pca &lt;-<span class="st"> </span><span class="kw">rda</span>(envdat.corr[,-<span class="kw">c</span>(<span class="dv">13</span>:<span class="dv">16</span>)], <span class="dt">scale=</span><span class="ot">TRUE</span>)    ### rda function makes PCAs
-                                                    ### scale means divide by species unit variance
+env.pca &lt;-<span class="st"> </span><span class="kw">rda</span>(envdat.phy[,-<span class="kw">c</span>(<span class="dv">13</span>:<span class="dv">16</span>)], <span class="dt">scale=</span><span class="ot">TRUE</span>)    <span class="co"># rda function makes PCAs</span>
+                                                    <span class="co"># scale means divide by species unit variance</span>
                                                     
 env.pca</code></pre></div>
-<pre><code>## Call: rda(X = envdat.corr[, -c(13:16)], scale = TRUE)
+<pre><code>## Call: rda(X = envdat.phy[, -c(13:16)], scale = TRUE)
 ## 
 ##               Inertia Rank
 ## Total              12     
@@ -714,26 +710,150 @@ env.pca</code></pre></div>
 ## 
 ## Eigenvalues for unconstrained axes:
 ##    PC1    PC2    PC3    PC4    PC5    PC6    PC7    PC8    PC9   PC10 
-## 2.6622 2.2414 1.6513 1.3968 1.1661 0.7421 0.7004 0.5863 0.3815 0.3013 
+## 2.9162 2.1837 1.7549 1.6099 0.9048 0.8154 0.6913 0.4585 0.3518 0.2123 
 ##   PC11   PC12 
-## 0.1648 0.0058</code></pre>
+## 0.0972 0.0039</code></pre>
+<pre><code>## 
+## Call:
+## rda(X = envdat.phy[, -c(13:16)], scale = TRUE) 
+## 
+## Partitioning of correlations:
+##               Inertia Proportion
+## Total              12          1
+## Unconstrained      12          1
+## 
+## Eigenvalues, and their contribution to the correlations 
+## 
+## Importance of components:
+##                         PC1   PC2    PC3    PC4    PC5     PC6     PC7
+## Eigenvalue            2.916 2.184 1.7549 1.6099 0.9048 0.81538 0.69131
+## Proportion Explained  0.243 0.182 0.1462 0.1342 0.0754 0.06795 0.05761
+## Cumulative Proportion 0.243 0.425 0.5712 0.7054 0.7808 0.84874 0.90635
+##                           PC8     PC9   PC10    PC11     PC12
+## Eigenvalue            0.45851 0.35182 0.2123 0.09723 0.003858
+## Proportion Explained  0.03821 0.02932 0.0177 0.00810 0.000320
+## Cumulative Proportion 0.94456 0.97388 0.9916 0.99968 1.000000
+## 
+## Scaling 1 for species and site scores
+## * Sites are scaled proportional to eigenvalues
+## * Species are unscaled: weighted dispersion equal on all dimensions
+## * General scaling constant of scores:  5.495392 
+## 
+## 
+## Species scores
+## 
+##                            PC1     PC2     PC3     PC4     PC5      PC6
+## Depth                  -0.0292 -0.6627 -2.2259  2.6883 -0.2391  0.43043
+## Chlorophyll.a.a.PHA     0.1480  1.7966 -2.1872 -2.7819  0.3878  0.51228
+## Calculated.Chlorophyll  1.6436  0.9838  0.8587 -1.6912 -1.5137  2.35915
+## Oxygen.Saturation..    -1.7255  0.1207 -1.2497 -0.8077 -4.2340 -0.85391
+## Calculated.Oxygen      -2.8687  1.1717  0.2561  0.4929 -1.1526 -0.65401
+## Salinity                2.5078  0.8143 -1.7518  0.9090 -0.4242 -0.55199
+## Temperature             0.7590 -2.4916  0.4988 -2.2810 -0.8393  0.81455
+## JD.Ammonium            -2.2168  0.3243  1.7653 -1.0179  1.7497  0.08852
+## JD.Nitrate              0.5089  2.7258  1.8164  0.5494 -0.6246 -0.77269
+## JD.Nitrite              1.6563  1.9847  0.8800 -0.3856 -0.1016 -2.58025
+## logflow                -0.3595  1.8821  0.5080  1.5789 -0.4736  3.83931
+## logSPM                  1.1650 -1.5130  2.7075  1.2122 -1.9683 -0.24100
+## 
+## 
+## Site scores (weighted sums of species scores)
+## 
+##                PC1       PC2       PC3       PC4        PC5       PC6
+## C29_18D   0.252923  0.003543 -0.587833  0.355655  0.2470320  0.262328
+## C29_27D   0.191866 -0.162901  0.099924  0.007171 -0.1336766  0.049478
+## C29_34D   0.714050  0.235689  0.430021 -0.305987 -0.0039654  0.187933
+## C29_3D   -0.123498 -0.212195  0.126949  0.048413 -0.1933016  0.050783
+## C29_3S   -0.158845 -0.202507  0.173406 -0.063743 -0.1291975  0.012589
+## C29_649D -0.011810 -0.038575  0.140297 -0.286665 -0.3036461  0.320868
+## C29_657D -0.179059 -0.050233  0.091275 -0.253299 -0.0363079  0.126335
+## C29_657S -0.175097  0.022324  0.075812 -0.420314 -0.0488288  0.150859
+## C29_6D   -0.113129 -0.301802  0.234749  0.173006 -0.0835214 -0.064199
+## C29_6S   -0.088230 -0.133996  0.080832 -0.148228 -0.0476196  0.024060
+## C29_9D   -0.002873 -0.210086 -0.047728  0.165152  0.0160114  0.103829
+## C29_9S   -0.011819  0.042435 -0.033880 -0.370110  0.0344542  0.130415
+## C30_13D   0.336799 -0.356152  0.200713  0.147050 -0.0112879  0.039205
+## C30_27D   0.497112 -0.440941  0.237442  0.089788 -0.2633791  0.099103
+## C30_34D   1.228948 -0.448508  0.661634  0.254246  0.8284510  0.225639
+## C30_3D   -0.150827 -0.335638  0.123485 -0.024242 -0.1638561  0.045121
+## C30_649D -0.159930 -0.362145  0.100769 -0.107685 -0.1174841  0.083967
+## C30_657D -0.250444 -0.234715 -0.151863 -0.413799  0.1070838  0.141951
+## C30_6D   -0.080832 -0.298097  0.161588  0.039920 -0.2260605 -0.003100
+## C30_9D    0.126377 -0.519395  0.255971  0.501108 -0.3459778 -0.046367
+## C31_36D   0.571036  0.097110 -0.022168 -0.428045 -0.0857754 -0.051218
+## C31_3D   -0.179219 -0.340107 -0.062331 -0.154892 -0.1213342  0.014437
+## C31_649D -0.206622 -0.353201  0.042158 -0.219549 -0.0334350  0.022544
+## C31_657D -0.326427 -0.334303 -0.050061 -0.334485  0.2435693  0.030262
+## C31_6D   -0.094946 -0.198639 -0.128954 -0.294309 -0.1426143  0.009532
+## C31_9D    0.159957 -0.326598 -0.182333  0.102227 -0.1752083  0.019305
+## C32_13D   0.196818 -0.027887 -0.351517 -0.386030  0.1257062 -0.001484
+## C32_27D   0.406232  0.089181 -0.185758 -0.327559 -0.0534862 -0.213406
+## C32_36D   0.391002  0.113043  0.112712 -0.299560 -0.1341927 -0.193299
+## C32_3D   -0.162842 -0.387924 -0.006378 -0.047441  0.0007877 -0.080535
+## C32_649D -0.187669 -0.285908 -0.036656 -0.202572  0.0900818 -0.074502
+## C32_657D -0.303293 -0.257167  0.035625 -0.290263  0.3077864 -0.099791
+## C32_6D   -0.090342 -0.248464 -0.049752 -0.184180 -0.0441651 -0.088949
+## C32_9D    0.136033 -0.292044 -0.195251  0.083877 -0.0356685 -0.028493
+## C33_13D   0.234820  0.110695 -0.410963 -0.203904  0.2016315  0.037004
+## C33_27D   0.547914  0.255396 -0.087369 -0.104558  0.0281990 -0.424454
+## C33_3D   -0.208128 -0.051224 -0.051364 -0.113320 -0.0979677 -0.009047
+## C33_649D -0.253707 -0.078511 -0.030332 -0.052683 -0.0506591 -0.049888
+## C33_657D -0.443864  0.068279  0.006418 -0.248367  0.3075734 -0.084802
+## C33_6D   -0.140343 -0.020250 -0.041712 -0.091173 -0.0793307 -0.036662
+## C33_9D    0.086639 -0.032892 -0.420761  0.092653  0.0548640 -0.023946
+## C34_13D   0.185858  0.089664 -0.312141 -0.061136  0.1491129 -0.074861
+## C34_3D   -0.158664 -0.033720  0.143015  0.125095 -0.0456754 -0.080052
+## C34_649D -0.230028  0.008684  0.085563  0.073914 -0.0200193 -0.096581
+## C34_657D -0.287825  0.049849  0.150595  0.005917  0.2302344 -0.114346
+## C34_6D    0.008003 -0.081470  0.182425  0.142881 -0.0846662 -0.084681
+## C34_9D    0.176612 -0.140061 -0.156499  0.374286 -0.0473440 -0.081207
+## C35_13D   0.237405 -0.043125 -0.103817  0.098383  0.0724302 -0.066542
+## C35_27D   0.533638  0.292418  0.107037  0.115371 -0.0398035 -0.564424
+## C35_649D -0.240206 -0.028023  0.160179  0.204181 -0.0405591 -0.197356
+## C35_657D -0.283717  0.028473  0.205514  0.114277  0.0775683 -0.180190
+## C35_6D    0.010994 -0.051891  0.056698  0.218277 -0.0159782 -0.188844
+## C35_9D    0.143651 -0.091897 -0.212234  0.368939 -0.0694807 -0.123012
+## C36_13D   0.090465  0.015538 -0.252331  0.121637  0.0723964 -0.096864
+## C36_27D   0.237107  0.137368 -0.071190  0.213952  0.0434341 -0.251622
+## C36_34D   0.391241  0.675861  0.187783 -0.095871 -0.0572504 -0.211153
+## C36_3D   -0.444209  0.257591  0.028747  0.020788  0.0406687 -0.193144
+## C36_649D -0.542348  0.232289  0.085364  0.097606  0.1177703 -0.271178
+## C36_657D -0.577370  0.272796  0.185595 -0.049863  0.1587858 -0.154887
+## C36_6D   -0.236550  0.253829 -0.131167 -0.068317 -0.0222883 -0.126544
+## C36_9D   -0.044604  0.104527 -0.419269  0.211003  0.0390093 -0.085333
+## C37_13D  -0.064482  0.285010 -0.346000  0.118027  0.0006593  0.297747
+## C37_27D   0.078425  0.247208 -0.046073  0.362675 -0.1449825  0.181789
+## C37_36D   0.352133  0.934904  0.269903 -0.068939 -0.3656746  0.120756
+## C37_3D   -0.469678  0.386656  0.237363  0.322502  0.0079203  0.131299
+## C37_649D -0.401348  0.390470  0.313796  0.325310 -0.0456812  0.140532
+## C37_657D -0.414300  0.500252  0.409536 -0.015077  0.2848446  0.373534
+## C37_9D   -0.134750  0.175561 -0.116319  0.571877 -0.1046549  0.185607
+## C38_13D   0.057749  0.169897 -0.448083 -0.083472  0.1240347  0.175385
+## C38_18D   0.018514 -0.017656 -0.689758  0.357425 -0.0465301  0.244305
+## C38_27D   0.079827  0.300246 -0.435739 -0.121847 -0.0379900  0.069288
+## C38_36D   0.447364  0.388721  0.118083 -0.304611 -0.3190484  0.319564
+## C38_3D   -0.118343  0.287468  0.154647 -0.028002  0.0920965  0.089125
+## C38_649D -0.120023  0.121270  0.315613  0.182174  0.1148219  0.082608
+## C38_657D -0.193563  0.044728  0.343156  0.167489  0.1942434  0.110073
+## C38_6D   -0.137514  0.238798  0.038942  0.064110  0.1669545 -0.038758
+## C38_9D    0.075808  0.103077 -0.295752  0.235736  0.0893573  0.146561</code></pre>
 <p>Look at the eigenvalues. Numerical Ecology in R recommends keeping all axes that are above the mean. One can also use the “elbow” method, look for a strong decrease in eigenvalues followed by slower decreases like a bend in the elbow. If several PCs have similar variances they are ill defined. If you include one you should include all of them as arbitrarily choosing the first one may not be the correct interpretation.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ev &lt;-<span class="st"> </span>env.pca$CA$eig
 ev&gt;<span class="kw">mean</span>(ev)</code></pre></div>
 <pre><code>##   PC1   PC2   PC3   PC4   PC5   PC6   PC7   PC8   PC9  PC10  PC11  PC12 
-##  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
-<p>Divide eigenvalues by total inertia to explain the proportion of variance explained</p>
+##  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
+<p>Divide eigenvalues by total inertia to explain the proportion of variance explained. Inertia should be the sum of all the eigenvalues (total variance of data). The below plots show eigenvalues with the mean plotted as a horizonatl line(top) and the broken stick model (bottom) which caluclates the eigenvalues you would expect to get if you picked PCs randomly.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))
 <span class="kw">barplot</span>(ev, <span class="dt">main=</span><span class="st">&quot;eigenvalues&quot;</span>, <span class="dt">col=</span><span class="st">&quot;bisque&quot;</span>, <span class="dt">las=</span><span class="dv">2</span>)
 <span class="kw">abline</span>(<span class="dt">h=</span><span class="kw">mean</span>(ev), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
 <span class="kw">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="st">&quot;Average eignenvalue&quot;</span>, <span class="dt">lwd=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="dv">2</span>)
 <span class="kw">barplot</span>(<span class="kw">t</span>(<span class="kw">cbind</span>(<span class="dv">100</span>*ev/<span class="kw">sum</span>(ev), bsm$p[n:<span class="dv">1</span>])), <span class="dt">beside=</span><span class="ot">TRUE</span>, <span class="dt">main=</span><span class="st">&quot;% variance&quot;</span>, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;bisque&quot;</span>, <span class="dv">2</span>), <span class="dt">las=</span><span class="dv">2</span>)</code></pre></div>
-<p><img src="images/06-A/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="images/06-A/unnamed-chunk-9-1.png" width="672" /></p>
 <p>You can look at projected points in two scalings. Scaling 1 is good for euclidean distances between objects (samples/sites). Scaling 2 is for understanding the correlation (angles between arrows) between species (variables).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
-<span class="kw">biplot</span>(env.pca, <span class="dt">scaling=</span><span class="dv">1</span>, <span class="dt">main=</span><span class="st">&quot;PCA scaling 1&quot;</span>) ## scaling 1 for distances between objects
-<span class="kw">biplot</span>(env.pca, <span class="dt">main=</span><span class="st">&quot;PCA scaling 2&quot;</span>) ## correlation biplot, for seeing correlation between response variables (species) see angles. </code></pre></div>
-<p><img src="images/06-A/unnamed-chunk-11-1.png" width="672" /></p>
+<span class="kw">biplot</span>(env.pca, <span class="dt">scaling=</span><span class="dv">1</span>, <span class="dt">main=</span><span class="st">&quot;PCA scaling 1&quot;</span>) <span class="co"># scaling 1 for distances between objects</span>
+<span class="kw">biplot</span>(env.pca, <span class="dt">main=</span><span class="st">&quot;PCA scaling 2&quot;</span>) <span class="co"># correlation biplot, for seeing correlation between response variables (species) see angles. </span></code></pre></div>
+<p><img src="images/06-A/unnamed-chunk-10-1.png" width="672" /></p>
 </div>
 <div id="alternative-pca-functions" class="section level5">
 <h5>Alternative PCA functions</h5>
@@ -743,9 +863,56 @@ ev&gt;<span class="kw">mean</span>(ev)</code></pre></div>
 <li>Eigenvalue = measures the importance of variance of an axis.</li>
 <li>Inertia = “variation”; sum of variance of variables (covariance matrix) or sum of diagonal values (correlation matrix)</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prin.env2 &lt;-<span class="st"> </span><span class="kw">princomp</span>(envdat.phy.scaled)
-dudi.env2 &lt;-<span class="kw">dudi.pca</span>(envdat.phy.scaled, <span class="dt">center=</span>F, <span class="dt">scale=</span>F, <span class="dt">scannf=</span><span class="ot">FALSE</span>, <span class="dt">nf=</span><span class="dv">4</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prin.env2 ## sv is the standard deviations of PCs</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ade4)
+pr.env2 &lt;-<span class="st"> </span><span class="kw">prcomp</span>(envdat.phy.scaled)
+prin.env2 &lt;-<span class="st"> </span><span class="kw">princomp</span>(envdat.phy.scaled)
+dudi.env2 &lt;-<span class="kw">dudi.pca</span>(envdat.phy.scaled, <span class="dt">center=</span>F, <span class="dt">scale=</span>F, <span class="dt">scannf=</span><span class="ot">FALSE</span>, <span class="dt">nf=</span><span class="dv">4</span>) <span class="co"># ade4 library</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pr.env2</code></pre></div>
+<pre><code>## Standard deviations (1, .., p=12):
+##  [1] 1.70769928 1.47774062 1.32472815 1.26881443 0.95120754 0.90298350
+##  [7] 0.83144869 0.67713729 0.59314185 0.46080985 0.31182237 0.06211363
+## 
+## Rotation (n x k) = (12 x 12):
+##                                 PC1         PC2         PC3         PC4
+## Depth                  -0.005313622 -0.12059069 -0.40504496  0.48918633
+## Chlorophyll.a.a.PHA     0.026930483  0.32693026 -0.39801258 -0.50621942
+## Calculated.Chlorophyll  0.299091061  0.17902838  0.15625362 -0.30774730
+## Oxygen.Saturation..    -0.313994886  0.02196435 -0.22741485 -0.14697830
+## Calculated.Oxygen      -0.522018814  0.21320646  0.04660956  0.08970040
+## Salinity                0.456344659  0.14818639 -0.31878036  0.16541278
+## Temperature             0.138113488 -0.45339877  0.09076421 -0.41507130
+## JD.Ammonium            -0.403389223  0.05901818  0.32123360 -0.18522248
+## JD.Nitrate              0.092602169  0.49602158  0.33052617  0.09997273
+## JD.Nitrite              0.301404013  0.36115043  0.16013828 -0.07017097
+## logflow                -0.065424584  0.34249095  0.09243757  0.28731578
+## logSPM                  0.212004849 -0.27532529  0.49267920  0.22058932
+##                                PC5         PC6         PC7         PC8
+## Depth                  -0.04351497  0.07832493 -0.40409951 -0.60211642
+## Chlorophyll.a.a.PHA     0.07056221  0.09321968 -0.10872065  0.08744925
+## Calculated.Chlorophyll -0.27545652  0.42929558 -0.55885386 -0.06597702
+## Oxygen.Saturation..    -0.77046655 -0.15538660  0.12684303 -0.08386211
+## Calculated.Oxygen      -0.20973206 -0.11901041 -0.14152286  0.11682201
+## Salinity               -0.07718595 -0.10044605 -0.00293044  0.19439448
+## Temperature            -0.15272046  0.14822330  0.28572289 -0.41180879
+## JD.Ammonium             0.31840282  0.01610872 -0.24737326 -0.31232678
+## JD.Nitrate             -0.11366680 -0.14060747 -0.08771393 -0.07916812
+## JD.Nitrite             -0.01848704 -0.46952971  0.24241053 -0.49470595
+## logflow                -0.08618663  0.69864241  0.48623520 -0.11647106
+## logSPM                 -0.35818051 -0.04385492 -0.17529103  0.18784154
+##                                PC9        PC10        PC11         PC12
+## Depth                   0.13246499 -0.01046354  0.17464368  0.006256985
+## Chlorophyll.a.a.PHA     0.15258588  0.11498980  0.63870048 -0.011804038
+## Calculated.Chlorophyll -0.22058786 -0.24423302 -0.27226863  0.009445403
+## Oxygen.Saturation..    -0.08135906  0.21751411 -0.14127064 -0.335901563
+## Calculated.Oxygen      -0.08746035 -0.24150028  0.09098860  0.711156105
+## Salinity               -0.22374874  0.56974797 -0.20809421  0.411076278
+## Temperature             0.27992929  0.09733093 -0.02182902  0.458261853
+## JD.Ammonium            -0.27419425  0.59807439 -0.03957643 -0.038372416
+## JD.Nitrate              0.72551421  0.17584975 -0.14874992 -0.008536020
+## JD.Nitrite             -0.37696345 -0.23736830  0.15914166  0.009475187
+## logflow                -0.13052170  0.07842485  0.13624153  0.007540065
+## logSPM                 -0.08442947  0.19022875  0.58977486 -0.021905783</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prin.env2 <span class="co"># sv is the standard deviations of PCs</span></code></pre></div>
 <pre><code>## Call:
 ## princomp(x = envdat.phy.scaled)
 ## 
@@ -756,7 +923,8 @@ dudi.env2 &lt;-<span class="kw">dudi.pca</span>(envdat.phy.scaled, <span class="
 ## 0.82603202 0.67272593 0.58927769 0.45780780 0.30979093 0.06170897 
 ## 
 ##  12  variables and  77 observations.</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">          ## loadings is matrix of variable loadings, columns contain eigenvectors</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">          <span class="co"># loadings is matrix of variable loadings, columns contain eigenvectors</span>
+          <span class="co"># Only for looking at scaling 2??</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dudi.env2</code></pre></div>
 <pre><code>## Duality diagramm
 ## class: pca dudi
@@ -778,86 +946,93 @@ dudi.env2 &lt;-<span class="kw">dudi.pca</span>(envdat.phy.scaled, <span class="
 ## 4 $co        12   4    column coordinates  
 ## 5 $c1        12   4    column normed scores
 ## other elements: cent norm</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(factoextra)
-eig1 &lt;-<span class="st"> </span><span class="kw">fviz_eig</span>(prin.env2, <span class="dt">geom=</span><span class="st">&quot;bar&quot;</span>, <span class="dt">width=</span>.<span class="dv">4</span>)+<span class="kw">theme</span>(<span class="dt">panel.grid=</span><span class="kw">element_blank</span>())
-eig2 &lt;-<span class="st"> </span><span class="kw">fviz_eig</span>(dudi.env2, <span class="dt">geom=</span><span class="st">&quot;bar&quot;</span>, <span class="dt">width=</span>.<span class="dv">4</span>)+<span class="kw">theme</span>(<span class="dt">panel.grid=</span><span class="kw">element_blank</span>())
+<p>These should all be doing the same thing, so when we look at the eigenvalues they should be the same. And it looks like the first 4 axes are important.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meaneig &lt;-<span class="kw">mean</span>(dudi.env2$eig) <span class="co"># .98</span>
+
+<span class="kw">library</span>(factoextra)
+eig0 &lt;-<span class="st"> </span><span class="kw">fviz_eig</span>(pr.env2, <span class="dt">geom=</span><span class="st">&quot;bar&quot;</span>, <span class="dt">width=</span>.<span class="dv">4</span>, <span class="dt">title=</span><span class="st">&quot;prcomp&quot;</span>)+<span class="kw">theme</span>(<span class="dt">panel.grid=</span><span class="kw">element_blank</span>())
+eig1 &lt;-<span class="st"> </span><span class="kw">fviz_eig</span>(prin.env2, <span class="dt">geom=</span><span class="st">&quot;bar&quot;</span>, <span class="dt">width=</span>.<span class="dv">4</span>, <span class="dt">title=</span><span class="st">&quot;princomp&quot;</span>)+<span class="kw">theme</span>(<span class="dt">panel.grid=</span><span class="kw">element_blank</span>())
+eig2 &lt;-<span class="st"> </span><span class="kw">fviz_eig</span>(dudi.env2, <span class="dt">geom=</span><span class="st">&quot;bar&quot;</span>, <span class="dt">width=</span>.<span class="dv">4</span>, <span class="dt">title=</span><span class="st">&quot;dudi.pca&quot;</span>)+<span class="kw">theme</span>(<span class="dt">panel.grid=</span><span class="kw">element_blank</span>())
 
 <span class="kw">library</span>(gridExtra)
-<span class="kw">grid.arrange</span>(eig1, eig2, <span class="dt">nrow=</span><span class="dv">1</span>)</code></pre></div>
-<p><img src="images/06-A/unnamed-chunk-18-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p0&lt;-<span class="kw">fviz_pca_ind</span>(prin.env2, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,
+<span class="kw">grid.arrange</span>(eig0,eig1, eig2, <span class="dt">nrow=</span><span class="dv">1</span>)</code></pre></div>
+<p><img src="images/06-A/unnamed-chunk-16-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p0&lt;-<span class="kw">fviz_pca_ind</span>(pr.env2, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,
              <span class="dt">habillage=</span> envdat.phy$system)
 
 p0</code></pre></div>
-<p><img src="images/06-A/unnamed-chunk-19-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fviz_pca_ind</span>(prin.env2, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,
+<p><img src="images/06-A/unnamed-chunk-17-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fviz_pca_ind</span>(pr.env2, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,
              <span class="dt">habillage=</span> envdat.phy$system,
              <span class="dt">addEllipses =</span> <span class="ot">TRUE</span>, 
              <span class="dt">ellipse.level=</span>.<span class="dv">69</span>)</code></pre></div>
-<p><img src="images/06-A/unnamed-chunk-20-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prin.p &lt;-<span class="st"> </span><span class="kw">fviz_pca_biplot</span>(prin.env2, 
+<p><img src="images/06-A/unnamed-chunk-18-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prin.p &lt;-<span class="st"> </span><span class="kw">fviz_pca_biplot</span>(pr.env2, 
                 <span class="dt">label=</span><span class="st">&quot;var&quot;</span>, 
                 <span class="dt">habillage=</span>envdat.phy$system, 
                 <span class="dt">axes =</span> <span class="dv">1</span>:<span class="dv">2</span>)
 
 prin.p</code></pre></div>
-<p><img src="images/06-A/unnamed-chunk-21-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fviz_pca_var</span>(dudi.env2, <span class="dt">col.circle=</span><span class="st">&quot;black&quot;</span>)+
+<p><img src="images/06-A/unnamed-chunk-19-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fviz_pca_var</span>(pr.env2, <span class="dt">col.circle=</span><span class="st">&quot;black&quot;</span>)+
 <span class="st">  </span><span class="kw">xlim</span>(<span class="kw">c</span>(-<span class="fl">1.2</span>,<span class="fl">1.2</span>)) +
 <span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(-<span class="fl">1.2</span>,<span class="fl">1.2</span>))</code></pre></div>
-<p><img src="images/06-A/unnamed-chunk-22-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p1 &lt;-<span class="st"> </span><span class="kw">fviz_pca_ind</span>(prin.env2, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,
+<p><img src="images/06-A/unnamed-chunk-20-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p1 &lt;-<span class="st"> </span><span class="kw">fviz_pca_ind</span>(pr.env2, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,
              <span class="dt">habillage=</span> envdat.phy$system,
              <span class="dt">axes=</span> <span class="dv">2</span>:<span class="dv">3</span>)
 
-p2 &lt;-<span class="st"> </span><span class="kw">fviz_pca_ind</span>(prin.env2, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,
+p2 &lt;-<span class="st"> </span><span class="kw">fviz_pca_ind</span>(pr.env2, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,
              <span class="dt">habillage=</span> envdat.phy$system,
              <span class="dt">axes=</span> <span class="dv">3</span>:<span class="dv">4</span>)
 
-p3 &lt;-<span class="st"> </span><span class="kw">fviz_pca_ind</span>(prin.env2, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,
+p3 &lt;-<span class="st"> </span><span class="kw">fviz_pca_ind</span>(pr.env2, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,
              <span class="dt">habillage=</span> envdat.phy$system,
              <span class="dt">axes=</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
 
-p4 &lt;-<span class="st"> </span><span class="kw">fviz_pca_ind</span>(prin.env2, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,
+p4 &lt;-<span class="st"> </span><span class="kw">fviz_pca_ind</span>(pr.env2, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,
              <span class="dt">habillage=</span> envdat.phy$system,
              <span class="dt">axes=</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>))
 
-p5 &lt;-<span class="st"> </span><span class="kw">fviz_pca_ind</span>(prin.env2, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,
+p5 &lt;-<span class="st"> </span><span class="kw">fviz_pca_ind</span>(pr.env2, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,
              <span class="dt">habillage=</span> envdat.phy$system,
              <span class="dt">axes=</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>))
 
 <span class="kw">grid.arrange</span>(p0,p1,p2,p3,p4,p5)</code></pre></div>
-<p><img src="images/06-A/unnamed-chunk-23-1.png" width="672" /></p>
+<p><img src="images/06-A/unnamed-chunk-21-1.png" width="672" /></p>
 </div>
 </div>
 <div id="ca-1" class="section level4">
 <h4>CA</h4>
+<p>Should only be done on frequency data but just to show that you can use the wrong ordination if you want. The output doesn’t make a whole lot of sense.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dud.env.coa&lt;-<span class="st"> </span><span class="kw">dudi.coa</span>(envdat.phy[,-<span class="kw">c</span>(<span class="dv">13</span>:<span class="dv">16</span>)], 
                        <span class="dt">nf=</span><span class="dv">2</span>,
                        <span class="dt">scannf=</span><span class="ot">FALSE</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fviz_eig</span>(dud.env.coa)</code></pre></div>
-<p><img src="images/06-A/unnamed-chunk-25-1.png" width="672" /></p>
+<p><img src="images/06-A/unnamed-chunk-23-1.png" width="672" /></p>
 <p>Joint plot shows samples/sites and variables/species. Species are near center of inertia of samples where they are most likely to occur</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fviz_ca_biplot</span>(dud.env.coa, 
                <span class="dt">geom=</span><span class="kw">c</span>(<span class="st">&quot;point&quot;</span>, <span class="st">&quot;text&quot;</span>),
                <span class="dt">label=</span><span class="st">&quot;col&quot;</span>)</code></pre></div>
-<p><img src="images/06-A/unnamed-chunk-26-1.png" width="672" /></p>
+<p><img src="images/06-A/unnamed-chunk-24-1.png" width="672" /></p>
 </div>
 <div id="pcoa-1" class="section level4">
 <h4>PCoA</h4>
 <p>PCoA is common in microbial ecology. Here are some examples of PCoA on OTU counts using the phyloseq package (based on vegan).</p>
 <p><em>bray-curtis dissimilarity</em></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_scree</span>(ord.pco3)</code></pre></div>
+<p><img src="images/06-A/unnamed-chunk-26-1.png" width="672" /></p>
 <p><img src="images/06-A/unnamed-chunk-27-1.png" width="672" /></p>
-<p><img src="images/06-A/unnamed-chunk-28-1.png" width="672" /></p>
 <p><em>jaccard distance</em></p>
-<p><img src="images/06-A/unnamed-chunk-30-1.png" width="672" /></p>
+<p><img src="images/06-A/unnamed-chunk-29-1.png" width="672" /></p>
 <p><em>wunifrac</em></p>
-<p><img src="images/06-A/unnamed-chunk-32-1.png" width="672" /></p>
+<p>If you update to ape version 5.0, download the newest phyloseq version. Should be available on joey711 github if the newest bioconductor version still does not have the fix.</p>
+<p>Unifrac is based on shared branch lengths between samples and calculated as (sum of unshared branch lengths)/(sum of all tree branch lengths (shared+unshared)). Weighted unifrac (wunifrac in phyloseq) incorporates the abundance of taxa as well.</p>
 <p>A note on horseshoes and arch effects: if there is a lot of species turnover and samples at each end of a gradient have no overlapping species, then placing their true distance from each other is difficult. Since my gradient spans freshwater to saltwater, there is basically no overlap on the OTU level between the two ends of the gradient so a horshoe or arch is to be expected.</p>
 </div>
 <div id="ca-on-taxa-data" class="section level4">
 <h4>CA on taxa data</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ord.cca &lt;-<span class="st"> </span><span class="kw">ordinate</span>(physeq.VST, <span class="dt">method=</span><span class="st">&quot;CCA&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ord.cca &lt;-<span class="st"> </span><span class="kw">ordinate</span>(physeq2, <span class="dt">method=</span><span class="st">&quot;CCA&quot;</span>)
 ord.cca</code></pre></div>
 <pre><code>## Call: cca(X = veganifyOTU(physeq))
 ## 
@@ -871,8 +1046,8 @@ ord.cca</code></pre></div>
 ## 0.21966 0.06429 0.05646 0.04401 0.03539 0.02703 0.02347 0.02060 
 ## (Showed only 8 of all 76 unconstrained eigenvalues)</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_scree</span>(ord.cca)</code></pre></div>
-<p><img src="images/06-A/unnamed-chunk-34-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p.cca &lt;-<span class="kw">plot_ordination</span>(physeq.V4, 
+<p><img src="images/06-A/unnamed-chunk-33-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p.cca &lt;-<span class="kw">plot_ordination</span>(physeq2, 
                 ord.cca, 
                 <span class="dt">color=</span><span class="st">&quot;Salinity&quot;</span>, 
                 <span class="dt">shape=</span><span class="st">&quot;season&quot;</span>)+
@@ -882,14 +1057,14 @@ ord.cca</code></pre></div>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid=</span><span class="kw">element_blank</span>())
 
 p.cca</code></pre></div>
-<p><img src="images/06-A/unnamed-chunk-35-1.png" width="672" /></p>
+<p><img src="images/06-A/unnamed-chunk-34-1.png" width="672" /></p>
 </div>
 <div id="nmds-1" class="section level4">
 <h4>NMDS</h4>
 <p>While the original distance between samples is not preserved, NMDS is useful for understanding ranked distances in a 2D space.</p>
 <p>And choice of distance matters a lot!</p>
 <p><em>jaccard</em></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ord.nmds1 &lt;-<span class="st"> </span><span class="kw">ordinate</span>(physeq.VST, <span class="dt">method=</span><span class="st">&quot;NMDS&quot;</span>, <span class="dt">distance=</span><span class="st">&quot;jaccard&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ord.nmds1 &lt;-<span class="st"> </span><span class="kw">ordinate</span>(physeq2, <span class="dt">method=</span><span class="st">&quot;NMDS&quot;</span>, <span class="dt">distance=</span><span class="st">&quot;jaccard&quot;</span>)</code></pre></div>
 <pre><code>## Wisconsin double standardization
 ## Run 0 stress 0.1012678 
 ## Run 1 stress 0.118503 
@@ -930,47 +1105,33 @@ p.cca</code></pre></div>
 ## Run 20 stress 0.1013971 
 ## ... Procrustes: rmse 0.004188231  max resid 0.03176595 
 ## *** Solution reached</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_ordination</span>(physeq.V4, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ord.nmds1</code></pre></div>
+<pre><code>## 
+## Call:
+## metaMDS(comm = veganifyOTU(physeq), distance = distance) 
+## 
+## global Multidimensional Scaling using monoMDS
+## 
+## Data:     wisconsin(veganifyOTU(physeq)) 
+## Distance: jaccard 
+## 
+## Dimensions: 2 
+## Stress:     0.1012217 
+## Stress type 1, weak ties
+## Two convergent solutions found after 20 tries
+## Scaling: centring, PC rotation, halfchange scaling 
+## Species: expanded scores based on &#39;wisconsin(veganifyOTU(physeq))&#39;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_ordination</span>(physeq2, 
                 ord.nmds1, 
                 <span class="dt">color=</span><span class="st">&quot;Salinity&quot;</span>, 
                 <span class="dt">shape=</span><span class="st">&quot;season&quot;</span>)+
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">3</span>)+
 <span class="st">  </span><span class="kw">scale_color_continuous</span>(<span class="dt">low=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">high=</span><span class="st">&quot;goldenrod2&quot;</span>)+
 <span class="st">  </span><span class="kw">scale_shape_manual</span>(<span class="dt">values=</span><span class="kw">c</span>(<span class="dv">7</span>,<span class="dv">6</span>,<span class="dv">16</span>,<span class="dv">8</span>))+
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">main=</span><span class="st">&quot;stress .10&quot;</span>)+
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.grid=</span><span class="kw">element_blank</span>())</code></pre></div>
 <p><img src="images/06-A/unnamed-chunk-36-1.png" width="672" /></p>
 <p><em>weighted unifrac</em></p>
-<pre><code>## Run 0 stress 0.07321062 
-## Run 1 stress 0.09614166 
-## Run 2 stress 0.07314061 
-## ... New best solution
-## ... Procrustes: rmse 0.01493898  max resid 0.1277408 
-## Run 3 stress 0.0892943 
-## Run 4 stress 0.09650769 
-## Run 5 stress 0.08139253 
-## Run 6 stress 0.08517824 
-## Run 7 stress 0.08747729 
-## Run 8 stress 0.08018119 
-## Run 9 stress 0.08018285 
-## Run 10 stress 0.07321068 
-## ... Procrustes: rmse 0.01493883  max resid 0.1278214 
-## Run 11 stress 0.09045227 
-## Run 12 stress 0.08036194 
-## Run 13 stress 0.07642846 
-## Run 14 stress 0.07996063 
-## Run 15 stress 0.08517823 
-## Run 16 stress 0.08670607 
-## Run 17 stress 0.07321063 
-## ... Procrustes: rmse 0.01493869  max resid 0.1278241 
-## Run 18 stress 0.07316785 
-## ... Procrustes: rmse 0.0007298187  max resid 0.004630277 
-## ... Similar to previous best
-## Run 19 stress 0.07314061 
-## ... Procrustes: rmse 1.334673e-05  max resid 4.272116e-05 
-## ... Similar to previous best
-## Run 20 stress 0.09733993 
-## *** Solution reached</code></pre>
-<p><img src="images/06-A/unnamed-chunk-37-1.png" width="672" /></p>
 </div>
 <div id="indirect-gradient-analysis" class="section level4">
 <h4>Indirect Gradient Analysis</h4>
@@ -999,7 +1160,7 @@ ef.nmds</code></pre></div>
 ## Number of permutations: 999</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(ord.nmds2, <span class="dt">display =</span> <span class="st">&quot;sites&quot;</span>, <span class="dt">cex=</span><span class="dv">1</span>)
 <span class="kw">plot</span>(ef.nmds, <span class="dt">p.max =</span> <span class="fl">0.1</span>)</code></pre></div>
-<p><img src="images/06-A/unnamed-chunk-39-1.png" width="672" /></p>
+<p><img src="images/06-A/unnamed-chunk-40-1.png" width="672" /></p>
 </div>
 </div>
 <div id="discussion-questions" class="section level3">
