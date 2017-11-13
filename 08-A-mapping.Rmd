@@ -1,8 +1,10 @@
 ---
-layout: topic
 title: "Visualizing spatial data"
-author: Tad & Tyler
-output: html_document
+author: "Tad & Tyler"
+output:
+  html_document: default
+  pdf_document: default
+layout: topic
 ---
 
 **Assigned Reading:**
@@ -129,11 +131,186 @@ Useful functions:
 
 ### Analysis Example
 
+**Traditional plot system (base graphics)**
+
+mesuse is a dataframe with 155 obs. of 14 variables. First two columns are lat/long identifying sampling sites. The remaining collumns are environmental variables collected at each point. Each point represents as sampling site in the flood plain of the river Meuse in the Netherlands. Researchers were interested in topsoil heavy metal concentrations.
+
+## Plotting geometry
+
+# Points
+```{r}
+library(sp) 
+data(meuse) 
+coordinates(meuse) <- c("x", "y") # tells r to use x and y collumns as the lat/long 
+plot(meuse) # by default plots the points
+```
+
+# Lines
+
+```{r}
+cc <- coordinates(meuse) 
+m.sl <- SpatialLines(list(Lines(list(Line(cc)), "line1"))) 
+plot(m.sl) # plots lines connecting all the points
+```
+
+# Polygons
+
+```{r}
+data(meuse.riv)  # lat/longs outlining bank or river
+meuse.lst <- list(Polygons(list(Polygon(meuse.riv)), "meuse.riv")) # not sure what this is doing?
+meuse.pol <- SpatialPolygons(meuse.lst) # converts list to SpatialPolygon, which can be plotted
+plot(meuse.pol, col = "grey") 
+
+str(meuse.lst)
+str(meuse.pol)
+
+```
+
+# Grid
+
+```{r}
+data(meuse.grid) # from GIS data?
+coordinates(meuse.grid) <- c("x", "y") 
+meuse.grid <- as(meuse.grid, "SpatialPixels") 
+image(meuse.grid, col = "grey") 
+
+```
+
+# Combining multiple elements
+
+You can combine multiple layers by using the add = TRUE argument
+
+```{r}
+image(meuse.grid, col = "yellow") 
+plot(meuse.pol, col = "blue", add = TRUE) 
+plot(meuse, pch = 1, cex = 0.5, add = TRUE) # change shape and size of points
+# see table 3.2 for helpful arguments for customizing plots
+
+```
+
+## Axes and layout options
+
+```{r}
+layout(matrix(c(1, 2), 1, 2)) 
+plot(meuse.pol, axes = TRUE) # default axes
+plot(meuse.pol, axes = FALSE) # with custom axes
+axis(1, at = c(178000 + 0:2 * 2000), cex.axis = 0.7) 
+axis(2, at = c(326000 + 0:3 * 4000), cex.axis = 0.7) 
+box()
+```
+
+# Plot without axes
+
+```{r}
+oldpar = par(no.readonly = TRUE) 
+layout(matrix(c(1, 2), 1, 2))
+plot(meuse, axes = TRUE, cex = 0.6) 
+plot(meuse.pol, add = TRUE) 
+title("Sample locations") 
+par(mar = c(0, 0, 0, 0) + 0.1)
+plot(meuse, axes = FALSE, cex = 0.6) 
+plot(meuse.pol, add = TRUE) 
+box() 
+par(oldpar)
+```
+
+
+# Adding degrees and gridlines
+
+```{r}
+# Install and load packages
+
+#install.packages("maptools")
+library(maptools) 
+library(maps) 
+#install.packages("rgdal")
+library(rgdal) 
+
+```
+```{r}
+wrld <- map("world", interior = FALSE, xlim = c(-179, + 179), ylim = c(-89, 89), 
+            plot = FALSE) 
+wrld_p <- pruneMap(wrld, xlim = c(-179, 179)) 
+llCRS <- CRS("+proj=longlat +ellps=WGS84") 
+wrld_sp <- map2SpatialLines(wrld_p, proj4string = llCRS) 
+prj_new <- CRS("+proj=moll") 
+
+wrld_proj <- spTransform(wrld_sp, prj_new) 
+wrld_grd <- gridlines(wrld_sp, easts = c(-179, seq(-150, + 150, 50), 179.5), 
+                      norths = seq(-75, 75, 15), ndiscr = 100) 
+wrld_grd_proj <- spTransform(wrld_grd, prj_new) 
+at_sp <- gridat(wrld_sp, easts = 0, norths = seq(-75, + 75, 15), offset = 0.3) 
+at_proj <- spTransform(at_sp, prj_new) 
+plot(wrld_proj, col = "grey60") 
+plot(wrld_grd_proj, add = TRUE, lty = 3, col = "grey70") 
+text(coordinates(at_proj), pos = at_proj$pos, offset = at_proj$offset, 
+     labels = parse(text = as.character(at_proj$labels)), cex = 0.6)
+```
+
+
+## Plotting attributes and map legends
+
+Up to now we have only plotted the geometry or topology of the spatial objects. If in addition we want to show feature characteristics or attributes of the objects, we need to use type, size, or colour of the symbols, lines, or polygons.
+
+```{r}
+install.packages("gstat")
+library(gstat) 
+```
+
+
+```{r}
+idw.out <- gstat::idw(zinc ~ 1, meuse, meuse.grid, idp = 2.5)
+grays = gray.colors(4, 0.55, 0.95) 
+image(idw.out, col = grays, breaks = c(100, 200, 400, 800, 1800))  
+plot(meuse.pol, add = TRUE) 
+plot(meuse, pch = 1, cex = sqrt(meuse$zinc)/40, add = TRUE) 
+legVals <- c(100, 200, 500, 1000, 2000) 
+legend("bottomleft", legend = legVals, pch = 1, pt.cex = sqrt(legVals)/40, bty = "n", title = "measured") 
+legend("topleft", legend = c("100-200", "200-400", "400-800", "800-1800"), fill = grays, bty = "n", title = "interpolated")
+
+```
+
+
+**Tellis/lattice plots with spplot**
+
+spplot provides plotting of spatial data with attributes through the Trellis graphics system. Good for making conditional plots.
+
+```{r}
+library(lattice) 
+levelplot(z ~ x+y| name, spmap.to.lev(zn[c("direct","log")]), asp = "iso") # how to define zn? Needs to be a SpatialPixelsDataFrame
+
+# same thing with spplot
+spplot(zn[c("direct", "log")])
+```
+
+# Plotting points, polygons, lines, and grids
+
+```{r}
+library(lattice)
+spplot(meuse, c("cadmium", "zinc", "copper", "lead"))
+```
+
+```{r}
+library(maptools) 
+data(meuse.grid) 
+coordinates(meuse.grid) <- c("x", "y") 
+meuse.grid <- as(meuse.grid, "SpatialPixelsDataFrame") 
+im <- as.image.SpatialGridDataFrame(meuse.grid["dist"]) 
+cl <- ContourLines2SLDF(contourLines(im)) 
+spplot(cl)
+```
+
 
 
 ### Discussion Questions
 
+*1)* Which of the three approaches (base plot, lattice, ggplot2) do you prefer? 
 
+*2)* What kinds of spatial data do you have and what kinds of visuals have you used?
+
+*3)* Have you used any other usefull packages for vizualizing spatial data?
+
+*4)* Pros/cons of using R vs. GIS or other platforms for data visualization?
 
 
 
