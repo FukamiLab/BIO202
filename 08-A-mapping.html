@@ -20,11 +20,23 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
 
 
 
@@ -55,7 +67,6 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="style.css" type="text/css" />
 
 </head>
 
@@ -149,107 +160,6 @@ $(document).ready(function () {
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = false;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-.tocify-subheader {
-  display: inline;
-}
-.tocify-subheader .tocify-item {
-  font-size: 0.95em;
-}
-
-</style>
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -527,15 +437,284 @@ div.tocify {
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
+<p><strong>Traditional plot system (base graphics)</strong></p>
+<p>mesuse is a dataframe with 155 obs. of 14 variables. First two columns are lat/long identifying sampling sites. The remaining collumns are environmental variables collected at each point. Each point represents as sampling site in the flood plain of the river Meuse in the Netherlands. Researchers were interested in topsoil heavy metal concentrations.</p>
 </div>
+<div id="plotting-geometry" class="section level2">
+<h2>Plotting geometry</h2>
+</div>
+<div id="points" class="section level1">
+<h1>Points</h1>
+<pre class="r"><code>library(sp) </code></pre>
+<pre><code>## Warning: package &#39;sp&#39; was built under R version 3.3.3</code></pre>
+<pre class="r"><code>data(meuse) 
+coordinates(meuse) &lt;- c(&quot;x&quot;, &quot;y&quot;) # tells r to use x and y collumns as the lat/long 
+plot(meuse) # by default plots the points</code></pre>
+<p><img src="images/08-A/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="lines" class="section level1">
+<h1>Lines</h1>
+<pre class="r"><code>cc &lt;- coordinates(meuse) 
+m.sl &lt;- SpatialLines(list(Lines(list(Line(cc)), &quot;line1&quot;))) 
+plot(m.sl) # plots lines connecting all the points</code></pre>
+<p><img src="images/08-A/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="polygons" class="section level1">
+<h1>Polygons</h1>
+<pre class="r"><code>data(meuse.riv)  # lat/longs outlining bank or river
+meuse.lst &lt;- list(Polygons(list(Polygon(meuse.riv)), &quot;meuse.riv&quot;)) # not sure what this is doing?
+meuse.pol &lt;- SpatialPolygons(meuse.lst) # converts list to SpatialPolygon, which can be plotted
+plot(meuse.pol, col = &quot;grey&quot;) </code></pre>
+<p><img src="images/08-A/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>str(meuse.lst)</code></pre>
+<pre><code>## List of 1
+##  $ :Formal class &#39;Polygons&#39; [package &quot;sp&quot;] with 5 slots
+##   .. ..@ Polygons :List of 1
+##   .. .. ..$ :Formal class &#39;Polygon&#39; [package &quot;sp&quot;] with 5 slots
+##   .. .. .. .. ..@ labpt  : num [1:2] 180183 331123
+##   .. .. .. .. ..@ area   : num 2122714
+##   .. .. .. .. ..@ hole   : logi FALSE
+##   .. .. .. .. ..@ ringDir: int 1
+##   .. .. .. .. ..@ coords : num [1:176, 1:2] 182004 182137 182252 182315 182332 ...
+##   .. ..@ plotOrder: int 1
+##   .. ..@ labpt    : num [1:2] 180183 331123
+##   .. ..@ ID       : chr &quot;meuse.riv&quot;
+##   .. ..@ area     : num 2122714</code></pre>
+<pre class="r"><code>str(meuse.pol)</code></pre>
+<pre><code>## Formal class &#39;SpatialPolygons&#39; [package &quot;sp&quot;] with 4 slots
+##   ..@ polygons   :List of 1
+##   .. ..$ :Formal class &#39;Polygons&#39; [package &quot;sp&quot;] with 5 slots
+##   .. .. .. ..@ Polygons :List of 1
+##   .. .. .. .. ..$ :Formal class &#39;Polygon&#39; [package &quot;sp&quot;] with 5 slots
+##   .. .. .. .. .. .. ..@ labpt  : num [1:2] 180183 331123
+##   .. .. .. .. .. .. ..@ area   : num 2122714
+##   .. .. .. .. .. .. ..@ hole   : logi FALSE
+##   .. .. .. .. .. .. ..@ ringDir: int 1
+##   .. .. .. .. .. .. ..@ coords : num [1:176, 1:2] 182004 182137 182252 182315 182332 ...
+##   .. .. .. ..@ plotOrder: int 1
+##   .. .. .. ..@ labpt    : num [1:2] 180183 331123
+##   .. .. .. ..@ ID       : chr &quot;meuse.riv&quot;
+##   .. .. .. ..@ area     : num 2122714
+##   ..@ plotOrder  : int 1
+##   ..@ bbox       : num [1:2, 1:2] 178304 325699 182332 337685
+##   .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. ..$ : chr [1:2] &quot;x&quot; &quot;y&quot;
+##   .. .. ..$ : chr [1:2] &quot;min&quot; &quot;max&quot;
+##   ..@ proj4string:Formal class &#39;CRS&#39; [package &quot;sp&quot;] with 1 slot
+##   .. .. ..@ projargs: chr NA</code></pre>
+<pre class="r"><code>str(meuse)</code></pre>
+<pre><code>## Formal class &#39;SpatialPointsDataFrame&#39; [package &quot;sp&quot;] with 5 slots
+##   ..@ data       :&#39;data.frame&#39;:  155 obs. of  12 variables:
+##   .. ..$ cadmium: num [1:155] 11.7 8.6 6.5 2.6 2.8 3 3.2 2.8 2.4 1.6 ...
+##   .. ..$ copper : num [1:155] 85 81 68 81 48 61 31 29 37 24 ...
+##   .. ..$ lead   : num [1:155] 299 277 199 116 117 137 132 150 133 80 ...
+##   .. ..$ zinc   : num [1:155] 1022 1141 640 257 269 ...
+##   .. ..$ elev   : num [1:155] 7.91 6.98 7.8 7.66 7.48 ...
+##   .. ..$ dist   : num [1:155] 0.00136 0.01222 0.10303 0.19009 0.27709 ...
+##   .. ..$ om     : num [1:155] 13.6 14 13 8 8.7 7.8 9.2 9.5 10.6 6.3 ...
+##   .. ..$ ffreq  : Factor w/ 3 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##   .. ..$ soil   : Factor w/ 3 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;: 1 1 1 2 2 2 2 1 1 2 ...
+##   .. ..$ lime   : Factor w/ 2 levels &quot;0&quot;,&quot;1&quot;: 2 2 2 1 1 1 1 1 1 1 ...
+##   .. ..$ landuse: Factor w/ 15 levels &quot;Aa&quot;,&quot;Ab&quot;,&quot;Ag&quot;,..: 4 4 4 11 4 11 4 2 2 15 ...
+##   .. ..$ dist.m : num [1:155] 50 30 150 270 380 470 240 120 240 420 ...
+##   ..@ coords.nrs : int [1:2] 1 2
+##   ..@ coords     : num [1:155, 1:2] 181072 181025 181165 181298 181307 ...
+##   .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. ..$ : chr [1:155] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...
+##   .. .. ..$ : chr [1:2] &quot;x&quot; &quot;y&quot;
+##   ..@ bbox       : num [1:2, 1:2] 178605 329714 181390 333611
+##   .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. ..$ : chr [1:2] &quot;x&quot; &quot;y&quot;
+##   .. .. ..$ : chr [1:2] &quot;min&quot; &quot;max&quot;
+##   ..@ proj4string:Formal class &#39;CRS&#39; [package &quot;sp&quot;] with 1 slot
+##   .. .. ..@ projargs: chr NA</code></pre>
+</div>
+<div id="grid" class="section level1">
+<h1>Grid</h1>
+<pre class="r"><code>data(meuse.grid) # from GIS data?
+coordinates(meuse.grid) &lt;- c(&quot;x&quot;, &quot;y&quot;) 
+meuse.grid &lt;- as(meuse.grid, &quot;SpatialPixels&quot;) 
+image(meuse.grid, col = &quot;grey&quot;) </code></pre>
+<p><img src="images/08-A/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="combining-multiple-elements" class="section level1">
+<h1>Combining multiple elements</h1>
+<p>You can combine multiple layers by using the add = TRUE argument</p>
+<pre class="r"><code>image(meuse.grid, col = &quot;yellow&quot;) 
+plot(meuse.pol, col = &quot;blue&quot;, add = TRUE) 
+plot(meuse, pch = 1, cex = 0.5, add = TRUE) # change shape and size of points</code></pre>
+<p><img src="images/08-A/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code># see table 3.2 for helpful arguments for customizing plots</code></pre>
+<div id="axes-and-layout-options" class="section level2">
+<h2>Axes and layout options</h2>
+<pre class="r"><code>layout(matrix(c(1, 2), 1, 2)) 
+plot(meuse.pol, axes = TRUE) # default axes
+plot(meuse.pol, axes = FALSE) # with custom axes
+axis(1, at = c(178000 + 0:2 * 2000), cex.axis = 0.7) 
+axis(2, at = c(326000 + 0:3 * 4000), cex.axis = 0.7) 
+box()</code></pre>
+<p><img src="images/08-A/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+</div>
+<div id="plot-without-axes" class="section level1">
+<h1>Plot without axes</h1>
+<pre class="r"><code>oldpar = par(no.readonly = TRUE) 
+layout(matrix(c(1, 2), 1, 2))
+plot(meuse, axes = TRUE, cex = 0.6) 
+plot(meuse.pol, add = TRUE) 
+title(&quot;Sample locations&quot;) 
+par(mar = c(0, 0, 0, 0) + 0.1)
+plot(meuse, axes = FALSE, cex = 0.6) 
+plot(meuse.pol, add = TRUE) 
+box() </code></pre>
+<p><img src="images/08-A/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>par(oldpar)</code></pre>
+</div>
+<div id="adding-degrees-and-gridlines" class="section level1">
+<h1>Adding degrees and gridlines</h1>
+<pre class="r"><code># Install and load packages
+
+#install.packages(&quot;maptools&quot;)
+library(maptools) </code></pre>
+<pre><code>## Warning: package &#39;maptools&#39; was built under R version 3.3.3</code></pre>
+<pre><code>## Checking rgeos availability: TRUE</code></pre>
+<pre class="r"><code>library(maps) </code></pre>
+<pre><code>## Warning: package &#39;maps&#39; was built under R version 3.3.3</code></pre>
+<pre class="r"><code>#install.packages(&quot;rgdal&quot;)
+library(rgdal) </code></pre>
+<pre><code>## Warning: package &#39;rgdal&#39; was built under R version 3.3.3</code></pre>
+<pre><code>## rgdal: version: 1.2-13, (SVN revision 686)
+##  Geospatial Data Abstraction Library extensions to R successfully loaded
+##  Loaded GDAL runtime: GDAL 2.2.0, released 2017/04/28
+##  Path to GDAL shared files: C:/Program Files/R/R-3.3.1/library/rgdal/gdal
+##  Loaded PROJ.4 runtime: Rel. 4.9.3, 15 August 2016, [PJ_VERSION: 493]
+##  Path to PROJ.4 shared files: C:/Program Files/R/R-3.3.1/library/rgdal/proj
+##  Linking to sp version: 1.2-5</code></pre>
+<pre class="r"><code>wrld &lt;- map(&quot;world&quot;, interior = FALSE, xlim = c(-179, + 179), ylim = c(-89, 89), 
+            plot = FALSE) 
+wrld_p &lt;- pruneMap(wrld, xlim = c(-179, 179)) 
+llCRS &lt;- CRS(&quot;+proj=longlat +ellps=WGS84&quot;) 
+wrld_sp &lt;- map2SpatialLines(wrld_p, proj4string = llCRS) 
+prj_new &lt;- CRS(&quot;+proj=moll&quot;) 
+
+wrld_proj &lt;- spTransform(wrld_sp, prj_new) 
+wrld_grd &lt;- gridlines(wrld_sp, easts = c(-179, seq(-150, + 150, 50), 179.5), 
+                      norths = seq(-75, 75, 15), ndiscr = 100) 
+wrld_grd_proj &lt;- spTransform(wrld_grd, prj_new) 
+at_sp &lt;- gridat(wrld_sp, easts = 0, norths = seq(-75, + 75, 15), offset = 0.3) 
+at_proj &lt;- spTransform(at_sp, prj_new) 
+plot(wrld_proj, col = &quot;grey60&quot;) 
+plot(wrld_grd_proj, add = TRUE, lty = 3, col = &quot;grey70&quot;) 
+text(coordinates(at_proj), pos = at_proj$pos, offset = at_proj$offset, 
+     labels = parse(text = as.character(at_proj$labels)), cex = 0.6)</code></pre>
+<p><img src="images/08-A/unnamed-chunk-10-1.png" width="672" /></p>
+<div id="plotting-attributes-and-map-legends" class="section level2">
+<h2>Plotting attributes and map legends</h2>
+<p>Up to now we have only plotted the geometry or topology of the spatial objects. If in addition we want to show feature characteristics or attributes of the objects, we need to use type, size, or colour of the symbols, lines, or polygons.</p>
+<pre class="r"><code>#install.packages(&quot;gstat&quot;)
+library(gstat) </code></pre>
+<pre><code>## Warning: package &#39;gstat&#39; was built under R version 3.3.3</code></pre>
+<pre class="r"><code>idw.out &lt;- gstat::idw(zinc ~ 1, meuse, meuse.grid, idp = 2.5) # gstat package used to create objects that hold info used for geostatistical prediction. idw is inverse distance weighted interpolation.</code></pre>
+<pre><code>## [inverse distance weighted interpolation]</code></pre>
+<pre class="r"><code>grays = gray.colors(4, 0.55, 0.95) # defines color scheme
+image(idw.out, col = grays, breaks = c(100, 200, 400, 800, 1800))  
+plot(meuse.pol, add = TRUE) 
+plot(meuse, pch = 1, cex = sqrt(meuse$zinc)/40, add = TRUE) 
+legVals &lt;- c(100, 200, 500, 1000, 2000) 
+legend(&quot;bottomleft&quot;, legend = legVals, pch = 1, pt.cex = sqrt(legVals)/40, bty = &quot;n&quot;, title = &quot;measured&quot;) 
+legend(&quot;topleft&quot;, legend = c(&quot;100-200&quot;, &quot;200-400&quot;, &quot;400-800&quot;, &quot;800-1800&quot;), fill = grays, bty = &quot;n&quot;, title = &quot;interpolated&quot;)</code></pre>
+<p><img src="images/08-A/unnamed-chunk-12-1.png" width="672" /></p>
+<p><strong>Tellis/lattice plots with spplot</strong></p>
+<p>spplot provides plotting of spatial data with attributes through the Trellis graphics system. Good for making conditional plots.</p>
+</div>
+</div>
+<div id="plotting-points-polygons-lines-and-grids" class="section level1">
+<h1>Plotting points, polygons, lines, and grids</h1>
+<pre class="r"><code>library(lattice)</code></pre>
+<pre><code>## Warning: package &#39;lattice&#39; was built under R version 3.3.3</code></pre>
+<pre class="r"><code>spplot(meuse, c(&quot;cadmium&quot;, &quot;zinc&quot;, &quot;copper&quot;, &quot;lead&quot;)) # easy way to plot side by side maps</code></pre>
+<p><img src="images/08-A/unnamed-chunk-13-1.png" width="672" /></p>
+<pre class="r"><code>library(maptools) 
+data(meuse.grid) 
+coordinates(meuse.grid) &lt;- c(&quot;x&quot;, &quot;y&quot;) 
+meuse.grid &lt;- as(meuse.grid, &quot;SpatialPixelsDataFrame&quot;) 
+im &lt;- as.image.SpatialGridDataFrame(meuse.grid[&quot;dist&quot;]) 
+cl &lt;- ContourLines2SLDF(contourLines(im)) 
+spplot(cl)</code></pre>
+<p><img src="images/08-A/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+<div id="adding-reference-and-layout-elements-to-plots" class="section level1">
+<h1>Adding reference and layout elements to plots</h1>
+<pre class="r"><code>river &lt;- list(&quot;sp.polygons&quot;, meuse.pol) 
+north &lt;- list(&quot;SpatialPolygonsRescale&quot;, layout.north.arrow(), offset = c(178750, 332500), scale = 400) 
+scale &lt;- list(&quot;SpatialPolygonsRescale&quot;, layout.scale.bar(), offset = c(180200, 329800), scale = 1000, fill = c(&quot;transparent&quot;, &quot;black&quot;))
+txt1 &lt;- list(&quot;sp.text&quot;, c(180200, 329950), &quot;0&quot;) 
+txt2 &lt;- list(&quot;sp.text&quot;, c(181200, 329950), &quot;1 km&quot;) 
+pts &lt;- list(&quot;sp.points&quot;, meuse, pch = 3, col = &quot;black&quot;) 
+meuse.layout &lt;- list(river, north, scale, txt1, txt2, pts)
+zn &lt;- meuse[&quot;zinc&quot;]
+spplot(zn, sp.layout = meuse.layout)</code></pre>
+<p><img src="images/08-A/unnamed-chunk-15-1.png" width="672" /></p>
+<p>** Other options: ggplot2 and latticeExtra**</p>
+<pre class="r"><code>library(ggplot2) </code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.3.2</code></pre>
+<pre class="r"><code>methods(fortify) # use fortify function to convert spatial data to a dataframe which ggplot can read</code></pre>
+<pre><code>##  [1] fortify.cld*                      fortify.confint.glht*            
+##  [3] fortify.data.frame*               fortify.default*                 
+##  [5] fortify.function*                 fortify.glht*                    
+##  [7] fortify.Line*                     fortify.Lines*                   
+##  [9] fortify.lm*                       fortify.map*                     
+## [11] fortify.NULL*                     fortify.Polygon*                 
+## [13] fortify.Polygons*                 fortify.SpatialLinesDataFrame*   
+## [15] fortify.SpatialPolygons*          fortify.SpatialPolygonsDataFrame*
+## [17] fortify.summary.glht*            
+## see &#39;?methods&#39; for accessing help and source code</code></pre>
+<p>However, doesn’t work for SpatialPointsDataFrame such as meuse data set, so we have to do it manually.</p>
+<pre class="r"><code>m = as(meuse, &quot;data.frame&quot;) 
+ggplot(m, aes(x, y)) + geom_point() + coord_equal()</code></pre>
+<p><img src="images/08-A/unnamed-chunk-17-1.png" width="672" /></p>
+</div>
+<div id="latticeextra" class="section level1">
+<h1>latticeExtra</h1>
+<pre class="r"><code>library(latticeExtra) </code></pre>
+<pre><code>## Warning: package &#39;latticeExtra&#39; was built under R version 3.3.3</code></pre>
+<pre><code>## Loading required package: RColorBrewer</code></pre>
+<pre><code>## Warning: package &#39;RColorBrewer&#39; was built under R version 3.3.2</code></pre>
+<pre><code>## 
+## Attaching package: &#39;latticeExtra&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     layer</code></pre>
+<pre class="r"><code>p = spplot(meuse[&quot;zinc&quot;]) 
+m = SpatialPolygonsDataFrame(meuse.pol, data.frame(col = 1), match.ID = FALSE) 
+l = spplot(m) 
+l+p </code></pre>
+<p><img src="images/08-A/unnamed-chunk-18-1.png" width="672" /></p>
+<pre class="r"><code>p+l</code></pre>
+<p><img src="images/08-A/unnamed-chunk-18-2.png" width="672" /></p>
+<div id="additional-resources" class="section level3">
+<h3>Additional resources</h3>
+</div>
+</div>
+<div id="about-how-r-handles-spatial-data" class="section level1">
+<h1>About how R handles spatial data</h1>
+<p><a href="http://rspatial.org/spatial/rst/1-introduction.html" class="uri">http://rspatial.org/spatial/rst/1-introduction.html</a></p>
+</div>
+<div id="about-making-maps-in-ggplot" class="section level1">
+<h1>About making maps in ggplot</h1>
+<p><a href="http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html" class="uri">http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html</a></p>
+<p><a href="https://timogrossenbacher.ch/2016/12/beautiful-thematic-maps-with-ggplot2-only/" class="uri">https://timogrossenbacher.ch/2016/12/beautiful-thematic-maps-with-ggplot2-only/</a></p>
 <div id="discussion-questions" class="section level3">
 <h3>Discussion Questions</h3>
+<p><em>1)</em> Which of the three approaches (base plot, lattice, ggplot2) do you prefer?</p>
+<p><em>2)</em> What kinds of spatial data do you have and what kinds of visuals have you used?</p>
+<p><em>3)</em> Have you used any other usefull packages for vizualizing spatial data?</p>
+<p><em>4)</em> Pros/cons of using R vs. GIS or other platforms for data visualization?</p>
+</div>
 </div>
 
 
 
-</div>
-</div>
 
 </div>
 

@@ -165,10 +165,6 @@ str(meuse.lst)
 str(meuse.pol)
 
 str(meuse)
-
-meuse2 <- SpatialPolygonsDataFrame(meuse.pol)
-
-
 ```
 
 # Grid
@@ -258,7 +254,7 @@ text(coordinates(at_proj), pos = at_proj$pos, offset = at_proj$offset,
 Up to now we have only plotted the geometry or topology of the spatial objects. If in addition we want to show feature characteristics or attributes of the objects, we need to use type, size, or colour of the symbols, lines, or polygons.
 
 ```{r}
-install.packages("gstat")
+#install.packages("gstat")
 library(gstat) 
 ```
 
@@ -280,14 +276,6 @@ legend("topleft", legend = c("100-200", "200-400", "400-800", "800-1800"), fill 
 **Tellis/lattice plots with spplot**
 
 spplot provides plotting of spatial data with attributes through the Trellis graphics system. Good for making conditional plots.
-
-```{r}
-library(lattice) 
-levelplot(z ~ x+y| name, spmap.to.lev(zn[c("direct","log")]), asp = "iso") # how to define zn? Needs to be a SpatialPixelsDataFrame
-
-# same thing with spplot
-spplot(zn[c("direct", "log")])
-```
 
 # Plotting points, polygons, lines, and grids
 
