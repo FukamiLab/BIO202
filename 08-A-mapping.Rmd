@@ -164,6 +164,11 @@ plot(meuse.pol, col = "grey")
 str(meuse.lst)
 str(meuse.pol)
 
+str(meuse)
+
+meuse2 <- SpatialPolygonsDataFrame(meuse.pol)
+
+
 ```
 
 # Grid
@@ -259,14 +264,15 @@ library(gstat)
 
 
 ```{r}
-idw.out <- gstat::idw(zinc ~ 1, meuse, meuse.grid, idp = 2.5)
-grays = gray.colors(4, 0.55, 0.95) 
+idw.out <- gstat::idw(zinc ~ 1, meuse, meuse.grid, idp = 2.5) # gstat package used to create objects that hold info used for geostatistical prediction. idw is inverse distance weighted interpolation.
+grays = gray.colors(4, 0.55, 0.95) # defines color scheme
 image(idw.out, col = grays, breaks = c(100, 200, 400, 800, 1800))  
 plot(meuse.pol, add = TRUE) 
 plot(meuse, pch = 1, cex = sqrt(meuse$zinc)/40, add = TRUE) 
 legVals <- c(100, 200, 500, 1000, 2000) 
 legend("bottomleft", legend = legVals, pch = 1, pt.cex = sqrt(legVals)/40, bty = "n", title = "measured") 
 legend("topleft", legend = c("100-200", "200-400", "400-800", "800-1800"), fill = grays, bty = "n", title = "interpolated")
+
 
 ```
 
@@ -287,7 +293,7 @@ spplot(zn[c("direct", "log")])
 
 ```{r}
 library(lattice)
-spplot(meuse, c("cadmium", "zinc", "copper", "lead"))
+spplot(meuse, c("cadmium", "zinc", "copper", "lead")) # easy way to plot side by side maps
 ```
 
 ```{r}
@@ -298,8 +304,64 @@ meuse.grid <- as(meuse.grid, "SpatialPixelsDataFrame")
 im <- as.image.SpatialGridDataFrame(meuse.grid["dist"]) 
 cl <- ContourLines2SLDF(contourLines(im)) 
 spplot(cl)
+
 ```
 
+
+# Adding reference and layout elements to plots
+
+```{r}
+river <- list("sp.polygons", meuse.pol) 
+north <- list("SpatialPolygonsRescale", layout.north.arrow(), offset = c(178750, 332500), scale = 400) 
+scale <- list("SpatialPolygonsRescale", layout.scale.bar(), offset = c(180200, 329800), scale = 1000, fill = c("transparent", "black"))
+txt1 <- list("sp.text", c(180200, 329950), "0") 
+txt2 <- list("sp.text", c(181200, 329950), "1 km") 
+pts <- list("sp.points", meuse, pch = 3, col = "black") 
+meuse.layout <- list(river, north, scale, txt1, txt2, pts)
+zn <- meuse["zinc"]
+spplot(zn, sp.layout = meuse.layout)
+
+```
+
+** Other options: ggplot2 and latticeExtra**
+
+```{r}
+library(ggplot2) 
+methods(fortify) # use fortify function to convert spatial data to a dataframe which ggplot can read
+```
+
+
+However, doesn't work for SpatialPointsDataFrame such as meuse data set, so we have to do it manually.
+
+```{r}
+m = as(meuse, "data.frame") 
+ggplot(m, aes(x, y)) + geom_point() + coord_equal()
+```
+
+
+# latticeExtra
+
+```{r}
+library(latticeExtra) 
+p = spplot(meuse["zinc"]) 
+m = SpatialPolygonsDataFrame(meuse.pol, data.frame(col = 1), match.ID = FALSE) 
+l = spplot(m) 
+l+p 
+p+l
+```
+
+
+### Additional resources
+
+# About how R handles spatial data
+
+http://rspatial.org/spatial/rst/1-introduction.html 
+
+# About making maps in ggplot
+
+http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
+
+https://timogrossenbacher.ch/2016/12/beautiful-thematic-maps-with-ggplot2-only/
 
 
 ### Discussion Questions
