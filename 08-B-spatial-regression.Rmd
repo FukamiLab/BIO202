@@ -92,10 +92,158 @@ Note:
 
 
 ### Analysis Example
+```{r, setup, echo = T}
+# load libraries and data
+library(plyr)
+library(dplyr)
+library(rgdal)
+library(magrittr)
+AmazonasShape <- readOGR("data/am_municipios/13MUE250GC_SIR.shp")
+YFcases = read.csv("data/cleanedYFV_enviro.csv") %>% 
+  mutate(code = as.character(code))
+```
+#### Data Visualization
+```{r, vis}
+plot(AmazonasShape)
+points(YFcases$x, YFcases$y, col = ifelse(YFcases$YFV > 0, "red", "black"), pch  = 16)
+
+AmazonasShape@data %<>% left_join(YFcases, by = c("CD_GEOCODM" = "code"))
+spplot(AmazonasShape, "percent_forest", main = "Percent Forest Cover")
+spplot(AmazonasShape, "percent_forest_loss", main = "Percent Forest Loss")
+spplot(AmazonasShape, "avg.rainfall", main = "Average Monthly Rainfall")
+spplot(AmazonasShape, "mean_elevation", main = "Mean Elevation")
 
 
+```
+
+#### Fit a model without autocorrelation
+```{r, model_basic}
+YF.glm = glm(YFVoccurence ~ percent_forest_loss + percent_forest + 
+               mean_elevation + population + avg.rainfall, 
+             family = binomial(link = "probit"),
+             data = YFcases)
+
+summary(YF.glm)
+drop1(YF.glm)
+```
+
+#### Detect spatial correlation
+```{r, detecting_spatial_corr}
+library(gstat)
+temp_data = data.frame(error = rstandard(YF.glm), x = YFcases$x, y = YFcases$y)
+coordinates(temp_data) <- c("x","y") 
+bubble(temp_data, "error", col = c("black","grey"),
+       main = "Residuals", xlab = "X-coordinates", ylab = "Y-coordinates")
+
+plot(temp_data$error ~ temp_data$x, xlab = "X-coordinates", ylab = "Errors")
+plot(temp_data$error ~ temp_data$y, xlab = "Y-coordinates", ylab = "Errors")
+
+plot(variogram(error ~ 1, temp_data))
+plot(variogram(error ~ 1, temp_data, alpha = c(0, 45, 90, 135)))
+```
+
+#### Construct models with correlation structure
+```{r, model_spatial1, eval = F}
+f1 = YFVoccurence ~ percent_forest_loss + percent_forest + 
+               mean_elevation + population + avg.rainfall
+model1 <- glm(f1, family = binomial(link = "logit"), correlation = corSpher(form =~ x + y, nugget = TRUE), data = YFcases)
+```
+The error from this code is `Error in corSpher(form = ~x + y, nugget = TRUE) :`
+`could not find function "corSpher"`. This error message occurs because you can't use a spatial correlation structure with `glm`. As laid out in Zuur et al., correlation structure can be specified in `gls`, `gamm`, and `lme`, however `gls` and `lme` do not allow for specifying that the data are binomial. 
+
+#### Correlation structure using glmmPQL
+F. Dormann, C., M. McPherson, J., B. Araújo, M., Bivand, R., Bolliger, J., Carl, G., G. Davies, R., Hirzel, A., Jetz, W., Daniel Kissling, W., Kühn, I., Ohlemüller, R., R. Peres-Neto, P., Reineking, B., Schröder, B., M. Schurr, F. and Wilson, R. (2007), Methods to account for spatial autocorrelation in the analysis of species distributional data: a review. Ecography, 30: 609–628. [doi:10.1111/j.2007.0906-7590.05171.x](http://onlinelibrary.wiley.com/doi/10.1111/j.2007.0906-7590.05171.x/full)
+
+The supplementary material of this paper suggests using the Generalized Linear Mixed Model function `glmmPQL`  in the package `MASS` for binary data with a correlation structure. They note that this is a  "cheat", as their suggestions is to add a group variable that is the same for all elements of the dataset. Then, glmmPQL can be run on the data even if random effects are not desired (glmmPQL requires random effect be specified).  
+```{r, model_spatial2}
+library(MASS)
+library(nlme)
+YFcases <- cbind(YFcases, group = factor(rep("a",nrow(YFcases))))
+# GLMM fits ----------------------
+f1 = YFVoccurence ~ percent_forest_loss + percent_forest + 
+               mean_elevation + population + avg.rainfall
+model.base<- glmmPQL(f1, random=~1|group,
+                   data=YFcases,
+                   family=binomial(link = "probit"))
+summary(model.base)
+plot(Variogram(model.base), main = "No Correlation Structure")
+
+#exponential correlation structure
+model.1 <- glmmPQL(f1, random=~1|group,
+                   data=YFcases,
+                   correlation=corExp(form=~x+y, nugget = T),
+                   family=binomial(link = "probit"))
+summary(model.1)
+plot(Variogram(model.1), main = "Exponential Correlation")
+
+#Gaussian correlation structure
+model.2 <- glmmPQL(f1, random=~1|group,
+                   data=YFcases,
+                   correlation=corGaus(form=~x+y, nugget = T),
+                   family=binomial(link = "probit"))
+summary(model.2)
+plot(Variogram(model.2), main = "Gaussian Correlation")
+
+#spherical correlation structure
+model.3 <- glmmPQL(f1, random=~1|group,
+                   data=YFcases,
+                   correlation=corSpher(form=~x+y, nugget = T),
+                   family=binomial(link = "probit"))
+summary(model.3)
+plot(Variogram(model.3), main = "Spherical Correlation")
+
+#rational quadratic correlation structure
+model.4 <- glmmPQL(f1, random=~1|group,
+                   data=YFcases,
+                   correlation=corRatio(form=~x+y, nugget = T),
+                   family=binomial(link = "probit"))
+summary(model.4)
+plot(Variogram(model.4), main = "Rational Quadratic Correlation")
+
+```
+
+#### Correlation structure using gamm
+Alternatively, if you think you need a smoother, you can you `gamm`. Here, we suppose that percent forest has a nonlinear effect on the chance of yellow fever occurence. 
+```{r, model_spatial_gamm, warning=FALSE, message=FALSE}
+library(mgcv)
+f2 = YFVoccurence ~ percent_forest_loss + s(percent_forest) + 
+               mean_elevation + population + avg.rainfall
+model2.base <- gamm(f2, method = "REML",
+                   data=YFcases,
+                   family=binomial(link = "probit"))
+
+#exponential correlation structure
+model2.1 <- gamm(f2, method = "REML",
+                 data=YFcases,
+                 correlation=corExp(form=~x+y, nugget = T),
+                 family=binomial(link = "probit"))
+
+#Gaussian correlation structure
+model2.2 <- gamm(f2, method = "REML",
+                   data=YFcases,
+                   correlation=corGaus(form=~x+y, nugget = T),
+                   family=binomial(link = "probit"))
+
+#rational quadratic correlation structure
+model2.4 <- gamm(f2, method = "REML",
+                   data=YFcases,
+                   correlation=corRatio(form=~x+y, nugget = T),
+                   family=binomial(link = "probit"))
+
+AIC(model2.base$lme, model2.1$lme, model2.2$lme, model2.4$lme)
+```
+One benefit of using `gamm` is that you have AIC values to compare the model fits while `glmmPQL` does not calculate AIC values. 
 
 ### Discussion Questions
+
+1) How should the variogram be interpreted if it is not a uniformly increasing band of points? 
+
+2) What data analyses do you foresee needing correlation structure for? Will the spatial/temportal dependence be induced by extrinsic and/or intrisic factors?
+
+3) How do spatial and temporal correlation structures differ? 
+
+4) How can we detect when spatial/temportal correlation is caused by a missing covariate?
+
 
 
 
