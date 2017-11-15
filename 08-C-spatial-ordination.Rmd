@@ -31,6 +31,14 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 ### Key Points
 
 
+#### Other resources
+
+A list of papers that might be useful:
+
++ Legendre and Gauthier 2014. Statistical methods for temporal and space–time analysis of community composition. Proc. R. Soc. B. DOI: [10.1098/rspb.2013.2728](http://dx.doi.org/10.1098/rspb.2013.2728)
+
++ Wagner 2013. Rethinking the linear regression model for spatial ecological data. Ecology. DOI: [10.1890/12-1899.1](http://dx.doi.org/10.1890/12-1899.1) Describes a method called "spatial component regression".
+
 
 ### Analysis Example
 
