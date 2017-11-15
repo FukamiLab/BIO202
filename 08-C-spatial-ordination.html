@@ -440,6 +440,67 @@ div.tocify {
 </blockquote>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<p>Two ordination-based approaches to modeling spatial structure:</p>
+<ol style="list-style-type: decimal">
+<li>Do an ordination of the spatial relationships among sampling locations and use these “spatial eigenvectors” to explore variation in a response variable (e.g. PCNM, MEM).</li>
+<li>Do an ordination of the response (e.g. community data) and use the variogram of the resulting eigenvectors to explore spatial dependence of the primary axes of variation (e.g. MSO).</li>
+</ol>
+<div id="approach-1-morans-eigenvector-maps-mem-and-principal-coordinates-of-neighbor-matrices-pcnm" class="section level4">
+<h4>Approach 1: Moran’s Eigenvector Maps (MEM) and Principal Coordinates of Neighbor Matrices (PCNM)</h4>
+<ol style="list-style-type: decimal">
+<li>Construct spatial variables (eigenvectors) derived from the adjacency of sampling sites.</li>
+</ol>
+<ul>
+<li>PCNM: uses a distance matrix
+<ol style="list-style-type: decimal">
+<li>Create a matrix of Euclidean distances among sites and set sites that are far apart to 0. (All sites must be connected.)</li>
+<li>Compute a PCoA of the distance matrix to create spatial eigenvectors representing the broadest to smallest potential spatial structures that can be detected by your sampling design.</li>
+</ol></li>
+<li>MEM: uses similarity matrix
+<ol style="list-style-type: decimal">
+<li>Define a spatial weights matrix in which weights (<span class="math inline">\(w_{i,j}\)</span>) are larger between sites that are more similar (e.g. closer together).</li>
+</ol>
+<p><span class="math display">\[W[i,j] = \begin{cases}
+0 &amp; \text{if $i$ and $j$ are not connected} \\
+w_{i,j} &amp; \text{if $i$ and $j$ are connected}
+  \end{cases}\]</span></p>
+<p>Note: How <span class="math inline">\(W\)</span> is defined can have a strong effect on results, so if you don’t have a strong biologically motivated way to construct <span class="math inline">\(W\)</span> be sure to do some sensitivity analyses and determine which way of defining <span class="math inline">\(W\)</span> is best. The <code>spdep</code> packages has many ways to define connectivity and neighbor matrices (some examples: Delaunay triangulation, <span class="math inline">\(k\)</span>-nearest neighbors, minimum spanning tree, neighbors within <span class="math inline">\(d\)</span> distance)</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Compute a PCoA without the square root standardization to create spatial eigenvectors from the most positively autocorrelated to the most negatively autocorrelated.</li>
+</ol></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Test spatial eigenvectors for significant autocorrelation using Moran’s I (see below).</li>
+<li>Model <span class="math inline">\(Y \sim \text{spatial eigenvectors}\)</span> using linear models or canonical ordination to determine the scales at which <span class="math inline">\(Y\)</span> has spatial structure. Some propose using spatial eigenvectors to “control” for spatial autocorrelation (what do you think?), but different authors find that this may work well or poorly.</li>
+</ol>
+</div>
+<div id="approach-2-multiscale-ordination-mso" class="section level4">
+<h4>Approach 2: Multiscale Ordination (MSO)</h4>
+<ol style="list-style-type: decimal">
+<li>Conduct a canonical ordination (RDA) that partitions <span class="math inline">\(Y\)</span> into fitted values explained by the covariates and residual values not explained by covariates.</li>
+<li>Calculate a variogram matrix of the fitted values that shows how the fitted values covary across sites for each distance class. Plot the empirical variogram of this matrix to see the spatial structure of fitted values (e.g. spatial structure related to covariates).</li>
+<li>Calculate a variogram matrix of the residual values that shows how residuals covary across sites for each distance class. Plot the empirical variogram of this matrix to see the spatial structure of residuals (e.g. spatial structure not related to covariates).</li>
+</ol>
+</div>
+<div id="correlograms" class="section level4">
+<h4>Correlograms</h4>
+<ul>
+<li>Correlograms are used to assess spatial autocorrelation at different spatial scales.</li>
+<li>Correlograms plot the correlation between observations as a function of the distance between them.</li>
+<li>Several statistics are used in correlograms: Moran’s I, Geary’s c, and the Mantel statistic.</li>
+<li>We can calculate whether data are significantly autocorrelated at a given spatial scale by comparing the observed value of a statistic to its expected value. It is usually better to use permutations to test in case normality is violated.</li>
+<li>If testing multiple distance classes, p-values should be adjusted for multiple tests (e.g. Holm’s or Bonferroni correction).</li>
+<li>We can only test for significance if data are stationary: there is not trend in the mean or the spatial covariance across the spatial extent of the data. If there is a trend, we can try “detrending” by modeling the data as a function of the site-coordinates and then testing the residuals.</li>
+</ul>
+</div>
+<div id="other-resources" class="section level4">
+<h4>Other resources</h4>
+<p>A list of papers that might be useful:</p>
+<ul>
+<li><p>Legendre and Gauthier 2014. Statistical methods for temporal and space–time analysis of community composition. Proc. R. Soc. B. DOI: <a href="http://dx.doi.org/10.1098/rspb.2013.2728">10.1098/rspb.2013.2728</a></p></li>
+<li><p>Wagner 2013. Rethinking the linear regression model for spatial ecological data. Ecology. DOI: <a href="http://dx.doi.org/10.1890/12-1899.1">10.1890/12-1899.1</a> Describes a method called “spatial component regression”.</p></li>
+</ul>
+</div>
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
