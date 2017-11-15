@@ -80,7 +80,7 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 | Gaussian correlation | `corGaus(form =~ x + y)`| parametric model of the semi-variogram|
 | linear correlation | `corLin(form =~ x + y)` | parametric model of the semi-variogram|
 | rational quadratic correlation | `corRatio( form =~ x + y)` | parametric model of the semi-variogram|
-| spherical correlation | `corSphere( form =~ x + y)` | parametric model of the semi-variogram|
+| spherical correlation | `corSpher( form =~ x + y)` | parametric model of the semi-variogram|
 
 
 Note:
