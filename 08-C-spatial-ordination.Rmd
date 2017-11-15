@@ -30,6 +30,50 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 
 ### Key Points
 
+Two ordination-based approaches to modeling spatial structure:
+
+1. Do an ordination of the spatial relationships among sampling locations and use these "spatial eigenvectors" to explore variation in a response variable (e.g. PCNM, MEM).
+2. Do an ordination of the response (e.g. community data) and use the variogram of the resulting eigenvectors to explore spatial dependence of the primary axes of variation (e.g. MSO).
+
+#### Approach 1: Moran's Eigenvector Maps (MEM) and Principal Coordinates of Neighbor Matrices (PCNM)
+
+1. Construct spatial variables (eigenvectors) derived from the adjacency of sampling sites.
+
+  + PCNM: uses a distance matrix
+      1. Create a matrix of Euclidean distances among sites and set sites that are far apart to 0. (All sites must be connected.)
+      2. Compute a PCoA of the distance matrix to create spatial eigenvectors representing the broadest to smallest potential spatial structures that can be detected by your sampling design.
+      
+  + MEM: uses similarity matrix
+      1. Define a spatial weights matrix in which weights ($w_{i,j}$) are larger between sites that are more similar (e.g. closer together). 
+      
+      $$W[i,j] = \begin{cases}
+    0 & \text{if $i$ and $j$ are not connected} \\
+    w_{i,j} & \text{if $i$ and $j$ are connected}
+  \end{cases}$$
+  
+      Note: How $W$ is defined can have a strong effect on results, so if you don't have a strong biologically motivated way to construct $W$ be sure to do some sensitivity analyses and determine which way of defining $W$ is best. The `spdep` packages has many ways to define connectivity and neighbor matrices (some examples: Delaunay triangulation, $k$-nearest neighbors, minimum spanning tree, neighbors within $d$ distance)
+
+      2. Compute a PCoA without the square root standardization to create spatial eigenvectors from the most positively autocorrelated to the most negatively autocorrelated.
+
+2. Test spatial eigenvectors for significant autocorrelation using Moran's I (see below).
+3. Model $Y \sim \text{spatial eigenvectors}$ using linear models or canonical ordination to determine the scales at which $Y$ has spatial structure. Some propose using spatial eigenvectors to "control" for spatial autocorrelation (what do you think?), but different authors find that this may work well or poorly.
+
+#### Approach 2: Multiscale Ordination (MSO)
+
+1. Conduct a canonical ordination (RDA) that partitions $Y$ into fitted values explained by the covariates and residual values not explained by covariates.
+2. Calculate a variogram matrix of the fitted values that shows how the fitted values covary across sites for each distance class. Plot the empirical variogram of this matrix to see the spatial structure of fitted values (e.g. spatial structure related to covariates).
+3. Calculate a variogram matrix of the residual values that shows how residuals covary across sites for each distance class. Plot the empirical variogram of this matrix to see the spatial structure of residuals (e.g. spatial structure not related to covariates).
+
+
+#### Correlograms
+
++ Correlograms are used to assess spatial autocorrelation at different spatial scales. 
++ Correlograms plot the correlation between observations as a function of the distance between them.
++ Several statistics are used in correlograms: Moran's I, Geary's c, and the Mantel statistic.
++ We can calculate whether data are significantly autocorrelated at a given spatial scale by comparing the observed value of a statistic to its expected value. It is usually better to use permutations to test in case normality is violated.
++ If testing multiple distance classes, p-values should be adjusted for multiple tests (e.g. Holm's or Bonferroni correction).
++ We can only test for significance if data are stationary: there is not trend in the mean or the spatial covariance across the spatial extent of the data. If there is a trend, we can try "detrending" by modeling the data as a function of the site-coordinates and then testing the residuals.
+
 
 #### Other resources
 
