@@ -445,8 +445,96 @@ div.tocify {
 </blockquote>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<p><strong>General ideas</strong></p>
 <ul>
-<li>Spatial dependence can be induced and modeled in several ways.</li>
+<li><p>Spatial and temporal autocorrelation can be problematic because they violate the assumption that the residuals in regression are independent, which causes estimated standard errors of parameters to be biased and causes parametric statistics no longer follow their expected distributions (i.e. p-values are too low).</p></li>
+<li><p>Spatial dependence can be induced by both extrinsic and intrisic factors.</p></li>
+<li>Spatial dependence can be modeled in many ways (see Table 2 in Beale et al. 2010) but we will talk about:
+<ul>
+<li>GLS: spatial dependence modeled by fitting a parametric model to the residuals</li>
+<li>Spatial filters (PCNM or MEM): spatial structure extracted using ordination of locations and spatial eigenvectors included as covariates</li>
+</ul></li>
+</ul>
+<p><strong>Definitions</strong></p>
+<p><em>stationarity</em> : when the mean, variance and correlation structure do not vary across time or space. We assume stationarity in the residuals of regression models.</p>
+<p><em>isotropy</em> : when a process does not vary with direction (only with distance)</p>
+<p><em>lag</em> : the number of steps or links that separate two observations (an integer). For example, the lag between observations sampled in June and August would be 2, if samples are collected once a month, but it would be 1, if samples are collected every other month.</p>
+<p><em>autocorrelation function</em> : a function that gives the correlation between two observations as a function of the lag between them. Note: <code>acf()</code> takes a series of values and assumes that adjacent values are separated by a lag of 1.</p>
+<p><em>variogram</em> : a function that gives the variance between two observations as a function of the distance between them. A <em>semi-variogram</em> gives 1/2 of the variance (semivariance) and is usually what is given by stats programs. Note: variograms are parametric functions, whereas <em>empirical variograms</em> are estimated from data by grouping observations into short windows of the distance between them.</p>
+<ul>
+<li><em>sill</em> : the asymptotic value of the variance</li>
+<li><em>range</em> : the distance at which the variance reaches the asymptote</li>
+<li><em>nugget</em> : the variance between observations separated by a distance of zero (e.g. variance upon re-sampling)</li>
+</ul>
+<p><strong>How to determine whether you should incorporate autocorrelation in a regression model</strong></p>
+<ol style="list-style-type: decimal">
+<li>Fit a model without autocorrelation.</li>
+<li>Plot the residuals vs. the covariates along which you expect autocorrelation (e.g. time, x-y coordinates).</li>
+<li>Plot the correlation among residuals vs. the distance between them. This could be the autocorrelation function, empirical variogram, or Moran’s I at different distances (see Friday’s reading).</li>
+<li>Compare models that do and do not model the autocorrelation structure using AIC or other information criteria.</li>
+</ol>
+<p><strong>Functions for modeling residual correlation structure</strong></p>
+<table style="width:97%;">
+<colgroup>
+<col width="27%" />
+<col width="50%" />
+<col width="19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th><code>correlation =</code> argument in <code>gls()</code></th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>compound symmetry</td>
+<td><code>corCompSym(form =~ x)</code></td>
+<td>The residual correlation is the same among all observations regardless of the distance between them.</td>
+</tr>
+<tr class="even">
+<td>autoregressive order 1 (AR-1)</td>
+<td><code>corAR1(form =~ x)</code></td>
+<td>The residual correlation is the same (<span class="math inline">\(\rho\)</span>) between all observations separated by a lag of 1 and the residual correlation between observations separated by a lag of <span class="math inline">\(n\)</span> is <span class="math inline">\(\rho^n\)</span>.</td>
+</tr>
+<tr class="odd">
+<td>autoregressive moving average ARMA(p,q)</td>
+<td><code>corARMA(start_p, start_q, p, q)</code></td>
+<td>An observation is a linear function of other observations with separate coeffients estimated for lags of <span class="math inline">\(1\)</span> to <span class="math inline">\(p\)</span> plus a linear function of the error of other observations with separate coefficients estimated for lags of <span class="math inline">\(1\)</span> to <span class="math inline">\(a\)</span> (effectively a more flexible model)</td>
+</tr>
+<tr class="even">
+<td>exponential correlation</td>
+<td><code>corExp(form =~ x + y)</code></td>
+<td>parametric model of the semi-variogram</td>
+</tr>
+<tr class="odd">
+<td>Gaussian correlation</td>
+<td><code>corGaus(form =~ x + y)</code></td>
+<td>parametric model of the semi-variogram</td>
+</tr>
+<tr class="even">
+<td>linear correlation</td>
+<td><code>corLin(form =~ x + y)</code></td>
+<td>parametric model of the semi-variogram</td>
+</tr>
+<tr class="odd">
+<td>rational quadratic correlation</td>
+<td><code>corRatio( form =~ x + y)</code></td>
+<td>parametric model of the semi-variogram</td>
+</tr>
+<tr class="even">
+<td>spherical correlation</td>
+<td><code>corSphere( form =~ x + y)</code></td>
+<td>parametric model of the semi-variogram</td>
+</tr>
+</tbody>
+</table>
+<p>Note:</p>
+<ul>
+<li>The variogram models are parametrized by their sill, range, and nugget.</li>
+<li>In the variogram models, distances are by default Euclidean (<span class="math inline">\(\sqrt{x^2 + y^2}\)</span>) so you should not use latitude and longitude. UTM coordinates can be used instead since they are in meters.</li>
+<li>If using a random-effects model, be sure to apply the correlation structure at the deepest level within groups so that the correlation between groups is zero. Do this using <code>form =~ x | group</code>.</li>
 </ul>
 </div>
 <div id="analysis-example" class="section level3">
