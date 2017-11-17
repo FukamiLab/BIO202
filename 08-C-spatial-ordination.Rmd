@@ -83,14 +83,170 @@ A list of papers that might be useful:
 
 + Wagner 2013. Rethinking the linear regression model for spatial ecological data. Ecology. DOI: [10.1890/12-1899.1](http://dx.doi.org/10.1890/12-1899.1) Describes a method called "spatial component regression".
 
-
 ### Analysis Example
 
+First, let's get the data:
 
+```{r results = 'hide'}
+library(vegan)
+library(adespatial)
+library(ade4)
+source("sr.value.R") # from https://raw.githubusercontent.com/JoeyBernhardt/NumericalEcology/master/sr.value.R
+  
+# Data converted to semi-quantitative
+data <- cbind(c(1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 30, 100, 100, 100, 100, 100, 100, 76, 3, 76, 1, 0, 75, 76, 0, 1, 0, 0, 1, 0, 0, 0, 0), c(75, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 1, 1, 2, 2, 0, 0, 0, 0, 100, 75, 1, 2, 0, 0, 0, 0, 0), c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 75, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), c(0, 75, 0, 0, 75, 1, 0, 77, 75, 75, 75, 2, 100, 2, 100, 100, 100, 30, 30, 77, 100, 100, 100, 100, 100, 100, 77, 100, 75, 77, 31, 0, 30, 76, 30, 1, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 100, 77, 2, 76, 2, 0, 100, 30, 1), c(75, 75, 100, 75, 0, 100, 100, 0, 0, 0, 0, 0, 30, 75, 0, 0, 0, 30, 30, 100, 75, 30, 75, 30, 0, 0, 75, 0, 0, 0, 30, 0, 0, 0, 75, 0, 0, 76, 100, 100, 100, 100, 100, 100, 100, 100, 77, 100, 100, 100, 100, 100, 0, 0, 0))
+colnames(data) <- c("pt", "sp", "co", "ly", "fe") # clades
+# vector indicating distance from river
+riv.dist <- c(seq(35,1),seq(1,20))
+# vector indicating point along transect
+trans.dist <- seq(1,nrow(data),1)
+```
+
+#### Two naive examples, using spatial data but no autocorrelation
+
+Now, we can do an RDA using distance from the river, or distance along the transect, as a possible explanatory variable. First, distance from the river:
+
+```{r}
+riv.rda <- rda(data,riv.dist)
+summary(riv.rda)
+```
+
+The RDA explains very little of the variance. Now, we can try distance along the transect:
+
+```{r}
+trans.rda <- rda(data,trans.dist)
+summary(trans.rda)
+```
+
+This is even worse.
+
+Now, for examples from this week's reading:
+
+#### PCNM/MEM
+
+We will begin by looking at the locations only and calculating a PCoA based only on the distances between the locations. So we're not looking at the actual occurrence data yet, just the locations where the data were taken from.
+
+```{r}
+trans.dm <- dist(trans.dist) # create distance matrix
+thresh <- 1 # truncation distance set to 1
+trans.dm[trans.dm > thresh] <- 4 * thresh # truncation to threshold
+
+# Make the PCoA
+trans.pcoa <- cmdscale(trans.dm, eig=TRUE, k=54) # this is the highest possible value of k in this case, see the textbook for other possibilities
+
+# Count the positive eigenvalues
+nb.ev <- length(which(trans.pcoa$eig > 0.0000000000001))
+
+# Matrix of PCNM variables
+trans.PCNM <- as.data.frame(trans.pcoa$points[,1:nb.ev])
+
+# Plot some of these
+par(mfrow=c(3,2))
+somePCNM <- c(1,2,4,8,16,37)
+for(i in 1:length(somePCNM)) {
+plot(trans.PCNM[,somePCNM[i]],type="l",ylab=c("PCNM",somePCNM[i]))
+}
+
+```
+
+So, these are some of the possible autocorrleation patterns that we might expect to see in the data. We can now test these against the actual data.
+
+
+```{r}
+# Detrend the data
+trans.dist.x <- as.data.frame(trans.dist) # need to make this a data frame in order to detrend
+data.D <- dist(data)
+data.det <- resid(lm(as.matrix(data.D) ~ ., data=trans.dist.x))
+
+# Run PCNM
+PCNM <- rda(data.det,trans.PCNM)
+anova.cca(PCNM)
+
+# Compute adj R2, run forward selection of variables
+R2a <- RsquareAdj(PCNM)$adj.r.squared
+PCNM.fwd <- forward.sel(data.det, as.matrix(trans.PCNM),adjR2thresh=R2a)
+```
+
+```{r}
+# We can see the variables by viewing the object
+PCNM.fwd
+```
+
+```{r}
+# Make object with significant PCNMs
+PCNM.sign <- sort(PCNM.fwd[,2])
+
+# Now we can write the significant variables to a new object
+PCNM.red <- trans.PCNM[,c(PCNM.sign)]
+
+# Now re-run RDA with only significant PCNMs
+PCNM2 <- rda(data.det ~ ., data=PCNM.red)
+
+# Get new adj R2
+R2a <- RsquareAdj(PCNM2)$adj.r.squared
+
+anova.cca(PCNM2)
+```
+
+```{r}
+# Number of significant axes
+(axes.test <- anova.cca(PCNM2, by="axis")) # only the first 2 are significant
+```
+
+```{r}
+# Now we can plot the 2 significant axes
+PCNM.axes <- scores(PCNM2, choices=c(1,2), display="lc",scaling=1) # had to use "scores" instead of "scores.cca"
+par(mfrow=c(2,1))
+plot(trans.dist, PCNM.axes[,1]) # had to use "plot" instead of "sr.value"
+plot(trans.dist, PCNM.axes[,2])
+```
+
+Finally, let's look at the summary output.
+
+```{r}
+summary(PCNM2)
+```
+
+RDA1 is our most informative axis. PC1 does explain noticeably more than RDA2, which is maybe not ideal, but there clearly is value in running the RDA.
+
+#### Multiscale Ordination (MSO)
+
+First, we can run a MSO using undetrended data.
+
+```{r}
+# Initial RDA with distance from river as explanatory variable
+river.rda <- rda(data,riv.dist)
+
+#Multiscale ordination
+river.mso <- mso(river.rda,trans.dist,  perm=999)
+
+#Plot
+msoplot(river.mso, ylim=c(0,15000), xlim=c(-20,40))
+```
+
+Now we can run a MSO using detrended data.
+
+```{r}
+# Initial RDA with distance from river as explanatory variable
+river.rda2 <- rda(data.det,riv.dist)
+
+#Multiscale ordination
+river.mso2 <- mso(river.rda2,trans.dist,  perm=999)
+
+#Plot
+msoplot(river.mso2)
+```
 
 ### Discussion Questions
 
+1) When is MEM/PCNM the most appropriate method to use, and when is MSO the most appropriate method to use?
 
+2) Are there circumstances in which it would be inappropriate to use either of these methods?
 
+3) In what circumstances would we find significant PCNM axes at both the broad and fine scale?
 
+4) Can you think of any examples in which you might apply either of these methods to your data?
 
+5) When would you want to run a MSO using undetrended data, and when would you want to use detrended data?
+
+6) When would it be most appropriate to use MEM and when would it be most appropriate to use PCNM?
