@@ -13,15 +13,15 @@ layout: topic
 
 **Helpful Resources:**
 
-Cochlan, A. Little Book of R for Time Series. 2017. [link] (https://a-little-book-of-r-for-time-series.readthedocs.io/en/latest/src/timeseries.html)
+Cochlan, A. Little Book of R for Time Series. 2017. [link](https://a-little-book-of-r-for-time-series.readthedocs.io/en/latest/src/timeseries.html)
 
-Hyndman, R. CRAN Task View: Time Series. [link] (https://CRAN.R-project.org/view=TimeSeries)
+Hyndman, R. CRAN Task View: Time Series. [link](https://CRAN.R-project.org/view=TimeSeries)
 
-Hyndman, R. Time Series Data Library (TSDL). [link] (https://datamarket.com/data/list/?q=provider:tsdl)
+Hyndman, R. Time Series Data Library (TSDL). [link](https://datamarket.com/data/list/?q=provider:tsdl)
 
-National Ecological Observatory Network (NEON) Data Skills. [link] (http://neondataskills.org/time-series/)
+National Ecological Observatory Network (NEON) Data Skills. [link](http://neondataskills.org/time-series/)
 
-National Institute of Standards and Technology (NIST/SEMATECH). Engineering Statistics Handbook. 2012. [link] (http://www.itl.nist.gov/div898/handbook/)
+National Institute of Standards and Technology (NIST/SEMATECH). Engineering Statistics Handbook. 2012. [link](http://www.itl.nist.gov/div898/handbook/)
 
 
 ```{r include = FALSE}
@@ -100,7 +100,7 @@ A time series is sequence of successive values representing a variable measured 
 ##### Read time series data
 
 ```{r include = TRUE}
-ppm <- read.csv("~/Dropbox/Stanford/Courses/2017 Fall/BIO 202/TimeSeries/data/ppmmaunaloa19651980.csv")
+ppm <- read.csv("data/ppmmaunaloa19651980.csv")
 ```
 
 ##### Store data as a time-series object, specifying frequency and start.
@@ -214,7 +214,7 @@ We can also modify the time period from which forecasts are drawn by using *fore
 ```{r include = TRUE}
 #install.packages("forecast")
 library("forecast")
-library("stats")
+#library("stats")
 rainseriesforecasts2 <- forecast(rainseriesforecasts, h=8) #corrected from forecast.HoltWinters()
 rainseriesforecasts2
 ```
