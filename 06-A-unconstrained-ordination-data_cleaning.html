@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Anna Rasmussen" />
+
+
+<title>Prepping data for unconstrained ordination</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="00-computer-setup.html">Computer Setup</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W1
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01-A-R-intro.html">Intro to R</a>
+    </li>
+    <li>
+      <a href="01-B-Rmarkdown-intro.html">R markdown</a>
+    </li>
+    <li>
+      <a href="01-C-R-workshop.html">R workshop</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W2
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="02-A-tidyr.html">ggplot2 and tidyr</a>
+    </li>
+    <li>
+      <a href="02-B-git-intro.html">Intro to git</a>
+    </li>
+    <li>
+      <a href="02-C-student-projects.html">Project introductions</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W3
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="03-A-data-exploration.html">Data exploration</a>
+    </li>
+    <li>
+      <a href="03-B-linear-models.html">Linear models</a>
+    </li>
+    <li>
+      <a href="03-C-heterogeneity.html">Heterogeneity</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W4
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="04-A-mixed-models.html">Mixed effects models</a>
+    </li>
+    <li>
+      <a href="04-B-binary-data.html">Binary &amp; proportional data</a>
+    </li>
+    <li>
+      <a href="04-C-zero-data.html">Zero-inflated data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W5
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="05-A-Bayesian-linear-models.html">Bayesian linear models</a>
+    </li>
+    <li>
+      <a href="05-B-Bayesian-priors.html">Bayesian inference with prior information</a>
+    </li>
+    <li>
+      <a href="05-C-Advanced-bayesian-example.html">Advanced Bayesian model example</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W6
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="06-A-unconstrained-ordination.html">Unconstrained ordination</a>
+    </li>
+    <li>
+      <a href="06-B-constrained-ordination.html">Constrained ordination</a>
+    </li>
+    <li>
+      <a href="06-C-matrix-comparison.html">Comparing multivariate data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W7
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="07-midquarter-anna.html">Anna</a>
+    </li>
+    <li>
+      <a href="07-midquarter-beth.html">Beth</a>
+    </li>
+    <li>
+      <a href="07-midquarter-jamie.html">Jamie</a>
+    </li>
+    <li>
+      <a href="07-midquarter-lizzie.html">Lizzie</a>
+    </li>
+    <li>
+      <a href="07-midquarter-marissa.html">Marissa</a>
+    </li>
+    <li>
+      <a href="07-midquarter-meghan.html">Meghan</a>
+    </li>
+    <li>
+      <a href="07-midquarter-nick.html">Nick</a>
+    </li>
+    <li>
+      <a href="07-midquarter-nicole.html">Nicole</a>
+    </li>
+    <li>
+      <a href="07-midquarter-priscilla.html">Priscilla</a>
+    </li>
+    <li>
+      <a href="07-midquarter-sandra.html">Sandra</a>
+    </li>
+    <li>
+      <a href="07-midquarter-tyler.html">Tyler</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W8
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="08-A-spatial-regression.html">Spatial regression</a>
+    </li>
+    <li>
+      <a href="08-B-spatial-ordination.html">Ordination approach to spatial analysis</a>
+    </li>
+    <li>
+      <a href="08-C-mapping.html">Visualizing spatial data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W9
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="09-A-topic-name.html">Topic 19</a>
+    </li>
+    <li>
+      <a href="09-B-topic-name.html">Topic 20</a>
+    </li>
+    <li>
+      <a href="09-C-topic-name.html">Topic 21</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W10
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="10-final-anna.html">Anna</a>
+    </li>
+    <li>
+      <a href="10-final-beth.html">Beth</a>
+    </li>
+    <li>
+      <a href="10-final-jamie.html">Jamie</a>
+    </li>
+    <li>
+      <a href="10-final-lizzie.html">Lizzie</a>
+    </li>
+    <li>
+      <a href="10-final-marissa.html">Marissa</a>
+    </li>
+    <li>
+      <a href="10-final-meghan.html">Meghan</a>
+    </li>
+    <li>
+      <a href="10-final-nick.html">Nick</a>
+    </li>
+    <li>
+      <a href="10-final-nicole.html">Nicole</a>
+    </li>
+    <li>
+      <a href="10-final-priscilla.html">Priscilla</a>
+    </li>
+    <li>
+      <a href="07-midquarter-sandra.html">Sandra</a>
+    </li>
+    <li>
+      <a href="10-final-tyler.html">Tyler</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Prepping data for unconstrained ordination</h1>
+<h4 class="author"><em>Anna Rasmussen</em></h4>
+<h4 class="date"><em>11/1/2017</em></h4>
+
+</div>
+
+
+<p>This document is to share how I have dealt with organizing my data. First, I needed to define terms and levels such as sample names, months, station order, etc.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">salinities &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;0 - &lt;.5&quot;</span>, <span class="st">&quot;.5 - &lt;5&quot;</span>, <span class="st">&quot;5 - &lt;18&quot;</span>, <span class="st">&quot;18 -  &lt;30&quot;</span>, <span class="st">&quot;30 - &lt;40&quot;</span> )
+system.order&lt;-<span class="kw">c</span>(<span class="st">&quot;Fresh&quot;</span>, <span class="st">&quot;Oligohaline&quot;</span>, <span class="st">&quot;Mesohaline&quot;</span>, <span class="st">&quot;Polyhaline&quot;</span>, <span class="st">&quot;Euhaline&quot;</span>)
+stat.order&lt;-<span class="kw">as.character</span>(<span class="kw">c</span>(<span class="dv">657</span>, <span class="dv">649</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">9</span>, <span class="dv">13</span>, <span class="dv">15</span>, <span class="dv">18</span>, <span class="dv">21</span>, <span class="dv">24</span>, <span class="dv">27</span>, <span class="dv">30</span>, <span class="dv">34</span>, <span class="dv">36</span>))
+seas.order &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Spring&quot;</span>, <span class="st">&quot;Summer&quot;</span>, <span class="st">&quot;Fall&quot;</span>, <span class="st">&quot;Winter&quot;</span>)
+surf.samp&lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;C29_657S&quot;</span>, <span class="st">&quot;C29_3S&quot;</span>, <span class="st">&quot;C29_6S&quot;</span>, <span class="st">&quot;C29_9S&quot;</span>)
+months &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Apr&quot;</span>, <span class="st">&quot;Jul&quot;</span>, <span class="st">&quot;Aug&quot;</span>, <span class="st">&quot;Sep&quot;</span>, <span class="st">&quot;Oct&quot;</span>, <span class="st">&quot;Nov&quot;</span>, <span class="st">&quot;Dec&quot;</span>, <span class="st">&quot;Jan&quot;</span>, <span class="st">&quot;Feb&quot;</span>, <span class="st">&quot;Mar&quot;</span>)
+cruise.dates &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;4/23/2013&quot;</span>, <span class="st">&quot;7/23/2013&quot;</span>, <span class="st">&quot;8/28/2013&quot;</span>,<span class="st">&quot;9/26/2013&quot;</span>,<span class="st">&quot;10/24/2013&quot;</span>,<span class="st">&quot;11/19/2013&quot;</span>, <span class="st">&quot;12/3/2013&quot;</span>, <span class="st">&quot;1/14/2014&quot;</span>,<span class="st">&quot;2/11/2014&quot;</span>,<span class="st">&quot;3/11/2014&quot;</span>)
+cruise.names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;C29&quot;</span>, <span class="st">&quot;C30&quot;</span>,<span class="st">&quot;C31&quot;</span>,<span class="st">&quot;C32&quot;</span>,<span class="st">&quot;C33&quot;</span>,<span class="st">&quot;C34&quot;</span>,<span class="st">&quot;C35&quot;</span>,<span class="st">&quot;C36&quot;</span>,<span class="st">&quot;C37&quot;</span>,<span class="st">&quot;C38&quot;</span>)</code></pre></div>
+<p>Then I imported data from the USGS San Francisco Bay water quality database available <a href="https://sfbay.wr.usgs.gov/access/wqdata/query/expert.html">here</a> and some data on water inputs into San Francisco bay available from <a href="http://www.water.ca.gov/dayflow/">California Dayflow</a>. I also used R to merge these two datasets previously and would recommend reading the cheatsheet for dplyr and tidyr if you need to merge many datasets.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(tidyr)
+
+## make dataframe of environmental variables
+envmat.all &lt;-<span class="kw">read.csv</span>(<span class="st">&quot;~/Documents/SFB_JGI_first_plate/timeseries_all_data.csv&quot;</span>, <span class="dt">header=</span>T, <span class="dt">row.names =</span> <span class="dv">1</span>)
+
+envmat.all$Station.Number&lt;-<span class="kw">as.factor</span>(envmat.all$Station.Number)
+envmat.all$system&lt;-<span class="kw">factor</span>(envmat.all$system, <span class="dt">levels=</span>system.order)</code></pre></div>
+<p>Then I selected variables that are of the most interest/relevance.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">variables.cols &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">31</span>, <span class="dv">7</span>,<span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">14</span>,<span class="dv">15</span>, <span class="dv">21</span>, <span class="dv">22</span>, <span class="dv">34</span>:<span class="dv">36</span>, <span class="dv">72</span>, <span class="dv">74</span>, <span class="dv">29</span>, <span class="dv">73</span>, <span class="dv">5</span>, <span class="dv">32</span>)
+
+envdat.corr &lt;-<span class="st"> </span><span class="kw">na.omit</span>(envmat.all %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span> (., variables.cols))
+<span class="kw">rownames</span>(envdat.corr) =<span class="st"> </span>envdat.corr$sample
+
+envdat.corr &lt;-<span class="st"> </span>envdat.corr[,-<span class="kw">c</span>(<span class="dv">1</span>)]</code></pre></div>
+<p>Next I made a <code>phyloseq</code> object. The package <code>phyloseq</code> is a great tool for assessing microbial community data and was developed by researchers here at Stanford. It uses packages such as vegan, ape, ade4, and ggplot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(phyloseq)
+<span class="kw">library</span>(ggplot2)
+
+otumat.V4 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;~/Documents/SFB_JGI_first_plate/SFBayDeltaitags/itags/16S-V4-ver2/2-1992333/otu.tsv&quot;</span>, <span class="dt">sep=</span> <span class="st">&quot;&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(-taxonomy) <span class="co">#remove non-numeric data</span>
+<span class="kw">rownames</span>(otumat.V4) &lt;-<span class="st"> </span><span class="kw">paste</span>(otumat.V4$OTU) <span class="co">#make OTU numbers the row names</span>
+otumat.V4 &lt;-<span class="st"> </span>otumat.V4 %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(-OTU)      <span class="co">#remove OTU column</span>
+
+taxmat.V4 &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;~/Documents/SFB_JGI_first_plate/SFBayDeltaitags/itags/16S-V4-ver2/2-1992333/tax.tsv&quot;</span>, <span class="dt">sep=</span> <span class="st">&quot;&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
+<span class="kw">colnames</span>(taxmat.V4) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;OTU&quot;</span>, <span class="st">&quot;tax&quot;</span>)    <span class="co">#Define columns</span>
+taxmat.V4&lt;-taxmat.V4 %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">separate</span>(tax, <span class="dt">into=</span><span class="kw">c</span>(<span class="st">&quot;Domain&quot;</span>, <span class="st">&quot;Phylum&quot;</span>, <span class="st">&quot;Class&quot;</span>, <span class="st">&quot;Order&quot;</span>, <span class="st">&quot;Family&quot;</span>, <span class="st">&quot;Genus&quot;</span>), <span class="dt">sep=</span> <span class="st">&quot;,&quot;</span>) ## separate taxa names
+<span class="kw">rownames</span>(taxmat.V4) &lt;-<span class="st"> </span><span class="kw">paste0</span>(taxmat.V4$OTU)       <span class="co">#Make rownames from the column &quot;OTU&quot;</span>
+taxmat.V4 &lt;-<span class="st"> </span>taxmat.V4 %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(-OTU) %&gt;%<span class="st">      </span><span class="co">#remove column with OTU names</span>
+<span class="st">  </span><span class="kw">as.matrix</span>(.)
+
+JGItre.V4&lt;-<span class="kw">read_tree</span>(<span class="st">&quot;~/Documents/SFB_JGI_first_plate/SFBayDeltaitags/itags/16S-V4-ver2/2-1992333/otu.tre&quot;</span>)
+
+OTU.V4 =<span class="st"> </span><span class="kw">otu_table</span>(otumat.V4, <span class="dt">taxa_are_rows =</span> <span class="ot">TRUE</span>)
+TAX.V4 =<span class="st"> </span><span class="kw">tax_table</span>(taxmat.V4)
+ENV.V4=<span class="st"> </span><span class="kw">sample_data</span>(envdat.corr)
+
+physeq.V4 &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(OTU.V4, TAX.V4, ENV.V4, JGItre.V4)
+physeq.nd&lt;-<span class="st"> </span>physeq.V4 %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter_taxa</span>(., function(x) <span class="kw">sum</span>(x &gt;<span class="st"> </span><span class="dv">2</span>) &gt;<span class="st"> </span><span class="dv">1</span>, <span class="ot">TRUE</span>) <span class="co"># remove doubltons</span></code></pre></div>
+<p>Next I needed to normalize and transform my count data to 1.) account for differences in library size (number of sequences in each sample) and 2.) format my data in a way that can help account for the vast differences between and within taxa (can range from 1 to 100,000 reads).</p>
+<p>I chose to use DESeq2 variance stabilization and transform counts with the geometric mean. This normailization and transformation process is based on a negative binomial hierarchical model. In the formula, differences in libary size are accounted for with a linear term. And from my understanding the transformation is basically a log transformation at larger values with wider spread in lower count values. See “Waste not want not: why rarefying microbiome data is inadmissable” by McMurdie and Holmes to get the following information in more detail:</p>
+<p>The negative binomial distribution is used to model the counts, K, for OTU i, in sample j according to the formula:</p>
+<p>Kij ~ NB(sj, mui, phii)</p>
+<p>where sj is a linear scaling factor for sample j that accounts for its library size, mui is the mean proportion for OTU i, and phii is the dispersion parameter for OTU i. The variance is vi = (sj)(mui) + (phii)(sj<sup>2)(mui</sup>2) , with the NB distribution becoming Poisson when phi = 0.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DESeq2)
+
+gm_mean =<span class="st"> </span>function(x, <span class="dt">na.rm=</span><span class="ot">TRUE</span>){
+  <span class="kw">exp</span>(<span class="kw">sum</span>(<span class="kw">log</span>(x[x &gt;<span class="st"> </span><span class="dv">0</span>]), <span class="dt">na.rm=</span>na.rm) /<span class="st"> </span><span class="kw">length</span>(x)) <span class="co">#geometric mean function</span>
+}
+
+ps_dds1 =<span class="st"> </span><span class="kw">phyloseq_to_deseq2</span>(physeq.nd, ~system) <span class="co">#convert phyloseq object to deseq object, &quot;treatments&quot; are salinity level</span>
+geoMeans =<span class="st"> </span><span class="kw">apply</span>(<span class="kw">counts</span>(ps_dds1), <span class="dv">1</span>, gm_mean)
+ps_dds1 =<span class="st"> </span><span class="kw">estimateSizeFactors</span>(ps_dds1, <span class="dt">geoMeans =</span> geoMeans)
+ps_dds1 =<span class="st"> </span><span class="kw">estimateDispersions</span>(ps_dds1)
+abund=<span class="kw">getVarianceStabilizedData</span>(ps_dds1) <span class="co">#this is the long processeing step, stabilizing the variance</span>
+<span class="kw">rownames</span>(abund)=<span class="kw">substr</span>(<span class="kw">rownames</span>(abund),<span class="dv">1</span>,<span class="dv">5</span>) %&gt;%<span class="st"> </span><span class="kw">make.names</span>(<span class="dt">unique=</span>T)
+
+otusf1 &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">row.names</span>(<span class="kw">otu_table</span>(physeq.nd))) <span class="co">#Get original OTU names</span>
+abund2 &lt;-<span class="st"> </span>abund
+<span class="kw">rownames</span>(abund2) &lt;-<span class="st"> </span>otusf1 <span class="co">#change new OTU names back to old OTU names so matches taxonomy and tree files</span>
+physeq.VST &lt;-<span class="st"> </span>physeq.nd
+<span class="kw">otu_table</span>(physeq.VST) &lt;-<span class="st"> </span><span class="kw">otu_table</span>(abund2, <span class="dt">taxa_are_rows=</span>T) <span class="co">#update the otu table of phyloseq object</span></code></pre></div>
+<p>Finally I exported the data as a csv for future use.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">otusnorm &lt;-<span class="kw">as.data.frame</span>(abund2) <span class="co"># make df of normailized OTU counts</span>
+<span class="kw">write.csv</span>(otusnorm, <span class="dt">row.names=</span><span class="ot">TRUE</span>, <span class="st">&quot;~/Documents/Stanford/Eco_stats_202/data/OTUsnormalized.csv&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">envdat.phy &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">sample_data</span>(physeq.VST)) ## make matrix of environmental data from phyloseq object to remove excess samples included in the environmental matrix in beginning
+<span class="kw">write.csv</span>(envdat.phy, <span class="dt">row.names =</span> <span class="ot">TRUE</span>, <span class="st">&quot;~/Documents/Stanford/Eco_stats_202/data/envdat_phy.csv&quot;</span>)</code></pre></div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

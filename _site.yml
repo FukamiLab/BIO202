@@ -52,30 +52,6 @@ navbar:
           href: 06-B-constrained-ordination.html
         - text: "Comparing multivariate data"
           href: 06-C-matrix-comparison.html
-    - text: "W7"
-      menu:
-        - text: "Anna"
-          href: 07-midquarter-anna.html
-        - text: "Beth"
-          href: 07-midquarter-beth.html
-        - text: "Jamie"
-          href: 07-midquarter-jamie.html
-        - text: "Lizzie"
-          href: 07-midquarter-lizzie.html
-        - text: "Marissa"
-          href: 07-midquarter-marissa.html
-        - text: "Meghan"
-          href: 07-midquarter-meghan.html
-        - text: "Nick"
-          href: 07-midquarter-nick.html
-        - text: "Nicole"
-          href: 07-midquarter-nicole.html
-        - text: "Priscilla"
-          href: 07-midquarter-priscilla.html
-        - text: "Sandra"
-          href: 07-midquarter-sandra.html
-        - text: "Tyler"
-          href: 07-midquarter-tyler.html
     - text: "W8"
       menu:
         - text: "Visualizing spatial data"
@@ -86,36 +62,12 @@ navbar:
           href: 08-C-spatial-ordination.html
     - text: "W9"
       menu:
-        - text: "Topic 19"
-          href: 09-A-topic-name.html
-        - text: "Topic 20"
-          href: 09-B-topic-name.html
-        - text: "Topic 21"
-          href: 09-C-topic-name.html
-    - text: "W10"
-      menu:
-        - text: "Anna"
-          href: 10-final-anna.html
-        - text: "Beth"
-          href: 10-final-beth.html
-        - text: "Jamie"
-          href: 10-final-jamie.html
-        - text: "Lizzie"
-          href: 10-final-lizzie.html
-        - text: "Marissa"
-          href: 10-final-marissa.html
-        - text: "Meghan"
-          href: 10-final-meghan.html
-        - text: "Nick"
-          href: 10-final-nick.html
-        - text: "Nicole"
-          href: 10-final-nicole.html
-        - text: "Priscilla"
-          href: 10-final-priscilla.html
-        - text: "Sandra"
-          href: 07-midquarter-sandra.html
-        - text: "Tyler"
-          href: 10-final-tyler.html 
+        - text: "Time series"
+          href: 09-A-time-series.html
+        - text: "Network analysis"
+          href: 09-B-networks.html
+        - text: "Occupancy models"
+          href: 09-C-occupancy-models.html
 output_dir: "."
 exclude: ["CONTRIBUT*.md","index.md","README.md","*.db"]
 include: ["*.Rmd","LICENSE.md"]

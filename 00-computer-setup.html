@@ -381,48 +381,6 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    W7
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="07-midquarter-anna.html">Anna</a>
-    </li>
-    <li>
-      <a href="07-midquarter-beth.html">Beth</a>
-    </li>
-    <li>
-      <a href="07-midquarter-jamie.html">Jamie</a>
-    </li>
-    <li>
-      <a href="07-midquarter-lizzie.html">Lizzie</a>
-    </li>
-    <li>
-      <a href="07-midquarter-marissa.html">Marissa</a>
-    </li>
-    <li>
-      <a href="07-midquarter-meghan.html">Meghan</a>
-    </li>
-    <li>
-      <a href="07-midquarter-nick.html">Nick</a>
-    </li>
-    <li>
-      <a href="07-midquarter-nicole.html">Nicole</a>
-    </li>
-    <li>
-      <a href="07-midquarter-priscilla.html">Priscilla</a>
-    </li>
-    <li>
-      <a href="07-midquarter-sandra.html">Sandra</a>
-    </li>
-    <li>
-      <a href="07-midquarter-tyler.html">Tyler</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     W8
      
     <span class="caret"></span>
@@ -447,55 +405,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="09-A-topic-name.html">Topic 19</a>
+      <a href="09-A-time-series.html">Time series</a>
     </li>
     <li>
-      <a href="09-B-topic-name.html">Topic 20</a>
+      <a href="09-B-networks.html">Network analysis</a>
     </li>
     <li>
-      <a href="09-C-topic-name.html">Topic 21</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    W10
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="10-final-anna.html">Anna</a>
-    </li>
-    <li>
-      <a href="10-final-beth.html">Beth</a>
-    </li>
-    <li>
-      <a href="10-final-jamie.html">Jamie</a>
-    </li>
-    <li>
-      <a href="10-final-lizzie.html">Lizzie</a>
-    </li>
-    <li>
-      <a href="10-final-marissa.html">Marissa</a>
-    </li>
-    <li>
-      <a href="10-final-meghan.html">Meghan</a>
-    </li>
-    <li>
-      <a href="10-final-nick.html">Nick</a>
-    </li>
-    <li>
-      <a href="10-final-nicole.html">Nicole</a>
-    </li>
-    <li>
-      <a href="10-final-priscilla.html">Priscilla</a>
-    </li>
-    <li>
-      <a href="07-midquarter-sandra.html">Sandra</a>
-    </li>
-    <li>
-      <a href="10-final-tyler.html">Tyler</a>
+      <a href="09-C-occupancy-models.html">Occupancy models</a>
     </li>
   </ul>
 </li>
@@ -577,6 +493,37 @@ div.tocify {
 <div id="editing-the-course-website" class="section level3">
 <h3>Editing the Course Website</h3>
 <p>The course website can be edited by changing the html files in the course GitHub repository located at <a href="https://github.com/FukamiLab/BIO202" class="uri">https://github.com/FukamiLab/BIO202</a>.</p>
+<div id="rules-for-structuring-your-rmd-file" class="section level4">
+<h4>Rules for structuring your Rmd file</h4>
+<p>If you follow these rules then anyone should be able to render your Rmd file without changing any of the code. The repository working directory is the working directory of thr .Rproj file and it contains all of the .Rmd and .html files used to make the website.</p>
+<p><strong>DO</strong></p>
+<ul>
+<li><p>Use example data files that have already been (mostly) cleaned and formatted. This reduces the time it takes to render the Rmd file after small changes.</p></li>
+<li>Two options for saving data:
+<ol style="list-style-type: decimal">
+<li>Save your data files in a folder called “data/” in the repository working directory.
+<ul>
+<li>If you are using git to interact with the course website and you do not want your data to be tracked and saved on GitHub, then open the “.gitignore” file and add the path to your data file on a new line: “data/your_data_filename.csv”. Then, send the data file to Jes so she can add it to Canvas for other to use.</li>
+<li>If you are using git and you want your data to be tracked and saved on GitHub, then make sure your commit the data file and push it to the repository.</li>
+<li>If you are not using git, then send your data file to Jes and tell her whether you want it to be public (on GitHub) or not (on Canvas).</li>
+</ul></li>
+<li>Upload your data file directly to the data folder on our <a href="https://github.com/FukamiLab/BIO202/tree/master/data">GitHub repository</a>.</li>
+</ol></li>
+<li>Save images that you reference with <code>![caption](image_name.png)</code> inside the folder called “images/” and then reference them with <code>![caption](images/image_name.png)</code>.
+<ul>
+<li>If you are using git, then make sure your commit the image file and push it to the repository.</li>
+<li>If you are not using git, then send your image file to Jes.</li>
+</ul></li>
+<li><p>Use file paths that are relative to the repository working directory. E.g. <code>read.csv(&quot;data/my_data.csv&quot;)</code> or <code>load(&quot;data/my_rdata.RData&quot;)</code>. Even better, read data directly from the GitHub repository (if the data is public): <code>read.csv(file.path(repo_url, &quot;data/filename.csv&quot;))</code>. Note that <code>repo_url</code> is a variable that is defined in all of the lesson pages.</p></li>
+<li><p>Give instructions for where to find any packages that cannot be installed from CRAN using <code>install.packages()</code>.</p></li>
+</ul>
+<p><strong>DO NOT</strong></p>
+<ul>
+<li>Change the working directory.</li>
+<li>Use file paths that are specific to your computer.</li>
+<li>Run analyses that take longer than ~ 2 min. If you need to run longer analyses, save the output as an RData file and then load it using <code>load(&quot;analysis_output.RData&quot;)</code>.</li>
+</ul>
+</div>
 <div id="if-you-dont-want-to-work-with-git" class="section level4">
 <h4>If you don’t want to work with git</h4>
 <div class="figure">
@@ -589,7 +536,7 @@ div.tocify {
 <li>Click the Raw button in the upper right corner.</li>
 <li>When the page with text opens, download the file and save it as a .Rmd file. Make sure to remove any .txt extensions that may be automatically added.</li>
 <li>Open and edit the .Rmd file in R Studio. Use the ‘Knit’ button to convert the file to an html to check your changes.</li>
-<li>When you as satisfied, email the .Rmd file to Jes no later than 8 am on the day you present.</li>
+<li>When you as satisfied, email the .Rmd file to Jes no later than 8 am on the day you present. <em>You must also email any data or image files that are not generated by the R code.</em></li>
 </ol>
 </div>
 <div id="if-you-are-new-to-git-but-want-to-learn" class="section level4">

@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Jes &amp; Marissa" />
+
+
+<title>Spatial regression</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="00-computer-setup.html">Computer Setup</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W1
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01-A-R-intro.html">Intro to R</a>
+    </li>
+    <li>
+      <a href="01-B-Rmarkdown-intro.html">R markdown</a>
+    </li>
+    <li>
+      <a href="01-C-R-workshop.html">R workshop</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W2
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="02-A-tidyr.html">ggplot2 and tidyr</a>
+    </li>
+    <li>
+      <a href="02-B-git-intro.html">Intro to git</a>
+    </li>
+    <li>
+      <a href="02-C-student-projects.html">Project introductions</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W3
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="03-A-data-exploration.html">Data exploration</a>
+    </li>
+    <li>
+      <a href="03-B-linear-models.html">Linear models</a>
+    </li>
+    <li>
+      <a href="03-C-heterogeneity.html">Heterogeneity</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W4
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="04-A-mixed-models.html">Mixed effects models</a>
+    </li>
+    <li>
+      <a href="04-B-binary-data.html">Binary &amp; proportional data</a>
+    </li>
+    <li>
+      <a href="04-C-zero-data.html">Zero-inflated data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W5
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="05-A-Bayesian-linear-models.html">Bayesian linear models</a>
+    </li>
+    <li>
+      <a href="05-B-Bayesian-priors.html">Bayesian inference with prior information</a>
+    </li>
+    <li>
+      <a href="05-C-Advanced-bayesian-example.html">Advanced Bayesian model example</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W6
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="06-A-unconstrained-ordination.html">Unconstrained ordination</a>
+    </li>
+    <li>
+      <a href="06-B-constrained-ordination.html">Constrained ordination</a>
+    </li>
+    <li>
+      <a href="06-C-matrix-comparison.html">Comparing multivariate data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W8
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="08-A-mapping.html">Visualizing spatial data</a>
+    </li>
+    <li>
+      <a href="08-B-spatial-regression.html">Spatial regression</a>
+    </li>
+    <li>
+      <a href="08-C-spatial-ordination.html">Ordination approach to spatial analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    W9
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="09-A-time-series.html">Time series</a>
+    </li>
+    <li>
+      <a href="09-B-networks.html">Network analysis</a>
+    </li>
+    <li>
+      <a href="09-C-occupancy-models.html">Occupancy models</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Spatial regression</h1>
+<h4 class="author"><em>Jes &amp; Marissa</em></h4>
+
+</div>
+
+
+<p><strong>Assigned Reading:</strong></p>
+<blockquote>
+<p>Chapters 6 &amp; 7 from: Zuur, A. F., Ieno, E. N., Walker, N., Saveliev, A. A. and Smith, G. M. 2009. <em>Mixed Effects Models and Extensions in Ecology with R.</em> Springer. <a href="https://link-springer-com.stanford.idm.oclc.org/book/10.1007%2F978-0-387-87458-6">link</a></p>
+</blockquote>
+<p><strong>Optional Readings:</strong></p>
+<blockquote>
+<p>Beale, C. M., Lennon, J. J., Yearsley, J. M., Brewer, M. J. and Elston, D. A. 2010. Regression analysis of spatial data. <em>Ecology Letters</em> <strong>13</strong>: 246-264. <a href="http://dx.doi.org/10.1111/j.1461-0248.2009.01422.x">DOI: 10.1111/j.1461-0248.2009.01422.x</a></p>
+<p>Hawkins, B. A. 2012. Eight (and a half) deadly sins of spatial analysis. <em>Journal of Biogeography</em> <strong>39</strong>: 1-9. <a href="http://dx.doi.org/10.1111/j.1365-2699.2011.02637.x">DOI: 10.1111/j.1365-2699.2011.02637.x</a></p>
+</blockquote>
+<div id="key-points" class="section level3">
+<h3>Key Points</h3>
+<p><strong>General ideas</strong></p>
+<ul>
+<li><p>Spatial and temporal autocorrelation can be problematic because they violate the assumption that the residuals in regression are independent, which causes estimated standard errors of parameters to be biased and causes parametric statistics no longer follow their expected distributions (i.e. p-values are too low).</p></li>
+<li><p>Spatial dependence can be induced by both extrinsic and intrisic factors.</p></li>
+<li>Spatial dependence can be modeled in many ways (see Table 2 in Beale et al. 2010) but we will talk about:
+<ul>
+<li>GLS: spatial dependence modeled by fitting a parametric model to the residuals</li>
+<li>Spatial filters (PCNM or MEM): spatial structure extracted using ordination of locations and spatial eigenvectors included as covariates</li>
+</ul></li>
+</ul>
+<p><strong>Definitions</strong></p>
+<p><em>stationarity</em> : when the mean, variance and correlation structure do not vary across time or space. We assume stationarity in the residuals of regression models.</p>
+<p><em>isotropy</em> : when a process does not vary with direction (only with distance)</p>
+<p><em>lag</em> : the number of steps or links that separate two observations (an integer). For example, the lag between observations sampled in June and August would be 2, if samples are collected once a month, but it would be 1, if samples are collected every other month.</p>
+<p><em>autocorrelation function</em> : a function that gives the correlation between two observations as a function of the lag between them. Note: <code>acf()</code> takes a series of values and assumes that adjacent values are separated by a lag of 1.</p>
+<p><em>variogram</em> : a function that gives the variance between two observations as a function of the distance between them. A <em>semi-variogram</em> gives 1/2 of the variance (semivariance) and is usually what is given by stats programs. Note: variograms are parametric functions, whereas <em>empirical variograms</em> are estimated from data by grouping observations into short windows of the distance between them.</p>
+<ul>
+<li><em>sill</em> : the asymptotic value of the variance</li>
+<li><em>range</em> : the distance at which the variance reaches the asymptote</li>
+<li><em>nugget</em> : the variance between observations separated by a distance of zero (e.g. variance upon re-sampling)</li>
+</ul>
+<p><strong>How to determine whether you should incorporate autocorrelation in a regression model</strong></p>
+<ol style="list-style-type: decimal">
+<li>Fit a model without autocorrelation.</li>
+<li>Plot the residuals vs. the covariates along which you expect autocorrelation (e.g. time, x-y coordinates).</li>
+<li>Plot the correlation among residuals vs. the distance between them. This could be the autocorrelation function, empirical variogram, or Moran’s I at different distances (see Friday’s reading).</li>
+<li>Compare models that do and do not model the autocorrelation structure using AIC or other information criteria.</li>
+</ol>
+<p><strong>Functions for modeling residual correlation structure</strong></p>
+<table style="width:97%;">
+<colgroup>
+<col width="27%" />
+<col width="50%" />
+<col width="19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th><code>correlation =</code> argument in <code>gls()</code></th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>compound symmetry</td>
+<td><code>corCompSym(form =~ x)</code></td>
+<td>The residual correlation is the same among all observations regardless of the distance between them.</td>
+</tr>
+<tr class="even">
+<td>autoregressive order 1 (AR-1)</td>
+<td><code>corAR1(form =~ x)</code></td>
+<td>The residual correlation is the same (<span class="math inline">\(\rho\)</span>) between all observations separated by a lag of 1 and the residual correlation between observations separated by a lag of <span class="math inline">\(n\)</span> is <span class="math inline">\(\rho^n\)</span>.</td>
+</tr>
+<tr class="odd">
+<td>autoregressive moving average ARMA(p,q)</td>
+<td><code>corARMA(start_p, start_q, p, q)</code></td>
+<td>An observation is a linear function of other observations with separate coeffients estimated for lags of <span class="math inline">\(1\)</span> to <span class="math inline">\(p\)</span> plus a linear function of the error of other observations with separate coefficients estimated for lags of <span class="math inline">\(1\)</span> to <span class="math inline">\(a\)</span> (effectively a more flexible model)</td>
+</tr>
+<tr class="even">
+<td>exponential correlation</td>
+<td><code>corExp(form =~ x + y)</code></td>
+<td>parametric model of the semi-variogram</td>
+</tr>
+<tr class="odd">
+<td>Gaussian correlation</td>
+<td><code>corGaus(form =~ x + y)</code></td>
+<td>parametric model of the semi-variogram</td>
+</tr>
+<tr class="even">
+<td>linear correlation</td>
+<td><code>corLin(form =~ x + y)</code></td>
+<td>parametric model of the semi-variogram</td>
+</tr>
+<tr class="odd">
+<td>rational quadratic correlation</td>
+<td><code>corRatio( form =~ x + y)</code></td>
+<td>parametric model of the semi-variogram</td>
+</tr>
+<tr class="even">
+<td>spherical correlation</td>
+<td><code>corSpher( form =~ x + y)</code></td>
+<td>parametric model of the semi-variogram</td>
+</tr>
+</tbody>
+</table>
+<p>Note:</p>
+<ul>
+<li>The variogram models are parametrized by their sill, range, and nugget.</li>
+<li>In the variogram models, distances are by default Euclidean (<span class="math inline">\(\sqrt{x^2 + y^2}\)</span>) so you should not use latitude and longitude. UTM coordinates can be used instead since they are in meters.</li>
+<li>If using a random-effects model, be sure to apply the correlation structure at the deepest level within groups so that the correlation between groups is zero. Do this using <code>form =~ x | group</code>.</li>
+</ul>
+</div>
+<div id="analysis-example" class="section level3">
+<h3>Analysis Example</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load libraries and data</span>
+<span class="kw">library</span>(plyr)
+<span class="kw">library</span>(dplyr)</code></pre></div>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 3.3.3</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:plyr&#39;:
+## 
+##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+##     summarize</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rgdal)</code></pre></div>
+<pre><code>## Warning: package &#39;rgdal&#39; was built under R version 3.3.3</code></pre>
+<pre><code>## Loading required package: sp</code></pre>
+<pre><code>## Warning: package &#39;sp&#39; was built under R version 3.3.3</code></pre>
+<pre><code>## rgdal: version: 1.2-13, (SVN revision 686)
+##  Geospatial Data Abstraction Library extensions to R successfully loaded
+##  Loaded GDAL runtime: GDAL 2.2.0, released 2017/04/28
+##  Path to GDAL shared files: C:/Program Files/R/R-3.3.1/library/rgdal/gdal
+##  Loaded PROJ.4 runtime: Rel. 4.9.3, 15 August 2016, [PJ_VERSION: 493]
+##  Path to PROJ.4 shared files: C:/Program Files/R/R-3.3.1/library/rgdal/proj
+##  Linking to sp version: 1.2-5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
+AmazonasShape &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="st">&quot;data/am_municipios/13MUE250GC_SIR.shp&quot;</span>)</code></pre></div>
+<pre><code>## OGR data source with driver: ESRI Shapefile 
+## Source: &quot;data/am_municipios/13MUE250GC_SIR.shp&quot;, layer: &quot;13MUE250GC_SIR&quot;
+## with 62 features
+## It has 3 fields
+## Integer64 fields read as strings:  ID</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">YFcases =<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/cleanedYFV_enviro.csv&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">code =</span> <span class="kw">as.character</span>(code))</code></pre></div>
+<pre><code>## Warning: package &#39;bindrcpp&#39; was built under R version 3.3.3</code></pre>
+<div id="data-visualization" class="section level4">
+<h4>Data Visualization</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(AmazonasShape)
+<span class="kw">points</span>(YFcases$x, YFcases$y, <span class="dt">col =</span> <span class="kw">ifelse</span>(YFcases$YFV &gt;<span class="st"> </span><span class="dv">0</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;black&quot;</span>), <span class="dt">pch  =</span> <span class="dv">16</span>)</code></pre></div>
+<p><img src="images/08-B/vis-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AmazonasShape@data %&lt;&gt;%<span class="st"> </span><span class="kw">left_join</span>(YFcases, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;CD_GEOCODM&quot;</span> =<span class="st"> &quot;code&quot;</span>))</code></pre></div>
+<pre><code>## Warning: Column `CD_GEOCODM`/`code` joining factor and character vector,
+## coercing into character vector</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">spplot</span>(AmazonasShape, <span class="st">&quot;percent_forest&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Percent Forest Cover&quot;</span>)</code></pre></div>
+<p><img src="images/08-B/vis-2.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">spplot</span>(AmazonasShape, <span class="st">&quot;percent_forest_loss&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Percent Forest Loss&quot;</span>)</code></pre></div>
+<p><img src="images/08-B/vis-3.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">spplot</span>(AmazonasShape, <span class="st">&quot;avg.rainfall&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Average Monthly Rainfall&quot;</span>)</code></pre></div>
+<p><img src="images/08-B/vis-4.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">spplot</span>(AmazonasShape, <span class="st">&quot;mean_elevation&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Mean Elevation&quot;</span>)</code></pre></div>
+<p><img src="images/08-B/vis-5.png" width="672" /></p>
+</div>
+<div id="fit-a-model-without-autocorrelation" class="section level4">
+<h4>Fit a model without autocorrelation</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">YF.glm =<span class="st"> </span><span class="kw">glm</span>(YFVoccurence ~<span class="st"> </span>percent_forest_loss +<span class="st"> </span>percent_forest +<span class="st"> </span>
+<span class="st">               </span>mean_elevation +<span class="st"> </span>population +<span class="st"> </span>avg.rainfall, 
+             <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;probit&quot;</span>),
+             <span class="dt">data =</span> YFcases)</code></pre></div>
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(YF.glm)</code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = YFVoccurence ~ percent_forest_loss + percent_forest + 
+##     mean_elevation + population + avg.rainfall, family = binomial(link = &quot;probit&quot;), 
+##     data = YFcases)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -1.17020  -0.15196  -0.00057   0.00000   2.60823  
+## 
+## Coefficients:
+##                       Estimate Std. Error z value Pr(&gt;|z|)   
+## (Intercept)          7.587e+00  7.858e+00   0.965  0.33433   
+## percent_forest_loss -5.164e+03  2.627e+03  -1.966  0.04928 * 
+## percent_forest       1.464e-01  6.511e-02   2.249  0.02454 * 
+## mean_elevation      -8.712e-02  3.360e-02  -2.593  0.00951 **
+## population           5.079e-05  1.904e-05   2.667  0.00765 **
+## avg.rainfall        -8.247e-02  4.672e-02  -1.765  0.07754 . 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 54.784  on 61  degrees of freedom
+## Residual deviance: 21.587  on 56  degrees of freedom
+## AIC: 33.587
+## 
+## Number of Fisher Scoring iterations: 11</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">drop1</span>(YF.glm)</code></pre></div>
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre><code>## Single term deletions
+## 
+## Model:
+## YFVoccurence ~ percent_forest_loss + percent_forest + mean_elevation + 
+##     population + avg.rainfall
+##                     Df Deviance    AIC
+## &lt;none&gt;                   21.587 33.587
+## percent_forest_loss  1   27.059 37.059
+## percent_forest       1   28.942 38.942
+## mean_elevation       1   42.743 52.743
+## population           1   38.647 48.647
+## avg.rainfall         1   25.853 35.853</code></pre>
+</div>
+<div id="detect-spatial-correlation" class="section level4">
+<h4>Detect spatial correlation</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gstat)</code></pre></div>
+<pre><code>## Warning: package &#39;gstat&#39; was built under R version 3.3.3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">temp_data =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">error =</span> <span class="kw">rstandard</span>(YF.glm), <span class="dt">x =</span> YFcases$x, <span class="dt">y =</span> YFcases$y)
+<span class="kw">coordinates</span>(temp_data) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;x&quot;</span>,<span class="st">&quot;y&quot;</span>) 
+<span class="kw">bubble</span>(temp_data, <span class="st">&quot;error&quot;</span>, <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;black&quot;</span>,<span class="st">&quot;grey&quot;</span>),
+       <span class="dt">main =</span> <span class="st">&quot;Residuals&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;X-coordinates&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Y-coordinates&quot;</span>)</code></pre></div>
+<p><img src="images/08-B/detecting_spatial_corr-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(temp_data$error ~<span class="st"> </span>temp_data$x, <span class="dt">xlab =</span> <span class="st">&quot;X-coordinates&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Errors&quot;</span>)</code></pre></div>
+<p><img src="images/08-B/detecting_spatial_corr-2.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(temp_data$error ~<span class="st"> </span>temp_data$y, <span class="dt">xlab =</span> <span class="st">&quot;Y-coordinates&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Errors&quot;</span>)</code></pre></div>
+<p><img src="images/08-B/detecting_spatial_corr-3.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">variogram</span>(error ~<span class="st"> </span><span class="dv">1</span>, temp_data))</code></pre></div>
+<p><img src="images/08-B/detecting_spatial_corr-4.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">variogram</span>(error ~<span class="st"> </span><span class="dv">1</span>, temp_data, <span class="dt">alpha =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">45</span>, <span class="dv">90</span>, <span class="dv">135</span>)))</code></pre></div>
+<p><img src="images/08-B/detecting_spatial_corr-5.png" width="672" /></p>
+</div>
+<div id="construct-models-with-correlation-structure" class="section level4">
+<h4>Construct models with correlation structure</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f1 =<span class="st"> </span>YFVoccurence ~<span class="st"> </span>percent_forest_loss +<span class="st"> </span>percent_forest +<span class="st"> </span>
+<span class="st">               </span>mean_elevation +<span class="st"> </span>population +<span class="st"> </span>avg.rainfall
+model1 &lt;-<span class="st"> </span><span class="kw">glm</span>(f1, <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>), <span class="dt">correlation =</span> <span class="kw">corSpher</span>(<span class="dt">form =</span>~<span class="st"> </span>x +<span class="st"> </span>y, <span class="dt">nugget =</span> <span class="ot">TRUE</span>), <span class="dt">data =</span> YFcases)</code></pre></div>
+<p>The error from this code is <code>Error in corSpher(form = ~x + y, nugget = TRUE) :</code> <code>could not find function &quot;corSpher&quot;</code>. This error message occurs because you can’t use a spatial correlation structure with <code>glm</code>. As laid out in Zuur et al., correlation structure can be specified in <code>gls</code>, <code>gamm</code>, and <code>lme</code>, however <code>gls</code> and <code>lme</code> do not allow for specifying that the data are binomial.</p>
+</div>
+<div id="correlation-structure-using-glmmpql" class="section level4">
+<h4>Correlation structure using glmmPQL</h4>
+<p>F. Dormann, C., M. McPherson, J., B. Araújo, M., Bivand, R., Bolliger, J., Carl, G., G. Davies, R., Hirzel, A., Jetz, W., Daniel Kissling, W., Kühn, I., Ohlemüller, R., R. Peres-Neto, P., Reineking, B., Schröder, B., M. Schurr, F. and Wilson, R. (2007), Methods to account for spatial autocorrelation in the analysis of species distributional data: a review. Ecography, 30: 609–628. <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.2007.0906-7590.05171.x/full">doi:10.1111/j.2007.0906-7590.05171.x</a></p>
+<p>The supplementary material of this paper suggests using the Generalized Linear Mixed Model function <code>glmmPQL</code> in the package <code>MASS</code> for binary data with a correlation structure. They note that this is a “cheat”, as their suggestions is to add a group variable that is the same for all elements of the dataset. Then, glmmPQL can be run on the data even if random effects are not desired (glmmPQL requires random effect be specified).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(MASS)</code></pre></div>
+<pre><code>## Warning: package &#39;MASS&#39; was built under R version 3.3.3</code></pre>
+<pre><code>## 
+## Attaching package: &#39;MASS&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     select</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(nlme)</code></pre></div>
+<pre><code>## Warning: package &#39;nlme&#39; was built under R version 3.3.3</code></pre>
+<pre><code>## 
+## Attaching package: &#39;nlme&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     collapse</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">YFcases &lt;-<span class="st"> </span><span class="kw">cbind</span>(YFcases, <span class="dt">group =</span> <span class="kw">factor</span>(<span class="kw">rep</span>(<span class="st">&quot;a&quot;</span>,<span class="kw">nrow</span>(YFcases))))
+<span class="co"># GLMM fits ----------------------</span>
+f1 =<span class="st"> </span>YFVoccurence ~<span class="st"> </span>percent_forest_loss +<span class="st"> </span>percent_forest +<span class="st"> </span>
+<span class="st">               </span>mean_elevation +<span class="st"> </span>population +<span class="st"> </span>avg.rainfall
+model.base&lt;-<span class="st"> </span><span class="kw">glmmPQL</span>(f1, <span class="dt">random=</span>~<span class="dv">1</span>|group,
+                   <span class="dt">data=</span>YFcases,
+                   <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;probit&quot;</span>))</code></pre></div>
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre><code>## iteration 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(model.base)</code></pre></div>
+<pre><code>## Linear mixed-effects model fit by maximum likelihood
+##  Data: YFcases 
+##   AIC BIC logLik
+##    NA  NA     NA
+## 
+## Random effects:
+##  Formula: ~1 | group
+##          (Intercept)  Residual
+## StdDev: 8.775764e-05 0.7932916
+## 
+## Variance function:
+##  Structure: fixed weights
+##  Formula: ~invwt 
+## Fixed effects: YFVoccurence ~ percent_forest_loss + percent_forest + mean_elevation +      population + avg.rainfall 
+##                         Value Std.Error DF   t-value p-value
+## (Intercept)             7.587    6.5593 56  1.156705  0.2523
+## percent_forest_loss -5164.525 2192.4106 56 -2.355638  0.0220
+## percent_forest          0.146    0.0543 56  2.693935  0.0093
+## mean_elevation         -0.087    0.0280 56 -3.106704  0.0030
+## population              0.000    0.0000 56  3.195651  0.0023
+## avg.rainfall           -0.082    0.0390 56 -2.114783  0.0389
+##  Correlation: 
+##                     (Intr) prcn__ prcnt_ mn_lvt popltn
+## percent_forest_loss -0.802                            
+## percent_forest       0.275 -0.397                     
+## mean_elevation      -0.478  0.702 -0.740              
+## population           0.264 -0.574  0.706 -0.695       
+## avg.rainfall        -0.857  0.736 -0.716  0.657 -0.545
+## 
+## Standardized Within-Group Residuals:
+##           Min            Q1           Med            Q3           Max 
+## -1.249898e+00 -1.358353e-01 -5.107621e-04 -1.877423e-08  6.789002e+00 
+## 
+## Number of Observations: 62
+## Number of Groups: 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">Variogram</span>(model.base), <span class="dt">main =</span> <span class="st">&quot;No Correlation Structure&quot;</span>)</code></pre></div>
+<p><img src="images/08-B/model_spatial2-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#exponential correlation structure</span>
+model<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">glmmPQL</span>(f1, <span class="dt">random=</span>~<span class="dv">1</span>|group,
+                   <span class="dt">data=</span>YFcases,
+                   <span class="dt">correlation=</span><span class="kw">corExp</span>(<span class="dt">form=</span>~x+y, <span class="dt">nugget =</span> T),
+                   <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;probit&quot;</span>))</code></pre></div>
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre><code>## iteration 1</code></pre>
+<pre><code>## iteration 2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(model<span class="fl">.1</span>)</code></pre></div>
+<pre><code>## Linear mixed-effects model fit by maximum likelihood
+##  Data: YFcases 
+##   AIC BIC logLik
+##    NA  NA     NA
+## 
+## Random effects:
+##  Formula: ~1 | group
+##          (Intercept) Residual
+## StdDev: 3.358151e-12 0.778228
+## 
+## Correlation Structure: Exponential spatial correlation
+##  Formula: ~x + y | group 
+##  Parameter estimate(s):
+##        range       nugget 
+## 1.270843e-01 1.605511e-06 
+## Variance function:
+##  Structure: fixed weights
+##  Formula: ~invwt 
+## Fixed effects: YFVoccurence ~ percent_forest_loss + percent_forest + mean_elevation +      population + avg.rainfall 
+##                         Value Std.Error DF   t-value p-value
+## (Intercept)             7.859    6.4297 56  1.222266  0.2267
+## percent_forest_loss -5183.117 2133.1229 56 -2.429826  0.0183
+## percent_forest          0.144    0.0524 56  2.755218  0.0079
+## mean_elevation         -0.087    0.0272 56 -3.187681  0.0023
+## population              0.000    0.0000 56  3.257554  0.0019
+## avg.rainfall           -0.083    0.0381 56 -2.170394  0.0342
+##  Correlation: 
+##                     (Intr) prcn__ prcnt_ mn_lvt popltn
+## percent_forest_loss -0.800                            
+## percent_forest       0.284 -0.400                     
+## mean_elevation      -0.478  0.700 -0.738              
+## population           0.262 -0.571  0.699 -0.687       
+## avg.rainfall        -0.862  0.735 -0.715  0.651 -0.536
+## 
+## Standardized Within-Group Residuals:
+##           Min            Q1           Med            Q3           Max 
+## -1.265284e+00 -1.471794e-01 -5.163779e-04 -1.873033e-08  6.746666e+00 
+## 
+## Number of Observations: 62
+## Number of Groups: 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">Variogram</span>(model<span class="fl">.1</span>), <span class="dt">main =</span> <span class="st">&quot;Exponential Correlation&quot;</span>)</code></pre></div>
+<p><img src="images/08-B/model_spatial2-2.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Gaussian correlation structure</span>
+model<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">glmmPQL</span>(f1, <span class="dt">random=</span>~<span class="dv">1</span>|group,
+                   <span class="dt">data=</span>YFcases,
+                   <span class="dt">correlation=</span><span class="kw">corGaus</span>(<span class="dt">form=</span>~x+y, <span class="dt">nugget =</span> T),
+                   <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;probit&quot;</span>))</code></pre></div>
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre><code>## iteration 1
+## iteration 2</code></pre>
+<pre><code>## iteration 3</code></pre>
+<pre><code>## iteration 4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(model<span class="fl">.2</span>)</code></pre></div>
+<pre><code>## Linear mixed-effects model fit by maximum likelihood
+##  Data: YFcases 
+##   AIC BIC logLik
+##    NA  NA     NA
+## 
+## Random effects:
+##  Formula: ~1 | group
+##          (Intercept)  Residual
+## StdDev: 7.416491e-05 0.7442327
+## 
+## Correlation Structure: Gaussian spatial correlation
+##  Formula: ~x + y | group 
+##  Parameter estimate(s):
+##        range       nugget 
+## 3.105129e-01 4.132748e-09 
+## Variance function:
+##  Structure: fixed weights
+##  Formula: ~invwt 
+## Fixed effects: YFVoccurence ~ percent_forest_loss + percent_forest + mean_elevation +      population + avg.rainfall 
+##                         Value Std.Error DF   t-value p-value
+## (Intercept)             8.429    6.0701 56  1.388607  0.1705
+## percent_forest_loss -5168.350 1977.5224 56 -2.613548  0.0115
+## percent_forest          0.138    0.0468 56  2.955781  0.0046
+## mean_elevation         -0.086    0.0253 56 -3.382648  0.0013
+## population              0.000    0.0000 56  3.406250  0.0012
+## avg.rainfall           -0.083    0.0358 56 -2.310068  0.0246
+##  Correlation: 
+##                     (Intr) prcn__ prcnt_ mn_lvt popltn
+## percent_forest_loss -0.792                            
+## percent_forest       0.320 -0.425                     
+## mean_elevation      -0.480  0.700 -0.736              
+## population           0.254 -0.568  0.676 -0.659       
+## avg.rainfall        -0.880  0.736 -0.715  0.632 -0.503
+## 
+## Standardized Within-Group Residuals:
+##           Min            Q1           Med            Q3           Max 
+## -1.292416e+00 -1.644675e-01 -6.255974e-04 -1.983160e-08  6.636181e+00 
+## 
+## Number of Observations: 62
+## Number of Groups: 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">Variogram</span>(model<span class="fl">.2</span>), <span class="dt">main =</span> <span class="st">&quot;Gaussian Correlation&quot;</span>)</code></pre></div>
+<p><img src="images/08-B/model_spatial2-3.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#spherical correlation structure</span>
+model<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">glmmPQL</span>(f1, <span class="dt">random=</span>~<span class="dv">1</span>|group,
+                   <span class="dt">data=</span>YFcases,
+                   <span class="dt">correlation=</span><span class="kw">corSpher</span>(<span class="dt">form=</span>~x+y, <span class="dt">nugget =</span> T),
+                   <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;probit&quot;</span>))</code></pre></div>
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre><code>## iteration 1</code></pre>
+<pre><code>## iteration 2</code></pre>
+<pre><code>## iteration 3</code></pre>
+<pre><code>## iteration 4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(model<span class="fl">.3</span>)</code></pre></div>
+<pre><code>## Linear mixed-effects model fit by maximum likelihood
+##  Data: YFcases 
+##   AIC BIC logLik
+##    NA  NA     NA
+## 
+## Random effects:
+##  Formula: ~1 | group
+##          (Intercept)  Residual
+## StdDev: 4.583454e-05 0.7389688
+## 
+## Correlation Structure: Spherical spatial correlation
+##  Formula: ~x + y | group 
+##  Parameter estimate(s):
+##        range       nugget 
+## 6.692568e-01 1.707727e-07 
+## Variance function:
+##  Structure: fixed weights
+##  Formula: ~invwt 
+## Fixed effects: YFVoccurence ~ percent_forest_loss + percent_forest + mean_elevation +      population + avg.rainfall 
+##                         Value Std.Error DF   t-value p-value
+## (Intercept)             8.342    6.0094 56  1.388236  0.1706
+## percent_forest_loss -5135.323 1952.2119 56 -2.630515  0.0110
+## percent_forest          0.139    0.0463 56  2.993038  0.0041
+## mean_elevation         -0.086    0.0250 56 -3.417810  0.0012
+## population              0.000    0.0000 56  3.433671  0.0011
+## avg.rainfall           -0.082    0.0354 56 -2.326652  0.0236
+##  Correlation: 
+##                     (Intr) prcn__ prcnt_ mn_lvt popltn
+## percent_forest_loss -0.791                            
+## percent_forest       0.317 -0.423                     
+## mean_elevation      -0.477  0.698 -0.735              
+## population           0.250 -0.564  0.673 -0.655       
+## avg.rainfall        -0.880  0.734 -0.713  0.629 -0.499
+## 
+## Standardized Within-Group Residuals:
+##           Min            Q1           Med            Q3           Max 
+## -1.298376e+00 -1.658197e-01 -6.539563e-04 -2.002856e-08  6.620939e+00 
+## 
+## Number of Observations: 62
+## Number of Groups: 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">Variogram</span>(model<span class="fl">.3</span>), <span class="dt">main =</span> <span class="st">&quot;Spherical Correlation&quot;</span>)</code></pre></div>
+<p><img src="images/08-B/model_spatial2-4.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#rational quadratic correlation structure</span>
+model<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">glmmPQL</span>(f1, <span class="dt">random=</span>~<span class="dv">1</span>|group,
+                   <span class="dt">data=</span>YFcases,
+                   <span class="dt">correlation=</span><span class="kw">corRatio</span>(<span class="dt">form=</span>~x+y, <span class="dt">nugget =</span> T),
+                   <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;probit&quot;</span>))</code></pre></div>
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre><code>## iteration 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(model<span class="fl">.4</span>)</code></pre></div>
+<pre><code>## Linear mixed-effects model fit by maximum likelihood
+##  Data: YFcases 
+##   AIC BIC logLik
+##    NA  NA     NA
+## 
+## Random effects:
+##  Formula: ~1 | group
+##          (Intercept)  Residual
+## StdDev: 8.302191e-05 0.7932916
+## 
+## Correlation Structure: Rational quadratic spatial correlation
+##  Formula: ~x + y | group 
+##  Parameter estimate(s):
+##        range       nugget 
+## 1.321305e-16 4.333688e-01 
+## Variance function:
+##  Structure: fixed weights
+##  Formula: ~invwt 
+## Fixed effects: YFVoccurence ~ percent_forest_loss + percent_forest + mean_elevation +      population + avg.rainfall 
+##                         Value Std.Error DF   t-value p-value
+## (Intercept)             7.587    6.5593 56  1.156705  0.2523
+## percent_forest_loss -5164.525 2192.4106 56 -2.355638  0.0220
+## percent_forest          0.146    0.0543 56  2.693935  0.0093
+## mean_elevation         -0.087    0.0280 56 -3.106704  0.0030
+## population              0.000    0.0000 56  3.195651  0.0023
+## avg.rainfall           -0.082    0.0390 56 -2.114783  0.0389
+##  Correlation: 
+##                     (Intr) prcn__ prcnt_ mn_lvt popltn
+## percent_forest_loss -0.802                            
+## percent_forest       0.275 -0.397                     
+## mean_elevation      -0.478  0.702 -0.740              
+## population           0.264 -0.574  0.706 -0.695       
+## avg.rainfall        -0.857  0.736 -0.716  0.657 -0.545
+## 
+## Standardized Within-Group Residuals:
+##           Min            Q1           Med            Q3           Max 
+## -1.249898e+00 -1.358353e-01 -5.107621e-04 -1.877423e-08  6.789002e+00 
+## 
+## Number of Observations: 62
+## Number of Groups: 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">Variogram</span>(model<span class="fl">.4</span>), <span class="dt">main =</span> <span class="st">&quot;Rational Quadratic Correlation&quot;</span>)</code></pre></div>
+<p><img src="images/08-B/model_spatial2-5.png" width="672" /></p>
+</div>
+<div id="correlation-structure-using-gamm" class="section level4">
+<h4>Correlation structure using gamm</h4>
+<p>Alternatively, if you think you need a smoother, you can you <code>gamm</code>. Here, we suppose that percent forest has a nonlinear effect on the chance of yellow fever occurence.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mgcv)
+f2 =<span class="st"> </span>YFVoccurence ~<span class="st"> </span>percent_forest_loss +<span class="st"> </span><span class="kw">s</span>(percent_forest) +<span class="st"> </span>
+<span class="st">               </span>mean_elevation +<span class="st"> </span>population +<span class="st"> </span>avg.rainfall
+model2.base &lt;-<span class="st"> </span><span class="kw">gamm</span>(f2, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>,
+                   <span class="dt">data=</span>YFcases,
+                   <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;probit&quot;</span>))</code></pre></div>
+<pre><code>## 
+##  Maximum number of PQL iterations:  20</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#exponential correlation structure</span>
+model2<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">gamm</span>(f2, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>,
+                 <span class="dt">data=</span>YFcases,
+                 <span class="dt">correlation=</span><span class="kw">corExp</span>(<span class="dt">form=</span>~x+y, <span class="dt">nugget =</span> T),
+                 <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;probit&quot;</span>))</code></pre></div>
+<pre><code>## 
+##  Maximum number of PQL iterations:  20</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Gaussian correlation structure</span>
+model2<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">gamm</span>(f2, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>,
+                   <span class="dt">data=</span>YFcases,
+                   <span class="dt">correlation=</span><span class="kw">corGaus</span>(<span class="dt">form=</span>~x+y, <span class="dt">nugget =</span> T),
+                   <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;probit&quot;</span>))</code></pre></div>
+<pre><code>## 
+##  Maximum number of PQL iterations:  20</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#rational quadratic correlation structure</span>
+model2<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">gamm</span>(f2, <span class="dt">method =</span> <span class="st">&quot;REML&quot;</span>,
+                   <span class="dt">data=</span>YFcases,
+                   <span class="dt">correlation=</span><span class="kw">corRatio</span>(<span class="dt">form=</span>~x+y, <span class="dt">nugget =</span> T),
+                   <span class="dt">family=</span><span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;probit&quot;</span>))</code></pre></div>
+<pre><code>## 
+##  Maximum number of PQL iterations:  20</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">AIC</span>(model2.base$lme, model2<span class="fl">.1</span>$lme, model2<span class="fl">.2</span>$lme, model2<span class="fl">.4</span>$lme)</code></pre></div>
+<pre><code>##                 df      AIC
+## model2.base$lme  7 941.7172
+## model2.1$lme     9 937.7682
+## model2.2$lme     9 913.4200
+## model2.4$lme     9 945.7172</code></pre>
+<p>One benefit of using <code>gamm</code> is that you have AIC values to compare the model fits while <code>glmmPQL</code> does not calculate AIC values.</p>
+</div>
+</div>
+<div id="discussion-questions" class="section level3">
+<h3>Discussion Questions</h3>
+<ol style="list-style-type: decimal">
+<li><p>How should the variogram be interpreted if it is not a uniformly increasing band of points?</p></li>
+<li><p>What data analyses do you foresee needing correlation structure for? Will the spatial/temportal dependence be induced by extrinsic and/or intrisic factors?</p></li>
+<li><p>How do spatial and temporal correlation structures differ?</p></li>
+<li><p>How can we detect when spatial/temportal correlation is caused by a missing covariate?</p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
