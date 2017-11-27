@@ -57,9 +57,9 @@ Each student will complete the results section to include in a paper to submit f
 |      | Wed | Nov. 15  | Topic 14. [Spatial regression](08-B-spatial-regression.html)  | Jes       | Marissa     |
 |      | Fri | Nov. 17  | Topic 15. [Ordination approach to spatial analysis](08-C-spatial-ordination.html)                       | Jes       | Sandra      |
 |RECESS|     |          | Thanksgiving                                                                      |           |            |
-| 9    | Mon | Nov. 27  | Topic 16. Selected by class: time-series analysis                                 | Lizzie    |       |
-|      | Wed | Nov. 29  | Topic 17. Selected by class: network analysis                                     | Beth      | Nicole     |
-|      | Fri | Dec. 1   | Topic 18. Selected by class: occupancy models                                     | Nick      |            |
+| 9    | Mon | Nov. 27  | Topic 16. Selected by class: [time-series analysis](09-A-time-series.html)        | Lizzie    |       |
+|      | Wed | Nov. 29  | Topic 17. Selected by class: [network analysis](09-B-networks.html)               | Beth      | Nicole     |
+|      | Fri | Dec. 1   | Topic 18. Selected by class: [occupancy models](09-C-occupancy-models.html)       | Nick      |            |
 | 10   | Mon | Dec. 4   | Final project presentations                                                       |           |            |
 |      | Wed | Dec. 6   | Final project presentations                                                       |           |            |
 |      | Fri | Dec. 8   | Final project presentations                                                       |           |            |
