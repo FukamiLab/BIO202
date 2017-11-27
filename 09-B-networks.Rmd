@@ -1,5 +1,5 @@
 ---
-title: "Time series analysis"
+title: "Network analysis"
 author: "Beth & Nicole"
 output:
   html_document: default
