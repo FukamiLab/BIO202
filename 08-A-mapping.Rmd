@@ -363,4 +363,3 @@ https://timogrossenbacher.ch/2016/12/beautiful-thematic-maps-with-ggplot2-only/
 *4)* Pros/cons of using R vs. GIS or other platforms for data visualization?
 
 
-
