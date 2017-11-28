@@ -1,10 +1,8 @@
 ---
+layout: topic
 title: "Visualizing spatial data"
 author: "Tad & Tyler"
-output:
-  html_document: default
-  pdf_document: default
-layout: topic
+output: html_document
 ---
 
 **Assigned Reading:**

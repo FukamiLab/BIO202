@@ -20,24 +20,55 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-1.1/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+
 
 <style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
 <style type="text/css">
   pre:not([class]) {
     background-color: white;
   }
 </style>
-<script type="text/javascript">
-if (window.hljs && document.readyState && document.readyState === "complete") {
-   window.setTimeout(function() {
-      hljs.initHighlighting();
-   }, 0);
-}
-</script>
-
 
 
 <style type="text/css">
@@ -67,6 +98,7 @@ h6 {
 }
 </style>
 
+<link rel="stylesheet" href="style.css" type="text/css" />
 
 </head>
 
@@ -160,6 +192,107 @@ $(document).ready(function () {
 <!-- code folding -->
 
 
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -445,28 +578,27 @@ $(document).ready(function () {
 </div>
 <div id="points" class="section level1">
 <h1>Points</h1>
-<pre class="r"><code>library(sp) </code></pre>
-<pre><code>## Warning: package &#39;sp&#39; was built under R version 3.3.3</code></pre>
-<pre class="r"><code>data(meuse) 
-coordinates(meuse) &lt;- c(&quot;x&quot;, &quot;y&quot;) # tells r to use x and y collumns as the lat/long 
-plot(meuse) # by default plots the points</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sp) 
+<span class="kw">data</span>(meuse) 
+<span class="kw">coordinates</span>(meuse) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>) <span class="co"># tells r to use x and y collumns as the lat/long </span>
+<span class="kw">plot</span>(meuse) <span class="co"># by default plots the points</span></code></pre></div>
 <p><img src="images/08-A/unnamed-chunk-2-1.png" width="672" /></p>
 </div>
 <div id="lines" class="section level1">
 <h1>Lines</h1>
-<pre class="r"><code>cc &lt;- coordinates(meuse) 
-m.sl &lt;- SpatialLines(list(Lines(list(Line(cc)), &quot;line1&quot;))) 
-plot(m.sl) # plots lines connecting all the points</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cc &lt;-<span class="st"> </span><span class="kw">coordinates</span>(meuse) 
+m.sl &lt;-<span class="st"> </span><span class="kw">SpatialLines</span>(<span class="kw">list</span>(<span class="kw">Lines</span>(<span class="kw">list</span>(<span class="kw">Line</span>(cc)), <span class="st">&quot;line1&quot;</span>))) 
+<span class="kw">plot</span>(m.sl) <span class="co"># plots lines connecting all the points</span></code></pre></div>
 <p><img src="images/08-A/unnamed-chunk-3-1.png" width="672" /></p>
 </div>
 <div id="polygons" class="section level1">
 <h1>Polygons</h1>
-<pre class="r"><code>data(meuse.riv)  # lat/longs outlining bank or river
-meuse.lst &lt;- list(Polygons(list(Polygon(meuse.riv)), &quot;meuse.riv&quot;)) # not sure what this is doing?
-meuse.pol &lt;- SpatialPolygons(meuse.lst) # converts list to SpatialPolygon, which can be plotted
-plot(meuse.pol, col = &quot;grey&quot;) </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(meuse.riv)  <span class="co"># lat/longs outlining bank or river</span>
+meuse.lst &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">Polygons</span>(<span class="kw">list</span>(<span class="kw">Polygon</span>(meuse.riv)), <span class="st">&quot;meuse.riv&quot;</span>)) <span class="co"># not sure what this is doing?</span>
+meuse.pol &lt;-<span class="st"> </span><span class="kw">SpatialPolygons</span>(meuse.lst) <span class="co"># converts list to SpatialPolygon, which can be plotted</span>
+<span class="kw">plot</span>(meuse.pol, <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>) </code></pre></div>
 <p><img src="images/08-A/unnamed-chunk-4-1.png" width="672" /></p>
-<pre class="r"><code>str(meuse.lst)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(meuse.lst)</code></pre></div>
 <pre><code>## List of 1
 ##  $ :Formal class &#39;Polygons&#39; [package &quot;sp&quot;] with 5 slots
 ##   .. ..@ Polygons :List of 1
@@ -475,12 +607,12 @@ plot(meuse.pol, col = &quot;grey&quot;) </code></pre>
 ##   .. .. .. .. ..@ area   : num 2122714
 ##   .. .. .. .. ..@ hole   : logi FALSE
 ##   .. .. .. .. ..@ ringDir: int 1
-##   .. .. .. .. ..@ coords : num [1:176, 1:2] 182004 182137 182252 182315 182332 ...
+##   .. .. .. .. ..@ coords : num [1:176, 1:2] 182004 182137 182252 182314 182332 ...
 ##   .. ..@ plotOrder: int 1
 ##   .. ..@ labpt    : num [1:2] 180183 331123
 ##   .. ..@ ID       : chr &quot;meuse.riv&quot;
 ##   .. ..@ area     : num 2122714</code></pre>
-<pre class="r"><code>str(meuse.pol)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(meuse.pol)</code></pre></div>
 <pre><code>## Formal class &#39;SpatialPolygons&#39; [package &quot;sp&quot;] with 4 slots
 ##   ..@ polygons   :List of 1
 ##   .. ..$ :Formal class &#39;Polygons&#39; [package &quot;sp&quot;] with 5 slots
@@ -490,19 +622,19 @@ plot(meuse.pol, col = &quot;grey&quot;) </code></pre>
 ##   .. .. .. .. .. .. ..@ area   : num 2122714
 ##   .. .. .. .. .. .. ..@ hole   : logi FALSE
 ##   .. .. .. .. .. .. ..@ ringDir: int 1
-##   .. .. .. .. .. .. ..@ coords : num [1:176, 1:2] 182004 182137 182252 182315 182332 ...
+##   .. .. .. .. .. .. ..@ coords : num [1:176, 1:2] 182004 182137 182252 182314 182332 ...
 ##   .. .. .. ..@ plotOrder: int 1
 ##   .. .. .. ..@ labpt    : num [1:2] 180183 331123
 ##   .. .. .. ..@ ID       : chr &quot;meuse.riv&quot;
 ##   .. .. .. ..@ area     : num 2122714
 ##   ..@ plotOrder  : int 1
-##   ..@ bbox       : num [1:2, 1:2] 178304 325699 182332 337685
+##   ..@ bbox       : num [1:2, 1:2] 178304 325698 182332 337685
 ##   .. ..- attr(*, &quot;dimnames&quot;)=List of 2
 ##   .. .. ..$ : chr [1:2] &quot;x&quot; &quot;y&quot;
 ##   .. .. ..$ : chr [1:2] &quot;min&quot; &quot;max&quot;
 ##   ..@ proj4string:Formal class &#39;CRS&#39; [package &quot;sp&quot;] with 1 slot
 ##   .. .. ..@ projargs: chr NA</code></pre>
-<pre class="r"><code>str(meuse)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(meuse)</code></pre></div>
 <pre><code>## Formal class &#39;SpatialPointsDataFrame&#39; [package &quot;sp&quot;] with 5 slots
 ##   ..@ data       :&#39;data.frame&#39;:  155 obs. of  12 variables:
 ##   .. ..$ cadmium: num [1:155] 11.7 8.6 6.5 2.6 2.8 3 3.2 2.8 2.4 1.6 ...
@@ -531,98 +663,99 @@ plot(meuse.pol, col = &quot;grey&quot;) </code></pre>
 </div>
 <div id="grid" class="section level1">
 <h1>Grid</h1>
-<pre class="r"><code>data(meuse.grid) # from GIS data?
-coordinates(meuse.grid) &lt;- c(&quot;x&quot;, &quot;y&quot;) 
-meuse.grid &lt;- as(meuse.grid, &quot;SpatialPixels&quot;) 
-image(meuse.grid, col = &quot;grey&quot;) </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(meuse.grid) <span class="co"># from GIS data?</span>
+<span class="kw">coordinates</span>(meuse.grid) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>) 
+meuse.grid &lt;-<span class="st"> </span><span class="kw">as</span>(meuse.grid, <span class="st">&quot;SpatialPixels&quot;</span>) 
+<span class="kw">image</span>(meuse.grid, <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>) </code></pre></div>
 <p><img src="images/08-A/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 <div id="combining-multiple-elements" class="section level1">
 <h1>Combining multiple elements</h1>
 <p>You can combine multiple layers by using the add = TRUE argument</p>
-<pre class="r"><code>image(meuse.grid, col = &quot;yellow&quot;) 
-plot(meuse.pol, col = &quot;blue&quot;, add = TRUE) 
-plot(meuse, pch = 1, cex = 0.5, add = TRUE) # change shape and size of points</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">image</span>(meuse.grid, <span class="dt">col =</span> <span class="st">&quot;yellow&quot;</span>) 
+<span class="kw">plot</span>(meuse.pol, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>) 
+<span class="kw">plot</span>(meuse, <span class="dt">pch =</span> <span class="dv">1</span>, <span class="dt">cex =</span> <span class="fl">0.5</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>) <span class="co"># change shape and size of points</span></code></pre></div>
 <p><img src="images/08-A/unnamed-chunk-6-1.png" width="672" /></p>
-<pre class="r"><code># see table 3.2 for helpful arguments for customizing plots</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># see table 3.2 for helpful arguments for customizing plots</span></code></pre></div>
 <div id="axes-and-layout-options" class="section level2">
 <h2>Axes and layout options</h2>
-<pre class="r"><code>layout(matrix(c(1, 2), 1, 2)) 
-plot(meuse.pol, axes = TRUE) # default axes
-plot(meuse.pol, axes = FALSE) # with custom axes
-axis(1, at = c(178000 + 0:2 * 2000), cex.axis = 0.7) 
-axis(2, at = c(326000 + 0:3 * 4000), cex.axis = 0.7) 
-box()</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">layout</span>(<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dv">1</span>, <span class="dv">2</span>)) 
+<span class="kw">plot</span>(meuse.pol, <span class="dt">axes =</span> <span class="ot">TRUE</span>) <span class="co"># default axes</span>
+<span class="kw">plot</span>(meuse.pol, <span class="dt">axes =</span> <span class="ot">FALSE</span>) <span class="co"># with custom axes</span>
+<span class="kw">axis</span>(<span class="dv">1</span>, <span class="dt">at =</span> <span class="kw">c</span>(<span class="dv">178000</span> <span class="op">+</span><span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="dv">2000</span>), <span class="dt">cex.axis =</span> <span class="fl">0.7</span>) 
+<span class="kw">axis</span>(<span class="dv">2</span>, <span class="dt">at =</span> <span class="kw">c</span>(<span class="dv">326000</span> <span class="op">+</span><span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="dv">3</span> <span class="op">*</span><span class="st"> </span><span class="dv">4000</span>), <span class="dt">cex.axis =</span> <span class="fl">0.7</span>) 
+<span class="kw">box</span>()</code></pre></div>
 <p><img src="images/08-A/unnamed-chunk-7-1.png" width="672" /></p>
 </div>
 </div>
 <div id="plot-without-axes" class="section level1">
 <h1>Plot without axes</h1>
-<pre class="r"><code>oldpar = par(no.readonly = TRUE) 
-layout(matrix(c(1, 2), 1, 2))
-plot(meuse, axes = TRUE, cex = 0.6) 
-plot(meuse.pol, add = TRUE) 
-title(&quot;Sample locations&quot;) 
-par(mar = c(0, 0, 0, 0) + 0.1)
-plot(meuse, axes = FALSE, cex = 0.6) 
-plot(meuse.pol, add = TRUE) 
-box() </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">oldpar =<span class="st"> </span><span class="kw">par</span>(<span class="dt">no.readonly =</span> <span class="ot">TRUE</span>) 
+<span class="kw">layout</span>(<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dv">1</span>, <span class="dv">2</span>))
+<span class="kw">plot</span>(meuse, <span class="dt">axes =</span> <span class="ot">TRUE</span>, <span class="dt">cex =</span> <span class="fl">0.6</span>) 
+<span class="kw">plot</span>(meuse.pol, <span class="dt">add =</span> <span class="ot">TRUE</span>) 
+<span class="kw">title</span>(<span class="st">&quot;Sample locations&quot;</span>) 
+<span class="kw">par</span>(<span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>) <span class="op">+</span><span class="st"> </span><span class="fl">0.1</span>)
+<span class="kw">plot</span>(meuse, <span class="dt">axes =</span> <span class="ot">FALSE</span>, <span class="dt">cex =</span> <span class="fl">0.6</span>) 
+<span class="kw">plot</span>(meuse.pol, <span class="dt">add =</span> <span class="ot">TRUE</span>) 
+<span class="kw">box</span>() </code></pre></div>
 <p><img src="images/08-A/unnamed-chunk-8-1.png" width="672" /></p>
-<pre class="r"><code>par(oldpar)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(oldpar)</code></pre></div>
 </div>
 <div id="adding-degrees-and-gridlines" class="section level1">
 <h1>Adding degrees and gridlines</h1>
-<pre class="r"><code># Install and load packages
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Install and load packages</span>
 
-#install.packages(&quot;maptools&quot;)
-library(maptools) </code></pre>
-<pre><code>## Warning: package &#39;maptools&#39; was built under R version 3.3.3</code></pre>
-<pre><code>## Checking rgeos availability: TRUE</code></pre>
-<pre class="r"><code>library(maps) </code></pre>
-<pre><code>## Warning: package &#39;maps&#39; was built under R version 3.3.3</code></pre>
-<pre class="r"><code>#install.packages(&quot;rgdal&quot;)
-library(rgdal) </code></pre>
-<pre><code>## Warning: package &#39;rgdal&#39; was built under R version 3.3.3</code></pre>
-<pre><code>## rgdal: version: 1.2-13, (SVN revision 686)
+<span class="co">#install.packages(&quot;maptools&quot;)</span>
+<span class="kw">library</span>(maptools) </code></pre></div>
+<pre><code>## Checking rgeos availability: FALSE
+##      Note: when rgeos is not available, polygon geometry     computations in maptools depend on gpclib,
+##      which has a restricted licence. It is disabled by default;
+##      to enable gpclib, type gpclibPermit()</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(maps) 
+<span class="co">#install.packages(&quot;rgdal&quot;)</span>
+<span class="kw">library</span>(rgdal) </code></pre></div>
+<pre><code>## Warning: package &#39;rgdal&#39; was built under R version 3.4.3</code></pre>
+<pre><code>## rgdal: version: 1.2-16, (SVN revision 701)
 ##  Geospatial Data Abstraction Library extensions to R successfully loaded
-##  Loaded GDAL runtime: GDAL 2.2.0, released 2017/04/28
-##  Path to GDAL shared files: C:/Program Files/R/R-3.3.1/library/rgdal/gdal
+##  Loaded GDAL runtime: GDAL 2.1.3, released 2017/20/01
+##  Path to GDAL shared files: /Library/Frameworks/R.framework/Versions/3.4/Resources/library/rgdal/gdal
+##  GDAL binary built with GEOS: FALSE 
 ##  Loaded PROJ.4 runtime: Rel. 4.9.3, 15 August 2016, [PJ_VERSION: 493]
-##  Path to PROJ.4 shared files: C:/Program Files/R/R-3.3.1/library/rgdal/proj
+##  Path to PROJ.4 shared files: /Library/Frameworks/R.framework/Versions/3.4/Resources/library/rgdal/proj
 ##  Linking to sp version: 1.2-5</code></pre>
-<pre class="r"><code>wrld &lt;- map(&quot;world&quot;, interior = FALSE, xlim = c(-179, + 179), ylim = c(-89, 89), 
-            plot = FALSE) 
-wrld_p &lt;- pruneMap(wrld, xlim = c(-179, 179)) 
-llCRS &lt;- CRS(&quot;+proj=longlat +ellps=WGS84&quot;) 
-wrld_sp &lt;- map2SpatialLines(wrld_p, proj4string = llCRS) 
-prj_new &lt;- CRS(&quot;+proj=moll&quot;) 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wrld &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="st">&quot;world&quot;</span>, <span class="dt">interior =</span> <span class="ot">FALSE</span>, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">179</span>, <span class="op">+</span><span class="st"> </span><span class="dv">179</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">89</span>, <span class="dv">89</span>), 
+            <span class="dt">plot =</span> <span class="ot">FALSE</span>) 
+wrld_p &lt;-<span class="st"> </span><span class="kw">pruneMap</span>(wrld, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">179</span>, <span class="dv">179</span>)) 
+llCRS &lt;-<span class="st"> </span><span class="kw">CRS</span>(<span class="st">&quot;+proj=longlat +ellps=WGS84&quot;</span>) 
+wrld_sp &lt;-<span class="st"> </span><span class="kw">map2SpatialLines</span>(wrld_p, <span class="dt">proj4string =</span> llCRS) 
+prj_new &lt;-<span class="st"> </span><span class="kw">CRS</span>(<span class="st">&quot;+proj=moll&quot;</span>) 
 
-wrld_proj &lt;- spTransform(wrld_sp, prj_new) 
-wrld_grd &lt;- gridlines(wrld_sp, easts = c(-179, seq(-150, + 150, 50), 179.5), 
-                      norths = seq(-75, 75, 15), ndiscr = 100) 
-wrld_grd_proj &lt;- spTransform(wrld_grd, prj_new) 
-at_sp &lt;- gridat(wrld_sp, easts = 0, norths = seq(-75, + 75, 15), offset = 0.3) 
-at_proj &lt;- spTransform(at_sp, prj_new) 
-plot(wrld_proj, col = &quot;grey60&quot;) 
-plot(wrld_grd_proj, add = TRUE, lty = 3, col = &quot;grey70&quot;) 
-text(coordinates(at_proj), pos = at_proj$pos, offset = at_proj$offset, 
-     labels = parse(text = as.character(at_proj$labels)), cex = 0.6)</code></pre>
+wrld_proj &lt;-<span class="st"> </span><span class="kw">spTransform</span>(wrld_sp, prj_new) 
+wrld_grd &lt;-<span class="st"> </span><span class="kw">gridlines</span>(wrld_sp, <span class="dt">easts =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">179</span>, <span class="kw">seq</span>(<span class="op">-</span><span class="dv">150</span>, <span class="op">+</span><span class="st"> </span><span class="dv">150</span>, <span class="dv">50</span>), <span class="fl">179.5</span>), 
+                      <span class="dt">norths =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">75</span>, <span class="dv">75</span>, <span class="dv">15</span>), <span class="dt">ndiscr =</span> <span class="dv">100</span>) 
+wrld_grd_proj &lt;-<span class="st"> </span><span class="kw">spTransform</span>(wrld_grd, prj_new) 
+at_sp &lt;-<span class="st"> </span><span class="kw">gridat</span>(wrld_sp, <span class="dt">easts =</span> <span class="dv">0</span>, <span class="dt">norths =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">75</span>, <span class="op">+</span><span class="st"> </span><span class="dv">75</span>, <span class="dv">15</span>), <span class="dt">offset =</span> <span class="fl">0.3</span>) 
+at_proj &lt;-<span class="st"> </span><span class="kw">spTransform</span>(at_sp, prj_new) 
+<span class="kw">plot</span>(wrld_proj, <span class="dt">col =</span> <span class="st">&quot;grey60&quot;</span>) 
+<span class="kw">plot</span>(wrld_grd_proj, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">lty =</span> <span class="dv">3</span>, <span class="dt">col =</span> <span class="st">&quot;grey70&quot;</span>) 
+<span class="kw">text</span>(<span class="kw">coordinates</span>(at_proj), <span class="dt">pos =</span> at_proj<span class="op">$</span>pos, <span class="dt">offset =</span> at_proj<span class="op">$</span>offset, 
+     <span class="dt">labels =</span> <span class="kw">parse</span>(<span class="dt">text =</span> <span class="kw">as.character</span>(at_proj<span class="op">$</span>labels)), <span class="dt">cex =</span> <span class="fl">0.6</span>)</code></pre></div>
 <p><img src="images/08-A/unnamed-chunk-10-1.png" width="672" /></p>
 <div id="plotting-attributes-and-map-legends" class="section level2">
 <h2>Plotting attributes and map legends</h2>
 <p>Up to now we have only plotted the geometry or topology of the spatial objects. If in addition we want to show feature characteristics or attributes of the objects, we need to use type, size, or colour of the symbols, lines, or polygons.</p>
-<pre class="r"><code>#install.packages(&quot;gstat&quot;)
-library(gstat) </code></pre>
-<pre><code>## Warning: package &#39;gstat&#39; was built under R version 3.3.3</code></pre>
-<pre class="r"><code>idw.out &lt;- gstat::idw(zinc ~ 1, meuse, meuse.grid, idp = 2.5) # gstat package used to create objects that hold info used for geostatistical prediction. idw is inverse distance weighted interpolation.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#install.packages(&quot;gstat&quot;)</span>
+<span class="kw">library</span>(gstat) </code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">idw.out &lt;-<span class="st"> </span>gstat<span class="op">::</span><span class="kw">idw</span>(zinc <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, meuse, meuse.grid, <span class="dt">idp =</span> <span class="fl">2.5</span>) <span class="co"># gstat package used to create objects that hold info used for geostatistical prediction. idw is inverse distance weighted interpolation.</span></code></pre></div>
 <pre><code>## [inverse distance weighted interpolation]</code></pre>
-<pre class="r"><code>grays = gray.colors(4, 0.55, 0.95) # defines color scheme
-image(idw.out, col = grays, breaks = c(100, 200, 400, 800, 1800))  
-plot(meuse.pol, add = TRUE) 
-plot(meuse, pch = 1, cex = sqrt(meuse$zinc)/40, add = TRUE) 
-legVals &lt;- c(100, 200, 500, 1000, 2000) 
-legend(&quot;bottomleft&quot;, legend = legVals, pch = 1, pt.cex = sqrt(legVals)/40, bty = &quot;n&quot;, title = &quot;measured&quot;) 
-legend(&quot;topleft&quot;, legend = c(&quot;100-200&quot;, &quot;200-400&quot;, &quot;400-800&quot;, &quot;800-1800&quot;), fill = grays, bty = &quot;n&quot;, title = &quot;interpolated&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">grays =<span class="st"> </span><span class="kw">gray.colors</span>(<span class="dv">4</span>, <span class="fl">0.55</span>, <span class="fl">0.95</span>) <span class="co"># defines color scheme</span>
+<span class="kw">image</span>(idw.out, <span class="dt">col =</span> grays, <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">400</span>, <span class="dv">800</span>, <span class="dv">1800</span>))  
+<span class="kw">plot</span>(meuse.pol, <span class="dt">add =</span> <span class="ot">TRUE</span>) 
+<span class="kw">plot</span>(meuse, <span class="dt">pch =</span> <span class="dv">1</span>, <span class="dt">cex =</span> <span class="kw">sqrt</span>(meuse<span class="op">$</span>zinc)<span class="op">/</span><span class="dv">40</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>) 
+legVals &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">2000</span>) 
+<span class="kw">legend</span>(<span class="st">&quot;bottomleft&quot;</span>, <span class="dt">legend =</span> legVals, <span class="dt">pch =</span> <span class="dv">1</span>, <span class="dt">pt.cex =</span> <span class="kw">sqrt</span>(legVals)<span class="op">/</span><span class="dv">40</span>, <span class="dt">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;measured&quot;</span>) 
+<span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&quot;100-200&quot;</span>, <span class="st">&quot;200-400&quot;</span>, <span class="st">&quot;400-800&quot;</span>, <span class="st">&quot;800-1800&quot;</span>), <span class="dt">fill =</span> grays, <span class="dt">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;interpolated&quot;</span>)</code></pre></div>
 <p><img src="images/08-A/unnamed-chunk-12-1.png" width="672" /></p>
 <p><strong>Tellis/lattice plots with spplot</strong></p>
 <p>spplot provides plotting of spatial data with attributes through the Trellis graphics system. Good for making conditional plots.</p>
@@ -630,35 +763,33 @@ legend(&quot;topleft&quot;, legend = c(&quot;100-200&quot;, &quot;200-400&quot;,
 </div>
 <div id="plotting-points-polygons-lines-and-grids" class="section level1">
 <h1>Plotting points, polygons, lines, and grids</h1>
-<pre class="r"><code>library(lattice)</code></pre>
-<pre><code>## Warning: package &#39;lattice&#39; was built under R version 3.3.3</code></pre>
-<pre class="r"><code>spplot(meuse, c(&quot;cadmium&quot;, &quot;zinc&quot;, &quot;copper&quot;, &quot;lead&quot;)) # easy way to plot side by side maps</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lattice)
+<span class="kw">spplot</span>(meuse, <span class="kw">c</span>(<span class="st">&quot;cadmium&quot;</span>, <span class="st">&quot;zinc&quot;</span>, <span class="st">&quot;copper&quot;</span>, <span class="st">&quot;lead&quot;</span>)) <span class="co"># easy way to plot side by side maps</span></code></pre></div>
 <p><img src="images/08-A/unnamed-chunk-13-1.png" width="672" /></p>
-<pre class="r"><code>library(maptools) 
-data(meuse.grid) 
-coordinates(meuse.grid) &lt;- c(&quot;x&quot;, &quot;y&quot;) 
-meuse.grid &lt;- as(meuse.grid, &quot;SpatialPixelsDataFrame&quot;) 
-im &lt;- as.image.SpatialGridDataFrame(meuse.grid[&quot;dist&quot;]) 
-cl &lt;- ContourLines2SLDF(contourLines(im)) 
-spplot(cl)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(maptools) 
+<span class="kw">data</span>(meuse.grid) 
+<span class="kw">coordinates</span>(meuse.grid) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>) 
+meuse.grid &lt;-<span class="st"> </span><span class="kw">as</span>(meuse.grid, <span class="st">&quot;SpatialPixelsDataFrame&quot;</span>) 
+im &lt;-<span class="st"> </span><span class="kw">as.image.SpatialGridDataFrame</span>(meuse.grid[<span class="st">&quot;dist&quot;</span>]) 
+cl &lt;-<span class="st"> </span><span class="kw">ContourLines2SLDF</span>(<span class="kw">contourLines</span>(im)) 
+<span class="kw">spplot</span>(cl)</code></pre></div>
 <p><img src="images/08-A/unnamed-chunk-14-1.png" width="672" /></p>
 </div>
 <div id="adding-reference-and-layout-elements-to-plots" class="section level1">
 <h1>Adding reference and layout elements to plots</h1>
-<pre class="r"><code>river &lt;- list(&quot;sp.polygons&quot;, meuse.pol) 
-north &lt;- list(&quot;SpatialPolygonsRescale&quot;, layout.north.arrow(), offset = c(178750, 332500), scale = 400) 
-scale &lt;- list(&quot;SpatialPolygonsRescale&quot;, layout.scale.bar(), offset = c(180200, 329800), scale = 1000, fill = c(&quot;transparent&quot;, &quot;black&quot;))
-txt1 &lt;- list(&quot;sp.text&quot;, c(180200, 329950), &quot;0&quot;) 
-txt2 &lt;- list(&quot;sp.text&quot;, c(181200, 329950), &quot;1 km&quot;) 
-pts &lt;- list(&quot;sp.points&quot;, meuse, pch = 3, col = &quot;black&quot;) 
-meuse.layout &lt;- list(river, north, scale, txt1, txt2, pts)
-zn &lt;- meuse[&quot;zinc&quot;]
-spplot(zn, sp.layout = meuse.layout)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">river &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;sp.polygons&quot;</span>, meuse.pol) 
+north &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;SpatialPolygonsRescale&quot;</span>, <span class="kw">layout.north.arrow</span>(), <span class="dt">offset =</span> <span class="kw">c</span>(<span class="dv">178750</span>, <span class="dv">332500</span>), <span class="dt">scale =</span> <span class="dv">400</span>) 
+scale &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;SpatialPolygonsRescale&quot;</span>, <span class="kw">layout.scale.bar</span>(), <span class="dt">offset =</span> <span class="kw">c</span>(<span class="dv">180200</span>, <span class="dv">329800</span>), <span class="dt">scale =</span> <span class="dv">1000</span>, <span class="dt">fill =</span> <span class="kw">c</span>(<span class="st">&quot;transparent&quot;</span>, <span class="st">&quot;black&quot;</span>))
+txt1 &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;sp.text&quot;</span>, <span class="kw">c</span>(<span class="dv">180200</span>, <span class="dv">329950</span>), <span class="st">&quot;0&quot;</span>) 
+txt2 &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;sp.text&quot;</span>, <span class="kw">c</span>(<span class="dv">181200</span>, <span class="dv">329950</span>), <span class="st">&quot;1 km&quot;</span>) 
+pts &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;sp.points&quot;</span>, meuse, <span class="dt">pch =</span> <span class="dv">3</span>, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>) 
+meuse.layout &lt;-<span class="st"> </span><span class="kw">list</span>(river, north, scale, txt1, txt2, pts)
+zn &lt;-<span class="st"> </span>meuse[<span class="st">&quot;zinc&quot;</span>]
+<span class="kw">spplot</span>(zn, <span class="dt">sp.layout =</span> meuse.layout)</code></pre></div>
 <p><img src="images/08-A/unnamed-chunk-15-1.png" width="672" /></p>
 <p>** Other options: ggplot2 and latticeExtra**</p>
-<pre class="r"><code>library(ggplot2) </code></pre>
-<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.3.2</code></pre>
-<pre class="r"><code>methods(fortify) # use fortify function to convert spatial data to a dataframe which ggplot can read</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2) 
+<span class="kw">methods</span>(fortify) <span class="co"># use fortify function to convert spatial data to a dataframe which ggplot can read</span></code></pre></div>
 <pre><code>##  [1] fortify.cld*                      fortify.confint.glht*            
 ##  [3] fortify.data.frame*               fortify.default*                 
 ##  [5] fortify.function*                 fortify.glht*                    
@@ -670,27 +801,25 @@ spplot(zn, sp.layout = meuse.layout)</code></pre>
 ## [17] fortify.summary.glht*            
 ## see &#39;?methods&#39; for accessing help and source code</code></pre>
 <p>However, doesn’t work for SpatialPointsDataFrame such as meuse data set, so we have to do it manually.</p>
-<pre class="r"><code>m = as(meuse, &quot;data.frame&quot;) 
-ggplot(m, aes(x, y)) + geom_point() + coord_equal()</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m =<span class="st"> </span><span class="kw">as</span>(meuse, <span class="st">&quot;data.frame&quot;</span>) 
+<span class="kw">ggplot</span>(m, <span class="kw">aes</span>(x, y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">coord_equal</span>()</code></pre></div>
 <p><img src="images/08-A/unnamed-chunk-17-1.png" width="672" /></p>
 </div>
 <div id="latticeextra" class="section level1">
 <h1>latticeExtra</h1>
-<pre class="r"><code>library(latticeExtra) </code></pre>
-<pre><code>## Warning: package &#39;latticeExtra&#39; was built under R version 3.3.3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(latticeExtra) </code></pre></div>
 <pre><code>## Loading required package: RColorBrewer</code></pre>
-<pre><code>## Warning: package &#39;RColorBrewer&#39; was built under R version 3.3.2</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;latticeExtra&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
 ## 
 ##     layer</code></pre>
-<pre class="r"><code>p = spplot(meuse[&quot;zinc&quot;]) 
-m = SpatialPolygonsDataFrame(meuse.pol, data.frame(col = 1), match.ID = FALSE) 
-l = spplot(m) 
-l+p </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p =<span class="st"> </span><span class="kw">spplot</span>(meuse[<span class="st">&quot;zinc&quot;</span>]) 
+m =<span class="st"> </span><span class="kw">SpatialPolygonsDataFrame</span>(meuse.pol, <span class="kw">data.frame</span>(<span class="dt">col =</span> <span class="dv">1</span>), <span class="dt">match.ID =</span> <span class="ot">FALSE</span>) 
+l =<span class="st"> </span><span class="kw">spplot</span>(m) 
+l<span class="op">+</span>p </code></pre></div>
 <p><img src="images/08-A/unnamed-chunk-18-1.png" width="672" /></p>
-<pre class="r"><code>p+l</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p<span class="op">+</span>l</code></pre></div>
 <p><img src="images/08-A/unnamed-chunk-18-2.png" width="672" /></p>
 <div id="additional-resources" class="section level3">
 <h3>Additional resources</h3>
@@ -715,6 +844,8 @@ l+p </code></pre>
 
 
 
+</div>
+</div>
 
 </div>
 
