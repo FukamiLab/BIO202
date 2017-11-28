@@ -1,8 +1,10 @@
 ---
-layout: topic
 title: "Visualizing spatial data"
 author: "Tad & Tyler"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
+layout: topic
 ---
 
 **Assigned Reading:**
@@ -359,6 +361,5 @@ https://timogrossenbacher.ch/2016/12/beautiful-thematic-maps-with-ggplot2-only/
 *3)* Have you used any other usefull packages for vizualizing spatial data?
 
 *4)* Pros/cons of using R vs. GIS or other platforms for data visualization?
-
 
 
