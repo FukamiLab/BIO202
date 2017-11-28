@@ -20,24 +20,55 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-1.1/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+
 
 <style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
 <style type="text/css">
   pre:not([class]) {
     background-color: white;
   }
 </style>
-<script type="text/javascript">
-if (window.hljs && document.readyState && document.readyState === "complete") {
-   window.setTimeout(function() {
-      hljs.initHighlighting();
-   }, 0);
-}
-</script>
-
 
 
 <style type="text/css">
@@ -67,6 +98,7 @@ h6 {
 }
 </style>
 
+<link rel="stylesheet" href="style.css" type="text/css" />
 
 </head>
 
@@ -160,6 +192,107 @@ $(document).ready(function () {
 <!-- code folding -->
 
 
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -354,16 +487,897 @@ $(document).ready(function () {
 </blockquote>
 <div id="key-points" class="section level3">
 <h3>Key Points</h3>
+<p>Anything that can be represented as an interaction matrix can be represented as a network (e.g., food webs, plant-pollinator networks, plant-fungal networks, microbe co-occurrence networks, facultative networks, host-parasite networks, etc.)</p>
+<p>Networks are interesting because they are a way to organize and quantify community structure beyond simple species identities and numbers. Network structure is purportedly related to community robustness (the ability of the community to resist change after a disturbance), resilience (the ability of the community to recover after a disturbance), evolutionary history, ecosystem service provision, and biodiversity maintenance.</p>
+<p>Columns and rows of interaction matrices represent interacting species (columns as pollinators and rows as plants, for example), and cell values represent either the presence/absence of an interaction between two species (binary networks) or the frequency of interactions between two species (weighted networks)</p>
+<ul>
+<li>Binary and weighted interaction networks are analyzed differently</li>
+</ul>
+<p>Networks are often unipartite (all species in the same guild), bipartite (two guilds), or tripartite (three guilds). We focus today on <strong>bipartite networks</strong>.</p>
+<p>There are many R packages to analyze and visualize networks including:</p>
+<ul>
+<li><code>vegan</code> (not strictly a network package, but required by <code>bipartite</code>)</li>
+<li><code>bipartite</code></li>
+<li><code>igraph</code></li>
+<li><code>sna</code></li>
+<li><code>d3network</code></li>
+<li><code>graphviz</code> (java)</li>
+<li><code>qgraph</code></li>
+</ul>
+<p>For the example analysis we use <code>vegan</code> and <code>bipartite</code>.</p>
+<p>Network metrics are used to quantify network structural properties (for example, a very simple one would be the average number of interactions per species). What network metric you pick depends on what question you’re trying to answer.</p>
+<p>Some common <em>network</em> metrics that appear often in the literature are:</p>
+<ul>
+<li><strong>Connectance</strong>: the number of observed interactions divided by the number of possible interactions
+<ul>
+<li>has been proposed that connectance is a measure of complexity</li>
+<li>indices: ‘connectance’, ‘weighted connectance’</li>
+</ul></li>
+<li><strong>Nestedness</strong>: a network in which the species with many interactions interact with the species with few interactions (and vice versa) is a nested network
+<ul>
+<li>common in mutualistic networks</li>
+<li>indices: ‘nestedness’, ‘weighted nestedness’, ‘NODF’, ‘weighted NODF’</li>
+</ul></li>
+<li><strong>Modularity</strong>: a network in which the species form discrete interaction compartments, with little interactions between species outside of each compartment, is a modular network
+<ul>
+<li>common in antagonistic networks</li>
+<li>indices: ‘computeModules’, ‘modularity’ (in <code>igraph</code>)</li>
+</ul></li>
+<li><strong>Specialization</strong> – two potential meanings
+<ul>
+<li>specialized networks = species have few interaction partners
+<ul>
+<li>indices: ‘links per species’</li>
+</ul></li>
+<li>specialized networks = networks where species are specific in their interaction partner choice (not opportunistic)
+<ul>
+<li>indices: ‘<span class="math inline">\(H_2\)</span>’</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>Some common <em>species level</em> (node level) metrics that appear often in the literature are:</p>
+<ul>
+<li><strong>Species degree</strong>: number of interaction partners
+<ul>
+<li>indices: ‘species degree’</li>
+</ul></li>
+<li><strong>Centrality</strong> - 2 kinds
+<ul>
+<li><strong>Closeness centrality</strong>: the sum of the number of shortest distances (i.e. number of interactions, also known as ‘path lengths’) between the species in question and all other species in the network
+<ul>
+<li>indices: ‘closeness_w’</li>
+</ul></li>
+<li><strong>Betweenness centrality</strong>: the sum of the number of pairs of species whose shortest path lengths are connected through the species in question
+<ul>
+<li>indices: ‘betweenness_w’</li>
+</ul></li>
+</ul></li>
+<li><strong>Specialization</strong> (specificity): species level metric similar to ‘<span class="math inline">\(H_2\)</span>’
+<ul>
+<li>the deviation of observed interactions from opportunistic, abundance-based interactions</li>
+<li>takes into account interaction partner diversity, relative abundance of other possible interaction partners, and reciprocal specialization between interaction partners</li>
+<li>Index: ‘d’</li>
+</ul></li>
+</ul>
+<p>Use null models to determine if observed network structure is significantly different from random network structure.</p>
+<ul>
+<li><p>Use the z-score <span class="math inline">\((observed - mean(null)/sd(null))\)</span> to calculate the statistical significance of observed network structure (more or less than two standard deviations away from the mean <span class="math inline">\(\rightarrow p &lt; 0.05\)</span>)</p></li>
+<li><p>Null models are common in community ecology in general (e.g., niche overlap, species-area relationship, species co-occurrence, phylogenetic diversity, etc.) so this null model approach is useful for ecologists in general</p></li>
+</ul>
+<p>A common binary null model:</p>
+<ul>
+<li>‘shuffle.web’
+<ul>
+<li>shuffles cells around the interaction matrix, keeps nothing constant</li>
+</ul></li>
+</ul>
+<p>Common weighted null models:</p>
+<ul>
+<li>‘r2dtable’
+<ul>
+<li>changes cell values while keeping row and column sums constant</li>
+</ul></li>
+<li>‘vaznull’
+<ul>
+<li>changes cell values while keeping connectance (number of links in the matrix) constant</li>
+</ul></li>
+<li>‘swap.web’
+<ul>
+<li>changes cell values while keeping both connectance and row/column sums constant</li>
+</ul></li>
+</ul>
+<p>Choose null model wisely - how restrictive do you want to be?</p>
+<p>Also use null models if you want to compare structural properties between networks.</p>
+<ul>
+<li><p>All network metrics are affected by network size (number of rows and columns) and shape (ratio of rows:columns) so it is not really possible to reliably compare network metrics between networks of different sizes and shapes</p></li>
+<li><p>Common solution is to calculate the z-score to standardize metrics first, then compare the z-scores of a metric between networks</p></li>
+</ul>
+<p>That’s networks in a nutshell! Proceed at your own risk…</p>
+<p><br></p>
 </div>
 <div id="analysis-example" class="section level3">
 <h3>Analysis Example</h3>
+<p>In this analysis example, we’re going to use the <code>bipartite</code> R package to visualize networks and to generate null models for significance of different network patterns. We will be using datasets that are already included in the package. These are plant-pollinator interaction matrices (pollinators species as columns and plant species as rows).</p>
+<p>Each dataset, or interaction matrix, is a summary of observed interactions between a pollinator species and a particular plant species in a specific country (or site). The number of these pairwise interactions is given by the value in each matrix cell. Each dataset was obtained in a different country, so the dataset/matrix and the network constructed from that will be named after its country of origin (or region).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Clear environment</span>
+<span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">ls</span>())
+
+<span class="co"># Load required packages for bipartite</span>
+<span class="kw">library</span>(permute)
+<span class="kw">library</span>(lattice)
+<span class="kw">library</span>(vegan)</code></pre></div>
+<pre><code>## This is vegan 2.4-4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(statnet.common)</code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;statnet.common&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     order</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(network)</code></pre></div>
+<pre><code>## network: Classes for Relational Data
+## Version 1.13.0 created on 2015-08-31.
+## copyright (c) 2005, Carter T. Butts, University of California-Irvine
+##                     Mark S. Handcock, University of California -- Los Angeles
+##                     David R. Hunter, Penn State University
+##                     Martina Morris, University of Washington
+##                     Skye Bender-deMoll, University of Washington
+##  For citation information, type citation(&quot;network&quot;).
+##  Type help(&quot;network-package&quot;) to get started.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sna)</code></pre></div>
+<pre><code>## sna: Tools for Social Network Analysis
+## Version 2.4 created on 2016-07-23.
+## copyright (c) 2005, Carter T. Butts, University of California-Irvine
+##  For citation information, type citation(&quot;sna&quot;).
+##  Type help(package=&quot;sna&quot;) to get started.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load main package</span>
+<span class="kw">library</span>(bipartite)</code></pre></div>
+<pre><code>##  This is bipartite 2.08
+##  For latest changes see versionlog in  ?&quot;bipartite-package&quot;.
+##  For citation see: citation(&quot;bipartite&quot;).
+##  Have a nice time plotting and analysing two-mode networks.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;bipartite&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:vegan&#39;:
+## 
+##     nullmodel</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read all the interaction network matrices into a list</span>
+webs &lt;-<span class="st"> </span><span class="kw">list</span>(Safariland, barrett1987, elberling1999, 
+             memmott1999, motten1982, olesen2002aigrettes)
+
+<span class="co"># Re-name the datasets according to the sites for each plant-pollinator network</span>
+webs.names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Argentina&quot;</span>, <span class="st">&quot;Canada&quot;</span>, <span class="st">&quot;Sweden&quot;</span>, <span class="st">&quot;UK&quot;</span>, <span class="st">&quot;USA&quot;</span>, <span class="st">&quot;Azores&quot;</span>) 
+<span class="kw">names</span>(webs) &lt;-<span class="st"> </span>webs.names
+
+<span class="co"># View data (interaction matrix, for generating a network, or a web)</span>
+<span class="kw">lapply</span>(webs, head, <span class="dt">n =</span> 2L) <span class="co"># Only display the first two rows in the dataset</span></code></pre></div>
+<pre><code>## $Argentina
+##                       Policana albopilosa Bombus dahlbomii
+## Aristotelia chilensis                 673                0
+## Alstroemeria aurea                      0              154
+##                       Ruizantheda mutabilis Trichophthalma amoena
+## Aristotelia chilensis                   110                     0
+## Alstroemeria aurea                        0                     0
+##                       Syrphus octomaculatus Manuelia gayi
+## Aristotelia chilensis                     0             0
+## Alstroemeria aurea                        5             7
+##                       Allograpta.Toxomerus Trichophthalma jaffueli
+## Aristotelia chilensis                    0                       0
+## Alstroemeria aurea                       1                       3
+##                       Phthiria Platycheirus1 Sapromyza.Minettia
+## Aristotelia chilensis        0             4                  0
+## Alstroemeria aurea           8             1                  1
+##                       Formicidae3 Nitidulidae Staphilinidae Ichneumonidae4
+## Aristotelia chilensis           0           0             0              1
+## Alstroemeria aurea              0           0             4              0
+##                       Braconidae3 Chalepogenus caeruleus Vespula germanica
+## Aristotelia chilensis           0                      0                 0
+## Alstroemeria aurea              0                      0                 4
+##                       Torymidae2 Phthiria1 Svastrides melanura Sphecidae
+## Aristotelia chilensis          0         0                   0         0
+## Alstroemeria aurea             0         1                   6         1
+##                       Thomisidae Corynura prothysteres Ichneumonidae2
+## Aristotelia chilensis          0                     1              0
+## Alstroemeria aurea             1                     3              4
+##                       Ruizantheda proxima Braconidae2
+## Aristotelia chilensis                   0           1
+## Alstroemeria aurea                      4           0
+## 
+## $Canada
+##                      Acmaeopsoides.rufula Agiotes.stabilis
+## Aralia.nudicaulis                       0                0
+## Chimaphila.umbellata                    0                0
+##                      Ancistrocerus.sp. Andrena.melanochroa Andrena.miranda
+## Aralia.nudicaulis                    0                   0               0
+## Chimaphila.umbellata                 0                   0               0
+##                      Andrena.nivalis Andrena.rufosignata Andrena.sigmundi
+## Aralia.nudicaulis                  0                   0                0
+## Chimaphila.umbellata               0                   0                0
+##                      Andrena.thaspii Andrena.wheeleri Andrena.wilkella
+## Aralia.nudicaulis                  0                1                0
+## Chimaphila.umbellata               0                0                0
+##                      Andrena.w.scripta Anthaxia.expansa Anthonomus.sp.
+## Aralia.nudicaulis                    1                0              0
+## Chimaphila.umbellata                 0                0              0
+##                      Blera.badia Blera.confusa Blera.nigripes
+## Aralia.nudicaulis              0             0              0
+## Chimaphila.umbellata           0             0              0
+##                      Bombus.perplexus Bombus.ternarius Bombus.terricola
+## Aralia.nudicaulis                   3                0                2
+## Chimaphila.umbellata                0                0                4
+##                      Bombus.vagans Bombylius.major Bombylius.pigmaeus
+## Aralia.nudicaulis                8               0                  0
+## Chimaphila.umbellata             5               0                  0
+##                      Cantharis.sp. Carposcalis.confusus
+## Aralia.nudicaulis                0                    0
+## Chimaphila.umbellata             0                    0
+##                      Carposcalis.obscura Cateres.pennatus
+## Aralia.nudicaulis                      0                1
+## Chimaphila.umbellata                   0                0
+##                      Celastrina.argiolus Chalcosyrphus.curvarius
+## Aralia.nudicaulis                      0                       0
+## Chimaphila.umbellata                   0                       0
+##                      Chalcosyrphus.inarmatus Chalcosyrphus.memorum
+## Aralia.nudicaulis                          0                     0
+## Chimaphila.umbellata                       0                     0
+##                      Chalcosyrphus.nigra Cheilosia.pallipes
+## Aralia.nudicaulis                      0                  0
+## Chimaphila.umbellata                   0                  0
+##                      Cheilosia.sialia Cheilosia.slossonae
+## Aralia.nudicaulis                   0                   0
+## Chimaphila.umbellata                0                   0
+##                      Cheilosia.tristis Crabro.sp. Dalopius.sp.
+## Aralia.nudicaulis                    1          0            0
+## Chimaphila.umbellata                 0          0            0
+##                      Dialictus.cressoni Dialictus.imitatus Dialictus.sp.
+## Aralia.nudicaulis                     3                  1             1
+## Chimaphila.umbellata                  0                  0             0
+##                      Eclimus.harrisi Ephemerella.sp. Eremomyioides.setosa
+## Aralia.nudicaulis                  0               0                    0
+## Chimaphila.umbellata               0               0                    0
+##                      Eudasyphora.cyanicolor Eupyses.vestris
+## Aralia.nudicaulis                         0               0
+## Chimaphila.umbellata                      0               0
+##                      Eusphalerum.convexum Eusphalerum.phothos
+## Aralia.nudicaulis                       7                   2
+## Chimaphila.umbellata                    0                   0
+##                      Eusphalerum.sp. Evodinus.monticola Evylaeus.divergens
+## Aralia.nudicaulis                 31                  0                  0
+## Chimaphila.umbellata               0                  0                  0
+##                      Evylaeus.quebecensis Fannia.ungulata
+## Aralia.nudicaulis                       1               0
+## Chimaphila.umbellata                    0               0
+##                      Halictus.confusus Halictus.rubicundus
+## Aralia.nudicaulis                    0                   1
+## Chimaphila.umbellata                 0                   0
+##                      Hoplitis.producta Hylaeus.basalis Hylaeus.ellipticus
+## Aralia.nudicaulis                    0               0                  0
+## Chimaphila.umbellata                 0               0                  0
+##                      Hylaeus.stevensi Judolia.montivagans Lygus.refidorsus
+## Aralia.nudicaulis                   0                   0                0
+## Chimaphila.umbellata                0                   0                0
+##                      Mallota.posticata Melagyna.lasiophthalma
+## Aralia.nudicaulis                    1                      0
+## Chimaphila.umbellata                 0                      0
+##                      Melanostoma.sp. Nomada.cuneata Nomada.sayi
+## Aralia.nudicaulis                  0              0           0
+## Chimaphila.umbellata               0              0           0
+##                      Orsodacne.atra Orthoneura.pulchella Osmia.lignaria
+## Aralia.nudicaulis                 0                    0              0
+## Chimaphila.umbellata              0                    0              0
+##                      Osmia.proxima Osmia.pumila Paramyia.nitens
+## Aralia.nudicaulis                0            0               0
+## Chimaphila.umbellata             0            0              61
+##                      Parasyrphus.relictus Passaloecus.sp.
+## Aralia.nudicaulis                       0               0
+## Chimaphila.umbellata                    0               0
+##                      Pegohylemyia.fugax Phalaenophana.pyramusalis
+## Aralia.nudicaulis                     0                         0
+## Chimaphila.umbellata                  0                         0
+##                      Phaonia.serva Pidonia.ruficolis Pieris.napi
+## Aralia.nudicaulis                0                 0           0
+## Chimaphila.umbellata             0                 0           0
+##                      Poanes.hobomok Psithyrus.sp. Pyrophaena.rosarum
+## Aralia.nudicaulis                 0             0                  0
+## Chimaphila.umbellata              0             0                  0
+##                      Rhopalum.sp. Sarcophaga.nearctica
+## Aralia.nudicaulis               0                    0
+## Chimaphila.umbellata            0                    0
+##                      Sphaerophoria.bifurcata Sphaerophoria.longipilosa
+## Aralia.nudicaulis                          0                         0
+## Chimaphila.umbellata                       0                         0
+##                      Sphaerophoria.sp. Sphecodes.sp. Syritta.pipiens
+## Aralia.nudicaulis                    0             0               0
+## Chimaphila.umbellata                 0             0               0
+##                      Syritta.rectus Temnostoma.alternans
+## Aralia.nudicaulis                 0                    0
+## Chimaphila.umbellata              0                    0
+##                      Temnostoma.balyras Temnostoma.barberi
+## Aralia.nudicaulis                     0                  0
+## Chimaphila.umbellata                  0                  0
+##                      Thamnotettix.confinis Trachysida.aspera
+## Aralia.nudicaulis                        0                 1
+## Chimaphila.umbellata                     0                 0
+##                      Tropidia.quadrata Tychius.stephensi Vespula.arenaria
+## Aralia.nudicaulis                    0                 0                0
+## Chimaphila.umbellata                 0                 0                0
+##                      Xylota.bigelowi Xylota.hinei Xylota.sp.
+## Aralia.nudicaulis                  0            0          0
+## Chimaphila.umbellata               0            0          0
+##                      Zeraea.americana
+## Aralia.nudicaulis                   0
+## Chimaphila.umbellata                0
+## 
+## $Sweden
+##                    Phytomyza.aquilonia Alliopsis.glacialis
+## Arabis.alpina                        0                   0
+## Astragalus.alpinus                   0                   0
+##                    Botanophilia.bidens Delai.piliventris Egle.minuta
+## Arabis.alpina                        0                 0           0
+## Astragalus.alpinus                   0                 0           0
+##                    Egle.parva Egle.sp. Paradelia.sp. Pegomya.haemorrhoum
+## Arabis.alpina               0        0             0                   0
+## Astragalus.alpinus          0        0             0                   0
+##                    Pegomya.sp. Pegoplata.aestiva Dipt..sp. Dipt..sp..1
+## Arabis.alpina                0                 1         0           0
+## Astragalus.alpinus           0                 0         0           0
+##                    Dipt..sp..2 Zaphne.barbiventris Zaphne.frontata
+## Arabis.alpina                0                   0               0
+## Astragalus.alpinus           0                   0               0
+##                    Zaphne.sp. Zaphne.sp..1 Bellardia.pubicornis
+## Arabis.alpina               0            0                    0
+## Astragalus.alpinus          0            0                    0
+##                    Dasineura.sp. Acamptocladius.submontanus
+## Arabis.alpina                  0                          0
+## Astragalus.alpinus             0                          0
+##                    Corynoneura.scutella Heterotrissocladius.subpilosus
+## Arabis.alpina                         0                              0
+## Astragalus.alpinus                    0                              0
+##                    Limnophyes.brachytomus Limnophyes.natalensis
+## Arabis.alpina                           0                     0
+## Astragalus.alpinus                      0                     0
+##                    Limnophyes.ninae Limnophyes.schnelli
+## Arabis.alpina                     0                   0
+## Astragalus.alpinus                0                   0
+##                    Micropsectra.radialis Micropsectra.sp.
+## Arabis.alpina                          0                0
+## Astragalus.alpinus                     0                0
+##                    Micropsectra.sp..1 Oliveridia.tricornis
+## Arabis.alpina                       0                    0
+## Astragalus.alpinus                  0                    0
+##                    Pseudosmittia.oxoniana Smittia.betuletorum
+## Arabis.alpina                           0                   0
+## Astragalus.alpinus                      0                   0
+##                    Smittia.aterrima Smittia.sp. Smittia.sp..1
+## Arabis.alpina                     1           0             0
+## Astragalus.alpinus                0           0             0
+##                    Chloropinae.sp. Dolichopus.plumipes Rhaphium.crassipes
+## Arabis.alpina                    0                   0                  0
+## Astragalus.alpinus               0                   0                  0
+##                    Empis.lucida Rhamphomyia.aethiops
+## Arabis.alpina                 0                    0
+## Astragalus.alpinus            0                    0
+##                    Rhamphomyia.obscuripennis Rhamphomyia.morio
+## Arabis.alpina                              0                 1
+## Astragalus.alpinus                         0                 0
+##                    Rhamphomyia.reflexa Fannia.mollissima
+## Arabis.alpina                        0                 0
+## Astragalus.alpinus                   0                 0
+##                    Platypalpus.nigritarsis Phyllolabis.macroura
+## Arabis.alpina                            0                    0
+## Astragalus.alpinus                       0                    0
+##                    Coenosia.atritibia Coenosia.octopunctata
+## Arabis.alpina                       0                     0
+## Astragalus.alpinus                  0                     0
+##                    Phaonia.alpicola Phaonia.lugubris
+## Arabis.alpina                     0                0
+## Astragalus.alpinus                0                0
+##                    Phaonia.subfuscinereis Spilogona.alpica
+## Arabis.alpina                           0                0
+## Astragalus.alpinus                      0                0
+##                    Spilogona.megastoma Spilogona.nitidicauda
+## Arabis.alpina                        0                     0
+## Astragalus.alpinus                   0                     0
+##                    Spilogona.triangulifera Thricops.cunctans
+## Arabis.alpina                            0                 0
+## Astragalus.alpinus                       0                 0
+##                    Thricops.furcatus Thricops.hirtulus
+## Arabis.alpina                      0                 0
+## Astragalus.alpinus                 0                 0
+##                    Thricops.nigritellus Thricops.rostratus Boletina.sp.
+## Arabis.alpina                         0                  1            0
+## Astragalus.alpinus                    0                  0            0
+##                    Mycomya.fuscata Megaselia.cirriventris Megaselia.coci
+## Arabis.alpina                    0                      0              0
+## Astragalus.alpinus               0                      0              0
+##                    Megaselia.digitalis Megaselia.diversa
+## Arabis.alpina                        0                 0
+## Astragalus.alpinus                   0                 0
+##                    Megaselia.girandii Megaselia.groenlandica
+## Arabis.alpina                       0                      0
+## Astragalus.alpinus                  0                      0
+##                    Megaselia.pleuralis Megaselia.sordida Megaselia.sp.
+## Arabis.alpina                        0                 0             0
+## Astragalus.alpinus                   0                 0             0
+##                    Parapiophila.vulgaris Chamaepsila.morio
+## Arabis.alpina                          0                 0
+## Astragalus.alpinus                     0                 0
+##                    Gimnomera.dorsala Bradysia.girandii Bradysia.sp.
+## Arabis.alpina                      0                 0            0
+## Astragalus.alpinus                 0                 1            0
+##                    Bradysia.sp..1 Bradysia.sp..2 Corynoptera.refrigerata
+## Arabis.alpina                   0              0                       0
+## Astragalus.alpinus              0              0                       0
+##                    Corynoptera.sp. Corynoptera.sp..1 Lycoriella.curvispina
+## Arabis.alpina                    0                 0                     0
+## Astragalus.alpinus               0                 0                     0
+##                    Lycoriella.freyi Lycoriella.sp. Lycoriella.sp..1
+## Arabis.alpina                     0              0                0
+## Astragalus.alpinus                0              0                0
+##                    Trichosia.truncata Allophorocera.lapponica Podabrus.sp.
+## Arabis.alpina                       0                       0            0
+## Astragalus.alpinus                  0                       0            0
+##                    Arpedium.sp. Bombus.alpinus Bombus.hyperboreus
+## Arabis.alpina                 0              0                  0
+## Astragalus.alpinus            0              1                  2
+##                    Alysiinae.sp. Alysiinae.sp..1 Alysiinae.sp..2
+## Arabis.alpina                  0               0               0
+## Astragalus.alpinus             0               0               0
+##                    Alysiinae.sp..3 Alysiinae.sp..4 Cotesia.sp.
+## Arabis.alpina                    0               0           0
+## Astragalus.alpinus               0               0           0
+##                    Tetrastichinae.sp. Aclastus.sp. Aclastus.sp..1
+## Arabis.alpina                       0            0              0
+## Astragalus.alpinus                  0            0              0
+##                    Orthocentrinae.sp. Phygadenon.sp. Porizontini.sp.
+## Arabis.alpina                       0              0               0
+## Astragalus.alpinus                  0              0               0
+##                    Ichn..sp. Ichn..sp..1 Ichn..sp..2 Ichn..sp..3
+## Arabis.alpina              0           0           0           0
+## Astragalus.alpinus         0           0           0           0
+##                    Stenomacrus.sp. Platygaster.sp. Pteromalidae.sp.
+## Arabis.alpina                    0               0                0
+## Astragalus.alpinus               0               0                0
+##                    Pteromalidae.sp..1 Xestommaster.sp. Cidaria.sp.
+## Arabis.alpina                       0                0           0
+## Astragalus.alpinus                  0                0           0
+##                    Urbicola.sp. Anarta.sp. Thysan..sp. Limnophilus.sp.
+## Arabis.alpina                 0          0           0               0
+## Astragalus.alpinus            0          0           1               0
+## 
+## $UK
+##                       Coleoptera.spec1 Coleoptera.spec2 Coleoptera.spec3
+## Agrimonium.eupatorium                0                0                0
+## Leontodon.autumnalis                 0                0                0
+##                       Coleoptera.spec4 Coleoptera.spec5 Coleoptera.spec6
+## Agrimonium.eupatorium                0                0                0
+## Leontodon.autumnalis                 0                0                0
+##                       Coleoptera.spec7 Cantharidae.spec1
+## Agrimonium.eupatorium                0                 0
+## Leontodon.autumnalis                 2                 0
+##                       Curculionidae.spec1 Diptera.spec1 Diptera.spec2
+## Agrimonium.eupatorium                   0             0             0
+## Leontodon.autumnalis                    0             0             0
+##                       Diptera.spec3 Diptera.spec4 Conipidae.spec1
+## Agrimonium.eupatorium             0             0               0
+## Leontodon.autumnalis              0             0               0
+##                       Diptera.spec5 Diptera.spec6 Scatophaga.stercoraria
+## Agrimonium.eupatorium             0             0                      0
+## Leontodon.autumnalis              0             0                      0
+##                       Diptera.spec7 Diptera.spec8 Diptera.spec9
+## Agrimonium.eupatorium             0             0             0
+## Leontodon.autumnalis              0             0             0
+##                       Diptera.spec10 Diptera.spec11 Diptera.spec12
+## Agrimonium.eupatorium              0              0              0
+## Leontodon.autumnalis               1              0              1
+##                       Diptera.spec13 Diptera.spec14 Diptera.spec15
+## Agrimonium.eupatorium              0              0              0
+## Leontodon.autumnalis               0              0              0
+##                       Diptera.spec16 Diptera.spec17 Diptera.spec18
+## Agrimonium.eupatorium              0              0              0
+## Leontodon.autumnalis               0              2              0
+##                       Diptera.spec19 Eriothrix.rufomaculata Diptera.spec20
+## Agrimonium.eupatorium              0                      1              0
+## Leontodon.autumnalis               0                      1              0
+##                       Diptera.spec21 Diptera.spec22 Diptera.spec23
+## Agrimonium.eupatorium              0              1              1
+## Leontodon.autumnalis               0             20              0
+##                       Diptera.spec24 Diptera.spec25 Tephretidae.spec1
+## Agrimonium.eupatorium              0              0                 0
+## Leontodon.autumnalis               0              0                 0
+##                       Diptera.spec26 Diptera.spec27 Chrysotoxum.bicinctum
+## Agrimonium.eupatorium              0              0                     0
+## Leontodon.autumnalis               0              0                     0
+##                       Episyrphus.arbustorum Episyrphus.balteatus
+## Agrimonium.eupatorium                     0                    2
+## Leontodon.autumnalis                      1                    0
+##                       Eristalis.pertinax Eristalis.tenax
+## Agrimonium.eupatorium                  0               0
+## Leontodon.autumnalis                   0               1
+##                       Helophilus.pendulus Helophilus.trivittatus
+## Agrimonium.eupatorium                   0                      0
+## Leontodon.autumnalis                    0                      0
+##                       Melanostoma.mellinum Melanostoma.scalare
+## Agrimonium.eupatorium                    1                   0
+## Leontodon.autumnalis                     0                   0
+##                       Meliscaeva.auricollis Metasyrphus.corollae
+## Agrimonium.eupatorium                     0                    1
+## Leontodon.autumnalis                      0                    1
+##                       Platycheirus.albimanus Platycheirus.clypeatus
+## Agrimonium.eupatorium                      0                      2
+## Leontodon.autumnalis                       0                      0
+##                       Platycheirus.scutatus Rhingia.campestris
+## Agrimonium.eupatorium                     0                  0
+## Leontodon.autumnalis                      0                  0
+##                       Scaeva.pyrastri Sphaerophoria.scripta
+## Agrimonium.eupatorium               0                     2
+## Leontodon.autumnalis                0                    16
+##                       Syritta.pipiens Syrphus.ribesii Syrphus.vitripennis
+## Agrimonium.eupatorium               0               0                   0
+## Leontodon.autumnalis                1               0                   0
+##                       Xanthogramma.pedissequum Bombus.lapidarius
+## Agrimonium.eupatorium                        0                 0
+## Leontodon.autumnalis                         0                 0
+##                       Bombus.muscorum Bombus.pascuorum Bombus.terrestris
+## Agrimonium.eupatorium               0                0                 0
+## Leontodon.autumnalis                0                0                 0
+##                       Psithyrus.spec1 Apis.mellifera Parasitica
+## Agrimonium.eupatorium               0              0          0
+## Leontodon.autumnalis                0              0          0
+##                       Formicidae.spec1 Symphyta.spec1 Symphyta.spec2
+## Agrimonium.eupatorium                0              0              0
+## Leontodon.autumnalis                 0              0              0
+##                       solitary.bees Polyommatus.icarus Pyonia.tithonus
+## Agrimonium.eupatorium             0                  0               0
+## Leontodon.autumnalis              7                  0               0
+##                       Pieris.brassicae Incurvariidae.spec1 Maniola.jurtina
+## Agrimonium.eupatorium                0                   0               0
+## Leontodon.autumnalis                 1                   0               0
+##                       Thymelicus.sylvestris Aglais.urticae
+## Agrimonium.eupatorium                     0              0
+## Leontodon.autumnalis                      0              0
+## 
+## $USA
+##                         Andrena..Scaphandrena..arabis
+## Hepatica.americana                                  0
+## Erythronium.umbilicatum                             0
+##                         Andrena..Melandrena..carlini
+## Hepatica.americana                                 1
+## Erythronium.umbilicatum                            4
+##                         Andrena..Trachandrena..ceanothi
+## Hepatica.americana                                    0
+## Erythronium.umbilicatum                               0
+##                         Andrena..Melandrena..dunningi
+## Hepatica.americana                                  0
+## Erythronium.umbilicatum                             0
+##                         Andrena..Ptilandrena..erigeniae
+## Hepatica.americana                                    0
+## Erythronium.umbilicatum                               0
+##                         Andrena..Scrapopteris..imatrix
+## Hepatica.americana                                   0
+## Erythronium.umbilicatum                              0
+##                         Andrena..Simandrena..nasonii
+## Hepatica.americana                                 0
+## Erythronium.umbilicatum                            0
+##                         Andrena..Euandrena..nigrihirta
+## Hepatica.americana                                  27
+## Erythronium.umbilicatum                            273
+##                         Andrena..Micrandrena..personata
+## Hepatica.americana                                    0
+## Erythronium.umbilicatum                               0
+##                         Andrena..Andrena..tridens
+## Hepatica.americana                              9
+## Erythronium.umbilicatum                        72
+##                         Andrena..Tomelissa..violae
+## Hepatica.americana                               0
+## Erythronium.umbilicatum                          0
+##                         Andrena..Micrandrena..ziziaeformis
+## Hepatica.americana                                       0
+## Erythronium.umbilicatum                                  0
+##                         Ceratina.calcarata Ephemoropsis.laboriosa
+## Hepatica.americana                       0                      0
+## Erythronium.umbilicatum                  0                      0
+##                         Nomada..Heminomada..bishopii
+## Hepatica.americana                                 0
+## Erythronium.umbilicatum                            0
+##                         Nomada..Heminomada..luteola
+## Hepatica.americana                                0
+## Erythronium.umbilicatum                           0
+##                         Nomada..Gnathias..perplexa Nomada..Nomada..pygmaea
+## Hepatica.americana                               0                       0
+## Erythronium.umbilicatum                          8                       0
+##                         Nomada..Nomada..sayi Nomada.sp.
+## Hepatica.americana                         0          4
+## Erythronium.umbilicatum                    0          1
+##                         Xylocopa.virginica.virginica Apis.mellifera
+## Hepatica.americana                                 0              4
+## Erythronium.umbilicatum                            2             52
+##                         Bombus.bimaculatus Bombus.pennsylvanicus
+## Hepatica.americana                       2                     0
+## Erythronium.umbilicatum                  0                     0
+##                         Augochlora.pura Augochorella.striata
+## Hepatica.americana                    0                    0
+## Erythronium.umbilicatum               1                    1
+##                         Dialictus.abanci Dialictus.cressonii
+## Hepatica.americana                     5                   0
+## Erythronium.umbilicatum                3                   0
+##                         Evylaeus.macoupinensis Lassioglossum.fuscipenne
+## Hepatica.americana                           5                        0
+## Erythronium.umbilicatum                      0                        0
+##                         halictid.sp. Osmia.atriventris Osmia.conjucta
+## Hepatica.americana                 1                 0              0
+## Erythronium.umbilicatum            0                 0              4
+##                         Osmia.lignaria Osmia.simillima Osmia.sp.
+## Hepatica.americana                   0               0         0
+## Erythronium.umbilicatum              4               0         7
+##                         Hylema.platura Bombylius.major
+## Hepatica.americana                   8              20
+## Erythronium.umbilicatum              0               2
+##                         Platycheirus.obscurus Toxomerous.geminatus
+## Hepatica.americana                          0                    0
+## Erythronium.umbilicatum                     0                    0
+##                         Gonia.sp. unknown.sp. Lycaenopsis.argiolus
+## Hepatica.americana              4           0                    0
+## Erythronium.umbilicatum         0           0                    0
+##                         Euchlo.creusa.lotta
+## Hepatica.americana                        0
+## Erythronium.umbilicatum                   0
+## 
+## $Azores
+##                     Phelsuma.ornata Phalantha.phalantha Stratiomydae.sp.
+## Gastonia.mauritiana              30                   0               16
+## Dracaena.concinna                33                   0                0
+##                     Xylocopa.fenestrata Megachile.sp.
+## Gastonia.mauritiana                   0             0
+## Dracaena.concinna                     0             0
+##                     Protaetia.aurichalcea Leptotes.pirithous
+## Gastonia.mauritiana                    15                  2
+## Dracaena.concinna                       0                  0
+##                     Borbo.borbonica Apis.mellifera Musca.domestica
+## Gastonia.mauritiana               0            149              16
+## Dracaena.concinna                 0             11               0
+##                     Syrphid.sp. Lucilia.sp. Ornidia.obesa
+## Gastonia.mauritiana           0          16            16
+## Dracaena.concinna            17           0             0</code></pre>
+<p>As you can see, these are all quantitative or <em>weighted networks</em> (cells contain values ranging from <span class="math inline">\(0\)</span> to any whole number <span class="math inline">\(n\)</span>, as supposed to just <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span>, as in binary networks).</p>
+<p><br></p>
+<div id="visualizing-networks" class="section level4">
+<h4>Visualizing networks</h4>
+<p>We can visualize these networks using the <code>visweb()</code> and <code>plotweb()</code> functions in the <code>bipartite</code> R package. For the viswebs, the plants are in rows and the pollinators are in columns. For the plotwebs, the plant species are colored in green and the pollinators are in blue.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Visualize the observed networks from the datasets</span>
+
+<span class="kw">visweb</span>(webs<span class="op">$</span>Argentina)</code></pre></div>
+<p><img src="images/09-B/unnamed-chunk-3-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotweb</span>(webs<span class="op">$</span>Argentina, <span class="dt">text.rot=</span><span class="dv">90</span>, <span class="dt">col.low =</span> <span class="st">&quot;green&quot;</span>, <span class="dt">col.high =</span> <span class="st">&quot;blue&quot;</span>)</code></pre></div>
+<p><img src="images/09-B/unnamed-chunk-3-2.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">visweb</span>(webs<span class="op">$</span>Canada)</code></pre></div>
+<p><img src="images/09-B/unnamed-chunk-3-3.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotweb</span>(webs<span class="op">$</span>Canada, <span class="dt">text.rot=</span><span class="dv">90</span>, <span class="dt">col.low =</span> <span class="st">&quot;green&quot;</span>, <span class="dt">col.high =</span> <span class="st">&quot;blue&quot;</span>)</code></pre></div>
+<p><img src="images/09-B/unnamed-chunk-3-4.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">visweb</span>(webs<span class="op">$</span>Sweden)</code></pre></div>
+<p><img src="images/09-B/unnamed-chunk-3-5.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotweb</span>(webs<span class="op">$</span>Sweden, <span class="dt">text.rot=</span><span class="dv">90</span>, <span class="dt">col.low =</span> <span class="st">&quot;green&quot;</span>, <span class="dt">col.high =</span> <span class="st">&quot;blue&quot;</span>)</code></pre></div>
+<p><img src="images/09-B/unnamed-chunk-3-6.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">visweb</span>(webs<span class="op">$</span>UK)</code></pre></div>
+<p><img src="images/09-B/unnamed-chunk-3-7.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotweb</span>(webs<span class="op">$</span>UK, <span class="dt">text.rot=</span><span class="dv">90</span>, <span class="dt">col.low =</span> <span class="st">&quot;green&quot;</span>, <span class="dt">col.high =</span> <span class="st">&quot;blue&quot;</span>)</code></pre></div>
+<p><img src="images/09-B/unnamed-chunk-3-8.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">visweb</span>(webs<span class="op">$</span>USA)</code></pre></div>
+<p><img src="images/09-B/unnamed-chunk-3-9.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotweb</span>(webs<span class="op">$</span>USA, <span class="dt">text.rot=</span><span class="dv">90</span>, <span class="dt">col.low =</span> <span class="st">&quot;green&quot;</span>, <span class="dt">col.high =</span> <span class="st">&quot;blue&quot;</span>)</code></pre></div>
+<p><img src="images/09-B/unnamed-chunk-3-10.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">visweb</span>(webs<span class="op">$</span>Azores)</code></pre></div>
+<p><img src="images/09-B/unnamed-chunk-3-11.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotweb</span>(webs<span class="op">$</span>Azores, <span class="dt">text.rot=</span><span class="dv">90</span>, <span class="dt">col.low =</span> <span class="st">&quot;green&quot;</span>, <span class="dt">col.high =</span> <span class="st">&quot;blue&quot;</span>)</code></pre></div>
+<p><img src="images/09-B/unnamed-chunk-3-12.png" width="672" /></p>
+<p>All networks look different, since they are essentially very different networks (different species and different ecosystems) even though they are all plant-pollinator networks.</p>
+<p><br></p>
+</div>
+<div id="network-structure-analysis" class="section level4">
+<h4>Network structure analysis</h4>
+<p>Next, we’re going to calculate some network metrics, or indices. We’re going to look at ‘nestedness’ and ‘links per species’ at the network level. You can also repeat the same analyses for indices at the species level (e.g., degree, which could be thought of as the equivalent of ‘links per species’ at a different level). We’ll be using the function <code>networklevel()</code> (and <code>specieslevel()</code> can be used for species level analyses).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate network metric nestedness for all plant-pollinator sites</span>
+net.metrics.nest &lt;-<span class="st"> </span><span class="kw">lapply</span>(webs, networklevel, <span class="dt">index =</span> <span class="st">&#39;nestedness&#39;</span>) 
+
+<span class="co"># Calculate network metric links per species for all plant-pollinator sites</span>
+net.metrics.links &lt;-<span class="st"> </span><span class="kw">lapply</span>(webs, networklevel, <span class="dt">index =</span> <span class="st">&#39;links per species&#39;</span>) </code></pre></div>
+<p>Then we will create null models, which are new networks that have been randomized to a certain extent (based on the original observed networks) to remove any possible patterns. We will use three different null model types that work for weighted networks:</p>
+<ol style="list-style-type: decimal">
+<li>r2dtable</li>
+<li>vaznull</li>
+<li>swap.web</li>
+</ol>
+<p>and see how the significance varies depending on which null model type we use as a fun exercise. We use the function <code>nullmodel()</code> to create our nulls (we set the number of nulls to 500) and we can use the <code>method</code> argument to specify the null model type.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Time consuming step!</span>
+
+<span class="co"># Load environment (already saved objects)</span>
+<span class="co">#load(&quot;data/network_analysis_example.RData&quot;)</span>
+
+<span class="co"># Make null models for all sites using the r2dtable null</span>
+net.nulls.r2d &lt;-<span class="st"> </span><span class="kw">lapply</span>(webs, nullmodel, <span class="dt">method =</span> <span class="st">&quot;r2dtable&quot;</span>, <span class="dt">N =</span> <span class="dv">500</span>) 
+
+<span class="co"># Make null models for all sites using the vaznull null</span>
+net.nulls.vaz &lt;-<span class="st"> </span><span class="kw">lapply</span>(webs, nullmodel, <span class="dt">method =</span> <span class="st">&quot;vaznull&quot;</span>, <span class="dt">N =</span> <span class="dv">500</span>) 
+
+<span class="co"># Make null models for all sites using the swap.web null</span>
+net.nulls.swap &lt;-<span class="st"> </span><span class="kw">lapply</span>(webs, nullmodel, <span class="dt">method =</span> <span class="st">&quot;swap.web&quot;</span>, <span class="dt">N =</span> <span class="dv">500</span>)
+
+<span class="co"># Save null objects</span>
+<span class="co">#save(net.nulls.r2d, net.nulls.vaz, net.nulls.swap, file = &quot;data/network_analysis_example.RData&quot;)</span></code></pre></div>
+<p>Then, we need to calculate the same indices for the different nulls (as we already did with the observed networks: ‘nestedness’ and ‘links per species’) created by each null model type. Since there will be a lot of repetition, we start by defining a function for each index where we can specify a null model type for generating the null distribution.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Null distribution function for nestedness - calculates the network nestedness for each null (using a particular null method) for each site </span>
+net.null.nest =<span class="st"> </span><span class="cf">function</span>(nulls){
+  net.null.metric &lt;-<span class="st"> </span><span class="kw">list</span>()
+  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(nulls)) {
+    net.null.metric[[i]] =<span class="st"> </span><span class="kw">do.call</span>(<span class="st">&#39;rbind&#39;</span>, 
+                                 <span class="kw">lapply</span>(nulls[[i]], networklevel, <span class="dt">index =</span> <span class="st">&#39;nestedness&#39;</span>))
+    }
+  <span class="kw">names</span>(net.null.metric) &lt;-<span class="st"> </span>webs.names
+  <span class="kw">return</span>(net.null.metric)
+}
+
+<span class="co"># Null distribution function for links per species - calculates the network links per species metric for each null (using a particular null method) for each site </span>
+net.null.links =<span class="st"> </span><span class="cf">function</span>(nulls){
+  net.null.metric &lt;-<span class="st"> </span><span class="kw">list</span>()
+  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(nulls)) {
+    net.null.metric[[i]] =<span class="st"> </span><span class="kw">do.call</span>(<span class="st">&#39;rbind&#39;</span>, 
+                                 <span class="kw">lapply</span>(nulls[[i]], networklevel, <span class="dt">index =</span> <span class="st">&#39;links per species&#39;</span>))
+    }
+  <span class="kw">names</span>(net.null.metric) &lt;-<span class="st"> </span>webs.names
+  <span class="kw">return</span>(net.null.metric)
+}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Time consuming step!</span>
+
+<span class="co"># Load environment (already saved objects)</span>
+<span class="co">#load(&quot;data/network_analysis_example.RData&quot;)</span>
+
+r2d.nest &lt;-<span class="st"> </span><span class="kw">net.null.nest</span>(net.nulls.r2d)
+vaz.nest &lt;-<span class="st"> </span><span class="kw">net.null.nest</span>(net.nulls.vaz)
+swap.nest &lt;-<span class="st"> </span><span class="kw">net.null.nest</span>(net.nulls.swap)
+
+r2d.links &lt;-<span class="st"> </span><span class="kw">net.null.links</span>(net.nulls.r2d)
+vaz.links &lt;-<span class="st"> </span><span class="kw">net.null.links</span>(net.nulls.vaz)
+swap.links &lt;-<span class="st"> </span><span class="kw">net.null.links</span>(net.nulls.swap)
+
+<span class="co"># Save environment</span>
+<span class="co">#save.image(file=&quot;data/network_analysis_example.RData&quot;)</span></code></pre></div>
+<p>Next, we will define a function for calculating the z-score when comparing the observed network with the null networks.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Z-score function for comparing different networks</span>
+net.zscore =<span class="st"> </span><span class="cf">function</span>(obsval, nullval) {
+  (obsval <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(nullval))<span class="op">/</span><span class="kw">sd</span>(nullval)  
+} </code></pre></div>
+<p>Then, we apply the <code>net.zscore()</code> function to obtain our z-scores for each network site.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function that perform z-score calculation of nestedness using the observed and null networks</span>
+nest.zscore =<span class="st"> </span><span class="cf">function</span>(nulltype){
+  net.nest.zscore &lt;-<span class="st"> </span><span class="kw">list</span>() 
+  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(net.metrics.nest)){
+    net.nest.zscore[[i]] =<span class="st"> </span><span class="kw">net.zscore</span>(net.metrics.nest[[i]][<span class="st">&#39;nestedness&#39;</span>], 
+                                      nulltype[[i]][ ,<span class="st">&#39;nestedness&#39;</span>])
+    }
+  <span class="kw">names</span>(net.nest.zscore) &lt;-<span class="st"> </span>webs.names
+  <span class="kw">return</span>(net.nest.zscore)
+}
+
+<span class="co"># Function that perform z-score calculation of links per species using the observed and null networks</span>
+links.zscore =<span class="st"> </span><span class="cf">function</span>(nulltype){
+  net.links.zscore &lt;-<span class="st"> </span><span class="kw">list</span>() 
+  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(net.metrics.links)){
+    net.links.zscore[[i]] =<span class="st"> </span><span class="kw">net.zscore</span>(net.metrics.links[[i]][<span class="st">&#39;links per species&#39;</span>], 
+                                      nulltype[[i]][ ,<span class="st">&#39;links per species&#39;</span>])
+    }
+  <span class="kw">names</span>(net.links.zscore) &lt;-<span class="st"> </span>webs.names
+  <span class="kw">return</span>(net.links.zscore)
+}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r2d.nest.zscore &lt;-<span class="st"> </span><span class="kw">nest.zscore</span>(r2d.nest)
+vaz.nest.zscore &lt;-<span class="st"> </span><span class="kw">nest.zscore</span>(vaz.nest)
+swap.nest.zscore &lt;-<span class="st"> </span><span class="kw">nest.zscore</span>(swap.nest)
+
+r2d.links.zscore &lt;-<span class="st"> </span><span class="kw">links.zscore</span>(r2d.links)
+vaz.links.zscore &lt;-<span class="st"> </span><span class="kw">links.zscore</span>(vaz.links)
+swap.links.zscore &lt;-<span class="st"> </span><span class="kw">links.zscore</span>(swap.links)</code></pre></div>
+<p>Lastly, we calculate the two-sided p-value for significance of the network property for nestedness and links per species. We start by defining a function below and then apply it for the various null models and metrics.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function that adds p-values according to the obtained z-scores</span>
+add.pvalues =<span class="st"> </span><span class="cf">function</span>(net.metric.zscore){
+  <span class="co"># Change the output class from list of a list into a matrix</span>
+  net.metric.zscore &lt;-<span class="st"> </span><span class="kw">do.call</span>(<span class="st">&#39;rbind&#39;</span>, net.metric.zscore) 
+  
+  <span class="co"># Convert z-scores to p-values (two-sided)</span>
+  net.metric.pvalue &lt;-<span class="st"> </span><span class="dv">2</span><span class="op">*</span><span class="kw">pnorm</span>(<span class="op">-</span><span class="kw">abs</span>(net.metric.zscore))
+  
+  <span class="co"># Change matrix into a dataframe</span>
+  net.metric.pvalue &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">as.table</span>(net.metric.pvalue))
+  <span class="kw">colnames</span>(net.metric.pvalue) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;site&#39;</span>, <span class="st">&#39;metric&#39;</span>, <span class="st">&#39;pvalue&#39;</span>)
+  
+  net.metric.pvalue &lt;-<span class="st"> </span><span class="kw">within</span>(net.metric.pvalue, {
+    significance &lt;-<span class="st"> </span><span class="kw">ifelse</span>(pvalue <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.001</span>, <span class="st">&quot;***&quot;</span>, 
+                         <span class="kw">ifelse</span>(pvalue <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.01</span>, <span class="st">&quot;**&quot;</span>,
+                         <span class="kw">ifelse</span>(pvalue <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.05</span>, <span class="st">&quot;*&quot;</span>, <span class="st">&quot;not significant&quot;</span>)))
+    })
+  <span class="kw">return</span>(net.metric.pvalue)
+} </code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add the p-values to our nestedness results</span>
+r2d.test.nest &lt;-<span class="st"> </span><span class="kw">add.pvalues</span>(r2d.nest.zscore)
+vaz.test.nest &lt;-<span class="st"> </span><span class="kw">add.pvalues</span>(vaz.nest.zscore)
+swap.test.nest &lt;-<span class="st"> </span><span class="kw">add.pvalues</span>(swap.nest.zscore)
+
+<span class="co"># Add the p-values to our links per species results</span>
+r2d.test.links &lt;-<span class="st"> </span><span class="kw">add.pvalues</span>(r2d.links.zscore)
+vaz.test.links &lt;-<span class="st"> </span><span class="kw">add.pvalues</span>(vaz.links.zscore)
+swap.test.links &lt;-<span class="st"> </span><span class="kw">add.pvalues</span>(swap.links.zscore)
+
+<span class="co"># Print the nestedness results</span>
+<span class="kw">print</span>(r2d.test.nest)</code></pre></div>
+<pre><code>##        site     metric       pvalue    significance
+## 1 Argentina nestedness 4.101991e-15             ***
+## 2    Canada nestedness 2.170427e-02               *
+## 3    Sweden nestedness 5.580157e-01 not significant
+## 4        UK nestedness 5.830274e-02 not significant
+## 5       USA nestedness 4.699772e-11             ***
+## 6    Azores nestedness 7.363953e-02 not significant</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(vaz.test.nest)</code></pre></div>
+<pre><code>##        site     metric       pvalue    significance
+## 1 Argentina nestedness 6.925157e-39             ***
+## 2    Canada nestedness 2.987384e-02               *
+## 3    Sweden nestedness 7.075084e-01 not significant
+## 4        UK nestedness 2.034032e-03              **
+## 5       USA nestedness 3.942222e-06             ***
+## 6    Azores nestedness 7.212628e-01 not significant</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(swap.test.nest)</code></pre></div>
+<pre><code>##        site     metric       pvalue    significance
+## 1 Argentina nestedness 5.780354e-17             ***
+## 2    Canada nestedness 1.788751e-02               *
+## 3    Sweden nestedness 7.781149e-01 not significant
+## 4        UK nestedness 2.227617e-02               *
+## 5       USA nestedness 1.266961e-02               *
+## 6    Azores nestedness 9.154426e-02 not significant</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Print the links per species results</span>
+<span class="kw">print</span>(r2d.test.links)</code></pre></div>
+<pre><code>##        site            metric       pvalue significance
+## 1 Argentina links per species 6.491750e-23          ***
+## 2    Canada links per species 7.221750e-46          ***
+## 3    Sweden links per species 5.246923e-26          ***
+## 4        UK links per species 1.316305e-57          ***
+## 5       USA links per species 4.684720e-34          ***
+## 6    Azores links per species 6.694950e-98          ***</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(vaz.test.links)</code></pre></div>
+<pre><code>##        site            metric pvalue significance
+## 1 Argentina links per species    NaN           NA
+## 2    Canada links per species    NaN           NA
+## 3    Sweden links per species    NaN           NA
+## 4        UK links per species    NaN           NA
+## 5       USA links per species    NaN           NA
+## 6    Azores links per species    NaN           NA</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(swap.test.links)</code></pre></div>
+<pre><code>##        site            metric pvalue significance
+## 1 Argentina links per species    NaN           NA
+## 2    Canada links per species    NaN           NA
+## 3    Sweden links per species    NaN           NA
+## 4        UK links per species    NaN           NA
+## 5       USA links per species    NaN           NA
+## 6    Azores links per species    NaN           NA</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Save environment</span>
+<span class="co">#save.image(file=&quot;data/network_analysis_example.RData&quot;)</span></code></pre></div>
+<p><br></p>
+</div>
 </div>
 <div id="discussion-questions" class="section level3">
 <h3>Discussion Questions</h3>
+<ul>
+<li>Based on the final output above, how do the different null methods compare for
+<ul>
+<li>nestedness?</li>
+<li>links per species?</li>
+</ul></li>
+<li><p>Which null method is more conservative?</p></li>
+<li><p>How does nestedness compare between the different sites (i.e., the networks constructed for each geographic region)?</p></li>
+<li><p>Why does the ‘r2dtable’ null method work for ‘links per species’ but not ‘vaznull’ and ‘swap.web’ (i.e., why do we obtain <code>NaN</code> values for these null methods)?</p></li>
+<li><p>Do you think bipartite networks are useful for your work?</p></li>
+</ul>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
