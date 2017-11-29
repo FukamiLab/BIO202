@@ -9,10 +9,9 @@ layout: topic
 
 **Assigned Reading:**
 
-> Kery 2010. Chapter 20: Nonstandard GLMMs 1: Site-Occupancy Species Distribution Model in *Introduction to WinBUGS for Ecologists* 
-https://www-sciencedirect-com.stanford.idm.oclc.org/science/book/9780123786050
+> Kery 2010. Chapter 20: Nonstandard GLMMs 1: Site-Occupancy Species Distribution Model in *Introduction to WinBUGS for Ecologists* [Stanford full text](https://www-sciencedirect-com.stanford.idm.oclc.org/science/book/9780123786050) or try [here](https://searchworks.stanford.edu/view/8660368)
 
-> Section 14.3 in Korner-Nievergelt et al. 2015. Bayesian data analysis in ecology using linear models with R, BUGS, and Stan. Elsevier. http://www.sciencedirect.com/science/book/9780128013700
+> Section 14.3 in Korner-Nievergelt et al. 2015. Bayesian data analysis in ecology using linear models with R, BUGS, and Stan. Elsevier. [Stanford full text](http://www.sciencedirect.com/science/book/9780128013700)
 
 
 
