@@ -35,7 +35,7 @@ repo_url <- "https://raw.githubusercontent.com/fukamilab/BIO202/master/"
 ### Key Points
 
 #### Definition 
-**Occupany Model**: Model used to account for imperfect detection of organisms in surveys and to determine the probability of the true presence or absence of a species at a site. This is done by quantifying the detection probability of a species at a site based off of your data.
+**Occupancy Model**: Model used to account for imperfect detection of organisms in surveys and to determine the probability of the true presence or absence of a species at a site. This is done by quantifying the detection probability of a species at a site based off of your data.
 
 
 
@@ -81,6 +81,7 @@ You can include the same or separate covariates in the detection and occupancy c
 The problem of detectability is further compounded when trying to measure abundance. When you move from presence/absence to number of individuals, the probability that you have counted (detected) every individual moves further away from zero. As an extension of the occupancy model, the N-mixture abundance model can account for imperfect detection of individuals within a species. To do this, we simply assume that local abundance at a site is described by a Poisson distribution.  
 
 $N_i \sim Poisson(\lambda)$ 1. Ecological process that produces true population size
+
 $y_{ij}|N_i \sim Binomial(N_i, p)$ 2. Observation process gives counts
 
 $\lambda$ describes the variation in abundance at sites. This parameter can be modeled with covariates to describes differences in $N_i$.   
@@ -97,7 +98,7 @@ For this example, we will be using Costa Rican bird banding data that I (and oth
 The rstan package is used to interface with Stan, and the blmeco package, which contains functions from _Korner-Nievergelt et al. 2015._  
 
 Set working directory, load packages and the two separate data objects.
-```{r cars}
+```{r cars, warning = FALSE, message = FALSE}
 #setwd("")```
 
 #############################################
