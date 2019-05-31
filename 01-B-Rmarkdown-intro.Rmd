@@ -7,7 +7,7 @@ output: html_document
 
 ```{r include = FALSE}
 # This code block sets up the r session when the page is rendered to html
-# include = FALSE means that it will not be included in the html document
+# include = FALSE means that it will not be included in the html document 
 
 # Write every code block to the html document 
 knitr::opts_chunk$set(echo = TRUE)
@@ -33,7 +33,7 @@ rinline <- function(code) {
 * R markdown is text-based formatting that allows you to embed code and explanatory text in the same document.
 * R markdown documents consist of a header, code chunks and text.
 * R markdown files (.Rmd) can be rendered to other document formats (e.g. html, pdf, docx) to generate reports or web applications. 
-* Formatting analyses in R markdown keeps the entire research process in one document that can easily regenerate reports and output if the data are changed.
+* Formatting analyses in R markdown keeps the entire research process in one document that can easily regenerate reports and output if the data are changed.fffsss
 
 > **Suggested Reading:**
 >
