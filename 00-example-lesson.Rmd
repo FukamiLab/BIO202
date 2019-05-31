@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "Lesson Title"
-author: [Instructor and Student names]
+author: 
 output: html_document
 ---
 
