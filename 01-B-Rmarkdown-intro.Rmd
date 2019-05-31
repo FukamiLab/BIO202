@@ -1,7 +1,7 @@
 ---
 layout: topic
 title: "Introduction to R markdown"
-author: Jes
+author: Jes, ggggg
 output: html_document
 ---
 
