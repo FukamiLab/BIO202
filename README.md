@@ -1,4 +1,4 @@
-## Biology 202: Ecological Statistics	
+## Biology 202: Ecological Statistics	- Amazing project
 
 This is a repository for materials used in Biology 202: Ecological Statistics in Fall 2017 at Stanford University.
 
